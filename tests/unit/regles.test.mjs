@@ -15,7 +15,10 @@ async function lister(dossier) {
   return sortie;
 }
 
-const fichiers = await lister(DIST);
+const tous = await lister(DIST);
+// dist/vendor : bibliothèques tierces servies par l'app (D-G-029), vérifiées à part.
+const fichiers = tous.filter((f) => !f.includes('/vendor/'));
+const vendor = tous.filter((f) => f.includes('/vendor/') && f.endsWith('.js'));
 const code = fichiers.filter((f) => ['.js', '.css'].includes(extname(f)));
 const pages = fichiers.filter((f) => extname(f) === '.html');
 
@@ -41,7 +44,7 @@ test('P-1 : aucune ressource externe sauf Google Identity', async () => {
       if (u === 'http://www.w3.org/2000/svg/') continue; // espace de noms SVG, pas une ressource
       if (u === 'https://…/') continue; // texte d'exemple dans un champ
       if (u.startsWith('https://claude.ai/new')) continue; // lien ouvert dans un nouvel onglet (D-G-026), pas une ressource chargée
-      assert.match(u, /^https:\/\/(accounts\.google\.com|www\.googleapis\.com|sheets\.googleapis\.com|docs\.google\.com|drive\.google\.com)\//, `${f} : ${u}`);
+      assert.match(u, /^https:\/\/(accounts\.google\.com|www\.googleapis\.com|sheets\.googleapis\.com|docs\.google\.com|drive\.google\.com|firebasevertexai\.googleapis\.com|content-firebaseappcheck\.googleapis\.com|www\.google\.com\/recaptcha|www\.gstatic\.com\/recaptcha|recaptcha\.google\.com\/recaptcha)\//, `${f} : ${u}`); // + Gemini et App Check (D-G-029)
     }
   }
 });
@@ -52,7 +55,7 @@ test('D-07 / N-03 : chaque page porte la CSP et la Referrer-Policy', async () =>
     const csp = /http-equiv="Content-Security-Policy" content="([^"]+)"/.exec(src)?.[1];
     assert.ok(csp, `${f} sans CSP`);
     assert.match(csp, /default-src 'self'/);
-    assert.match(csp, /script-src 'self' https:\/\/accounts\.google\.com\/gsi\/client;/);
+    assert.match(csp, /script-src 'self' https:\/\/accounts\.google\.com\/gsi\/client( https:\/\/www\.google\.com\/recaptcha\/ https:\/\/www\.gstatic\.com\/recaptcha\/)?;/);
     assert.doesNotMatch(csp, /unsafe-inline|unsafe-eval/);
     assert.match(src, /<meta name="referrer"/);
   }
@@ -74,4 +77,12 @@ test('P-11 / N-04 : aucun secret, portée drive.file seulement', async () => {
   assert.doesNotMatch(cfg, /secret|GOCSPX-|apiKey/i);
   assert.match(cfg, /auth\/drive\.file'/);
   assert.doesNotMatch(cfg, /auth\/drive'|auth\/drive\.readonly|spreadsheets'/);
+});
+
+test('D-G-029 : bibliothèques tierces servies par l\'app, sans import distant', async () => {
+  assert.deepEqual(vendor.map((f) => f.split('/').pop()).sort(), ['firebase-ai.js', 'firebase-app-check.js', 'firebase-app.js']);
+  for (const f of vendor) {
+    const src = await readFile(f, 'utf8');
+    assert.doesNotMatch(src, /(from|import)\s*\(?\s*["']https?:/, f);
+  }
 });

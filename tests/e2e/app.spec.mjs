@@ -227,3 +227,50 @@ test('+ Recette : Fiche 3Bras du projet Claude collée telle quelle', async ({ p
   expect(col('Tâches sous-chef')).toContain('Étendre la purée');
   expect(erreurs).toEqual([]);
 });
+
+test('+ Recette avec Gemini (Firebase simulé) : photo et lien deviennent une fiche', async ({ page }) => {
+  const IA = { apiKey: 'AIza-test', projectId: 'projet-test', appId: '1:2:web:3', recaptcha: 'cle-site-test', modele: 'gemini-3.5-flash' };
+  const erreurs = [];
+  page.on('pageerror', (e) => erreurs.push(e.message));
+  const { sim } = await brancher(page, { ia: IA });
+  await page.addInitScript(() => { window.__reponseGemini = '```\nFICHE 3BRAS\nNom : Tarte au sucre\nType : Dessert\nProtéine : Aucune\nPortions : 8\nTemps total : 60 min\nSource : Ricardo\nLien : https://www.ricardocuisine.com/recettes/1234-tarte-au-sucre\n\nINGRÉDIENTS\n- 1 abaisse de pâte\n- 250 ml de cassonade\n\nÉTAPES\n1. Préchauffer le four à 180 °C (350 °F).\n2. Cuire 45 minutes.\n\nSOUS-CHEF\n- Mesurer la cassonade\n```'; });
+  await page.goto('./');
+  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
+  await page.locator('[data-compteclose]').click();
+  await page.locator('#addbtn').click();
+  await expect(page.locator('#add-go')).toHaveText(/Convertir avec Gemini/);
+
+  // Photo : envoyée à Gemini en image, App Check branché avec la clé de site
+  const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+  await page.locator('#add-file').setInputFiles({ name: 'tarte.png', mimeType: 'image/png', buffer: png });
+  await page.locator('#add-type').selectOption('Dessert');
+  await page.locator('#add-go').click();
+  await expect(page.locator('#add-status')).toContainText('Converti par Gemini');
+  await expect(page.locator('#add-name')).toHaveValue('Tarte au sucre');
+  const g = await page.evaluate(() => ({ ...window.__gemini, appcheck: window.__appcheck, nb: window.__gemini.parts.length, image: !!window.__gemini.parts[0].inlineData }));
+  expect(g).toMatchObject({ modele: 'gemini-3.5-flash', appcheck: 'cle-site-test', nb: 2, image: true });
+  expect(g.outils).toEqual([]);
+  await page.locator('#add-save').click();
+  await expect(page.locator('#toast')).toContainText('Ajoutée au livre : Tarte au sucre');
+  const onglet = [...sim.classeurs.values()][0].onglets.Recettes, entete = onglet[0];
+  const ligne = onglet.find((l) => l[1] === 'Tarte au sucre');
+  expect(ligne[entete.indexOf('Type')]).toBe('Dessert');
+  expect(ligne[entete.indexOf('Lien source')]).toBe('https://www.ricardocuisine.com/recettes/1234-tarte-au-sucre');
+
+  // Lien seul : Gemini reçoit l'outil « URL context »
+  await page.locator('#addbtn').click();
+  await page.locator('#add-url').fill('https://www.ricardocuisine.com/recettes/1234-tarte-au-sucre');
+  await page.locator('#add-go').click();
+  await expect(page.locator('#add-name')).toHaveValue('Tarte au sucre');
+  expect(await page.evaluate(() => window.__gemini.outils)).toEqual([{ urlContext: {} }]);
+
+  // Une Fiche 3Bras collée ne repasse pas par Gemini
+  await page.evaluate(() => { window.__gemini = null; });
+  await page.locator('[data-addclose]').click();
+  await page.locator('#addbtn').click();
+  await page.locator('#add-text').fill('FICHE 3BRAS\nNom : Soupe test\nType : Soupe\n\nINGRÉDIENTS\n- 1 l d\'eau\n\nÉTAPES\n1. Bouillir 10 minutes.');
+  await page.locator('#add-go').click();
+  await expect(page.locator('#add-name')).toHaveValue('Soupe test');
+  expect(await page.evaluate(() => window.__gemini)).toBeNull();
+  expect(erreurs).toEqual([]);
+});

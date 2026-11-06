@@ -1,10 +1,11 @@
 // « + Recette » : même feuille que Gordon Rams.ai (lien, photo ou fichier, texte collé, type, aperçu, ajouter au livre).
 // Hors de claude.ai, l'app n'a pas Claude : le texte, Word et PDF sont lus ici ; une photo ou un lien seul passent
 // par l'app Claude, dont on colle la réponse dans la boîte de texte (D-G-004, D-G-026).
-import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render } from '../etat.js?v=1.5.0';
-import { el, ico, vider } from '../el.js?v=1.5.0';
-import { ajouterRecette } from '../donnees.js?v=1.5.0';
-import { lireDocx, lirePdf, parseLoose, parseTexte } from '../lecture.js?v=1.5.0';
+import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render } from '../etat.js?v=1.6.0';
+import { el, ico, vider } from '../el.js?v=1.6.0';
+import { ajouterRecette } from '../donnees.js?v=1.6.0';
+import { lireDocx, lirePdf, parseLoose, parseTexte } from '../lecture.js?v=1.6.0';
+import { iaDisponible, convertirAvecGemini, erreurIA } from '../ia.js?v=1.6.0';
 
 const SRC_CAT = ['Famille', 'Ricardo', 'Di Stasio', 'Recettes du Québec', 'Labriski', 'Trois fois par jour', 'Web autre'];
 const A = { files: [], result: null, busy: false };
@@ -17,10 +18,10 @@ export function openAdd() {
     el('div', { class: 'sheet-bar' }, el('div', { class: 'wrap' }, el('span', { class: 'label' }, 'Ajouter une recette'),
       el('button', { class: 'btn icon', 'data-addclose': '', 'aria-label': 'Fermer' }, ico('left')))),
     el('div', { class: 'wrap' }, el('h2', {}, 'Nouvelle recette'),
-      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, 'Donne un PDF, un fichier Word, une photo ou une capture d\'écran, ou colle le texte. 3Bras la met au format du livre, puis tu l\'ajoutes à ton classeur.'),
+      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, `Donne un PDF, un fichier Word, une photo ou une capture d'écran, ou colle le texte. ${iaDisponible() ? 'Gemini' : '3Bras'} la met au format du livre, puis tu l'ajoutes à ton classeur.`),
       el('form', { class: 'addf', id: 'addform' },
         el('div', {}, el('label', { for: 'add-url' }, 'Lien de la recette (facultatif)'), el('input', { id: 'add-url', type: 'url', inputmode: 'url', placeholder: 'https://…', autocomplete: 'off' }),
-          el('p', { class: 'hint' }, 'Avec un fichier, une capture ou du texte, le lien sert de source. Donné seul, le lien est envoyé à Claude, qui lit la page et te renvoie la fiche.')),
+          el('p', { class: 'hint' }, iaDisponible() ? 'Avec un fichier, une capture ou du texte, le lien sert de source. Donné seul, Gemini lit la page et en fait la fiche.' : 'Avec un fichier, une capture ou du texte, le lien sert de source. Donné seul, le lien est envoyé à Claude, qui lit la page et te renvoie la fiche.')),
         el('div', {}, el('span', { class: 'lbl' }, 'Photo ou fichier'),
           el('div', { class: 'pick' },
             el('label', { class: 'btn primary pickbtn' }, ico('camera'), 'Prendre une photo', el('input', { id: 'add-cam', class: 'pickin', type: 'file', accept: 'image/*', capture: 'environment', 'aria-label': 'Prendre une photo ou choisir une image' })),
@@ -30,7 +31,7 @@ export function openAdd() {
         el('div', {}, el('label', { for: 'add-text' }, 'Ou colle le texte (ou la Fiche 3Bras de ton projet Claude)'), el('textarea', { id: 'add-text', placeholder: 'Ingrédients, étapes…' })),
         el('p', { class: 'hint', 'data-new': '1.5.0-projet-claude' }, 'Pas de recette sous la main ? Ton projet Claude « 3Bras » te pose 3 ou 4 questions, puis te donne une Fiche 3Bras à coller ici.'),
         el('div', {}, el('label', { for: 'add-type' }, 'Type'), el('select', { id: 'add-type' }, TYPES.map((t) => el('option', {}, t)))),
-        el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', type: 'submit', id: 'add-go', 'data-new': '1.4.0-convertir' }, ico('file'), 'Convertir')),
+        el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', type: 'submit', id: 'add-go', 'data-new': '1.4.0-convertir' }, ico('file'), iaDisponible() ? 'Convertir avec Gemini' : 'Convertir')),
         el('div', { class: 'add-status', id: 'add-status', 'aria-live': 'polite' })),
       el('div', { class: 'add-prev', id: 'add-prev' })));
   document.body.append(n); document.body.style.overflow = 'hidden';
@@ -117,6 +118,8 @@ export async function convertRecipe() {
     if (json.erreur) { addStatus('Claude : ' + json.erreur, true); return; }
     A.result = normRecipe(json, lien, type); addStatus('Fiche de Claude lue. Vérifie-la, puis ajoute-la.'); renderAddPreview(); return;
   }
+  const ficheCollee = /^\s*(```\w*\s*)?fiche 3 ?bras/i.test(pasted);
+  if (iaDisponible() && !ficheCollee) { await viaGemini(type, lien, files, pasted); return; }
   if (images.length || (!files.length && !pasted && lien)) { await versClaude(type, lien, images); return; }
   if (!files.length && !pasted) { addStatus('Ajoute un lien, un fichier, une capture ou colle le texte de la recette.', true); return; }
   A.busy = true; $('#add-go').disabled = true; vider($('#add-prev'));
@@ -136,6 +139,60 @@ export async function convertRecipe() {
     addStatus(r.a_verifier ? 'Recette lue. Vérifie et corrige la fiche, puis ajoute-la.' : 'Fiche 3Bras lue. Vérifie-la, puis ajoute-la.');
     renderAddPreview();
   } catch (e) { addStatus(e && e.local ? e.local : 'La lecture a été interrompue. Réessaie.', true); }
+  A.busy = false; const g = $('#add-go'); if (g) g.disabled = false;
+}
+
+/* ---------- conversion par Gemini (Firebase AI Logic, D-G-029) ---------- */
+// Photos de téléphone réduites en JPEG (comme Gordon Rams.ai) : envoi plus rapide, moins de jetons.
+async function shrinkImage(file) {
+  if (file.size < 1.5e6 && ['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return file;
+  try {
+    const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    let side = 2000, q = 0.85, blob = null;
+    for (let i = 0; i < 5; i++) {
+      const k = Math.min(1, side / Math.max(bmp.width, bmp.height)), c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k); c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+      blob = await new Promise((r) => c.toBlob(r, 'image/jpeg', q));
+      if (blob && blob.size <= 1.5e6) break; side = Math.round(side * 0.8); q = Math.max(0.6, q - 0.08);
+    }
+    return blob || file;
+  } catch (_) { throw { local: 'Cette photo n\'a pas pu être lue (format HEIC ?). Prends-la en JPEG, ou fais une capture d\'écran.' }; }
+}
+async function base64(blob) {
+  const b = new Uint8Array(await blob.arrayBuffer()); let s = '';
+  for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode(...b.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+async function viaGemini(type, lien, files, pasted) {
+  A.busy = true; $('#add-go').disabled = true; vider($('#add-prev'));
+  try {
+    let texte = pasted ? pasted + '\n\n' : ''; const parties = []; let nbImages = 0;
+    for (const f of files.slice(0, 6)) {
+      const n = f.name.toLowerCase();
+      if (f.type.startsWith('image/') || /\.(jpe?g|png|webp|heic|heif)$/.test(n)) {
+        addStatus('Préparation de la photo…'); const img = await shrinkImage(f); nbImages++;
+        parties.push({ mimeType: ['image/png', 'image/webp'].includes(img.type) ? img.type : 'image/jpeg', data: await base64(img) });
+      } else if (n.endsWith('.pdf') || f.type === 'application/pdf') {
+        if (f.size > 15e6) throw { local: 'Ce PDF est trop gros (15 Mo max). Garde seulement la page de la recette.' };
+        parties.push({ mimeType: 'application/pdf', data: await base64(f) });
+      } else if (n.endsWith('.docx')) { addStatus('Lecture du fichier Word…'); texte += await lireDocx(f).catch(() => { throw { local: 'Impossible de lire ce fichier Word. Enregistre-le en .docx ou colle son texte.' }; }); }
+      else if (n.endsWith('.doc')) throw { local: 'Les anciens fichiers .doc ne sont pas lus : enregistre-le en .docx ou colle le texte.' };
+      else texte += await f.text();
+    }
+    const lienSeul = lien && !texte && !parties.length;
+    addStatus(lienSeul ? 'Gemini lit la page de la recette…' : 'Gemini lit la recette…');
+    const consignePlus = consigne(type, lien, nbImages) + (texte ? `\n\nTexte de la recette :\n"""\n${texte.slice(0, 40000)}\n"""` : '')
+      + (parties.some((p) => p.mimeType === 'application/pdf') ? '\nLa recette est aussi dans le PDF joint.' : '');
+    const sortie = await convertirAvecGemini(consignePlus, parties, lienSeul ? lien : '');
+    const propre = String(sortie || '').replace(/```\w*\n?/g, '');
+    const r = parseTexte(propre, type);
+    if (!r.ingredients.length && !r.etapes.length) throw { local: 'Gemini n\'a pas trouvé de recette dans ce contenu. Essaie avec une autre photo ou le texte.' };
+    A.result = { ...r, url: lien || r.lien };
+    addStatus('Converti par Gemini. Vérifie la fiche, puis ajoute-la.');
+    renderAddPreview();
+  } catch (e) {
+    addStatus(e && e.local ? e.local : erreurIA(e), true);
+  }
   A.busy = false; const g = $('#add-go'); if (g) g.disabled = false;
 }
 
