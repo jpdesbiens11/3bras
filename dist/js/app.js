@@ -1,22 +1,22 @@
 // 3Bras : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
-import { CONFIG } from './config.js?v=1.2.2';
-import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.2.2';
-import { el, ico, vider } from './el.js?v=1.2.2';
-import { creerAuth } from './auth.js?v=1.2.2';
-import { creerDrive } from './drive.js?v=1.2.2';
-import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.2.2';
-import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.2.2';
-import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.2.2';
-import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.2.2';
-import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.2.2';
-import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.2.2';
-import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.2.2';
-import { viewTri, loadTri, decide } from './vues/livre.js?v=1.2.2';
-import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.2.2';
-import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.2.2';
-import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.2.2';
-import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.2.2';
-import { openCompte, closeCompte, lireImport } from './vues/compte.js?v=1.2.2';
+import { CONFIG } from './config.js?v=1.3.0';
+import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.3.0';
+import { el, ico, vider } from './el.js?v=1.3.0';
+import { creerAuth } from './auth.js?v=1.3.0';
+import { creerDrive } from './drive.js?v=1.3.0';
+import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.3.0';
+import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.3.0';
+import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.3.0';
+import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.3.0';
+import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.3.0';
+import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.3.0';
+import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.3.0';
+import { viewTri, loadTri, decide } from './vues/livre.js?v=1.3.0';
+import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.3.0';
+import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.3.0';
+import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.3.0';
+import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.3.0';
+import { openCompte, closeCompte, lireImport, chargerKits } from './vues/compte.js?v=1.3.0';
 
 let auth = null;
 // Mémoire de l'utilisateur sur l'appareil : son courriel seulement, jamais le jeton (N-02).
@@ -76,6 +76,8 @@ document.addEventListener('click', (e) => {
   if (b.id === 'autrecompte') { memoriser(''); render(); connecter(true); return; }
   if (b.id === 'comptebtn') { openCompte(); return; }
   if (d.compteclose !== undefined) { closeCompte(); return; }
+  if (d.kit) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); return; }
+  if (b.id === 'chargerkits') { chargerKits(recharger); return; }
   if (b.id === 'deconnexion') { auth?.deconnecter(); memoriser(''); closeCompte(); S.ctx = null; S.book = []; render(); return; }
   if (!S.ctx) return;
   if (d.swap) { swap(+d.swap); return; }
@@ -197,7 +199,7 @@ async function connecter(autreCompte) {
     S.ctx = { drive, classeurId: b.classeur.id, dossier: b.dossier, courriel,
       messageMigration: m && m.apres > m.avant ? `Classeur mis à jour (schéma ${m.avant} → ${m.apres}).` : '' };
     await boot();
-    if (!S.book.length) { toast('Ton livre est vide : importe tes recettes.'); openCompte(true); }
+    if (!S.book.length) { toast('Ton livre est vide : choisis un kit pour démarrer.'); openCompte(true); }
   } catch (e) { console.error(e); S.err = errText(e); render(); }
   enCours = false;
 }

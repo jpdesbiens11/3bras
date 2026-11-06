@@ -140,3 +140,25 @@ test('partager une recette depuis le coin de sa fiche', async ({ page, context }
   expect(txt).toContain('Marinade');
   expect(txt).toContain('1. Mélanger la marinade.');
 });
+
+test('première connexion : livre vide, kits de départ au choix', async ({ page }, info) => {
+  const erreurs = [];
+  page.on('pageerror', (e) => erreurs.push(e.message));
+  page.on('console', (m) => { if (m.type() === 'error') erreurs.push(m.text()); });
+  const { sim } = await brancher(page);
+  await page.goto('./');
+  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
+  await expect(page.locator('#comptesheet')).toBeVisible();
+  await expect(page.locator('[data-kit][aria-pressed="true"]')).toHaveCount(3);       // les 3 kits cochés par défaut
+  await page.locator('[data-kit="asiatique"]').click();                                // on en retire un
+  await page.screenshot({ path: `tests/captures/${info.project.name}-kits.png`, fullPage: true });
+  await page.locator('#chargerkits').click();
+  await expect(page.locator('#kit-res')).toContainText('20 recettes ajoutées');
+  const rec = [...sim.classeurs.values()][0].onglets.Recettes;
+  expect(rec.length).toBe(21);                                                         // en-tête + 20
+  await page.locator('[data-chargerkits], #chargerkits').click();                      // recharger : aucun doublon
+  await expect(page.locator('#kit-res')).toContainText('0 recettes ajoutées');
+  await page.locator('[data-compteclose]').click();
+  await expect(page.locator('.frame.day')).toHaveCount(4);                             // la semaine se pige dans les kits
+  expect(erreurs).toEqual([]);
+});

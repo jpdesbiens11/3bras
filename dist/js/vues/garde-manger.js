@@ -1,9 +1,9 @@
 // 02 · Garde-manger (R-06). Repris de Gordon Rams.ai.
-import { S, ZONES, toast, errText, render } from '../etat.js?v=1.2.2';
-import { el } from '../el.js?v=1.2.2';
-import { majQuantite, ajouterArticle } from '../donnees.js?v=1.2.2';
-import { deptOf, zoneOf } from '../cuisine.js?v=1.2.2';
-import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.2.2';
+import { S, ZONES, toast, errText, render } from '../etat.js?v=1.3.0';
+import { el } from '../el.js?v=1.3.0';
+import { majQuantite, ajouterArticle } from '../donnees.js?v=1.3.0';
+import { deptOf, zoneOf } from '../cuisine.js?v=1.3.0';
+import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.3.0';
 
 export function viewInv() {
   const out = [panelHead('02 · Garde-manger', 'Garde-manger', 'Frigo, garde-manger, épices et outils. L\'épicerie cochée s\'ajoute, les soupers cuisinés se retirent.'),
