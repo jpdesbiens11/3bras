@@ -1,6 +1,6 @@
 // Lecture de recettes sans bibliothèque externe (P-1, N-10) : texte, Word (.docx), PDF simple,
 // et réponse JSON de Claude (même format que la conversion de Gordon Rams.ai).
-import { norm } from './etat.js?v=1.4.0';
+import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.5.0';
 
 /* ---------- .docx : zip natif (DecompressionStream) + XML ---------- */
 async function inflerBrut(octets) {
@@ -75,28 +75,40 @@ export function parseLoose(text) {
 
 /* ---------- texte libre → fiche ---------- */
 const PROT_MOTS = [['Poisson & fruits de mer', /saumon|crevette|poisson|thon|morue|petoncle|tilapia|aiglefin|moule/], ['Poulet', /poulet|dinde/], ['Bœuf', /boeuf|bavette|steak/], ['Porc', /porc|bacon|jambon|saucisse/], ['Veau', /\bveau\b/], ['Œufs', /\boeufs?\b/]];
+// Fiche 3Bras (texte produit par le projet Claude 3Bras, D-G-028) ou texte libre.
+const SRC_CAT = ['Famille', 'Ricardo', 'Di Stasio', 'Recettes du Québec', 'Labriski', 'Trois fois par jour', 'Web autre'];
+const META = { nom: 'nom', type: 'type', proteine: 'proteine', cuisine: 'cuisine', portions: 'portions', 'temps total': 'temps', temps: 'temps', outils: 'outils', source: 'source', lien: 'lien' };
+const trouve = (v, liste) => liste.find((x) => norm(x) === norm(v)) || null;
+
 export function parseTexte(texte, type) {
   const lignes = String(texte).split(/\r?\n/).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
-  let nom = '', sec = null, groupe = null; const ingredients = [], etapes = [], notes = [];
+  let nom = '', sec = null, groupe = null; const ingredients = [], etapes = [], notes = [], sous = [], verif = [], meta = {};
   const titreSec = (l) => {
-    const n = norm(l).replace(/[:\s]+$/, '');
+    const n = norm(l).replace(/^#+\s*/, '').replace(/[:\s]+$/, '');
     if (/^(ingredients?|ce qu'il (vous )?faut|liste d'ingredients)$/.test(n)) return 'ing';
     if (/^(preparation|etapes?|instructions?|methode|directions|marche a suivre|mode de preparation)$/.test(n)) return 'eta';
+    if (/^(sous-chef|taches? (du )?sous-chef)$/.test(n)) return 'sous';
+    if (/^a verifier$/.test(n)) return 'verif';
     return null;
   };
   const puce = /^(?:[-*•▪◦·]|\[[ xX]\])\s*/, numero = /^(?:etape\s*)?\d+\s*[.)\-:]\s*/i;
   for (const l of lignes) {
+    if (/^fiche 3 ?bras$/i.test(norm(l))) continue;
     const s = titreSec(l);
     if (s) { sec = s; groupe = null; continue; }
+    const m = !sec && /^([^:]{2,14})\s*:\s*(.+)$/.exec(l);
+    if (m && META[norm(m[1]).trim()]) { meta[META[norm(m[1]).trim()]] = m[2].trim(); continue; }
     if (!nom && !sec) { nom = l.replace(/^#+\s*/, ''); continue; }
     if (sec === 'ing') {
-      if (/:$/.test(l) && l.length < 40) { groupe = l.replace(/\s*:$/, ''); ingredients.push({ groupe, items: [] }); continue; }
+      if (/:$/.test(l) && l.length < 40 && !puce.test(l)) { groupe = l.replace(/\s*:$/, ''); ingredients.push({ groupe, items: [] }); continue; }
       if (!ingredients.length) ingredients.push({ groupe: null, items: [] });
       ingredients[ingredients.length - 1].items.push(l.replace(puce, ''));
     } else if (sec === 'eta') {
       if (numero.test(norm(l)) || numero.test(l) || !etapes.length) etapes.push(l.replace(numero, '').replace(puce, ''));
       else etapes[etapes.length - 1] += ' ' + l;
-    } else notes.push(l);
+    } else if (sec === 'sous') sous.push(l.replace(puce, ''));
+    else if (sec === 'verif') { const v = l.replace(puce, ''); if (!/^\(?\s*(rien|aucun|nothing)\b/i.test(v)) verif.push(v); }
+    else notes.push(l);
   }
   // Sans titres de section : lignes à quantité = ingrédients, phrases = étapes.
   if (!ingredients.length && !etapes.length) {
@@ -106,16 +118,23 @@ export function parseTexte(texte, type) {
     notes.length = 0;
   }
   const tout = norm(texte);
-  const portions = (tout.match(/(\d+)\s*(?:portions?|personnes?)/) || tout.match(/(?:portions?|pour)\s*:?\s*(\d+)/) || [])[1];
-  const temps = ['preparation', 'cuisson', 'repos'].reduce((t, k) => t + Number((tout.match(new RegExp(`${k}\\s*:?\\s*(\\d+)\\s*min`)) || [])[1] || 0), 0)
-    || Number((tout.match(/temps total\s*:?\s*(\d+)\s*min/) || [])[1] || 0);
+  const portions = Number((String(meta.portions || '').match(/\d+/) || [])[0]) || Number((tout.match(/(\d+)\s*(?:portions?|personnes?)/) || tout.match(/(?:portions?|pour)\s*:?\s*(\d+)/) || [])[1]) || null;
+  const temps = Number((String(meta.temps || '').match(/\d+/) || [])[0]) * (/\bh/.test(norm(meta.temps || '')) && !/min/.test(norm(meta.temps || '')) ? 60 : 1)
+    || ['preparation', 'cuisson', 'repos'].reduce((t, k) => t + Number((tout.match(new RegExp(`${k}\\s*:?\\s*(\\d+)\\s*min`)) || [])[1] || 0), 0)
+    || Number((tout.match(/temps total\s*:?\s*(\d+)\s*min/) || [])[1] || 0) || null;
   const ingTexte = norm(ingredients.flatMap((g) => g.items).join(' '));
-  const proteine = (PROT_MOTS.find(([, re]) => re.test(ingTexte)) || [type === 'Souper' ? 'Végé' : null])[0];
+  const typeF = trouve(meta.type || '', TYPES) || type;
+  const proteine = meta.proteine ? (trouve(meta.proteine, PROTS) || (/vege|aucune/.test(norm(meta.proteine)) ? 'Végé' : null))
+    : (PROT_MOTS.find(([, re]) => re.test(ingTexte)) || [typeF === 'Souper' ? 'Végé' : null])[0];
+  const fiche = !!(meta.nom || meta.type || meta.source);
+  const src = String(meta.source || '');
   return {
-    nom: nom.slice(0, 120) || 'Nouvelle recette', type, proteine, cuisine: null,
-    portions: portions ? +portions : null, temps: temps || null, outils: [],
-    source_nom: 'Inconnue', source_cat: 'Web autre',
-    ingredients: ingredients.filter((g) => g.items.length), etapes: etapes.filter(Boolean),
-    sous: [], a_verifier: 'Lue automatiquement dans le texte : vérifie les ingrédients et les étapes.'
+    nom: (meta.nom || nom).slice(0, 120) || 'Nouvelle recette', type: typeF, proteine,
+    cuisine: trouve(meta.cuisine || '', CUIS), portions, temps,
+    outils: String(meta.outils || '').split(/[,;]/).map((o) => trouve(o.trim(), OUTILS)).filter(Boolean),
+    source_nom: src || 'Inconnue', source_cat: trouve(src, SRC_CAT) || (/famille|maison|grand-?m/i.test(norm(src)) ? 'Famille' : 'Web autre'),
+    lien: /^https:\/\/\S+$/.test(meta.lien || '') ? meta.lien : '',
+    ingredients: ingredients.filter((g) => g.items.length), etapes: etapes.filter(Boolean), sous,
+    a_verifier: verif.join(' ') || (fiche ? '' : 'Lue automatiquement dans le texte : vérifie les ingrédients et les étapes.')
   };
 }

@@ -203,3 +203,27 @@ test('+ Recette : texte collé, réponse de Claude, photo vers Claude', async ({
   expect(decodeURIComponent(ouvert)).toContain('3Bras');
   expect(erreurs).toEqual([]);
 });
+
+test('+ Recette : Fiche 3Bras du projet Claude collée telle quelle', async ({ page }) => {
+  const { readFileSync } = await import('node:fs');
+  const fiche = readFileSync(new URL('../../docs/projet-claude-3bras.md', import.meta.url), 'utf8').split('```')[1].trim();
+  const { sim, erreurs } = await demarrer(page);
+  await page.locator('#addbtn').click();
+  await expect(page.locator('#addsheet')).toContainText('projet Claude « 3Bras »');
+  await page.locator('#add-text').fill(fiche);
+  await page.locator('#add-go').click();
+  await expect(page.locator('#add-status')).toContainText('Fiche 3Bras lue');
+  await expect(page.locator('#add-name')).toHaveValue('Pâté chinois');
+  await expect(page.locator('#add-prev')).toContainText('Ricardo');
+  await page.locator('#add-save').click();
+  await expect(page.locator('#toast')).toContainText('Ajoutée au livre : Pâté chinois');
+  const onglet = [...sim.classeurs.values()][0].onglets.Recettes, entete = onglet[0];
+  const ligne = onglet.find((l) => l[1] === 'Pâté chinois'), col = (c) => ligne[entete.indexOf(c)];
+  expect(col('Type')).toBe('Souper');
+  expect(col('Protéine')).toBe('Bœuf');
+  expect(col('Source')).toBe('Ricardo');
+  expect(col('Lien source')).toBe('https://www.ricardocuisine.com/recettes/5541-pate-chinois');
+  expect(col('Ingrédients')).toContain('## Purée');
+  expect(col('Tâches sous-chef')).toContain('Étendre la purée');
+  expect(erreurs).toEqual([]);
+});

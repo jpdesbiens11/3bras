@@ -1,8 +1,8 @@
 // Fichier d'import 3Bras (R-02, D-G-003) : validation puis écriture dans le classeur.
 // Le fichier est une donnée non fiable : on vérifie tout avant d'écrire une seule cellule.
 
-import { ONGLETS, VERSION_SCHEMA } from './schema.js?v=1.4.0';
-import { lireOnglet, ajouterObjets } from './store.js?v=1.4.0';
+import { ONGLETS, VERSION_SCHEMA } from './schema.js?v=1.5.0';
+import { lireOnglet, ajouterObjets } from './store.js?v=1.5.0';
 
 export const FORMAT = '3ebras-import';
 const SECTIONS = { recettes: 'Recettes', plans: 'Plans de semaine', inventaire: 'Inventaire', bilans: 'Bilans' };
