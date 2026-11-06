@@ -2,7 +2,7 @@
 
 Le livre de recettes familial qui vit dans **ton** Google Drive. Tu planifies la semaine, tu fais l'épicerie, tu cuisines et tu notes les soupers.
 
-- App : https://jpdesbiens11.github.io/3ebras/
+- App : https://jpdesbiens11.github.io/3bras/
 - Aucune recette ne passe par un serveur. L'app parle directement à Google depuis ton navigateur.
 - Portée Google `drive.file` : 3Bras ne voit que les fichiers qu'il a créés.
 

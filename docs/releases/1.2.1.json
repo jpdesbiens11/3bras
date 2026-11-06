@@ -5,8 +5,8 @@
   "requis": [],
   "nouveautes": [
     "L'app s'appelle 3Bras : Besoin de Renfort Au Souper (B.R.A.S.)",
-    "Icône 3B ; l'adresse, le dépôt et le dossier Drive gardent leur nom"
+    "Icône 3B ; nouvelle adresse https://jpdesbiens11.github.io/3bras/ ; le dossier Drive garde son nom"
   ],
-  "decisions": ["D-G-021"],
+  "decisions": ["D-G-021", "D-G-022"],
   "tests": { "unitaires": 24, "bout_en_bout": 6, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
 }
