@@ -96,3 +96,88 @@ h2 { margin: 0 0 8px; font-size: 1.3rem; }
 @media (min-width: 1024px) {
   .carte { padding: 40px 36px; }
 }
+
+/* ---- Coquille connectée (1.1.0) : onglets en bas au téléphone, panneau à gauche à l'ordinateur ---- */
+body.connecte { background-image: none; }
+body.connecte #app { display: block; padding: 0; min-height: 100dvh; }
+.nav {
+  position: fixed; inset: auto 0 0 0; z-index: 10;
+  display: flex; justify-content: space-around; align-items: stretch;
+  background: var(--carte); border-top: 1px solid var(--trait);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.nav-marque { display: none; }
+.nav-item {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  min-height: 56px; padding: 0 8px; border: 0; background: none;
+  color: var(--doux); font: 600 0.95rem var(--police); text-decoration: none; cursor: pointer;
+  list-style: none;
+}
+.nav-item::-webkit-details-marker { display: none; }
+.nav-item[aria-current="page"] { color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
+.nav-item:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.nav-pied { flex: 1; display: flex; }
+.nav-pied > summary { width: 100%; }
+.nav-compte { display: grid; gap: 6px; }
+@media (max-width: 1023px) {
+  .nav-compte {
+    position: fixed; left: 8px; right: 8px; bottom: calc(64px + env(safe-area-inset-bottom));
+    padding: 14px 16px; background: var(--carte); border: 1px solid var(--trait);
+    border-radius: var(--rayon); box-shadow: 0 -6px 24px rgb(0 0 0 / 0.12);
+  }
+}
+.zone-vue { padding: 16px 16px calc(80px + env(safe-area-inset-bottom)); max-width: 760px; margin: 0 auto; outline: none; }
+
+.filtres { display: grid; gap: 8px; margin-bottom: 8px; }
+.champ {
+  width: 100%; min-height: 48px; padding: 0 12px; border-radius: 10px;
+  border: 1px solid var(--trait); background: var(--carte); color: var(--encre); font: 1rem var(--police);
+}
+.champ:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.compte { margin: 4px 0 8px; }
+.liste-recettes { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.item-recette {
+  width: 100%; text-align: left; display: grid; gap: 2px; min-height: 56px; padding: 10px 14px;
+  border-radius: 12px; border: 1px solid var(--trait); background: var(--carte); color: var(--encre); cursor: pointer;
+  font: 1rem var(--police);
+}
+.item-recette.choisie { border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
+.item-recette:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.item-nom { font-weight: 600; }
+.item-meta { color: var(--doux); font-size: 0.88rem; }
+.fiche:empty { display: none; }
+.fiche h2 { font-size: 1.5rem; margin-top: 4px; outline: none; }
+.fiche h3 { margin: 20px 0 6px; font-size: 1.1rem; }
+.fiche h4 { margin: 12px 0 4px; font-size: 1rem; color: var(--doux); }
+.fiche li { margin: 4px 0; }
+.avis-doux { background: color-mix(in srgb, var(--accent) 10%, transparent); padding: 8px 12px; border-radius: 10px; }
+.retour { width: auto; margin: 0 0 4px; padding: 0; justify-content: flex-start; }
+/* Téléphone : la fiche ouverte remplace la liste. */
+@media (max-width: 1023px) {
+  .vue-livre.fiche-ouverte .colonne-liste { display: none; }
+}
+.champ-fichier { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.champ-fichier:focus-visible + .resultat { outline: none; }
+label.bouton { margin: 8px 0 16px; }
+.erreurs, .rapport { padding-left: 20px; }
+
+@media (min-width: 1024px) {
+  body.connecte #app { display: grid; grid-template-columns: 240px 1fr; align-items: start; justify-content: stretch; }
+  .nav {
+    position: sticky; top: 0; height: 100dvh; inset: auto; flex-direction: column; justify-content: flex-start;
+    border-top: 0; border-right: 1px solid var(--trait); padding: 16px 12px; gap: 4px;
+  }
+  .nav-marque { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; margin: 0 8px 16px; }
+  .nav-marque img { border-radius: 8px; }
+  .nav-item { flex: 0 0 auto; justify-content: flex-start; border-radius: 10px; padding: 0 12px; }
+  .nav-item[aria-current="page"] { background: color-mix(in srgb, var(--accent) 12%, transparent); box-shadow: none; }
+  .nav-pied { flex: 0 0 auto; margin-top: auto; display: grid; gap: 6px; }
+  .nav-pied > summary { display: none; }
+  .zone-vue { max-width: none; margin: 0; padding: 24px 32px; }
+  .vue-livre { display: grid; grid-template-columns: minmax(320px, 400px) 1fr; gap: 32px; align-items: start; }
+  .vue-livre .colonne-liste { position: sticky; top: 24px; max-height: calc(100dvh - 48px); overflow: auto; padding-right: 4px; }
+  .vue-livre .retour { display: none; }
+  .fiche { max-width: 720px; }
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+@media (min-width: 1024px) { .vue-importer { max-width: 720px; } }

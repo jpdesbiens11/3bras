@@ -18,6 +18,9 @@ Chaque décision a un code D-G-nnn et une date. On n'en efface jamais : une déc
 | D-G-012 | 2026-11-05 | Le dossier Drive s'appelle « 3eBras » et le classeur « 3eBras — Livre ». L'app retrouve ses fichiers par l'étiquette `appProperties.3ebras` (`dossier`, `livre`), jamais par leur nom : la personne peut les renommer. |
 | D-G-013 | 2026-11-05 | Le jeton Google est obtenu par le flux « jeton » de Google Identity Services, sans serveur. Il est renouvelé sans invite cinq minutes avant la fin de son heure. |
 | D-G-014 | 2026-11-05 | Une version = une PR fusionnée dans `main`. Le workflow lit la version de `package.json`, crée le tag et la release `v<version>` s'ils n'existent pas, puis publie. La fusion de la PR par JP est la seule étape humaine. |
+| D-G-015 | 2026-11-06 | Schéma 2 : les champs de Notion absents du schéma 1 (Facilité, Étoiles, Restes, Tâches sous-chef, À vérifier, Fiche complète, Lien source, Notes, ID Notion, ID Evernote ; Titre et Déjà à la maison pour les plans ; Département et Essentiel pour l'inventaire ; six colonnes de bilan) sont ajoutés à la fin des onglets. Un classeur v1 est migré à l'ouverture ; un en-tête renommé à la main bloque la migration au lieu d'être écrasé. |
+| D-G-016 | 2026-11-06 | Fichier d'import `3ebras-import` v1 : un objet par ligne, clés = noms de colonnes, ids stables (`r-<id Notion>`, `p-…`, `i-…`). Tout est validé avant d'écrire ; ré-importer le même fichier n'ajoute rien. Les recettes de kits repas sont refusées à l'import (R-15). |
+| D-G-017 | 2026-11-06 | Le Livre montre par défaut toutes les recettes sauf les « Déclassées » ; les filtres Type, Statut et Protéine précisent. |
 
 ## Questions ouvertes
 

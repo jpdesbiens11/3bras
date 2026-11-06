@@ -1,0 +1,14 @@
+{
+  "version": "1.1.0",
+  "date": "2026-11-06",
+  "mvp": "MVP 1 — Migration et lecture (1re partie)",
+  "requis": ["R-02", "R-03", "R-15", "P-4"],
+  "nouveautes": [
+    "Schéma 2 : nouvelles colonnes reprises de Notion, ajoutées à la fin ; ton classeur se met à jour tout seul à la connexion",
+    "Écran Importer : validation complète du fichier, rapport (créées, déjà présentes, kits repas refusés, à vérifier), ré-import sans doublon",
+    "Livre en lecture : recherche par nom ou ingrédient, filtres Type / Statut / Protéine, fiche avec ingrédients, étapes, tâches du sous-chef et source",
+    "Navigation : onglets en bas au téléphone, panneau à gauche à l'ordinateur"
+  ],
+  "decisions": ["D-G-015", "D-G-016", "D-G-017"],
+  "tests": { "unitaires": 24, "bout_en_bout": 6, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}
