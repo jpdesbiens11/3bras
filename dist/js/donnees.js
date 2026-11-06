@@ -1,8 +1,8 @@
 // Couche de données : le classeur Google remplace les bases Notion de Gordon Rams.ai.
 // Toutes les écritures passent par ecrireParId (N-07) ou ajouterUn.
-import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.3.0';
-import { lireOnglets, ecrireParId, ajouterUn } from './store.js?v=1.3.0';
-import { ficheDeLigne } from './cuisine.js?v=1.3.0';
+import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.4.0';
+import { lireOnglets, ecrireParId, ajouterUn } from './store.js?v=1.4.0';
+import { ficheDeLigne } from './cuisine.js?v=1.4.0';
 
 const T_REC = 'Recettes', T_PLAN = 'Plans de semaine', T_INV = 'Inventaire', T_BIL = 'Bilans';
 const oui = (v) => /^(oui|true|vrai|1|__yes__)$/i.test(String(v || '').trim());
@@ -115,3 +115,10 @@ export async function ajouterArticle(nom, zone, dept, qty) {
 /* ---------- bilans ---------- */
 export const ajouterBilan = (obj) => ajout(T_BIL, obj);
 export const semainePrecedente = (debut) => (S.planAll || []).filter((r) => semaineDe(r) === iso(debut) && !oui(r.Dessert)).map((r) => r['Recette id']).filter(Boolean);
+
+/* ---------- ajouter une recette (bouton + Recette) ---------- */
+export async function ajouterRecette(obj) {
+  const row = await ajout(T_REC, { id: `r-${slug(obj.Nom)}-${Date.now().toString(36)}`, ...obj });
+  const r = toRecipe(row); S.book.push(r); rebuildPools();
+  return r;
+}
