@@ -1,8 +1,8 @@
 // Bibliothèque 3Bras dans le Drive de la personne (R-01).
 // Trouve le dossier et le classeur créés par l'app, ou les crée.
 
-import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.2.1';
-import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.2.1';
+import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.2.2';
+import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.2.2';
 
 export async function ouvrirOuCreer(drive, { nomDossier, nomClasseur, version }, etape = () => {}) {
   etape('recherche');
@@ -145,6 +145,20 @@ export function valeurCellule(v) {
   if (Array.isArray(v)) return v.join('\n');
   if (typeof v === 'boolean') return v ? 'oui' : 'non';
   return String(v);
+}
+
+// Le propriétaire et sa dernière connexion sont notés dans l'onglet Schéma du classeur (dans son Drive).
+export async function noterProprietaire(drive, id, { courriel, version }) {
+  const lu = await drive.lireValeurs(id, "'Schéma'!A2:B40");
+  const lignes = lu.values || [];
+  const valeurs = { proprietaire: courriel, derniere_connexion: new Date().toISOString().slice(0, 10), derniere_version: version };
+  let fin = lignes.length + 2;
+  const donnees = Object.entries(valeurs).filter(([, v]) => v).map(([cle, v]) => {
+    const i = lignes.findIndex((l) => l[0] === cle);
+    const ligne = i >= 0 ? i + 2 : fin++;
+    return { range: `'Schéma'!A${ligne}:B${ligne}`, values: [[cle, v]] };
+  });
+  if (donnees.length) await drive.ecrireValeurs(id, donnees);
 }
 
 export const lienClasseur = (id) => `https://docs.google.com/spreadsheets/d/${encodeURIComponent(id)}/edit`;

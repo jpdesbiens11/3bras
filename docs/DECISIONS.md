@@ -25,6 +25,8 @@ Chaque décision a un code D-G-nnn et une date. On n'en efface jamais : une déc
 | D-G-019 | 2026-11-06 | Un plan de semaine = une ligne par souper (Jour) et une ligne par dessert (Dessert = oui) dans « Plans de semaine ». Approuver met à jour ces lignes (relues avant d'écrire, N-07) au lieu de les recréer. |
 | D-G-020 | 2026-11-06 | Le bouton « + Recette » (conversion par Claude) reste caché hors de claude.ai, comme dans l'artefact : la conversion passe par un chat Claude qui produit un fichier d'import (D-G-004). Le bouton Compte (en-tête) donne l'import, le classeur et la déconnexion. |
 | D-G-021 | 2026-11-06 | Nom affiché : 3Bras (révise D-G-010). Sous-titre B.R.A.S. : « Besoin de Renfort Au Souper », à la place de « Restauration Express ». Restent figés : le dépôt `3ebras`, l'adresse https://jpdesbiens11.github.io/3ebras/, le dossier Drive « 3eBras » et son classeur, le format `3ebras-import` et les clés techniques. |
+| D-G-023 | 2026-11-06 | Mémoire du compte : l'appareil garde seulement le courriel (`3bras-compte`), jamais le jeton (N-02). Au retour, « Content de te revoir » : un toucher (bouton ou étape) reconnecte avec ce compte, sans choix de compte. Sans serveur à nous, Google ne donne pas de session silencieuse à une page statique ; la fenêtre Google s'ouvre et se referme seule. Le classeur note le propriétaire, la dernière connexion et la version dans l'onglet Schéma. Première connexion d'un nouveau compte : dossier et livre créés, puis l'écran d'import s'ouvre. |
+| D-G-024 | 2026-11-06 | Bouton Partager dans le coin de chaque fiche : la feuille de partage du téléphone (texte de la recette), ou une copie dans le presse-papiers à l'ordinateur. Rien ne passe par un serveur à nous. |
 
 ## Questions ouvertes
 

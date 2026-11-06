@@ -1,24 +1,28 @@
 // 3Bras : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
-import { CONFIG } from './config.js?v=1.2.1';
-import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.2.1';
-import { el, ico, vider } from './el.js?v=1.2.1';
-import { creerAuth } from './auth.js?v=1.2.1';
-import { creerDrive } from './drive.js?v=1.2.1';
-import { ouvrirOuCreer } from './store.js?v=1.2.1';
-import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.2.1';
-import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.2.1';
-import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.2.1';
-import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.2.1';
-import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.2.1';
-import { openPreview, closePreview, renderSheet, toggleHave } from './vues/fiche.js?v=1.2.1';
-import { viewTri, loadTri, decide } from './vues/livre.js?v=1.2.1';
-import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.2.1';
-import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.2.1';
-import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.2.1';
-import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.2.1';
-import { openCompte, closeCompte, lireImport } from './vues/compte.js?v=1.2.1';
+import { CONFIG } from './config.js?v=1.2.2';
+import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.2.2';
+import { el, ico, vider } from './el.js?v=1.2.2';
+import { creerAuth } from './auth.js?v=1.2.2';
+import { creerDrive } from './drive.js?v=1.2.2';
+import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.2.2';
+import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.2.2';
+import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.2.2';
+import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.2.2';
+import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.2.2';
+import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.2.2';
+import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.2.2';
+import { viewTri, loadTri, decide } from './vues/livre.js?v=1.2.2';
+import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.2.2';
+import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.2.2';
+import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.2.2';
+import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.2.2';
+import { openCompte, closeCompte, lireImport } from './vues/compte.js?v=1.2.2';
 
 let auth = null;
+// Mémoire de l'utilisateur sur l'appareil : son courriel seulement, jamais le jeton (N-02).
+const CLE_COMPTE = '3bras-compte';
+const compteMemorise = () => { try { return localStorage.getItem(CLE_COMPTE) || ''; } catch (_) { return ''; } };
+const memoriser = (c) => { try { c ? localStorage.setItem(CLE_COMPTE, c) : localStorage.removeItem(CLE_COMPTE); } catch (_) {} };
 const VUES = { semaine: viewWeek, poele: viewCook, tri: viewTri, livre: viewInv, provigo: viewProvigo, bilan: viewBilan };
 
 function renderSteps() {
@@ -26,12 +30,19 @@ function renderSteps() {
     el('b', {}, s.n), el('i', {}, s.short ? [el('span', { class: 'lg' }, s.label), el('span', { class: 'sh' }, s.short[0], el('br'), s.short[1])] : s.label))));
 }
 function viewConnexion() {
+  const memo = compteMemorise();
+  if (!CONFIG.clientId) return [el('div', { class: 'frame connexion' }, el('p', { role: 'alert' }, 'L\'ID client Google n\'est pas encore configuré (js/config.js).'))];
+  if (memo) {
+    return [el('div', { class: 'frame connexion' },
+      el('h3', {}, 'Content de te revoir'),
+      el('p', {}, `Ton livre est prêt dans le Drive de ${memo}. Un toucher et on repart.`),
+      el('button', { class: 'btn primary', id: 'connexion', disabled: !auth }, ico('users'), auth ? 'Continuer' : 'On attend Google…'),
+      el('button', { class: 'btn', id: 'autrecompte' }, 'Utiliser un autre compte'))];
+  }
   return [el('div', { class: 'frame connexion' },
     el('h3', {}, 'Ton livre t\'attend'),
-    el('p', {}, 'Tes recettes vivent dans ton Google Drive. 3Bras ne voit que les fichiers qu\'il crée.'),
-    CONFIG.clientId
-      ? el('button', { class: 'btn primary', id: 'connexion', disabled: !auth }, ico('users'), auth ? 'Se connecter avec Google' : 'On attend Google…')
-      : el('p', { role: 'alert' }, 'L\'ID client Google n\'est pas encore configuré (js/config.js).'))];
+    el('p', {}, 'Tes recettes vivent dans ton Google Drive. 3Bras ne voit que les fichiers qu\'il crée. À ta première connexion, il crée ton livre.'),
+    el('button', { class: 'btn primary', id: 'connexion', disabled: !auth }, ico('users'), auth ? 'Se connecter avec Google' : 'On attend Google…'))];
 }
 function doRender() {
   renderSteps();
@@ -58,11 +69,14 @@ function applySkin(k) {
 document.addEventListener('click', (e) => {
   const b = e.target.closest('button'); if (!b) return;
   const d = b.dataset;
+  // Compte mémorisé : le premier toucher (une étape, par exemple) reconnecte, comme le bouton Continuer.
+  if (!S.ctx && auth && compteMemorise() && b.id !== 'autrecompte' && b.id !== 'connexion') connecter();
   if (d.go) { setView(d.go); return; }
   if (b.id === 'connexion') { connecter(); return; }
+  if (b.id === 'autrecompte') { memoriser(''); render(); connecter(true); return; }
   if (b.id === 'comptebtn') { openCompte(); return; }
   if (d.compteclose !== undefined) { closeCompte(); return; }
-  if (b.id === 'deconnexion') { auth?.deconnecter(); closeCompte(); S.ctx = null; S.book = []; render(); return; }
+  if (b.id === 'deconnexion') { auth?.deconnecter(); memoriser(''); closeCompte(); S.ctx = null; S.book = []; render(); return; }
   if (!S.ctx) return;
   if (d.swap) { swap(+d.swap); return; }
   if (d.dtog) { toggleDay(+d.dtog); return; }
@@ -76,6 +90,7 @@ document.addEventListener('click', (e) => {
   if (d.pickid) { choosePick(d.pickid); return; }
   if (d.unfix) { const i = +d.unfix; closePicker(); setFixed(i, null); return; }
   if (d.cook) { if (S.preview) closePreview(); if (S.view !== 'poele') setView('poele'); openCook(d.cook); return; }
+  if (d.partager) { partagerRecette(d.partager); return; }
   if (d.ttog) { toggleTimer(d.ttog); return; }
   if (d.tdel) { dismissTimer(d.tdel); return; }
   if (d.havebtn) { toggleHave(d.havebtn); return; }
@@ -164,21 +179,27 @@ async function boot() {
 }
 async function recharger() { await boot(); }
 
-async function connecter() {
+let enCours = false;
+async function connecter(autreCompte) {
+  if (enCours || !auth) return;
+  enCours = true;
   try {
     S.err = null;
-    await auth.connecter();
+    await (autreCompte ? auth.choisirCompte() : auth.connecter(compteMemorise()));
     const drive = creerDrive({ jetonValide: auth.jetonValide });
     $('#sync').textContent = 'Ouverture de ta bibliothèque…';
     const b = await ouvrirOuCreer(drive, { nomDossier: CONFIG.nomDossier, nomClasseur: CONFIG.nomClasseur, version: CONFIG.version });
     let courriel = '';
     try { courriel = (await drive.moi()).email || ''; } catch (_) { /* facultatif */ }
+    memoriser(courriel);
+    noterProprietaire(drive, b.classeur.id, { courriel, version: CONFIG.version }).catch(() => {});
     const m = b.migration;
     S.ctx = { drive, classeurId: b.classeur.id, dossier: b.dossier, courriel,
       messageMigration: m && m.apres > m.avant ? `Classeur mis à jour (schéma ${m.avant} → ${m.apres}).` : '' };
     await boot();
     if (!S.book.length) { toast('Ton livre est vide : importe tes recettes.'); openCompte(true); }
   } catch (e) { console.error(e); S.err = errText(e); render(); }
+  enCours = false;
 }
 
 (function start() {
