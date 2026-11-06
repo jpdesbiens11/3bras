@@ -1,8 +1,8 @@
 // Morceaux d'interface partagés : étoiles, méta, puces, étiquettes. Repris de Gordon Rams.ai.
-import { S, DAYS, TYPES, PROTS, CUIS, OUTILS, starsOf, starLabel, toolsOf, toast, errText, render, renderSheet } from '../etat.js?v=1.3.0';
-import { el, ico, svgEtoile } from '../el.js?v=1.3.0';
-import { majRecette, rebuildPools } from '../donnees.js?v=1.3.0';
-import { recentFor } from '../planif.js?v=1.3.0';
+import { S, DAYS, TYPES, PROTS, CUIS, OUTILS, starsOf, starLabel, toolsOf, toast, errText, render, renderSheet } from '../etat.js?v=1.4.0';
+import { el, ico, svgEtoile } from '../el.js?v=1.4.0';
+import { majRecette, rebuildPools } from '../donnees.js?v=1.4.0';
+import { recentFor } from '../planif.js?v=1.4.0';
 
 export const panelHead = (label, titre, texte, ...extra) => el('div', { class: 'panel-head' },
   el('div', {}, el('div', { class: 'label' }, label), el('h2', {}, titre), texte && el('p', {}, texte)), ...extra);

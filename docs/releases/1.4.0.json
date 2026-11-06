@@ -1,0 +1,14 @@
+{
+  "version": "1.4.0",
+  "date": "2026-11-06",
+  "mvp": "MVP 3 — ajout de recettes",
+  "requis": ["R-04"],
+  "nouveautes": [
+    "Bouton « + Recette » de Gordon Rams.ai : lien, photo, galerie ou fichier, texte collé, type",
+    "Texte, Word (.docx) et PDF lus directement dans l'app",
+    "Photo ou lien : Claude prend le relais avec la consigne du livre ; colle sa réponse et c'est dans le livre",
+    "Aperçu avec nom modifiable et « Corriger le texte » avant d'ajouter"
+  ],
+  "decisions": ["D-G-026"],
+  "tests": { "unitaires": 27, "bout_en_bout": 14, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

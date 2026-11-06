@@ -1,22 +1,23 @@
 // 3Bras : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
-import { CONFIG } from './config.js?v=1.3.0';
-import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.3.0';
-import { el, ico, vider } from './el.js?v=1.3.0';
-import { creerAuth } from './auth.js?v=1.3.0';
-import { creerDrive } from './drive.js?v=1.3.0';
-import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.3.0';
-import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.3.0';
-import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.3.0';
-import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.3.0';
-import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.3.0';
-import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.3.0';
-import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.3.0';
-import { viewTri, loadTri, decide } from './vues/livre.js?v=1.3.0';
-import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.3.0';
-import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.3.0';
-import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.3.0';
-import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.3.0';
-import { openCompte, closeCompte, lireImport, chargerKits } from './vues/compte.js?v=1.3.0';
+import { CONFIG } from './config.js?v=1.4.0';
+import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.4.0';
+import { el, ico, vider } from './el.js?v=1.4.0';
+import { creerAuth } from './auth.js?v=1.4.0';
+import { creerDrive } from './drive.js?v=1.4.0';
+import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.4.0';
+import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.4.0';
+import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.4.0';
+import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.4.0';
+import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.4.0';
+import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.4.0';
+import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.4.0';
+import { viewTri, loadTri, decide } from './vues/livre.js?v=1.4.0';
+import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.4.0';
+import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.4.0';
+import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.4.0';
+import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.4.0';
+import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.4.0';
+import { openCompte, closeCompte, lireImport, chargerKits } from './vues/compte.js?v=1.4.0';
 
 let auth = null;
 // Mémoire de l'utilisateur sur l'appareil : son courriel seulement, jamais le jeton (N-02).
@@ -53,6 +54,7 @@ function doRender() {
   if (S.view === 'poele') paintLock();
   $('#sync').textContent = !S.ctx ? (S.err ? 'Hors ligne' : 'Connexion à Google…') : S.loading ? 'Lecture du livre…' : `${S.recipes.length} soupers dans le livre`;
   $('#comptebtn').hidden = !S.ctx;
+  $('#addbtn').hidden = !S.ctx;
 }
 hooks.render = doRender;
 hooks.renderSheet = renderSheet;
@@ -75,6 +77,10 @@ document.addEventListener('click', (e) => {
   if (b.id === 'connexion') { connecter(); return; }
   if (b.id === 'autrecompte') { memoriser(''); render(); connecter(true); return; }
   if (b.id === 'comptebtn') { openCompte(); return; }
+  if (b.id === 'addbtn') { openAdd(); return; }
+  if (d.addclose !== undefined) { closeAdd(); return; }
+  if (d.chipdel !== undefined) { removeFile(+d.chipdel); return; }
+  if (b.id === 'add-save') { saveRecipe((id) => openPreview(id)); return; }
   if (d.compteclose !== undefined) { closeCompte(); return; }
   if (d.kit) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); return; }
   if (b.id === 'chargerkits') { chargerKits(recharger); return; }
@@ -136,17 +142,26 @@ document.addEventListener('change', (e) => {
   if (d.have !== undefined) toggleHave(d.have, t.checked);
   if (t.id === 'pick-every' && S.picker) S.picker.every = t.checked;
   if (t.id === 'fichier-import') { lireImport(t.files[0], recharger); t.value = ''; }
+  if (t.id === 'add-cam' || t.id === 'add-file') { addFiles(t.files); t.value = ''; }
 });
 document.addEventListener('submit', async (e) => {
+  if (e.target.id === 'addform') { e.preventDefault(); convertRecipe(); return; }
   if (e.target.id !== 'addinv') return; e.preventDefault();
   if (await addInv($('#inv-name').value, $('#inv-zone').value)) toast('Ajouté à l\'inventaire');
 });
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    if (S.preview) { closePreview(); return; } if (S.dpick) { closeDessert(); return; } if (S.picker) { closePicker(); return; } if ($('#comptesheet')) { closeCompte(); return; }
+    if (S.preview) { closePreview(); return; } if (S.dpick) { closeDessert(); return; } if (S.picker) { closePicker(); return; } if ($('#comptesheet')) { closeCompte(); return; } if ($('#addsheet')) { closeAdd(); return; }
   }
   if (S.view !== 'poele' || !S.cook.data) return;
   if (e.key === 'ArrowRight') go(1); else if (e.key === 'ArrowLeft') go(-1);
+});
+/* coller une image (capture copiée) dans la feuille d'ajout, comme dans Gordon Rams.ai */
+document.addEventListener('paste', (e) => {
+  if (!$('#addsheet')) return;
+  const files = [...((e.clipboardData && e.clipboardData.items) || [])].filter((i) => i.kind === 'file' && /^image\//.test(i.type)).map((i) => i.getAsFile()).filter(Boolean);
+  if (!files.length) return; e.preventDefault();
+  addFiles(files.map((f, k) => new File([f], f.name && f.name !== 'image.png' ? f.name : `image-collee-${Date.now()}-${k}.png`, { type: f.type })));
 });
 let sx = null, sy = null;
 document.addEventListener('pointerdown', (e) => { if (!e.target.closest('#cook') || e.target.closest('button,input,label')) { sx = null; return; } sx = e.clientX; sy = e.clientY; });
