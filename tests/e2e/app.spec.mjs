@@ -107,3 +107,36 @@ test('ID client absent : message clair', async ({ page }) => {
   await page.goto('./');
   await expect(page.getByRole('alert')).toContainText('ID client Google');
 });
+
+test('mémoire du compte : le retour se fait en un toucher, sans garder le jeton', async ({ page, context }, info) => {
+  const { sim } = await demarrer(page);
+  const stock = await page.evaluate(() => Object.fromEntries(Object.keys(localStorage).map((k) => [k, localStorage.getItem(k)])));
+  expect(stock['3bras-compte']).toBe('jp@exemple.ca');
+  expect(JSON.stringify(stock)).not.toContain('jeton-test');           // N-02 : jamais le jeton
+  const schema = [...sim.classeurs.values()][0].onglets['Schéma'];
+  expect(schema.find((l) => l[0] === 'proprietaire')?.[1]).toBe('jp@exemple.ca');
+
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Content de te revoir' })).toBeVisible();
+  await page.screenshot({ path: `tests/captures/${info.project.name}-retour.png` });
+  await page.locator('[data-go="tri"]').click();                        // un toucher sur une étape reconnecte
+  await expect(page.locator('#sync')).toHaveText(/soupers dans le livre/);
+  await expect(page.locator('.pickrow').first()).toBeVisible();
+  expect(context).toBeTruthy();
+});
+
+test('partager une recette depuis le coin de sa fiche', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await demarrer(page);
+  await page.addInitScript(() => {});
+  await page.evaluate(() => { Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); });
+  await page.locator('[data-go="tri"]').click();
+  await page.getByRole('button', { name: /Poulet au citron test/ }).click();
+  await page.getByRole('button', { name: 'Partager la recette Poulet au citron test' }).click();
+  await expect(page.locator('#toast')).toContainText('Recette copiée');
+  const txt = await page.evaluate(() => navigator.clipboard.readText());
+  expect(txt).toContain('Poulet au citron test');
+  expect(txt).toContain('INGRÉDIENTS');
+  expect(txt).toContain('Marinade');
+  expect(txt).toContain('1. Mélanger la marinade.');
+});

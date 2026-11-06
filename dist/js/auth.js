@@ -9,6 +9,7 @@ export function creerAuth({ clientId, portees, google = globalThis.google, maint
   let expireA = 0;
   let client = null;
   let enAttente = null;
+  let indiceCourant = '';
 
   function obtenirClient() {
     if (client) return client;
@@ -32,23 +33,26 @@ export function creerAuth({ clientId, portees, google = globalThis.google, maint
     return client;
   }
 
-  function demander(invite) {
+  // login_hint : Google saute le choix de compte ; avec le consentement déjà donné, la fenêtre se ferme seule.
+  function demander(invite, indice) {
     if (enAttente) return enAttente.promesse;
     let resoudre, rejeter;
     const promesse = new Promise((res, rej) => { resoudre = res; rejeter = rej; });
     enAttente = { promesse, resoudre, rejeter };
-    obtenirClient().requestAccessToken({ prompt: invite });
+    obtenirClient().requestAccessToken(indice ? { prompt: invite, login_hint: indice } : { prompt: invite });
     return promesse;
   }
 
   return {
     // Premier appel : clic sur le bouton (Google exige un geste de l'utilisateur).
-    connecter: () => demander(''),
+    connecter: (indice) => { indiceCourant = indice || ''; return demander('', indiceCourant); },
+    // Autre compte : Google affiche le choix de compte.
+    choisirCompte: () => { indiceCourant = ''; return demander('select_account'); },
     // Renvoie un jeton valide, renouvelé au besoin.
     async jetonValide() {
       if (jeton && maintenant() < expireA - MARGE_MS) return jeton;
       if (!jeton) throw new Error('non-connecte');
-      return demander('');
+      return demander('', indiceCourant);
     },
     estConnecte: () => Boolean(jeton) && maintenant() < expireA,
     deconnecter() {

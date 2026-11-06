@@ -1,11 +1,11 @@
 // 04 · Provigo : liste d'épicerie par rayon (R-10, R-11). Repris de Gordon Rams.ai.
-import { S, DEPTS, iso, norm, weekLabel, render } from '../etat.js?v=1.2.1';
-import { el, ico } from '../el.js?v=1.2.1';
-import { getRecipe } from '../donnees.js?v=1.2.1';
-import { ingKey, niceName, deptOf, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.2.1';
-import { frozen } from './fiche.js?v=1.2.1';
-import { setQty, addInv } from './garde-manger.js?v=1.2.1';
-import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.2.1';
+import { S, DEPTS, iso, norm, weekLabel, render } from '../etat.js?v=1.2.2';
+import { el, ico } from '../el.js?v=1.2.2';
+import { getRecipe } from '../donnees.js?v=1.2.2';
+import { ingKey, niceName, deptOf, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.2.2';
+import { frozen } from './fiche.js?v=1.2.2';
+import { setQty, addInv } from './garde-manger.js?v=1.2.2';
+import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.2.2';
 
 // R-11 : les cases cochées restent sur le téléphone, par semaine (aucune recette ni jeton).
 const provKey = () => '3ebras-provigo-' + iso(S.weekStart);

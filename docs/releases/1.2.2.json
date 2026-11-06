@@ -1,0 +1,13 @@
+{
+  "version": "1.2.2",
+  "date": "2026-11-06",
+  "mvp": "Confort",
+  "requis": ["R-01", "N-02"],
+  "nouveautes": [
+    "L'app se souvient de ton compte : au retour, un toucher et ton livre s'ouvre",
+    "Le classeur note son propriétaire et sa dernière connexion (onglet Schéma)",
+    "Bouton Partager dans le coin de chaque fiche : texto, courriel, Messenger…"
+  ],
+  "decisions": ["D-G-023", "D-G-024"],
+  "tests": { "unitaires": 24, "bout_en_bout": 10, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

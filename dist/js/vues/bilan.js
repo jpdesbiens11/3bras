@@ -1,8 +1,8 @@
 // 06 · Bilan : noter les soupers de la semaine dernière (R-13). Repris de Gordon Rams.ai.
-import { S, MOIS, iso, starsOf, starLabel, toast, errText, render } from '../etat.js?v=1.2.1';
-import { el, ico } from '../el.js?v=1.2.1';
-import { majRecette, rebuildPools, ajouterBilan, semainePrecedente } from '../donnees.js?v=1.2.1';
-import { panelHead, skeleton, noticeWarn, frameEmpty, starRow } from './commun.js?v=1.2.1';
+import { S, MOIS, iso, starsOf, starLabel, toast, errText, render } from '../etat.js?v=1.2.2';
+import { el, ico } from '../el.js?v=1.2.2';
+import { majRecette, rebuildPools, ajouterBilan, semainePrecedente } from '../donnees.js?v=1.2.2';
+import { panelHead, skeleton, noticeWarn, frameEmpty, starRow } from './commun.js?v=1.2.2';
 
 export function loadBilan() {
   const prev = new Date(S.weekStart); prev.setDate(prev.getDate() - 7);
