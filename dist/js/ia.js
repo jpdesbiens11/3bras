@@ -2,7 +2,7 @@
 // Aucune clé secrète dans l'app : la configuration Firebase est publique, la clé Gemini reste chez Google,
 // et App Check (Fraud Defense, anciennement reCAPTCHA Enterprise) n'accepte que les appels qui viennent de 3Bras.
 // La bibliothèque Firebase est chargée seulement à la première conversion.
-import { CONFIG } from './config.js?v=1.6.1';
+import { CONFIG } from './config.js?v=1.6.2';
 
 let modele = null;
 
@@ -41,10 +41,14 @@ export async function convertirAvecGemini(consigne, parties, url) {
 
 // Message clair pour les erreurs de Google.
 export function erreurIA(e) {
-  const t = String((e && (e.code || e.message)) || '');
-  if (/app-check|appCheck|attestation|recaptcha/i.test(t)) return 'La vérification anti-robot de Google a échoué. Recharge la page et réessaie.';
-  if (/429|quota|RESOURCE_EXHAUSTED/i.test(t)) return 'La limite gratuite de Gemini est atteinte pour le moment. Réessaie plus tard, ou passe par le projet Claude 3Bras.';
-  if (/SAFETY|blocked/i.test(t)) return 'Gemini a refusé ce contenu. Essaie avec le texte de la recette.';
-  if (/fetch|network|Failed to fetch/i.test(t)) return 'Pas de réseau pour joindre Gemini. Réessaie dans un moment.';
-  return `Gemini n'a pas pu convertir la recette (${t.slice(0, 80)}).`;
+  // Firebase classe toute réponse HTTP en « fetch-error » : on lit le message, pas le code.
+  try { console.error('[3Bras] Gemini', e); } catch { /* console absente */ }
+  const code = String((e && e.code) || '');
+  const msg = String((e && e.message) || '');
+  const t = `${code} ${msg}`;
+  if (/app-check|appCheck|attestation|recaptcha/i.test(t)) return `La vérification anti-robot de Google a échoué (${msg.slice(0, 120)}).`;
+  if (/\b429\b|quota|RESOURCE_EXHAUSTED/i.test(t)) return 'La limite gratuite de Gemini est atteinte pour le moment. Réessaie plus tard, ou passe par le projet Claude 3Bras.';
+  if (/SAFETY/i.test(t)) return 'Gemini a refusé ce contenu. Essaie avec le texte de la recette.';
+  if (/^(TypeError: )?(Failed to fetch|NetworkError|Load failed)/i.test(msg) || (typeof navigator !== 'undefined' && navigator.onLine === false)) return 'Pas de réseau pour joindre Gemini. Réessaie dans un moment.';
+  return `Gemini n'a pas pu convertir la recette : ${msg.slice(0, 200) || code}`;
 }
