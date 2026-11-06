@@ -1,0 +1,15 @@
+# Relais Claude de 3Bras (D-G-027) : reçoit une recette, appelle Claude avec la clé gardée en secret, renvoie la fiche.
+# Ne voit ni le Drive ni le jeton Google ; ne garde rien (aucun stockage, journaux désactivés).
+name = "3bras-relais"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[observability]
+enabled = false
+
+# Limite par adresse IP : 6 conversions par minute (le plafond mensuel se règle dans la console Anthropic).
+[[ratelimits]]
+name = "LIMITE"
+namespace_id = "3001"
+simple = { limit = 6, period = 60 }

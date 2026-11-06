@@ -1,0 +1,13 @@
+{
+  "version": "1.5.0",
+  "date": "2026-11-06",
+  "mvp": "MVP 3 — conversion par Claude",
+  "requis": ["R-04"],
+  "nouveautes": [
+    "« Convertir avec Claude » : photo, PDF, Word, texte ou lien deviennent une fiche du livre, comme dans Gordon Rams.ai",
+    "Relais 3Bras sur Cloudflare : la clé reste secrète, rien n'est gardé, 6 conversions par minute au maximum",
+    "Un lien seul suffit : Claude lit la page de la recette"
+  ],
+  "decisions": ["D-G-027"],
+  "tests": { "unitaires": 32, "bout_en_bout": 16, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

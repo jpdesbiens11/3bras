@@ -35,6 +35,10 @@ Règles du dépôt (vérifiées par les tests) : fichiers JS et CSS sous 500 lig
 
 Le guide complet viendra au MVP 3. En bref : forker le dépôt, activer Pages (source : GitHub Actions), créer ton ID client OAuth « Application Web » dans Google Cloud, puis le mettre dans `dist/js/config.js`.
 
+## Relais Claude (conversion de recettes)
+
+`relais/` est un Cloudflare Worker publié par le workflow « Relais Claude » (D-G-027). Secrets du dépôt requis : `ANTHROPIC_API_KEY`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`. Pour ta propre copie : change `ORIGINES` dans `relais/worker.js`, l'adresse `relais` dans `dist/js/config.js` et la CSP de `dist/index.html`, ou laisse `relais` vide pour te passer de Claude.
+
 ## Licence
 
 MIT

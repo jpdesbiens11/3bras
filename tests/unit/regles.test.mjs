@@ -41,7 +41,7 @@ test('P-1 : aucune ressource externe sauf Google Identity', async () => {
       if (u === 'http://www.w3.org/2000/svg/') continue; // espace de noms SVG, pas une ressource
       if (u === 'https://…/') continue; // texte d'exemple dans un champ
       if (u.startsWith('https://claude.ai/new')) continue; // lien ouvert dans un nouvel onglet (D-G-026), pas une ressource chargée
-      assert.match(u, /^https:\/\/(accounts\.google\.com|www\.googleapis\.com|sheets\.googleapis\.com|docs\.google\.com|drive\.google\.com)\//, `${f} : ${u}`);
+      assert.match(u, /^https:\/\/(accounts\.google\.com|www\.googleapis\.com|sheets\.googleapis\.com|docs\.google\.com|drive\.google\.com|3bras-relais\.jpdesbiens11\.workers\.dev)\//, `${f} : ${u}`);
     }
   }
 });

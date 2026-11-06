@@ -1,0 +1,42 @@
+# D-G-027 : déploie le relais Claude sur Cloudflare Workers.
+# Les clés sont des secrets du dépôt (Settings → Secrets and variables → Actions), jamais dans le code :
+#   ANTHROPIC_API_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+name: Relais Claude
+
+on:
+  push:
+    branches: [main]
+    paths: ['relais/**', '.github/workflows/relais.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deployer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Vérifier que les secrets sont là
+        env:
+          A: ${{ secrets.ANTHROPIC_API_KEY }}
+          C: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          I: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          manque=""
+          [ -n "$A" ] || manque="$manque ANTHROPIC_API_KEY"
+          [ -n "$C" ] || manque="$manque CLOUDFLARE_API_TOKEN"
+          [ -n "$I" ] || manque="$manque CLOUDFLARE_ACCOUNT_ID"
+          if [ -n "$manque" ]; then echo "::error::Secrets manquants :$manque"; exit 1; fi
+      - id: deploiement
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: relais
+          secrets: |
+            ANTHROPIC_API_KEY
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - name: Adresse du relais
+        run: echo "Relais publié : ${{ steps.deploiement.outputs.deployment-url }}" >> "$GITHUB_STEP_SUMMARY"

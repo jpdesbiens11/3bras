@@ -163,43 +163,50 @@ test('première connexion : livre vide, kits de départ au choix', async ({ page
   expect(erreurs).toEqual([]);
 });
 
-test('+ Recette : texte collé, réponse de Claude, photo vers Claude', async ({ page }, info) => {
-  const { sim, erreurs } = await demarrer(page);
-  await expect(page.locator('#addbtn')).toBeVisible();
+test('+ Recette : Claude convertit texte, photo et lien par le relais', async ({ page }, info) => {
+  const { sim, erreurs, envois } = await demarrer(page);
   await page.locator('#addbtn').click();
-  await expect(page.locator('#addsheet h2')).toHaveText('Nouvelle recette');
-  await page.screenshot({ path: `tests/captures/${info.project.name}-ajout.png`, fullPage: true });
+  await expect(page.locator('#add-go')).toHaveText(/Convertir avec Claude/);
+  await page.screenshot({ path: `tests/captures/${info.project.name}-ajout.png` });
 
-  // 1. Texte collé, lu par l'app
-  await page.locator('#add-text').fill('Soupe à l\'oignon\nPortions : 4\n\nIngrédients\n- 4 oignons\n- 1 l de bouillon de bœuf\n\nPréparation\n1. Caraméliser les oignons 30 minutes.\n2. Ajouter le bouillon et mijoter 20 minutes.');
+  // 1. Texte collé
+  await page.locator('#add-text').fill('Soupe à l\'oignon\n4 oignons, bouillon');
   await page.locator('#add-type').selectOption('Soupe');
   await page.locator('#add-go').click();
+  await expect(page.locator('#add-status')).toContainText('Converti par Claude');
   await expect(page.locator('#add-name')).toHaveValue('Soupe à l\'oignon');
-  await expect(page.locator('#add-prev ol li')).toHaveCount(2);
-  await page.screenshot({ path: `tests/captures/${info.project.name}-ajout-apercu.png`, fullPage: true });
+  expect(envois.at(-1)).toMatchObject({ type: 'Soupe', images: [], pdfs: [] });
+  await page.screenshot({ path: `tests/captures/${info.project.name}-ajout-apercu.png` });
   await page.locator('#add-save').click();
   await expect(page.locator('#toast')).toContainText('Ajoutée au livre : Soupe à l\'oignon');
-  const rec = [...sim.classeurs.values()][0].onglets.Recettes;
-  const ligne = rec.find((l) => l[1] === 'Soupe à l\'oignon');
-  expect(ligne).toBeTruthy();
+  expect([...sim.classeurs.values()][0].onglets.Recettes.find((l) => l[1] === 'Soupe à l\'oignon')).toBeTruthy();
 
-  // 2. Réponse JSON de Claude collée
+  // 2. Photo : envoyée en image (JPEG) au relais
   await page.locator('#addbtn').click();
-  await page.locator('#add-text').fill('```json\n{"nom":"Pad thaï maison","type":"Souper","proteine":"Poulet","temps_total_min":30,"portions":4,"ingredients":[{"groupe":null,"items":["200 g de nouilles de riz","2 poitrines de poulet"]}],"etapes":["Tremper les nouilles 10 minutes.","Sauter le poulet."],"sous_chef":["Rincer les germes"],"a_verifier":""}\n```');
+  const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+  await page.locator('#add-file').setInputFiles({ name: 'recette.png', mimeType: 'image/png', buffer: png });
   await page.locator('#add-go').click();
-  await expect(page.locator('#add-status')).toContainText('Fiche de Claude lue');
-  await expect(page.locator('#add-name')).toHaveValue('Pad thaï maison');
+  await expect(page.locator('#add-name')).toHaveValue('Recette en photo');
+  expect(envois.at(-1).images).toHaveLength(1);
   await page.locator('[data-addclose]').click();
 
-  // 3. Photo : envoyée à Claude (nouvel onglet claude.ai avec la consigne)
-  await page.evaluate(() => { window.__ouvert = []; window.open = (u) => { window.__ouvert.push(u); return null; }; Object.defineProperty(navigator, 'canShare', { value: undefined, configurable: true }); });
+  // 3. Lien seul : le relais lit la page
   await page.locator('#addbtn').click();
-  await page.locator('#add-file').setInputFiles({ name: 'recette.jpg', mimeType: 'image/jpeg', buffer: Buffer.from([0xff, 0xd8, 0xff, 0xd9]) });
-  await expect(page.locator('.fchip')).toHaveCount(1);
+  await page.locator('#add-url').fill('https://www.ricardocuisine.com/recettes/5541-pate-chinois');
   await page.locator('#add-go').click();
-  await expect(page.locator('#add-status')).toContainText('Claude prend le relais');
-  const ouvert = await page.evaluate(() => window.__ouvert[0]);
-  expect(ouvert).toMatch(/^https:\/\/claude\.ai\/new\?q=/);
-  expect(decodeURIComponent(ouvert)).toContain('3Bras');
+  await expect(page.locator('#add-name')).toHaveValue('Recette du lien');
+  expect(envois.at(-1).url).toBe('https://www.ricardocuisine.com/recettes/5541-pate-chinois');
   expect(erreurs).toEqual([]);
+});
+
+test('+ Recette sans relais : lecture dans l\'app, photo vers l\'app Claude', async ({ page }) => {
+  await brancher(page, { relais: '' });
+  await page.goto('./');
+  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
+  await page.locator('[data-compteclose]').click();
+  await page.locator('#addbtn').click();
+  await expect(page.locator('#add-go')).toHaveText(/^Convertir$/);
+  await page.locator('#add-text').fill('Soupe\nIngrédients\n- 4 oignons\nPréparation\n1. Cuire 30 minutes.');
+  await page.locator('#add-go').click();
+  await expect(page.locator('#add-name')).toHaveValue('Soupe');
 });

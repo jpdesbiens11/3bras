@@ -1,10 +1,11 @@
 // « + Recette » : même feuille que Gordon Rams.ai (lien, photo ou fichier, texte collé, type, aperçu, ajouter au livre).
 // Hors de claude.ai, l'app n'a pas Claude : le texte, Word et PDF sont lus ici ; une photo ou un lien seul passent
 // par l'app Claude, dont on colle la réponse dans la boîte de texte (D-G-004, D-G-026).
-import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render } from '../etat.js?v=1.4.0';
-import { el, ico, vider } from '../el.js?v=1.4.0';
-import { ajouterRecette } from '../donnees.js?v=1.4.0';
-import { lireDocx, lirePdf, parseLoose, parseTexte } from '../lecture.js?v=1.4.0';
+import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render } from '../etat.js?v=1.5.0';
+import { el, ico, vider } from '../el.js?v=1.5.0';
+import { ajouterRecette } from '../donnees.js?v=1.5.0';
+import { lireDocx, lirePdf, parseLoose, parseTexte } from '../lecture.js?v=1.5.0';
+import { CONFIG } from '../config.js?v=1.5.0';
 
 const SRC_CAT = ['Famille', 'Ricardo', 'Di Stasio', 'Recettes du Québec', 'Labriski', 'Trois fois par jour', 'Web autre'];
 const A = { files: [], result: null, busy: false };
@@ -17,10 +18,10 @@ export function openAdd() {
     el('div', { class: 'sheet-bar' }, el('div', { class: 'wrap' }, el('span', { class: 'label' }, 'Ajouter une recette'),
       el('button', { class: 'btn icon', 'data-addclose': '', 'aria-label': 'Fermer' }, ico('left')))),
     el('div', { class: 'wrap' }, el('h2', {}, 'Nouvelle recette'),
-      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, 'Donne un PDF, un fichier Word, une photo ou une capture d\'écran, ou colle le texte. 3Bras la met au format du livre, puis tu l\'ajoutes à ton classeur.'),
+      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, CONFIG.relais ? 'Donne un PDF, un fichier Word, une photo ou une capture d\'écran, ou colle le texte. Claude la met au format du livre, puis tu l\'ajoutes à ton classeur.' : 'Donne un PDF, un fichier Word, une photo ou une capture d\'écran, ou colle le texte. 3Bras la met au format du livre, puis tu l\'ajoutes à ton classeur.'),
       el('form', { class: 'addf', id: 'addform' },
         el('div', {}, el('label', { for: 'add-url' }, 'Lien de la recette (facultatif)'), el('input', { id: 'add-url', type: 'url', inputmode: 'url', placeholder: 'https://…', autocomplete: 'off' }),
-          el('p', { class: 'hint' }, 'Avec un fichier, une capture ou du texte, le lien sert de source. Donné seul, le lien est envoyé à Claude, qui lit la page et te renvoie la fiche.')),
+          el('p', { class: 'hint' }, 'Avec un fichier, une capture ou du texte, le lien sert de source. Donné seul, Claude lit la page et en fait la fiche.')),
         el('div', {}, el('span', { class: 'lbl' }, 'Photo ou fichier'),
           el('div', { class: 'pick' },
             el('label', { class: 'btn primary pickbtn' }, ico('camera'), 'Prendre une photo', el('input', { id: 'add-cam', class: 'pickin', type: 'file', accept: 'image/*', capture: 'environment', 'aria-label': 'Prendre une photo ou choisir une image' })),
@@ -29,7 +30,7 @@ export function openAdd() {
           el('p', { class: 'hint' }, 'Photo du livre ou capture d\'écran (une recette sur deux pages : prends 2 photos). Aussi PDF, Word (.docx) ou texte.')),
         el('div', {}, el('label', { for: 'add-text' }, 'Ou colle le texte (ou la réponse de Claude)'), el('textarea', { id: 'add-text', placeholder: 'Ingrédients, étapes…' })),
         el('div', {}, el('label', { for: 'add-type' }, 'Type'), el('select', { id: 'add-type' }, TYPES.map((t) => el('option', {}, t)))),
-        el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', type: 'submit', id: 'add-go', 'data-new': '1.4.0-convertir' }, ico('file'), 'Convertir')),
+        el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', type: 'submit', id: 'add-go', 'data-new': '1.4.0-convertir' }, ico('file'), CONFIG.relais ? 'Convertir avec Claude' : 'Convertir')),
         el('div', { class: 'add-status', id: 'add-status', 'aria-live': 'polite' })),
       el('div', { class: 'add-prev', id: 'add-prev' })));
   document.body.append(n); document.body.style.overflow = 'hidden';
@@ -99,6 +100,7 @@ export async function convertRecipe() {
     if (json.erreur) { addStatus('Claude : ' + json.erreur, true); return; }
     A.result = normRecipe(json, lien, type); addStatus('Fiche de Claude lue. Vérifie-la, puis ajoute-la.'); renderAddPreview(); return;
   }
+  if (CONFIG.relais) { await viaRelais(type, lien, files, pasted); return; }
   if (images.length || (!files.length && !pasted && lien)) { await versClaude(type, lien, images); return; }
   if (!files.length && !pasted) { addStatus('Ajoute un lien, un fichier, une capture ou colle le texte de la recette.', true); return; }
   A.busy = true; $('#add-go').disabled = true; vider($('#add-prev'));
@@ -118,6 +120,60 @@ export async function convertRecipe() {
     addStatus('Recette lue. Vérifie et corrige la fiche, puis ajoute-la.');
     renderAddPreview();
   } catch (e) { addStatus(e && e.local ? e.local : 'La lecture a été interrompue. Réessaie.', true); }
+  A.busy = false; const g = $('#add-go'); if (g) g.disabled = false;
+}
+
+/* ---------- conversion par Claude, via le relais 3Bras (D-G-027) ---------- */
+// Photos de téléphone : réduites en JPEG pour passer sous la limite d'envoi (comme Gordon Rams.ai).
+async function shrinkImage(file) {
+  if (file.size < 1.5e6 && ['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return file;
+  try {
+    const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    let side = 2000, q = 0.85, blob = null;
+    for (let i = 0; i < 5; i++) {
+      const k = Math.min(1, side / Math.max(bmp.width, bmp.height)), c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k); c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+      blob = await new Promise((r) => c.toBlob(r, 'image/jpeg', q));
+      if (blob && blob.size <= 1.5e6) break; side = Math.round(side * 0.8); q = Math.max(0.6, q - 0.08);
+    }
+    return blob || file;
+  } catch (_) { throw { local: 'Cette photo n\'a pas pu être lue (format HEIC ?). Prends-la en JPEG, ou fais une capture d\'écran.' }; }
+}
+async function base64(blob) {
+  const b = new Uint8Array(await blob.arrayBuffer()); let s = '';
+  for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode(...b.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+async function viaRelais(type, lien, files, pasted) {
+  A.busy = true; $('#add-go').disabled = true; vider($('#add-prev'));
+  try {
+    let texte = pasted ? pasted + '\n\n' : ''; const images = [], pdfs = [];
+    for (const f of files) {
+      const n = f.name.toLowerCase();
+      if (f.type.startsWith('image/') || /\.(jpe?g|png|webp|heic|heif)$/.test(n)) {
+        addStatus('Préparation de la photo…'); const img = await shrinkImage(f);
+        images.push({ media_type: img.type === 'image/png' || img.type === 'image/webp' ? img.type : 'image/jpeg', data: await base64(img) });
+      } else if (n.endsWith('.pdf') || f.type === 'application/pdf') {
+        if (f.size > 8e6) throw { local: 'Ce PDF est trop gros (8 Mo max). Garde seulement la page de la recette.' };
+        pdfs.push({ data: await base64(f) });
+      } else if (n.endsWith('.docx')) { addStatus('Lecture du fichier Word…'); texte += await lireDocx(f).catch(() => { throw { local: 'Impossible de lire ce fichier Word. Enregistre-le en .docx ou colle son texte.' }; }); }
+      else if (n.endsWith('.doc')) throw { local: 'Les anciens fichiers .doc ne sont pas lus : enregistre-le en .docx ou colle le texte.' };
+      else texte += await f.text();
+    }
+    addStatus(lien && !texte && !images.length && !pdfs.length ? 'Claude lit la page de la recette…' : 'Claude lit la recette…');
+    const rep = await fetch(`${CONFIG.relais}/convertir`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, url: lien, texte: texte.slice(0, 40000), images: images.slice(0, 5), pdfs: pdfs.slice(0, 2) }) });
+    const corps = await rep.json().catch(() => ({}));
+    if (!rep.ok) throw { local: corps.erreur || `Le relais a répondu ${rep.status}. Réessaie.` };
+    const data = parseLoose(corps.texte);
+    if (!data) throw { local: 'La réponse de Claude n\'était pas lisible. Réessaie.' };
+    if (data.erreur) throw { local: 'Claude : ' + data.erreur };
+    A.result = normRecipe(data, lien, type);
+    addStatus('Converti par Claude. Vérifie la fiche, puis ajoute-la.');
+    renderAddPreview();
+  } catch (e) {
+    addStatus(e && e.local ? e.local : 'Le relais Claude ne répond pas. Vérifie ta connexion et réessaie.', true);
+  }
   A.busy = false; const g = $('#add-go'); if (g) g.disabled = false;
 }
 
