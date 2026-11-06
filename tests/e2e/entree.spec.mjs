@@ -18,7 +18,7 @@ async function brancher(page, { clientId = 'client-test.apps.googleusercontent.c
     if (url.hostname === 'localhost') {
       if (url.pathname.endsWith('/js/config.js')) {
         const src = await readFile(new URL('../../dist/js/config.js', import.meta.url), 'utf8');
-        return route.fulfill({ contentType: 'text/javascript', body: src.replace("clientId: ''", `clientId: '${clientId}'`) });
+        return route.fulfill({ contentType: 'text/javascript', body: src.replace(/clientId: '[^']*'/, `clientId: '${clientId}'`) });
       }
       return route.continue();
     }
