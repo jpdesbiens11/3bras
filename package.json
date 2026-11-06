@@ -1,0 +1,16 @@
+{
+  "name": "3ebras",
+  "version": "1.0.0",
+  "private": true,
+  "description": "3eBras — le livre de recettes familial dans ton Google Drive",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"tests/unit/*.test.mjs\"",
+    "test:e2e": "playwright test",
+    "serve": "node tests/serveur.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

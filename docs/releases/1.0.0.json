@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "date": "2026-11-05",
+  "mvp": "MVP 0 — Socle",
+  "requis": ["R-01", "N-02", "N-03", "N-04", "D-01", "D-02", "D-03", "D-04", "D-07"],
+  "nouveautes": [
+    "Connexion Google (portée drive.file seulement, jeton en mémoire)",
+    "Création du dossier 3eBras (Fiches, Photos, Exports) et du classeur « 3eBras — Livre »",
+    "Onglets Recettes, Plans de semaine, Inventaire, Bilans et Schéma (version 1)",
+    "Deuxième visite : la bibliothèque existante est retrouvée, rien n'est recréé",
+    "Publication GitHub Pages par GitHub Actions, CSP par balise meta"
+  ],
+  "decisions": ["D-G-001", "D-G-002", "D-G-005", "D-G-006", "D-G-007", "D-G-010", "D-G-011", "D-G-012", "D-G-013"],
+  "tests": { "unitaires": 16, "bout_en_bout": 4, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

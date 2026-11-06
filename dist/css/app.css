@@ -1,0 +1,98 @@
+/* 3eBras — thème « Plan technique », clair et sombre. Polices système (P-1). */
+:root {
+  --fond: #f4efe6;
+  --carte: #fffdf8;
+  --encre: #1c2733;
+  --doux: #4f5d6b;
+  --accent: #1f3a5f;
+  --accent-encre: #ffffff;
+  --trait: #c9c1b3;
+  --alerte: #8a2b12;
+  --rayon: 14px;
+  --police: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fond: #11171e;
+    --carte: #1a222c;
+    --encre: #eef1f4;
+    --doux: #b3bfcb;
+    --accent: #8fb6e8;
+    --accent-encre: #0d1620;
+    --trait: #33404e;
+    --alerte: #ffb4a0;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  background: var(--fond);
+  background-image:
+    linear-gradient(var(--trait) 1px, transparent 1px),
+    linear-gradient(90deg, var(--trait) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-attachment: fixed;
+  color: var(--encre);
+  font: 17px/1.5 var(--police);
+  -webkit-text-size-adjust: 100%;
+}
+#app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+}
+.carte {
+  width: 100%;
+  max-width: 460px;
+  background: var(--carte);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon);
+  padding: 28px 22px;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.08);
+}
+.entete { text-align: center; margin-bottom: 20px; }
+.logo { display: block; margin: 0 auto 8px; border-radius: 12px; }
+h1 { margin: 0; font-size: 2rem; letter-spacing: -0.02em; }
+h2 { margin: 0 0 8px; font-size: 1.3rem; }
+.slogan { margin: 4px 0 0; color: var(--doux); }
+.aide { color: var(--doux); font-size: 0.95rem; }
+.avis { color: var(--alerte); font-weight: 600; }
+.pied { margin-top: 14px; color: var(--doux); font-size: 0.8rem; }
+
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font: 600 1rem var(--police);
+  text-decoration: none;
+  cursor: pointer;
+}
+.bouton.principal { background: var(--accent); color: var(--accent-encre); width: 100%; }
+.bouton.discret { border-color: transparent; margin-top: 8px; width: 100%; }
+.bouton:disabled { opacity: 0.6; cursor: progress; }
+.bouton:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.actions { display: grid; gap: 10px; margin: 16px 0; }
+
+.travail { display: flex; align-items: center; gap: 12px; justify-content: center; min-height: 48px; }
+.roue {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 3px solid var(--trait); border-top-color: var(--accent);
+  animation: tourne 0.9s linear infinite;
+}
+@keyframes tourne { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .roue { animation: none; border-top-color: var(--trait); }
+}
+@media (min-width: 1024px) {
+  .carte { padding: 40px 36px; }
+}
