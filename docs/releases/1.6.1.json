@@ -1,0 +1,12 @@
+{
+  "version": "1.6.1",
+  "date": "2026-11-06",
+  "mvp": "MVP 3 — Gemini branché",
+  "requis": ["R-04"],
+  "nouveautes": [
+    "Gemini est branché : « Convertir avec Gemini » dans + Recette",
+    "App Check avec Fraud Defense (anciennement reCAPTCHA Enterprise), la version classique étant fermée aux nouvelles apps"
+  ],
+  "decisions": ["D-G-029"],
+  "tests": { "unitaires": 29, "bout_en_bout": 18, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

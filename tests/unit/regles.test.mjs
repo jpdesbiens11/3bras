@@ -74,7 +74,9 @@ test('N-05 : chaque fichier local porte ?v=<version> (cache de Pages)', async ()
 
 test('P-11 / N-04 : aucun secret, portée drive.file seulement', async () => {
   const cfg = (await readFile(join(DIST, 'js/config.js'), 'utf8')).replace(/^\s*\/\/.*$/gm, '');
-  assert.doesNotMatch(cfg, /secret|GOCSPX-|apiKey/i);
+  assert.doesNotMatch(cfg, /secret|GOCSPX-|sk-ant-/i);
+  // Seule clé permise : la clé de navigateur Firebase (publique par conception, protégée par App Check, D-G-029).
+  for (const m of cfg.matchAll(/apiKey:\s*'([^']*)'/g)) assert.match(m[1], /^AIza[\w-]{35}$/);
   assert.match(cfg, /auth\/drive\.file'/);
   assert.doesNotMatch(cfg, /auth\/drive'|auth\/drive\.readonly|spreadsheets'/);
 });

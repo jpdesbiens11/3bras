@@ -1,8 +1,8 @@
 // Gemini par Firebase AI Logic (D-G-029) : convertit une recette (texte, photo, PDF, lien) en fiche du livre.
 // Aucune clé secrète dans l'app : la configuration Firebase est publique, la clé Gemini reste chez Google,
-// et App Check (reCAPTCHA v3) n'accepte que les appels qui viennent de 3Bras.
+// et App Check (Fraud Defense, anciennement reCAPTCHA Enterprise) n'accepte que les appels qui viennent de 3Bras.
 // La bibliothèque Firebase est chargée seulement à la première conversion.
-import { CONFIG } from './config.js?v=1.6.0';
+import { CONFIG } from './config.js?v=1.6.1';
 
 let modele = null;
 
@@ -10,14 +10,14 @@ export const iaDisponible = () => !!(CONFIG.ia && CONFIG.ia.apiKey && CONFIG.ia.
 
 async function obtenirModele() {
   if (modele) return modele;
-  const [{ initializeApp }, { initializeAppCheck, ReCaptchaV3Provider }, { getAI, getGenerativeModel, GoogleAIBackend }] = await Promise.all([
+  const [{ initializeApp }, { initializeAppCheck, ReCaptchaEnterpriseProvider }, { getAI, getGenerativeModel, GoogleAIBackend }] = await Promise.all([
     import('../vendor/firebase/firebase-app.js'),
     import('../vendor/firebase/firebase-app-check.js'),
     import('../vendor/firebase/firebase-ai.js')
   ]);
   const { apiKey, projectId, appId, recaptcha } = CONFIG.ia;
   const app = initializeApp({ apiKey, projectId, appId, authDomain: `${projectId}.firebaseapp.com` }, '3bras');
-  initializeAppCheck(app, { provider: new ReCaptchaV3Provider(recaptcha), isTokenAutoRefreshEnabled: true });
+  initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(recaptcha), isTokenAutoRefreshEnabled: true });
   const ai = getAI(app, { backend: new GoogleAIBackend() });
   modele = { ai, getGenerativeModel };
   return modele;
