@@ -1,22 +1,22 @@
-// 3eBras : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
-import { CONFIG } from './config.js?v=1.2.0';
-import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.2.0';
-import { el, ico, vider } from './el.js?v=1.2.0';
-import { creerAuth } from './auth.js?v=1.2.0';
-import { creerDrive } from './drive.js?v=1.2.0';
-import { ouvrirOuCreer } from './store.js?v=1.2.0';
-import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.2.0';
-import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.2.0';
-import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.2.0';
-import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.2.0';
-import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.2.0';
-import { openPreview, closePreview, renderSheet, toggleHave } from './vues/fiche.js?v=1.2.0';
-import { viewTri, loadTri, decide } from './vues/livre.js?v=1.2.0';
-import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.2.0';
-import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.2.0';
-import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.2.0';
-import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.2.0';
-import { openCompte, closeCompte, lireImport } from './vues/compte.js?v=1.2.0';
+// 3Bras : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
+import { CONFIG } from './config.js?v=1.2.1';
+import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.2.1';
+import { el, ico, vider } from './el.js?v=1.2.1';
+import { creerAuth } from './auth.js?v=1.2.1';
+import { creerDrive } from './drive.js?v=1.2.1';
+import { ouvrirOuCreer } from './store.js?v=1.2.1';
+import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.2.1';
+import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.2.1';
+import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.2.1';
+import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.2.1';
+import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.2.1';
+import { openPreview, closePreview, renderSheet, toggleHave } from './vues/fiche.js?v=1.2.1';
+import { viewTri, loadTri, decide } from './vues/livre.js?v=1.2.1';
+import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.2.1';
+import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.2.1';
+import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.2.1';
+import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.2.1';
+import { openCompte, closeCompte, lireImport } from './vues/compte.js?v=1.2.1';
 
 let auth = null;
 const VUES = { semaine: viewWeek, poele: viewCook, tri: viewTri, livre: viewInv, provigo: viewProvigo, bilan: viewBilan };
@@ -28,7 +28,7 @@ function renderSteps() {
 function viewConnexion() {
   return [el('div', { class: 'frame connexion' },
     el('h3', {}, 'Ton livre t\'attend'),
-    el('p', {}, 'Tes recettes vivent dans ton Google Drive. 3eBras ne voit que les fichiers qu\'il crée.'),
+    el('p', {}, 'Tes recettes vivent dans ton Google Drive. 3Bras ne voit que les fichiers qu\'il crée.'),
     CONFIG.clientId
       ? el('button', { class: 'btn primary', id: 'connexion', disabled: !auth }, ico('users'), auth ? 'Se connecter avec Google' : 'On attend Google…')
       : el('p', { role: 'alert' }, 'L\'ID client Google n\'est pas encore configuré (js/config.js).'))];

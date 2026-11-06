@@ -107,12 +107,12 @@ export function creerDriveSimule() {
 
   // Crée un classeur au schéma 1 (comme celui de JP en 1.0.x), pour tester la migration.
   function classeurV1(colonnesV1) {
-    const dossier = { id: `f${++compteur}`, name: '3eBras', mimeType: 'application/vnd.google-apps.folder', parents: [], appProperties: { '3ebras': 'dossier' } };
-    const livre = { id: `f${++compteur}`, name: '3eBras — Livre', mimeType: 'application/vnd.google-apps.spreadsheet', parents: [dossier.id], appProperties: { '3ebras': 'livre' } };
+    const dossier = { id: `f${++compteur}`, name: '3Bras', mimeType: 'application/vnd.google-apps.folder', parents: [], appProperties: { '3ebras': 'dossier' } };
+    const livre = { id: `f${++compteur}`, name: '3Bras — Livre', mimeType: 'application/vnd.google-apps.spreadsheet', parents: [dossier.id], appProperties: { '3ebras': 'livre' } };
     fichiers.push(dossier, livre);
     const onglets = {};
     for (const [titre, cols] of Object.entries(colonnesV1)) onglets[titre] = [cols];
-    onglets['Schéma'].push(['version_schema', '1'], ['cree_par', '3eBras 1.0.1'], ['cree_le', '2026-11-05']);
+    onglets['Schéma'].push(['version_schema', '1'], ['cree_par', '3Bras 1.0.1'], ['cree_le', '2026-11-05']);
     classeurs.set(livre.id, { sheets: Object.keys(onglets).map((t, i) => ({ properties: { sheetId: i, title: t } })), onglets });
     return livre.id;
   }

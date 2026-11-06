@@ -1,14 +1,14 @@
-# 3eBras
+# 3Bras
 
 Le livre de recettes familial qui vit dans **ton** Google Drive. Tu planifies la semaine, tu fais l'épicerie, tu cuisines et tu notes les soupers.
 
 - App : https://jpdesbiens11.github.io/3ebras/
 - Aucune recette ne passe par un serveur. L'app parle directement à Google depuis ton navigateur.
-- Portée Google `drive.file` : 3eBras ne voit que les fichiers qu'il a créés.
+- Portée Google `drive.file` : 3Bras ne voit que les fichiers qu'il a créés.
 
 ## État
 
-Version 1.0.0, MVP 0 (socle) : connexion Google, puis création du dossier `3eBras` et du classeur `3eBras — Livre`. Voir `docs/releases/` et `docs/DECISIONS.md`.
+Version 1.0.0, MVP 0 (socle) : connexion Google, puis création du dossier `3Bras` et du classeur `3Bras — Livre`. Voir `docs/releases/` et `docs/DECISIONS.md`.
 
 ## Développer
 
@@ -29,7 +29,7 @@ Règles du dépôt (vérifiées par les tests) : fichiers JS et CSS sous 500 lig
 1. `node scripts/version.mjs 1.0.x` et une note `docs/releases/1.0.x.json`, dans une branche `version/1.0.x`.
 2. PR vers `main` ; les tests tournent sur la PR.
 3. Fusionner : GitHub Actions crée le tag et la release `v1.0.x`, puis publie `dist/` sur Pages (D-G-014).
-4. Retour arrière : Actions → « Publier 3eBras » → *Run workflow* avec le tag précédent.
+4. Retour arrière : Actions → « Publier 3Bras » → *Run workflow* avec le tag précédent.
 
 ## Héberger ta propre copie
 

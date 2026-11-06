@@ -1,8 +1,8 @@
-// Bibliothèque 3eBras dans le Drive de la personne (R-01).
+// Bibliothèque 3Bras dans le Drive de la personne (R-01).
 // Trouve le dossier et le classeur créés par l'app, ou les crée.
 
-import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.2.0';
-import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.2.0';
+import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.2.1';
+import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.2.1';
 
 export async function ouvrirOuCreer(drive, { nomDossier, nomClasseur, version }, etape = () => {}) {
   etape('recherche');
@@ -43,7 +43,7 @@ export async function preparerOnglets(drive, id, version) {
     range: "'Schéma'!A2:B4",
     values: [
       ['version_schema', String(VERSION_SCHEMA)],
-      ['cree_par', `3eBras ${version}`],
+      ['cree_par', `3Bras ${version}`],
       ['cree_le', new Date().toISOString().slice(0, 10)]
     ]
   });
