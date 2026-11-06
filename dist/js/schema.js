@@ -1,4 +1,4 @@
-// Schéma du classeur « 3eBras — Livre ».
+// Schéma du classeur « 3Bras — Livre ».
 // P-4 : on ajoute des colonnes à la fin, on n'en renomme ni n'en retire jamais.
 // Chaque ligne a un id stable ; les plans et bilans pointent vers cet id.
 // Version 2 (1.1.0) : colonnes reprises de Notion ajoutées à la fin de chaque onglet.

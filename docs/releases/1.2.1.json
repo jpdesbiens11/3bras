@@ -1,0 +1,12 @@
+{
+  "version": "1.2.1",
+  "date": "2026-11-06",
+  "mvp": "Nom",
+  "requis": [],
+  "nouveautes": [
+    "L'app s'appelle 3Bras : Brigade, Recettes, Achats, Soupers",
+    "Icône 3B ; l'adresse, le dépôt et le dossier Drive gardent leur nom"
+  ],
+  "decisions": ["D-G-021"],
+  "tests": { "unitaires": 24, "bout_en_bout": 6, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

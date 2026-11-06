@@ -1,4 +1,4 @@
-/* Ajouts propres à 3eBras, dans le même langage visuel que Gordon Rams.ai. */
+/* Ajouts propres à 3Bras, dans le même langage visuel que Gordon Rams.ai. */
 .connexion{padding:34px 22px;text-align:center;display:grid;gap:14px;justify-items:center}
 .connexion h3{font-size:1.6rem;text-transform:uppercase}
 .connexion p{color:var(--muted);max-width:46ch;margin:0}
@@ -8,3 +8,6 @@
 .import-res{display:grid;gap:8px;margin-top:14px}
 .import-res ul{margin:0;padding-left:1.2em}
 .sprite{position:absolute}
+/* Sous-titre B.R.A.S. : en entier sur grand écran, en sigle au téléphone pour garder l'en-tête sur deux lignes comme Gordon Rams.ai. */
+.acro-sh{display:none}
+@media (max-width:620px){.acro-lg{display:none}.acro-sh{display:inline}}

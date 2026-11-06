@@ -1,9 +1,9 @@
 // Feuille Compte : connexion, classeur, import (R-02). Même gabarit que les feuilles de Gordon Rams.ai.
-import { S, $, toast } from '../etat.js?v=1.2.0';
-import { el, ico, vider } from '../el.js?v=1.2.0';
-import { lienClasseur, lienDossier } from '../store.js?v=1.2.0';
-import { valider, importer } from '../import.js?v=1.2.0';
-import { CONFIG } from '../config.js?v=1.2.0';
+import { S, $, toast } from '../etat.js?v=1.2.1';
+import { el, ico, vider } from '../el.js?v=1.2.1';
+import { lienClasseur, lienDossier } from '../store.js?v=1.2.1';
+import { valider, importer } from '../import.js?v=1.2.1';
+import { CONFIG } from '../config.js?v=1.2.1';
 
 export function openCompte(surImporter) {
   if ($('#comptesheet')) return;
@@ -22,13 +22,13 @@ export function openCompte(surImporter) {
           c.dossier && el('a', { class: 'btn', href: lienDossier(c.dossier.id), target: '_blank', rel: 'noopener' }, 'Dossier')),
         c.messageMigration && el('p', { class: 'hint' }, c.messageMigration)),
       el('h4', { id: 'importer' }, 'Importer des recettes'),
-      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, 'Choisis un fichier d\'import 3eBras (.json). Tout est vérifié avant d\'écrire, et ré-importer le même fichier ne crée pas de doublons.'),
+      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, 'Choisis un fichier d\'import 3Bras (.json). Tout est vérifié avant d\'écrire, et ré-importer le même fichier ne crée pas de doublons.'),
       el('div', { class: 'pick addf' }, el('label', { class: 'btn primary pickbtn' }, ico('file'), 'Choisir le fichier',
         el('input', { id: 'fichier-import', class: 'pickin', type: 'file', accept: '.json,application/json', 'aria-label': 'Choisir le fichier d\'import' }))),
       res,
       el('div', { class: 'sheet-acts' },
         el('button', { class: 'btn', id: 'deconnexion' }, 'Se déconnecter'),
-        el('span', { class: 'label' }, `3eBras v${CONFIG.version}`))));
+        el('span', { class: 'label' }, `3Bras v${CONFIG.version}`))));
   if (surImporter) $('#importer')?.scrollIntoView();
 }
 export function closeCompte() { $('#comptesheet')?.remove(); if (!S.preview && !$('#picksheet') && !$('#dsheet')) document.body.style.overflow = ''; }

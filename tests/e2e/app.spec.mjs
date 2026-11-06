@@ -19,12 +19,12 @@ async function demarrer(page) {
   return { ...b, erreurs };
 }
 
-test('les 6 étapes de Gordon Rams.ai sur 3eBras', async ({ page }, info) => {
+test('les 6 étapes de Gordon Rams.ai sur 3Bras', async ({ page }, info) => {
   const P = info.project.name;
   const { sim, erreurs } = await demarrer(page);
 
   // En-tête identique : marque, 6 étapes numérotées
-  await expect(page.locator('.brand h1')).toHaveText('3eBras');
+  await expect(page.locator('.brand h1')).toHaveText('3Bras');
   await expect(page.locator('#steps button')).toHaveCount(6);
   await expect(page.locator('#steps button[aria-current="page"] i')).toHaveText('Semaine');
   await expect(page.locator('#sync')).toHaveText(/soupers dans le livre/);

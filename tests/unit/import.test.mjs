@@ -22,7 +22,7 @@ const fichier = (extra = {}) => ({
 const preparer = async () => {
   const sim = creerDriveSimule();
   const drive = creerDrive({ jetonValide: async () => 'jeton-test', fetch: sim.fetch });
-  const b = await ouvrirOuCreer(drive, { nomDossier: '3eBras', nomClasseur: '3eBras — Livre', version: '1.1.0' });
+  const b = await ouvrirOuCreer(drive, { nomDossier: '3Bras', nomClasseur: '3Bras — Livre', version: '1.1.0' });
   return { sim, drive, id: b.classeur.id };
 };
 
@@ -34,7 +34,7 @@ test('R-02 : un fichier valide passe', () => {
 
 test('R-02 : refus clair des fichiers douteux, sans rien écrire', () => {
   assert.match(valider('pas du json').erreurs[0], /JSON/);
-  assert.match(valider({ format: 'autre' }).erreurs[0], /3eBras/);
+  assert.match(valider({ format: 'autre' }).erreurs[0], /3Bras/);
   const v = valider(fichier({
     recettes: [
       { id: 'r-a', Nom: 'X', '<img onerror>': 1 },

@@ -5,7 +5,7 @@ import { ouvrirOuCreer } from '../../dist/js/store.js';
 import { ONGLETS, lettre, VERSION_SCHEMA } from '../../dist/js/schema.js';
 import { creerDriveSimule } from './drive-simule.mjs';
 
-const OPTS = { nomDossier: '3eBras', nomClasseur: '3eBras — Livre', version: '1.0.0' };
+const OPTS = { nomDossier: '3Bras', nomClasseur: '3Bras — Livre', version: '1.0.0' };
 const preparer = (jeton = 'jeton-test') => {
   const sim = creerDriveSimule();
   const drive = creerDrive({ jetonValide: async () => jeton, fetch: sim.fetch });
@@ -19,8 +19,8 @@ test('R-01 : première visite, crée dossier, sous-dossiers et classeur', async 
   assert.equal(r.nouveau, true);
   assert.deepEqual(etapes, ['recherche', 'creation']);
   const noms = sim.fichiers.map((f) => f.name).sort();
-  assert.deepEqual(noms, ['3eBras', '3eBras — Livre', 'Exports', 'Fiches', 'Photos']);
-  const dossier = sim.fichiers.find((f) => f.name === '3eBras');
+  assert.deepEqual(noms, ['3Bras', '3Bras — Livre', 'Exports', 'Fiches', 'Photos']);
+  const dossier = sim.fichiers.find((f) => f.name === '3Bras');
   for (const f of sim.fichiers.filter((x) => x !== dossier)) assert.deepEqual(f.parents, [dossier.id]);
 });
 

@@ -19,4 +19,4 @@ createServer(async (req, res) => {
   } catch {
     res.writeHead(404).end('introuvable');
   }
-}).listen(PORT, () => console.log(`3eBras sur http://localhost:${PORT}/3ebras/`));
+}).listen(PORT, () => console.log(`3Bras sur http://localhost:${PORT}/3ebras/`));

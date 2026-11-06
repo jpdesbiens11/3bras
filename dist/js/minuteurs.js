@@ -1,6 +1,6 @@
 // Minuteurs : plusieurs à la fois, sons maison, écran verrouillé, écran allumé. Repris de Gordon Rams.ai.
-import { S, $, toast, render } from './etat.js?v=1.2.0';
-import { el, ico, vider } from './el.js?v=1.2.0';
+import { S, $, toast, render } from './etat.js?v=1.2.1';
+import { el, ico, vider } from './el.js?v=1.2.1';
 
 let audioCtx = null, master = null;
 export function ac() { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (_) {} return audioCtx; }
@@ -66,10 +66,10 @@ function bgSync() {
   if (!('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') return;
   const list = ids.map((k) => S.timers[k]).sort((a, b) => (b.done - a.done) || (a.left - b.left)), first = list[0];
   const title = first.done ? `PRÊT : ${first.label}` : `${fmt(first.left)} · ${first.label}`;
-  const artist = list.length > 1 ? list.slice(1).map((t) => `${t.done ? 'prêt' : fmt(t.left)} ${t.label}`).join(' | ') : '3eBras';
+  const artist = list.length > 1 ? list.slice(1).map((t) => `${t.done ? 'prêt' : fmt(t.left)} ${t.label}`).join(' | ') : '3Bras';
   if (title + artist === lastMeta) return; lastMeta = title + artist;
   try {
-    navigator.mediaSession.metadata = new MediaMetadata({ title, artist, album: first.done ? 'Touche pause pour arrêter l\'alarme' : 'Minuteurs 3eBras' });
+    navigator.mediaSession.metadata = new MediaMetadata({ title, artist, album: first.done ? 'Touche pause pour arrêter l\'alarme' : 'Minuteurs 3Bras' });
     navigator.mediaSession.playbackState = 'playing';
     if (navigator.mediaSession.setPositionState && !first.done) navigator.mediaSession.setPositionState({ duration: first.total, position: Math.min(first.total, first.total - first.left), playbackRate: 1 });
   } catch (_) {}
