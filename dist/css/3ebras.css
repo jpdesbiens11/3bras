@@ -11,3 +11,4 @@
 /* Sous-titre B.R.A.S. : en entier sur grand écran, en sigle au téléphone pour garder l'en-tête sur deux lignes comme Gordon Rams.ai. */
 .acro-sh{display:none}
 @media (max-width:620px){.acro-lg{display:none}.acro-sh{display:inline}}
+a.btn{color:inherit;text-decoration:none}

@@ -1,0 +1,13 @@
+{
+  "version": "1.3.0",
+  "date": "2026-11-06",
+  "mvp": "Kits de départ",
+  "requis": ["R-01", "R-15"],
+  "nouveautes": [
+    "Trois kits de 10 recettes classiques : Québécois, Végé et Asiatique",
+    "Première connexion : les kits sont proposés pour remplir le livre en un toucher",
+    "On peut ajouter un kit plus tard depuis Compte, sans doublon"
+  ],
+  "decisions": ["D-G-025"],
+  "tests": { "unitaires": 24, "bout_en_bout": 12, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}
