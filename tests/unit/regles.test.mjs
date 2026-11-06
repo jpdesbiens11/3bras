@@ -55,6 +55,17 @@ test('D-07 / N-03 : chaque page porte la CSP et la Referrer-Policy', async () =>
   }
 });
 
+test('N-05 : chaque fichier local porte ?v=<version> (cache de Pages)', async () => {
+  const version = /version: '([^']+)'/.exec(await readFile(join(DIST, 'js/config.js'), 'utf8'))[1];
+  const html = await readFile(join(DIST, 'index.html'), 'utf8');
+  for (const ref of html.match(/(?:href|src)="(?:css|js)\/[^"]+"/g)) assert.match(ref, new RegExp(`\\?v=${version}"$`), ref);
+  for (const f of code.filter((x) => x.endsWith('.js'))) {
+    for (const imp of (await readFile(f, 'utf8')).match(/from '\.\/[^']+'/g) || []) {
+      assert.match(imp, new RegExp(`\\.js\\?v=${version}'$`), `${f} : ${imp}`);
+    }
+  }
+});
+
 test('P-11 / N-04 : aucun secret, portée drive.file seulement', async () => {
   const cfg = (await readFile(join(DIST, 'js/config.js'), 'utf8')).replace(/^\s*\/\/.*$/gm, '');
   assert.doesNotMatch(cfg, /secret|GOCSPX-|apiKey/i);

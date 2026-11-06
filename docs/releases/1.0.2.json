@@ -1,0 +1,12 @@
+{
+  "version": "1.0.2",
+  "date": "2026-11-05",
+  "mvp": "MVP 0 — Socle",
+  "requis": ["N-05"],
+  "nouveautes": [
+    "Chaque fichier CSS et JS porte ?v=<version> : une nouvelle version n'est jamais mélangée avec des fichiers en cache",
+    "Script scripts/version.mjs pour changer la version partout en une commande"
+  ],
+  "decisions": [],
+  "tests": { "unitaires": 17, "bout_en_bout": 4, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

@@ -26,7 +26,7 @@ Règles du dépôt (vérifiées par les tests) : fichiers JS et CSS sous 500 lig
 
 ## Publier une version
 
-1. Fusionner la PR de la version dans `main`.
+1. `node scripts/version.mjs 1.0.x`, puis PR de la version dans `main`.
 2. `git tag v1.0.x && git push origin v1.0.x` : GitHub Actions teste, puis publie `dist/` sur Pages.
 3. Retour arrière : Actions → « Publier 3eBras » → *Run workflow* avec le tag précédent.
 
