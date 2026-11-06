@@ -26,9 +26,10 @@ Règles du dépôt (vérifiées par les tests) : fichiers JS et CSS sous 500 lig
 
 ## Publier une version
 
-1. `node scripts/version.mjs 1.0.x`, puis PR de la version dans `main`.
-2. `git tag v1.0.x && git push origin v1.0.x` : GitHub Actions teste, puis publie `dist/` sur Pages.
-3. Retour arrière : Actions → « Publier 3eBras » → *Run workflow* avec le tag précédent.
+1. `node scripts/version.mjs 1.0.x` et une note `docs/releases/1.0.x.json`, dans une branche `version/1.0.x`.
+2. PR vers `main` ; les tests tournent sur la PR.
+3. Fusionner : GitHub Actions crée le tag et la release `v1.0.x`, puis publie `dist/` sur Pages (D-G-014).
+4. Retour arrière : Actions → « Publier 3eBras » → *Run workflow* avec le tag précédent.
 
 ## Héberger ta propre copie
 

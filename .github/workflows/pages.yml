@@ -1,9 +1,11 @@
 # D-02 / D-05 / D-06 : tests, puis publication de dist/ sur GitHub Pages.
-# Publie à chaque tag v1.0.x. Retour arrière : relancer à la main avec le tag précédent.
+# D-G-014 : chaque fusion dans main crée le tag et la release v<version de package.json>
+# (si absents), puis publie. Retour arrière : relancer à la main avec le tag précédent.
 name: Publier 3eBras
 
 on:
   push:
+    branches: [main]
     tags: ['v*']
   pull_request:
   workflow_dispatch:
@@ -13,7 +15,7 @@ on:
         required: true
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -47,6 +49,18 @@ jobs:
       - uses: actions/checkout@v5
         with:
           ref: ${{ inputs.ref || github.ref }}
+      - name: Créer le tag et la release de la version
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V=$(node -p "require('./package.json').version")
+          if gh release view "v$V" >/dev/null 2>&1; then
+            echo "v$V existe déjà, on publie seulement."
+          else
+            node -e "const r=require('./docs/releases/'+process.argv[1]+'.json'); require('fs').writeFileSync('notes.md', r.mvp+'\n\n'+r.nouveautes.map(n=>'- '+n).join('\n')+'\n')" "$V"
+            gh release create "v$V" --target "$GITHUB_SHA" --title "$V" --notes-file notes.md
+          fi
       - name: Joindre les notes de version
         run: mkdir -p dist/releases && cp docs/releases/*.json dist/releases/
       - uses: actions/configure-pages@v5

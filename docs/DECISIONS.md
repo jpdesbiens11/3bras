@@ -17,6 +17,7 @@ Chaque décision a un code D-G-nnn et une date. On n'en efface jamais : une déc
 | D-G-011 | 2026-11-05 | Le VPS Hostinger n'est pas utilisé. |
 | D-G-012 | 2026-11-05 | Le dossier Drive s'appelle « 3eBras » et le classeur « 3eBras — Livre ». L'app retrouve ses fichiers par l'étiquette `appProperties.3ebras` (`dossier`, `livre`), jamais par leur nom : la personne peut les renommer. |
 | D-G-013 | 2026-11-05 | Le jeton Google est obtenu par le flux « jeton » de Google Identity Services, sans serveur. Il est renouvelé sans invite cinq minutes avant la fin de son heure. |
+| D-G-014 | 2026-11-05 | Une version = une PR fusionnée dans `main`. Le workflow lit la version de `package.json`, crée le tag et la release `v<version>` s'ils n'existent pas, puis publie. La fusion de la PR par JP est la seule étape humaine. |
 
 ## Questions ouvertes
 
