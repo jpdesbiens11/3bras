@@ -1,0 +1,13 @@
+{
+  "version": "1.0.1",
+  "date": "2026-11-05",
+  "mvp": "MVP 0 — Socle",
+  "requis": ["R-01", "D-03", "D-04"],
+  "nouveautes": [
+    "ID client OAuth public du projet Google Cloud « 3eBras » (écran de consentement en mode Test)",
+    "Actions checkout et setup-node passées en v5 (Node 24)",
+    "Environnement github-pages : publication permise pour les tags v*"
+  ],
+  "decisions": [],
+  "tests": { "unitaires": 16, "bout_en_bout": 4, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}
