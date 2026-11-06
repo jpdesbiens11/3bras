@@ -1,0 +1,18 @@
+{
+  "version": "1.2.0",
+  "date": "2026-11-06",
+  "mvp": "MVP 1 et 2 — cadre Gordon Rams.ai complet sur Google Drive",
+  "requis": ["R-03", "R-06", "R-07", "R-08", "R-09", "R-10", "R-11", "R-12", "R-13", "R-14", "R-15", "N-07"],
+  "nouveautes": [
+    "Apparence et disposition identiques à Gordon Rams.ai : en-tête, 6 étapes numérotées, cadres à repères, thèmes Plan technique, Magazine et Ardoise",
+    "01 Livre : parcourir, étiquettes, étoiles, tri par glissement",
+    "02 Garde-manger : inventaire par zone, + et −",
+    "03 Semaine : pige, choix, jours fixes, règle des 3 semaines, desserts, approbation dans le classeur",
+    "04 Provigo : liste par rayon, déjà à la maison, cases gardées sur le téléphone",
+    "05 Au poêle : étape par étape, ingrédients par étape, minuteurs avec sons, sous-chef, écran allumé",
+    "06 Bilan : notes, facilité, restes, verdict",
+    "Polices servies par l'app ; Compte et import dans l'en-tête"
+  ],
+  "decisions": ["D-G-018", "D-G-019", "D-G-020"],
+  "tests": { "unitaires": 24, "bout_en_bout": 6, "appareils": ["Galaxy S25 360 px", "PC 1440 px"], "themes": ["plan", "magazine", "ardoise"] }
+}

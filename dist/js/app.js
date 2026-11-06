@@ -1,112 +1,196 @@
-// Coquille de 3eBras : connexion Google, puis navigation entre les vues.
-import { CONFIG } from './config.js?v=1.1.0';
-import { T } from './textes.js?v=1.1.0';
-import { el, vider } from './el.js?v=1.1.0';
-import { creerAuth } from './auth.js?v=1.1.0';
-import { creerDrive } from './drive.js?v=1.1.0';
-import { ouvrirOuCreer, lienClasseur, lienDossier } from './store.js?v=1.1.0';
-import { vueLivre } from './vues/livre.js?v=1.1.0';
-import { vueImporter } from './vues/importer.js?v=1.1.0';
+// 3eBras : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
+import { CONFIG } from './config.js?v=1.2.0';
+import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.2.0';
+import { el, ico, vider } from './el.js?v=1.2.0';
+import { creerAuth } from './auth.js?v=1.2.0';
+import { creerDrive } from './drive.js?v=1.2.0';
+import { ouvrirOuCreer } from './store.js?v=1.2.0';
+import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.2.0';
+import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.2.0';
+import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.2.0';
+import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.2.0';
+import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.2.0';
+import { openPreview, closePreview, renderSheet, toggleHave } from './vues/fiche.js?v=1.2.0';
+import { viewTri, loadTri, decide } from './vues/livre.js?v=1.2.0';
+import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.2.0';
+import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.2.0';
+import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.2.0';
+import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.2.0';
+import { openCompte, closeCompte, lireImport } from './vues/compte.js?v=1.2.0';
 
-const racine = document.getElementById('app');
-const VUES = { livre: vueLivre, importer: vueImporter };
 let auth = null;
+const VUES = { semaine: viewWeek, poele: viewCook, tri: viewTri, livre: viewInv, provigo: viewProvigo, bilan: viewBilan };
 
-function entete() {
-  return el('header', { class: 'entete' },
-    el('img', { src: 'icone.svg', alt: '', width: 56, height: 56, class: 'logo' }),
-    el('h1', {}, '3eBras'),
-    el('p', { class: 'slogan' }, T.slogan));
+function renderSteps() {
+  vider($('#steps')).append(...STEPS.map((s) => el('button', { type: 'button', 'data-go': s.id, class: READY.has(s.id) ? '' : 'later', 'aria-current': S.view === s.id ? 'page' : null },
+    el('b', {}, s.n), el('i', {}, s.short ? [el('span', { class: 'lg' }, s.label), el('span', { class: 'sh' }, s.short[0], el('br'), s.short[1])] : s.label))));
+}
+function viewConnexion() {
+  return [el('div', { class: 'frame connexion' },
+    el('h3', {}, 'Ton livre t\'attend'),
+    el('p', {}, 'Tes recettes vivent dans ton Google Drive. 3eBras ne voit que les fichiers qu\'il crée.'),
+    CONFIG.clientId
+      ? el('button', { class: 'btn primary', id: 'connexion', disabled: !auth }, ico('users'), auth ? 'Se connecter avec Google' : 'On attend Google…')
+      : el('p', { role: 'alert' }, 'L\'ID client Google n\'est pas encore configuré (js/config.js).'))];
+}
+function doRender() {
+  renderSteps();
+  const kids = [];
+  if (S.err) kids.push(noticeWarn(S.err, S.ctx ? null : el('button', { class: 'btn', id: 'connexion' }, 'Réessayer')));
+  kids.push(...(!S.ctx ? viewConnexion() : (VUES[S.view] || viewWeek)()));
+  vider($('#main')).append(...kids);
+  if (S.view === 'poele') paintLock();
+  $('#sync').textContent = !S.ctx ? (S.err ? 'Hors ligne' : 'Connexion à Google…') : S.loading ? 'Lecture du livre…' : `${S.recipes.length} soupers dans le livre`;
+  $('#comptebtn').hidden = !S.ctx;
+}
+hooks.render = doRender;
+hooks.renderSheet = renderSheet;
+
+/* ---------- thème ---------- */
+function applySkin(k) {
+  if (k === 'magazine' || k === 'ardoise') document.documentElement.setAttribute('data-skin', k);
+  else { document.documentElement.removeAttribute('data-skin'); k = 'plan'; }
+  try { localStorage.setItem('3ebras-skin', k); } catch (_) {}
+  const sel = $('#skin'); if (sel) sel.value = k;
 }
 
-function afficher(...contenu) {
-  document.body.classList.remove('connecte');
-  vider(racine).append(el('div', { class: 'carte' }, entete(), ...contenu),
-    el('footer', { class: 'pied' }, `v${CONFIG.version}`));
-}
-
-function attendreGoogle(delaiMs = 10000) {
-  return new Promise((res, rej) => {
-    const debut = Date.now();
-    (function verifier() {
-      if (globalThis.google?.accounts?.oauth2) return res(globalThis.google);
-      if (Date.now() - debut > delaiMs) return rej(new Error('google-indisponible'));
-      setTimeout(verifier, 100);
-    })();
-  });
-}
-
-function vueAccueil() {
-  if (!CONFIG.clientId) {
-    afficher(el('p', { class: 'avis', role: 'alert' }, T.idClientManquant));
-    return;
+/* ---------- événements (délégués, comme dans Gordon Rams.ai) ---------- */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  const d = b.dataset;
+  if (d.go) { setView(d.go); return; }
+  if (b.id === 'connexion') { connecter(); return; }
+  if (b.id === 'comptebtn') { openCompte(); return; }
+  if (d.compteclose !== undefined) { closeCompte(); return; }
+  if (b.id === 'deconnexion') { auth?.deconnecter(); closeCompte(); S.ctx = null; S.book = []; render(); return; }
+  if (!S.ctx) return;
+  if (d.swap) { swap(+d.swap); return; }
+  if (d.dtog) { toggleDay(+d.dtog); return; }
+  if (b.id === 'adddess') { openDessert(); return; }
+  if (d.dclose !== undefined) { closeDessert(); return; }
+  if (d.dday) { S.dpick.day = +d.dday; renderDessert(); return; }
+  if (d.dadd) { addDessert(d.dadd); return; }
+  if (d.ddel) { removeDessert(d.ddel); return; }
+  if (d.pick) { openPicker(+d.pick); return; }
+  if (d.pickclose !== undefined) { closePicker(); return; }
+  if (d.pickid) { choosePick(d.pickid); return; }
+  if (d.unfix) { const i = +d.unfix; closePicker(); setFixed(i, null); return; }
+  if (d.cook) { if (S.preview) closePreview(); if (S.view !== 'poele') setView('poele'); openCook(d.cook); return; }
+  if (d.ttog) { toggleTimer(d.ttog); return; }
+  if (d.tdel) { dismissTimer(d.tdel); return; }
+  if (d.havebtn) { toggleHave(d.havebtn); return; }
+  if (d.star) { setStars(d.star, +d.n); return; }
+  if (d.tag && S.preview) { setTag(S.preview.id, d.tag, d.v); return; }
+  if (d.setstatut && S.preview) { setStatut(S.preview.id, d.setstatut); return; }
+  if (d.libmode) { S.lib.mode = d.libmode; if (S.lib.mode === 'tri') loadTri(true); render(); return; }
+  if (d.libtype) { S.lib.type = d.libtype; render(); return; }
+  if (d.libstat) { S.lib.statut = d.libstat; render(); return; }
+  if (d.tadd) { addTimer(d.tlabel || 'Minuteur', +d.tadd, S.cook.id); return; }
+  if (b.id === 'sndtest') { ac(); SOUNDS[($('#snd') || {}).value || soundKey()].play(); return; }
+  if (b.id === 'save') savePlan();
+  else if (b.id === 'redraw') { draftWeek(); render(); }
+  else if (b.id === 'prev') go(-1);
+  else if (b.id === 'next') go(1);
+  else if (b.id === 'served') served();
+  else if (b.id === 'rebuild') buildProvigo();
+  else if (d.preview) openPreview(d.preview, d.day);
+  else if (b.hasAttribute('data-close')) closePreview();
+  else if (d.sheetswap !== undefined) { const i = +d.sheetswap; swap(i); if (S.plan[i]) openPreview(S.plan[i], i); }
+  else if (b.id === 'invoff') applyInvOff();
+  else if (d.decide) decide(d.decide);
+  else if (d.qty) { const it = (S.inv.items || []).find((i) => i.id === d.qty); if (it) setQty(it, it.qty + (+d.d)); }
+  else if (d.bf) { const f = S.bil.form[d.bf]; f[d.k] = Math.min(10, Math.max(1, f[d.k] + (+d.d))); render(); }
+  else if (d.brest) { S.bil.form[d.brest].rest = d.v; render(); }
+  else if (d.bsave) saveBilan(d.bsave);
+});
+document.addEventListener('input', (e) => {
+  const t = e.target;
+  if (t.id === 'lib-q') { S.lib.q = t.value; const pos = t.selectionStart; render(); const i = $('#lib-q'); if (i) { i.focus(); try { i.setSelectionRange(pos, pos); } catch (_) {} } return; }
+  if (t.id === 'd-q' && S.dpick) { S.dpick.q = t.value; const l = $('#dlist'); if (l) vider(l).append(...dessertList()); return; }
+  if (t.id === 'pick-q' && S.picker) { S.picker.q = t.value; const l = $('#picklist'); if (l) vider(l).append(...pickList()); }
+});
+document.addEventListener('change', (e) => {
+  const t = e.target, d = t.dataset || {};
+  if (d.gro !== undefined) toggleGrocery(d.gro);
+  if (d.breal) S.bil.form[d.breal].real = t.value;
+  if (t.id === 'skin') applySkin(t.value);
+  if (t.id === 'snd') setSound(t.value);
+  if (d.got !== undefined && S.cook.got) { const k = +d.got; t.checked ? S.cook.got.add(k) : S.cook.got.delete(k); t.closest('label')?.classList.toggle('on', t.checked); }
+  if (d.have !== undefined) toggleHave(d.have, t.checked);
+  if (t.id === 'pick-every' && S.picker) S.picker.every = t.checked;
+  if (t.id === 'fichier-import') { lireImport(t.files[0], recharger); t.value = ''; }
+});
+document.addEventListener('submit', async (e) => {
+  if (e.target.id !== 'addinv') return; e.preventDefault();
+  if (await addInv($('#inv-name').value, $('#inv-zone').value)) toast('Ajouté à l\'inventaire');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (S.preview) { closePreview(); return; } if (S.dpick) { closeDessert(); return; } if (S.picker) { closePicker(); return; } if ($('#comptesheet')) { closeCompte(); return; }
   }
-  const bouton = el('button', { class: 'bouton principal', type: 'button', disabled: true,
-    onclick: () => connecter() }, T.attenteGoogle);
-  afficher(bouton, el('p', { class: 'aide' }, T.connexionAide));
-  attendreGoogle().then((google) => {
-    auth = creerAuth({ clientId: CONFIG.clientId, portees: CONFIG.portees, google });
-    bouton.disabled = false;
-    bouton.textContent = T.connexion;
-  }).catch(vueErreur);
-}
+  if (S.view !== 'poele' || !S.cook.data) return;
+  if (e.key === 'ArrowRight') go(1); else if (e.key === 'ArrowLeft') go(-1);
+});
+let sx = null, sy = null;
+document.addEventListener('pointerdown', (e) => { if (!e.target.closest('#cook') || e.target.closest('button,input,label')) { sx = null; return; } sx = e.clientX; sy = e.clientY; });
+document.addEventListener('pointerup', (e) => {
+  if (sx === null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.3) go(dx < 0 ? 1 : -1);
+});
 
-function vueTravail(message) {
-  afficher(el('p', { class: 'travail', role: 'status' }, el('span', { class: 'roue', 'aria-hidden': 'true' }), message));
+function setView(v) {
+  S.view = v; try { history.replaceState(null, '', '#' + v); } catch (_) { location.hash = v; }
+  if (v === 'poele') wakeOn(); else wakeOff();
+  if (S.ctx && !S.loading) {
+    if (v === 'tri' && S.lib.mode === 'tri') loadTri();
+    if (v === 'provigo' && !S.prov.lines) buildProvigo();
+    if (v === 'bilan' && !S.bil.items) loadBilan();
+  }
+  render(); window.scrollTo(0, 0);
 }
+hooks.setView = setView;
+window.addEventListener('hashchange', () => { const v = location.hash.slice(1); if (STEPS.some((s) => s.id === v) && v !== S.view) setView(v); });
 
-function vueErreur(err) {
-  console.error(err);
-  afficher(
-    el('h2', {}, T.erreurTitre),
-    el('p', { class: 'avis', role: 'alert' }, String(err?.message || err)),
-    el('button', { class: 'bouton', type: 'button', onclick: vueAccueil }, T.reessayer));
+/* ---------- démarrage ---------- */
+async function boot() {
+  S.err = null; S.loading = true; render();
+  try {
+    await chargerTout();
+    loadRecent();
+    if (!loadPlan()) draftWeek(); else { S.saved = true; S.swapped = DAYS.map(() => new Set()); }
+  } catch (e) { S.err = errText(e); }
+  S.loading = false; S.prov.lines = null; S.bil.items = null; S.tri.list = null; S.pages = {};
+  setView(S.view);
 }
-
-// Coquille connectée : onglets en bas au téléphone, panneau à gauche à l'ordinateur.
-function coquille(ctx) {
-  document.body.classList.add('connecte');
-  const zone = el('main', { class: 'zone-vue', id: 'vue', tabindex: '-1' });
-  const boutons = {};
-  const nav = el('nav', { class: 'nav', 'aria-label': T.navPrincipale, 'data-new': '1.1.0-nav' },
-    el('span', { class: 'nav-marque' }, el('img', { src: 'icone.svg', alt: '', width: 32, height: 32 }), '3eBras'),
-    ...Object.keys(VUES).map((cle) => (boutons[cle] = el('button', { type: 'button', class: 'nav-item',
-      onclick: () => ctx.aller(cle) }, cle === 'livre' ? T.navLivre : T.navImporter))),
-    el('a', { class: 'nav-item', href: lienClasseur(ctx.classeurId), target: '_blank', rel: 'noopener' }, T.navDrive),
-    el('details', { class: 'nav-pied', open: matchMedia('(min-width: 1024px)').matches },
-      el('summary', { class: 'nav-item' }, T.navCompte),
-      el('div', { class: 'nav-compte' },
-        ctx.courriel && el('span', { class: 'aide' }, T.connecteEn(ctx.courriel)),
-        ctx.messageMigration && el('span', { class: 'aide' }, ctx.messageMigration),
-        ctx.dossier && el('a', { class: 'aide', href: lienDossier(ctx.dossier.id), target: '_blank', rel: 'noopener' }, T.ouvrirDossier),
-        el('button', { type: 'button', class: 'bouton discret', onclick: () => { auth.deconnecter(); vueAccueil(); } }, T.deconnexion),
-        el('span', { class: 'aide' }, `v${CONFIG.version}`))));
-
-  ctx.aller = async (cle) => {
-    for (const [k, b] of Object.entries(boutons)) b.setAttribute('aria-current', k === cle ? 'page' : 'false');
-    vider(zone).className = `zone-vue vue-${cle}`;
-    try { await VUES[cle](ctx, zone); } catch (err) { console.error(err); vider(zone).append(el('p', { class: 'avis', role: 'alert' }, `${T.erreurTitre} ${err.message}`)); }
-  };
-  vider(racine).append(nav, zone);
-  return ctx.aller('livre');
-}
+async function recharger() { await boot(); }
 
 async function connecter() {
   try {
+    S.err = null;
     await auth.connecter();
     const drive = creerDrive({ jetonValide: auth.jetonValide });
-    const textes = { recherche: T.recherche, creation: T.creation };
-    const biblio = await ouvrirOuCreer(drive, {
-      nomDossier: CONFIG.nomDossier, nomClasseur: CONFIG.nomClasseur, version: CONFIG.version
-    }, (e) => vueTravail(textes[e]));
+    $('#sync').textContent = 'Ouverture de ta bibliothèque…';
+    const b = await ouvrirOuCreer(drive, { nomDossier: CONFIG.nomDossier, nomClasseur: CONFIG.nomClasseur, version: CONFIG.version });
     let courriel = '';
-    try { courriel = (await drive.moi()).email || ''; } catch { /* facultatif */ }
-    const m = biblio.migration;
-    await coquille({ drive, classeurId: biblio.classeur.id, dossier: biblio.dossier, courriel,
-      messageMigration: m && m.apres > m.avant ? T.migration(m.avant, m.apres) : '' });
-  } catch (err) {
-    vueErreur(err);
-  }
+    try { courriel = (await drive.moi()).email || ''; } catch (_) { /* facultatif */ }
+    const m = b.migration;
+    S.ctx = { drive, classeurId: b.classeur.id, dossier: b.dossier, courriel,
+      messageMigration: m && m.apres > m.avant ? `Classeur mis à jour (schéma ${m.avant} → ${m.apres}).` : '' };
+    await boot();
+    if (!S.book.length) { toast('Ton livre est vide : importe tes recettes.'); openCompte(true); }
+  } catch (e) { console.error(e); S.err = errText(e); render(); }
 }
 
-vueAccueil();
+(function start() {
+  S.weekStart = computeWeek();
+  applySkin(document.documentElement.getAttribute('data-skin') || 'plan');
+  const v = location.hash.slice(1); if (STEPS.some((s) => s.id === v)) S.view = v;
+  render();
+  if (!CONFIG.clientId) return;
+  const debut = Date.now();
+  (function attendre() {
+    if (globalThis.google?.accounts?.oauth2) { auth = creerAuth({ clientId: CONFIG.clientId, portees: CONFIG.portees, google: globalThis.google }); render(); return; }
+    if (Date.now() - debut > 10000) { S.err = 'Google ne répond pas. Vérifie ta connexion, puis recharge la page.'; render(); return; }
+    setTimeout(attendre, 100);
+  })();
+})();
