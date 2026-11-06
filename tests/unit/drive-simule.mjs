@@ -3,7 +3,7 @@
 const col = (l) => [...l].reduce((n, c) => n * 26 + c.charCodeAt(0) - 64, 0);
 
 function parsePlage(p) {
-  const m = /^'(.+)'(?:!([A-Z]+)(\d+)(?::([A-Z]+)(\d+))?)?$/.exec(p);
+  const m = /^'(.+)'(?:!([A-Z]+)(\d*)(?::([A-Z]+)(\d*))?)?$/.exec(p);
   if (!m) throw new Error(`plage ${p}`);
   return { onglet: m[1], c1: m[2] ? col(m[2]) - 1 : 0, r1: m[3] ? Number(m[3]) - 1 : 0,
     r2: m[5] ? Number(m[5]) - 1 : Infinity, c2: m[4] ? col(m[4]) - 1 : Infinity };
@@ -93,7 +93,7 @@ export function creerDriveSimule() {
         let fin = t.length;
         while (fin > 0 && !t[fin - 1].some((v) => v !== '' && v !== undefined)) fin--;
         ecrire(c, `'${p.onglet}'!A${fin + 1}`, corps.values);
-        return json(200, { updates: { updatedRows: corps.values.length } });
+        return json(200, { updates: { updatedRows: corps.values.length, updatedRange: `'${p.onglet}'!A${fin + 1}:Z${fin + corps.values.length}` } });
       }
       const g = /^\/values\/(.+)$/.exec(reste);
       if (g && methode === 'GET') {

@@ -1,8 +1,8 @@
 // Bibliothèque 3eBras dans le Drive de la personne (R-01).
 // Trouve le dossier et le classeur créés par l'app, ou les crée.
 
-import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.1.0';
-import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet } from './schema.js?v=1.1.0';
+import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.2.0';
+import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.2.0';
 
 export async function ouvrirOuCreer(drive, { nomDossier, nomClasseur, version }, etape = () => {}) {
   etape('recherche');
@@ -77,12 +77,59 @@ export async function migrerSchema(drive, id) {
   return { avant, apres: VERSION_SCHEMA, ajouts };
 }
 
-// Lit un onglet entier en objets { colonne: valeur }.
+// Lit un onglet entier en objets { colonne: valeur, _ligne: n° de ligne dans Sheets }.
 export async function lireOnglet(drive, id, titre) {
   const lu = await drive.lireValeurs(id, `'${titre}'`);
-  const [entete = [], ...lignes] = lu.values || [];
-  return lignes.filter((l) => l.some((v) => v !== '')).map((l) =>
-    Object.fromEntries(entete.map((c, i) => [c, l[i] ?? ''])));
+  return enObjets(lu.values || []);
+}
+
+export function enObjets(valeurs) {
+  const [entete = [], ...lignes] = valeurs;
+  const out = [];
+  lignes.forEach((l, i) => {
+    if (!l.some((v) => v !== '')) return;
+    const o = Object.fromEntries(entete.map((c, j) => [c, l[j] ?? '']));
+    Object.defineProperty(o, '_ligne', { value: i + 2, writable: true, enumerable: false });
+    out.push(o);
+  });
+  return out;
+}
+
+// Lit plusieurs onglets d'un seul appel.
+export async function lireOnglets(drive, id, titres) {
+  const lu = await drive.lirePlusieurs(id, titres.map((t) => `'${t}'`));
+  return Object.fromEntries(titres.map((t, i) => [t, enObjets(lu.valueRanges?.[i]?.values || [])]));
+}
+
+// N-07 : écrit des colonnes d'une ligne repérée par son id, après avoir relu la cellule id.
+// Si la ligne a bougé (autre appareil), on retrouve l'id dans la colonne A ; s'il a disparu, on refuse.
+export async function ecrireParId(drive, id, titre, obj, valeurs) {
+  const o = onglet(titre);
+  let ligne = obj._ligne;
+  const lu = ligne ? await drive.lireValeurs(id, `'${titre}'!A${ligne}:A${ligne}`) : null;
+  if (!ligne || lu?.values?.[0]?.[0] !== obj.id) {
+    const col = await drive.lireValeurs(id, `'${titre}'!A:A`);
+    const k = (col.values || []).findIndex((l) => l[0] === obj.id);
+    if (k < 1) { const e = new Error(`ligne ${obj.id} introuvable`); e.conflit = true; throw e; }
+    ligne = k + 1; obj._ligne = ligne;
+  }
+  const donnees = Object.entries(valeurs).map(([c, v]) => {
+    const j = o.colonnes.indexOf(c);
+    if (j < 0) throw new Error(`colonne inconnue ${c}`);
+    const a = lettre(j + 1);
+    return { range: `'${titre}'!${a}${ligne}:${a}${ligne}`, values: [[valeurCellule(v)]] };
+  });
+  await drive.ecrireValeurs(id, donnees);
+  Object.assign(obj, Object.fromEntries(Object.entries(valeurs).map(([c, v]) => [c, valeurCellule(v)])));
+}
+
+// Ajoute une ligne et renvoie l'objet avec son numéro de ligne.
+export async function ajouterUn(drive, id, titre, obj) {
+  const rep = await ajouterObjets(drive, id, titre, [obj]);
+  const m = /![A-Z]+(\d+)/.exec(rep?.updates?.updatedRange || '');
+  const o = Object.fromEntries(onglet(titre).colonnes.map((c) => [c, valeurCellule(obj[c])]));
+  Object.defineProperty(o, '_ligne', { value: m ? Number(m[1]) : null, writable: true, enumerable: false });
+  return o;
 }
 
 // Ajoute des objets à la fin d'un onglet, dans l'ordre de ses colonnes.
@@ -93,7 +140,7 @@ export function ajouterObjets(drive, id, titre, objets) {
   return drive.ajouterValeurs(id, `'${titre}'!A1`, lignes);
 }
 
-function valeurCellule(v) {
+export function valeurCellule(v) {
   if (v === undefined || v === null) return '';
   if (Array.isArray(v)) return v.join('\n');
   if (typeof v === 'boolean') return v ? 'oui' : 'non';
