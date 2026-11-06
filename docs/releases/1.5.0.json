@@ -1,0 +1,13 @@
+{
+  "version": "1.5.0",
+  "date": "2026-11-06",
+  "mvp": "MVP 3 — ajout de recettes avec le projet Claude",
+  "requis": ["R-04"],
+  "nouveautes": [
+    "Fiche 3Bras : le texte du projet Claude « 3Bras » se colle dans + Recette et remplit toute la fiche (type, protéine, source, lien, groupes, sous-chef…)",
+    "Instructions du projet Claude 3Bras : entrevue de 3 ou 4 questions, puis une fiche prête à coller",
+    "La consigne envoyée à Claude pour une photo demande la même fiche"
+  ],
+  "decisions": ["D-G-028"],
+  "tests": { "unitaires": 28, "bout_en_bout": 16, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

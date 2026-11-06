@@ -1,10 +1,10 @@
 // « + Recette » : même feuille que Gordon Rams.ai (lien, photo ou fichier, texte collé, type, aperçu, ajouter au livre).
 // Hors de claude.ai, l'app n'a pas Claude : le texte, Word et PDF sont lus ici ; une photo ou un lien seul passent
 // par l'app Claude, dont on colle la réponse dans la boîte de texte (D-G-004, D-G-026).
-import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render } from '../etat.js?v=1.4.0';
-import { el, ico, vider } from '../el.js?v=1.4.0';
-import { ajouterRecette } from '../donnees.js?v=1.4.0';
-import { lireDocx, lirePdf, parseLoose, parseTexte } from '../lecture.js?v=1.4.0';
+import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render } from '../etat.js?v=1.5.0';
+import { el, ico, vider } from '../el.js?v=1.5.0';
+import { ajouterRecette } from '../donnees.js?v=1.5.0';
+import { lireDocx, lirePdf, parseLoose, parseTexte } from '../lecture.js?v=1.5.0';
 
 const SRC_CAT = ['Famille', 'Ricardo', 'Di Stasio', 'Recettes du Québec', 'Labriski', 'Trois fois par jour', 'Web autre'];
 const A = { files: [], result: null, busy: false };
@@ -27,7 +27,8 @@ export function openAdd() {
             el('label', { class: 'btn pickbtn' }, ico('file'), 'Galerie ou fichier', el('input', { id: 'add-file', class: 'pickin', type: 'file', multiple: true, accept: 'image/*,.pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain' }))),
           el('div', { class: 'chips', id: 'add-chips' }),
           el('p', { class: 'hint' }, 'Photo du livre ou capture d\'écran (une recette sur deux pages : prends 2 photos). Aussi PDF, Word (.docx) ou texte.')),
-        el('div', {}, el('label', { for: 'add-text' }, 'Ou colle le texte (ou la réponse de Claude)'), el('textarea', { id: 'add-text', placeholder: 'Ingrédients, étapes…' })),
+        el('div', {}, el('label', { for: 'add-text' }, 'Ou colle le texte (ou la Fiche 3Bras de ton projet Claude)'), el('textarea', { id: 'add-text', placeholder: 'Ingrédients, étapes…' })),
+        el('p', { class: 'hint', 'data-new': '1.5.0-projet-claude' }, 'Pas de recette sous la main ? Ton projet Claude « 3Bras » te pose 3 ou 4 questions, puis te donne une Fiche 3Bras à coller ici.'),
         el('div', {}, el('label', { for: 'add-type' }, 'Type'), el('select', { id: 'add-type' }, TYPES.map((t) => el('option', {}, t)))),
         el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', type: 'submit', id: 'add-go', 'data-new': '1.4.0-convertir' }, ico('file'), 'Convertir')),
         el('div', { class: 'add-status', id: 'add-status', 'aria-live': 'polite' })),
@@ -46,20 +47,37 @@ export function paintChips() {
 export function addFiles(list) { A.files = A.files.concat([...(list || [])]).slice(-8); paintChips(); }
 export function removeFile(i) { A.files.splice(i, 1); paintChips(); }
 
-// Consigne pour Claude : même règles que Gordon Rams.ai, réponse JSON à coller dans 3Bras.
+// Consigne pour Claude (photo ou lien seul) : même fiche texte que le projet Claude 3Bras (D-G-028).
 function consigne(type, url, nbImages) {
-  return `Tu convertis une recette pour mon livre de recettes familial 3Bras. Écris en français québécois.
+  return `Convertis cette recette en « Fiche 3Bras » pour mon livre de recettes familial. Français québécois.
 
-Règles :
-- Ingrédients : reprends fidèlement chaque ingrédient et sa quantité. Mesures métriques d'abord, impériales entre parenthèses quand la source les donne. Regroupe par composante (ex. « Marinade », « Sauce ») seulement si la recette en a plusieurs.
-- Étapes : réécris-les dans tes propres mots, en phrases courtes, dans le même ordre, avec les mêmes temps et températures (°C puis °F). Écris les durées en minutes dans l'étape (ex. « 25 minutes »).
-- N'invente aucune quantité, température ni durée absente de la source ; liste ce qui manque dans "a_verifier".
-- Tâches sous-chef : 2 ou 3 tâches simples et sécuritaires pour un enfant.
-- Laisse tomber la publicité, l'histoire, les commentaires et les valeurs nutritives.
-- Type : ${type}.
+Règles : ingrédients fidèles (métrique d'abord, impérial entre parenthèses si la source le donne) ; étapes réécrites dans tes mots, phrases courtes, mêmes temps et températures (°C puis °F), durées en minutes ; n'invente rien qui manque, liste-le sous À VÉRIFIER ; 2 ou 3 tâches simples pour un enfant sous SOUS-CHEF ; laisse tomber la pub, l'histoire et les valeurs nutritives.
 
-Réponds avec seulement un objet JSON (que je vais copier dans l'app) :
-{"nom": "…", "type": "${TYPES.join('" | "')}", "proteine": "${PROTS.join('" | "')}" ou null, "cuisine": "${CUIS.join('" | "')}" ou null, "portions": nombre ou null, "temps_total_min": nombre ou null, "outils": [sous-ensemble de ${JSON.stringify(OUTILS)}], "source_nom": "auteur, site ou livre, ou Inconnue", "source_categorie": "${SRC_CAT.join('" | "')}", "ingredients": [{"groupe": null ou "…", "items": ["…"]}], "etapes": ["…"], "sous_chef": ["…"], "a_verifier": "…"}
+Réponds avec seulement ce bloc de texte, prêt à coller :
+
+FICHE 3BRAS
+Nom : …
+Type : ${type} (ou ${TYPES.filter((t) => t !== type).join(', ')})
+Protéine : ${PROTS.join(', ')} ou Aucune
+Cuisine : ${CUIS.join(', ')}
+Portions : …
+Temps total : … min
+Outils : ${OUTILS.join(', ')} (seulement ceux utilisés)
+Source : nom du site, de l'auteur ou du livre
+Lien : https://… (si connu)
+
+INGRÉDIENTS
+Groupe : (seulement s'il y a plusieurs composantes)
+- …
+
+ÉTAPES
+1. …
+
+SOUS-CHEF
+- …
+
+À VÉRIFIER
+- …
 
 ${url ? `Lien de la recette (lis cette page) : ${url}\n` : ''}${nbImages ? `Recette : voir ${nbImages > 1 ? `les ${nbImages} photos jointes` : 'la photo jointe'}.` : ''}`;
 }
@@ -70,7 +88,7 @@ async function versClaude(type, url, images) {
     else window.open(`https://claude.ai/new?q=${encodeURIComponent(texte)}`, '_blank', 'noopener');
   } catch (e) { if (!(e && e.name === 'AbortError')) window.open(`https://claude.ai/new?q=${encodeURIComponent(texte)}`, '_blank', 'noopener'); }
   addStatus([el('b', {}, 'Claude prend le relais. '), images.length && !(navigator.canShare && navigator.canShare({ files: images })) ? 'Joins ta photo dans Claude. ' : '',
-    'Quand il répond, copie sa réponse, colle-la dans la boîte « Ou colle le texte » ci-dessus, puis touche « Convertir ».']);
+    'Quand il répond, copie la fiche, colle-la dans la boîte « Ou colle le texte » ci-dessus, puis touche « Convertir ».']);
 }
 
 function normRecipe(d, url, type) {
@@ -114,8 +132,8 @@ export async function convertRecipe() {
     }
     const r = parseTexte(text.slice(0, 40000), type);
     if (!r.ingredients.length && !r.etapes.length) throw { local: 'Aucune recette trouvée dans ce texte. Essaie avec Claude : prends une capture ou donne le lien.' };
-    A.result = { ...r, url: lien };
-    addStatus('Recette lue. Vérifie et corrige la fiche, puis ajoute-la.');
+    A.result = { ...r, url: lien || r.lien };
+    addStatus(r.a_verifier ? 'Recette lue. Vérifie et corrige la fiche, puis ajoute-la.' : 'Fiche 3Bras lue. Vérifie-la, puis ajoute-la.');
     renderAddPreview();
   } catch (e) { addStatus(e && e.local ? e.local : 'La lecture a été interrompue. Réessaie.', true); }
   A.busy = false; const g = $('#add-go'); if (g) g.disabled = false;
