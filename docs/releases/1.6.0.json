@@ -1,0 +1,13 @@
+{
+  "version": "1.6.0",
+  "date": "2026-11-06",
+  "mvp": "MVP 3 — Gemini dans + Recette",
+  "requis": ["R-04"],
+  "nouveautes": [
+    "« Convertir avec Gemini » : photo, PDF, Word, texte ou lien deviennent une fiche du livre, directement dans l'app",
+    "Gemini par Firebase AI Logic, protégé par App Check ; aucune clé secrète dans l'app",
+    "Le projet Claude 3Bras reste possible : une Fiche 3Bras collée ne repasse pas par Gemini"
+  ],
+  "decisions": ["D-G-029"],
+  "tests": { "unitaires": 29, "bout_en_bout": 18, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}
