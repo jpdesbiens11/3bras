@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { creerDrive, ErreurGoogle } from '../../dist/js/drive.js';
 import { ouvrirOuCreer } from '../../dist/js/store.js';
-import { ONGLETS, lettre } from '../../dist/js/schema.js';
+import { ONGLETS, lettre, VERSION_SCHEMA } from '../../dist/js/schema.js';
 import { creerDriveSimule } from './drive-simule.mjs';
 
 const OPTS = { nomDossier: '3eBras', nomClasseur: '3eBras — Livre', version: '1.0.0' };
@@ -29,9 +29,8 @@ test('R-01 : onglets et en-têtes écrits, version de schéma notée', async () 
   const r = await ouvrirOuCreer(drive, OPTS);
   const c = sim.classeurs.get(r.classeur.id);
   assert.deepEqual(c.sheets.map((s) => s.properties.title), ONGLETS.map((o) => o.titre));
-  assert.equal(c.valeurs["'Recettes'!A1:Q1"][0][0], 'id');
-  assert.equal(c.valeurs["'Recettes'!A1:Q1"][0].length, 17);
-  assert.deepEqual(c.valeurs["'Schéma'!A2:B4"][0], ['version_schema', '1']);
+  assert.deepEqual(c.onglets.Recettes[0], ONGLETS[0].colonnes);
+  assert.deepEqual(c.onglets['Schéma'][1], ['version_schema', String(VERSION_SCHEMA)]);
 });
 
 test('R-01 : deuxième visite, retrouve le classeur sans rien recréer', async () => {
@@ -61,5 +60,6 @@ test('jeton refusé : erreur Google claire', async () => {
 test('lettre de colonne', () => {
   assert.equal(lettre(1), 'A');
   assert.equal(lettre(17), 'Q');
+  assert.equal(lettre(52), 'AZ');
   assert.equal(lettre(27), 'AA');
 });

@@ -60,7 +60,7 @@ test('N-05 : chaque fichier local porte ?v=<version> (cache de Pages)', async ()
   const html = await readFile(join(DIST, 'index.html'), 'utf8');
   for (const ref of html.match(/(?:href|src)="(?:css|js)\/[^"]+"/g)) assert.match(ref, new RegExp(`\\?v=${version}"$`), ref);
   for (const f of code.filter((x) => x.endsWith('.js'))) {
-    for (const imp of (await readFile(f, 'utf8')).match(/from '\.\/[^']+'/g) || []) {
+    for (const imp of (await readFile(f, 'utf8')).match(/from '\.\.?\/[^']+'/g) || []) {
       assert.match(imp, new RegExp(`\\.js\\?v=${version}'$`), `${f} : ${imp}`);
     }
   }

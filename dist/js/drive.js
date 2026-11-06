@@ -75,6 +75,18 @@ export function creerDrive({ jetonValide, fetch = globalThis.fetch.bind(globalTh
       return appel(`${SHEETS}/${encodeURIComponent(id)}/values/${encodeURIComponent(plage)}`);
     },
 
+    lirePlusieurs(id, plages) {
+      const qs = plages.map((p) => `ranges=${encodeURIComponent(p)}`).join('&');
+      return appel(`${SHEETS}/${encodeURIComponent(id)}/values:batchGet?${qs}`);
+    },
+
+    // Ajoute des lignes à la fin d'un onglet (jamais par numéro de ligne).
+    ajouterValeurs(id, plage, lignes) {
+      return appel(`${SHEETS}/${encodeURIComponent(id)}/values/${encodeURIComponent(plage)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
+        methode: 'POST', corps: { values: lignes }
+      });
+    },
+
     moi() {
       return appel('https://www.googleapis.com/oauth2/v3/userinfo');
     }

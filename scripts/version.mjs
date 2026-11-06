@@ -16,7 +16,7 @@ async function remplacer(fichier, motif, rempl) {
 await remplacer('dist/js/config.js', /version: '[^']+'/, `version: '${v}'`);
 await remplacer('package.json', /"version": "[^"]+"/, `"version": "${v}"`);
 await remplacer('dist/index.html', /\?v=[\d.]+/g, `?v=${v}`);
-for (const f of await readdir(join(racine, 'dist/js'))) {
+for (const f of await readdir(join(racine, 'dist/js'), { recursive: true })) {
   if (f.endsWith('.js')) await remplacer(`dist/js/${f}`, /\.js\?v=[\d.]+'/g, `.js?v=${v}'`);
 }
 console.log(`Version ${v} appliquée.`);
