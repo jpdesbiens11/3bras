@@ -1,10 +1,10 @@
 // Vue Entrée de 3eBras (MVP 0) : connexion Google, puis dossier + classeur.
-import { CONFIG } from './config.js';
-import { T } from './textes.js';
-import { el, vider } from './el.js';
-import { creerAuth } from './auth.js';
-import { creerDrive } from './drive.js';
-import { ouvrirOuCreer, lienClasseur, lienDossier } from './store.js';
+import { CONFIG } from './config.js?v=1.0.2';
+import { T } from './textes.js?v=1.0.2';
+import { el, vider } from './el.js?v=1.0.2';
+import { creerAuth } from './auth.js?v=1.0.2';
+import { creerDrive } from './drive.js?v=1.0.2';
+import { ouvrirOuCreer, lienClasseur, lienDossier } from './store.js?v=1.0.2';
 
 const racine = document.getElementById('app');
 let auth = null;
