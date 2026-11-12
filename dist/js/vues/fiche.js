@@ -1,11 +1,11 @@
 // Aperçu d'une recette et « déjà à la maison ». Repris de Gordon Rams.ai.
-import { S, $, DAYS, norm, toast, errText, render } from '../etat.js?v=1.16.0';
-import { el, ico, vider } from '../el.js?v=1.16.0';
-import { getRecipe, saveHave } from '../donnees.js?v=1.16.0';
-import { ingKey, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.16.0';
-import { lienClasseur } from '../store.js?v=1.16.0';
-import { starRow, recipeMeta, chips, tagEditor, noticeWarn } from './commun.js?v=1.16.0';
-import { iaDisponible } from '../ia.js?v=1.16.0';
+import { S, $, DAYS, norm, toast, errText, render } from '../etat.js?v=1.17.0';
+import { el, ico, vider } from '../el.js?v=1.17.0';
+import { getRecipe, saveHave } from '../donnees.js?v=1.17.0';
+import { ingKey, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.17.0';
+import { lienClasseur } from '../store.js?v=1.17.0';
+import { starRow, recipeMeta, chips, tagEditor, noticeWarn } from './commun.js?v=1.17.0';
+import { iaDisponible } from '../ia.js?v=1.17.0';
 
 export const weekIds = () => new Set([...S.plan.filter(Boolean), ...(S.dess || []).map((x) => x.id)]);
 export const frozen = () => !!(S.saved && S.planRows.length);
@@ -74,7 +74,7 @@ export function renderSheet() {
   const lien = /^https:\/\/\S+$/.test(r.lien || '') ? r.lien : '';
   vider(n).append(
     el('div', { class: 'sheet-bar' }, el('div', { class: 'wrap' }, el('span', { class: 'label' }, `${p.day !== null ? DAYS[p.day] + ' · ' : ''}Aperçu de la recette`),
-      el('button', { class: 'btn icon', 'data-partager': p.id, 'aria-label': `Partager la recette ${r.name}`, title: 'Partager', 'data-new': '1.2.2-partager' }, ico('share')),
+      el('button', { class: 'btn icon', 'data-partager': p.id, 'aria-label': `Partager la recette ${r.name} en PDF`, title: 'Partager en PDF', 'data-new': '1.17.0-partage-pdf' }, ico('share')),
       el('button', { class: 'btn icon', 'data-close': '', 'aria-label': 'Fermer l\'aperçu' }, ico('left')))),
     el('div', { class: 'wrap' }, el('h2', {}, r.name), r.id && [starRow(r), recipeMeta(r), chips(r), tagEditor(r)], body,
       el('div', { class: 'sheet-acts' },
@@ -88,33 +88,4 @@ export function renderSheet() {
         el('button', { class: 'btn primary', 'data-close': '' }, 'Retour à la semaine'))));
   paintHaveCount();
   if (neuf) n.querySelector('[data-close]')?.focus();
-}
-
-// Partager une recette (texte lisible partout : texto, courriel, Messenger…). Rien ne passe par un serveur à nous.
-export function texteRecette(id) {
-  const r = S.byId[id]; if (!r) return '';
-  const d = getRecipe(id);
-  const meta = [r.time && `${Math.round(r.time)} min`, r.portions && `${Math.round(r.portions)} portions`].filter(Boolean).join(' · ');
-  const out = [r.name, meta, ''];
-  if (d.ing.length) {
-    out.push('INGRÉDIENTS'); let g = null;
-    d.ing.forEach((x) => { if (x.group && x.group !== g) { g = x.group; out.push('', x.group); } out.push(`- ${x.text}`); });
-    out.push('');
-  }
-  if (d.steps.length) { out.push('ÉTAPES'); d.steps.forEach((s, i) => out.push(`${i + 1}. ${s}`)); out.push(''); }
-  if (/^https:\/\/\S+$/.test(r.lien || '')) out.push(`Source : ${r.lien}`);
-  out.push('Partagé avec SuperChef.ai · Ton renfort au souper');
-  return out.filter((l, i, a) => !(l === '' && a[i - 1] === '')).join('\n').trim();
-}
-export async function partagerRecette(id) {
-  const r = S.byId[id]; if (!r) return;
-  const text = texteRecette(id);
-  try {
-    if (navigator.share) { await navigator.share({ title: r.name, text }); return; }
-    await navigator.clipboard.writeText(text);
-    toast('Recette copiée : colle-la dans un texto ou un courriel.');
-  } catch (e) {
-    if (e && e.name === 'AbortError') return; // partage annulé
-    try { await navigator.clipboard.writeText(text); toast('Recette copiée : colle-la dans un texto ou un courriel.'); } catch (_) { toast('Le partage n\'est pas disponible sur cet appareil.'); }
-  }
 }

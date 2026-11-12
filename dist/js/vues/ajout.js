@@ -1,12 +1,12 @@
 // « + Recette » : même feuille que Gordon Rams.ai (lien, photo ou fichier, texte collé, type, aperçu, ajouter au livre).
 // Hors de claude.ai, l'app n'a pas Claude : le texte, Word et PDF sont lus ici ; une photo ou un lien seul passent
 // par l'app Claude, dont on colle la réponse dans la boîte de texte (D-G-004, D-G-026).
-import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render, norm } from '../etat.js?v=1.16.0';
-import { el, ico, vider } from '../el.js?v=1.16.0';
-import { ajouterRecette } from '../donnees.js?v=1.16.0';
-import { lireDocx, lirePdf, parseLoose, parseTexte, ENTETE_FICHE } from '../lecture.js?v=1.16.0';
-import { iaDisponible, convertirAvecGemini, erreurIA } from '../ia.js?v=1.16.0';
-import { consigneCreation } from '../generateur.js?v=1.16.0';
+import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render, norm } from '../etat.js?v=1.17.0';
+import { el, ico, vider } from '../el.js?v=1.17.0';
+import { ajouterRecette } from '../donnees.js?v=1.17.0';
+import { lireDocx, lirePdf, parseLoose, parseTexte, ENTETE_FICHE } from '../lecture.js?v=1.17.0';
+import { iaDisponible, convertirAvecGemini, erreurIA } from '../ia.js?v=1.17.0';
+import { consigneCreation } from '../generateur.js?v=1.17.0';
 
 const SRC_CAT = ['Famille', 'Ricardo', 'Di Stasio', 'Recettes du Québec', 'Labriski', 'Trois fois par jour', 'Web autre'];
 const A = { files: [], result: null, busy: false };

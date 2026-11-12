@@ -44,6 +44,8 @@ test('P-1 : aucune ressource externe sauf Google Identity', async () => {
       if (u === 'http://www.w3.org/2000/svg/') continue; // espace de noms SVG, pas une ressource
       if (u === 'https://…/') continue; // texte d'exemple dans un champ
       if (u.startsWith('https://claude.ai/new')) continue; // lien ouvert dans un nouvel onglet (D-G-026), pas une ressource chargée
+      // D-G-048 : sites de messagerie ouverts par la personne depuis « Partager » (comme Dynamite | Agile), jamais chargés.
+      if (f.endsWith('/vues/partage.js') && /^https:\/\/(mail\.google\.com|outlook\.office\.com|www\.messenger\.com|wa\.me|t\.me|teams\.microsoft\.com)\//.test(u)) continue;
       assert.match(u, /^https:\/\/(accounts\.google\.com|www\.googleapis\.com|sheets\.googleapis\.com|docs\.google\.com|drive\.google\.com|firebasevertexai\.googleapis\.com|content-firebaseappcheck\.googleapis\.com|www\.google\.com\/recaptcha|www\.gstatic\.com\/recaptcha|recaptcha\.google\.com\/recaptcha)\//, `${f} : ${u}`); // + Gemini et App Check (D-G-029)
     }
   }

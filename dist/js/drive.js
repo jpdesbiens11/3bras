@@ -3,6 +3,7 @@
 
 const DRIVE = 'https://www.googleapis.com/drive/v3';
 const SHEETS = 'https://sheets.googleapis.com/v4/spreadsheets';
+const UPLOAD = 'https://www.googleapis.com/upload/drive/v3/files';
 export const TYPE_DOSSIER = 'application/vnd.google-apps.folder';
 export const TYPE_CLASSEUR = 'application/vnd.google-apps.spreadsheet';
 // Étiquette Drive qui retrouve les fichiers de l'app (D-G-012). Clé technique figée depuis 3eBras :
@@ -14,15 +15,16 @@ export class ErreurGoogle extends Error {
 }
 
 export function creerDrive({ jetonValide, fetch = globalThis.fetch.bind(globalThis) }) {
-  async function appel(url, { methode = 'GET', corps } = {}) {
+  // brut / typeBrut : corps déjà prêt (fichier ou multipart), D-G-048.
+  async function appel(url, { methode = 'GET', corps, brut, typeBrut } = {}) {
     const jeton = await jetonValide();
     const rep = await fetch(url, {
       method: methode,
       headers: {
         Authorization: `Bearer ${jeton}`,
-        ...(corps ? { 'Content-Type': 'application/json' } : {})
+        ...(corps ? { 'Content-Type': 'application/json' } : brut !== undefined ? { 'Content-Type': typeBrut } : {})
       },
-      body: corps ? JSON.stringify(corps) : undefined
+      body: corps ? JSON.stringify(corps) : brut
     });
     if (!rep.ok) {
       let msg = '';
@@ -63,6 +65,23 @@ export function creerDrive({ jetonValide, fetch = globalThis.fetch.bind(globalTh
       return appel(`${DRIVE}/files/${encodeURIComponent(id)}?fields=${encodeURIComponent('id,name,webViewLink')}`, {
         methode: 'PATCH', corps: { name: nom }
       });
+    },
+
+    // D-G-048 : dépose un fichier créé par l'app (PDF d'une recette partagée), ou en remplace le contenu.
+    televerser({ nom, type, octets, parent, role }) {
+      const limite = `superchef-${Date.now().toString(36)}`;
+      const meta = JSON.stringify({ name: nom, mimeType: type, ...(parent ? { parents: [parent] } : {}), appProperties: { [CLE_APP]: role } });
+      const corps = new Blob([`--${limite}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${limite}\r\nContent-Type: ${type}\r\n\r\n`,
+        octets, `\r\n--${limite}--`]);
+      return appel(`${UPLOAD}?uploadType=multipart&fields=${encodeURIComponent('id,name,webViewLink')}`, { methode: 'POST', brut: corps, typeBrut: `multipart/related; boundary=${limite}` });
+    },
+    remplacerContenu(id, { type, octets, nom }) {
+      return appel(`${UPLOAD}/${encodeURIComponent(id)}?uploadType=media&fields=${encodeURIComponent('id,name,webViewLink')}`, { methode: 'PATCH', brut: new Blob([octets], { type }), typeBrut: type })
+        .then((f) => (nom && f.name !== nom ? this.renommer(id, nom) : f));
+    },
+    // Lien « toute personne qui a le lien peut lire » (portée drive.file : fichiers créés par l'app seulement).
+    partagerLien(id) {
+      return appel(`${DRIVE}/files/${encodeURIComponent(id)}/permissions?fields=id`, { methode: 'POST', corps: { role: 'reader', type: 'anyone' } });
     },
 
     lireClasseur(id) {
