@@ -9,7 +9,7 @@ Le livre de recettes familial qui vit dans **ton** Google Drive. Tu planifies la
 
 ## État
 
-Version 1.13.0 : garde-manger filtrable avec un mode Modifier et la fusion des doublons, et « Au garde-manger » dans Provigo. Depuis 1.12.0 : 10 kits de départ (dont Survie et Mexicain), stock de base à cocher, classeur qui se répare avant d'écrire. Depuis 1.10 : « Adapter avec Gemini » au poêle et dans la fiche ; depuis 1.9.0 : « Créer des recettes avec Claude ». Voir `docs/releases/` et `docs/DECISIONS.md`.
+Version 1.14.0 : mode Modifier dans le livre (infos, supprimer, fusionner les doublons) et texte de la fiche modifiable à la main. Depuis 1.13.0 : garde-manger filtrable avec mode Modifier et fusion des doublons, « Au garde-manger » dans Provigo. Depuis 1.12.0 : 10 kits de départ (dont Survie et Mexicain), stock de base à cocher, classeur qui se répare avant d'écrire. Depuis 1.10 : « Adapter avec Gemini » au poêle et dans la fiche ; depuis 1.9.0 : « Créer des recettes avec Claude ». Voir `docs/releases/` et `docs/DECISIONS.md`.
 
 ## Développer
 

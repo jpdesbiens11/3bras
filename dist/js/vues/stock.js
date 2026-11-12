@@ -1,10 +1,10 @@
 // « Stock de base » (D-G-039) : la personne coche ce qu'elle a à la maison ; seul ce qui est coché
 // s'écrit dans l'onglet Inventaire du classeur. Rien n'est préchargé dans l'app.
-import { S, $, ZONES, iso, toast } from '../etat.js?v=1.13.0';
-import { el, ico, vider } from '../el.js?v=1.13.0';
-import { importer } from '../import.js?v=1.13.0';
-import { CONFIG } from '../config.js?v=1.13.0';
-import { couvre, articlesDeRecettes, preparerStock, lignesInventaire, fichierStock } from '../stock.js?v=1.13.0';
+import { S, $, ZONES, iso, toast } from '../etat.js?v=1.14.0';
+import { el, ico, vider } from '../el.js?v=1.14.0';
+import { importer } from '../import.js?v=1.14.0';
+import { CONFIG } from '../config.js?v=1.14.0';
+import { couvre, articlesDeRecettes, preparerStock, lignesInventaire, fichierStock } from '../stock.js?v=1.14.0';
 
 let T = null; // { items, err }
 export const stockOuvert = () => !!T;

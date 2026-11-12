@@ -1,8 +1,9 @@
 // 01 · Livre : parcourir et trier par glissement (R-03). Repris de Gordon Rams.ai.
-import { S, $, TYPES, norm, starsOf, toast, errText, render } from '../etat.js?v=1.13.0';
-import { el, ico } from '../el.js?v=1.13.0';
-import { majRecette, rebuildPools } from '../donnees.js?v=1.13.0';
-import { panelHead, skeleton, noticeWarn } from './commun.js?v=1.13.0';
+import { S, $, TYPES, PROTS, CUIS, norm, starsOf, toast, errText, render } from '../etat.js?v=1.14.0';
+import { el, ico } from '../el.js?v=1.14.0';
+import { majRecette, rebuildPools, dansLaSemaine, supprimerRecette, remettreRecette, fusionnerRecettes } from '../donnees.js?v=1.14.0';
+import { doublonRecette } from '../doublons.js?v=1.14.0';
+import { panelHead, skeleton, noticeWarn } from './commun.js?v=1.14.0';
 
 function viewBook() {
   const L = S.lib, q = norm(L.q || ''), book = S.book || [];
@@ -14,13 +15,55 @@ function viewBook() {
     el('div', { class: 'field' }, el('label', { for: 'lib-q' }, 'Chercher'), el('input', { id: 'lib-q', type: 'search', placeholder: 'Nom de la recette…', value: L.q, autocomplete: 'off' })),
     el('div', { class: 'tseg filt' }, types.map((t) => el('button', { class: 'btn', 'data-libtype': t, 'aria-pressed': String(L.type === t) }, `${t} `, el('small', {}, String(t === 'Tous' ? book.length : book.filter((r) => r.type === t).length))))),
     el('div', { class: 'tseg filt' }, stats.map((t) => el('button', { class: 'btn', 'data-libstat': t, 'aria-pressed': String(L.statut === t) }, t))),
-    el('p', { class: 'label', style: 'margin:12px 0 6px' }, `${list.length} recette${list.length > 1 ? 's' : ''}`),
-    el('div', { class: 'picklist', id: 'liblist' }, list.slice(0, 250).map((r) => {
+    el('div', { class: 'lib-compte' }, el('p', { class: 'label', style: 'margin:12px 0 6px' }, `${list.length} recette${list.length > 1 ? 's' : ''}`),
+      el('button', { class: 'btn', id: 'lib-edit', type: 'button', 'aria-pressed': String(!!L.edit), 'data-new': '1.14.0-modifier' }, L.edit ? 'Terminer' : 'Modifier')),
+    L.edit ? el('div', { id: 'liblist' }, list.slice(0, 250).map(ligneEdition)) : el('div', { class: 'picklist', id: 'liblist' }, list.slice(0, 250).map((r) => {
       const n = starsOf(r);
       return el('button', { class: 'pickrow', 'data-preview': r.id }, el('b', {}, r.name),
         el('small', {}, [n ? '★'.repeat(n) + '☆'.repeat(5 - n) : '', r.type || 'Sans type', r.statut, r.prot, r.time ? Math.round(r.time) + ' min' : '', r.isNew ? 'New' : ''].filter(Boolean).join(' · ')));
     }))
   ];
+}
+
+/* ---------- D-G-044 : mode Modifier du livre ---------- */
+const STATUTS = ['Au livre', 'À trier', 'À retravailler', 'Déclassée'];
+function ligneEdition(r) {
+  const d = doublonRecette(r, S.book || []);
+  const sel = (attr, opts, cur, vide, lbl) => el('select', { [attr]: r.id, 'aria-label': `${lbl} de ${r.name}` }, vide && el('option', { value: '' }, vide), opts.map((o) => el('option', { value: o, selected: o === cur }, o)));
+  const nb = (attr, v, lbl) => el('label', { class: 'rec-num' }, lbl, el('input', { type: 'number', min: 0, inputmode: 'numeric', [attr]: r.id, value: v || '', 'aria-label': `${lbl} de ${r.name}` }));
+  return el('div', { class: 'inv-edit' },
+    el('div', { class: 'inv-ligne' }, el('input', { 'data-recnom': r.id, value: r.name, 'aria-label': `Nom de ${r.name}`, autocomplete: 'off' }),
+      el('button', { class: 'btn icon', type: 'button', 'data-preview': r.id, 'aria-label': `Ouvrir ${r.name}`, title: 'Ouvrir la fiche' }, ico('right')),
+      el('button', { class: 'btn icon danger', type: 'button', 'data-recdel': r.id, 'aria-label': `Supprimer ${r.name}`, title: 'Supprimer' }, '×')),
+    el('div', { class: 'inv-ligne' }, sel('data-rectype', TYPES, r.type, 'Type ?', 'Type'), sel('data-recstat', STATUTS, r.statut, null, 'Statut'),
+      sel('data-recprot', PROTS, r.prot, 'Protéine ?', 'Protéine'), sel('data-reccuis', CUIS, r.cuisine, 'Cuisine ?', 'Cuisine')),
+    el('div', { class: 'inv-ligne' }, nb('data-rectemps', r.time && Math.round(r.time), 'Temps (min)'), nb('data-recportions', r.portions, 'Portions')),
+    d && el('p', { class: 'hint inv-double' }, `Doublon possible de « ${d.name} » (${d.statut}). `,
+      el('button', { class: 'btn', type: 'button', 'data-recfus': r.id, 'data-dans': d.id }, `Fusionner dans « ${d.name} »`)));
+}
+const COLS = { nom: 'Nom', type: 'Type', statut: 'Statut', prot: 'Protéine', cuis: 'Cuisine', temps: 'Temps total (min)', portions: 'Portions' };
+export async function modifierRecette(id, champ, valeur) {
+  const r = S.byId[id]; if (!r || !COLS[champ]) return;
+  let v = typeof valeur === 'string' ? valeur.trim() : valeur;
+  if (champ === 'nom' && (!v || v === r.name)) { render(); return; }
+  if (champ === 'temps' || champ === 'portions') v = v === '' ? '' : Math.max(0, Math.round(Number(v)) || 0);
+  const vals = { [COLS[champ]]: v, ...(champ === 'temps' && v !== '' ? { 'Soir de semaine': v > 0 && v <= 45 } : {}) };
+  try { await majRecette(r, vals); rebuildPools(); toast(`« ${r.name} » mis à jour`); } catch (e) { toast(errText(e)); }
+  render();
+}
+export async function supprimerRec(id) {
+  const r = S.byId[id]; if (!r) return;
+  if (dansLaSemaine(id)) { toast(`« ${r.name} » est dans ta semaine : change ce souper d'abord.`); return; }
+  const row = { ...r.row };
+  try {
+    await supprimerRecette(r); render();
+    toast(`« ${r.name} » supprimée`, { label: 'Annuler', fn: () => remettreRecette(row).then(render).catch((e) => toast(errText(e))) });
+  } catch (e) { toast(errText(e)); render(); }
+}
+export async function fusionnerRec(id, dansId) {
+  const double = S.byId[id], garde = S.byId[dansId]; if (!double || !garde) return;
+  try { const n = await fusionnerRecettes(garde, double); toast(`« ${double.name} » fusionnée dans « ${garde.name} »${n ? ` (${n} semaine${n > 1 ? 's' : ''} ou bilan${n > 1 ? 's' : ''} suivent)` : ''}`); } catch (e) { toast(errText(e)); }
+  render();
 }
 
 export function viewTri() {

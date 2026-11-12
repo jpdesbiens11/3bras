@@ -1,0 +1,14 @@
+{
+  "version": "1.14.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — livre en ordre",
+  "requis": ["R-03", "R-04"],
+  "nouveautes": [
+    "01 Livre, « Modifier » : change le nom, le type, le statut, la protéine, la cuisine, le temps ou les portions directement dans la liste.",
+    "Supprimer une recette, avec « Annuler » ; une recette de ta semaine ne se supprime pas tant que le souper n'est pas changé.",
+    "Doublons : une recette en double est signalée, et « Fusionner » n'en garde qu'une ; les semaines et bilans qui pointaient vers l'autre suivent.",
+    "Fiche : « Modifier le texte » pour corriger à la main les ingrédients, les étapes et les tâches sous-chef ; l'originale reste gardée et « Revenir à l'originale » la remet."
+  ],
+  "decisions": ["D-G-044"],
+  "tests": { "unitaires": 62, "bout_en_bout": 36, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

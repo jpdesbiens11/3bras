@@ -1,8 +1,8 @@
 // Couche de données : le classeur Google remplace les bases Notion de Gordon Rams.ai.
 // Toutes les écritures passent par ecrireParId (N-07) ou ajouterUn.
-import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.13.0';
-import { lireOnglets, ecrireParId, ajouterUn, supprimerParId } from './store.js?v=1.13.0';
-import { ficheDeLigne } from './cuisine.js?v=1.13.0';
+import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.14.0';
+import { lireOnglets, lireOnglet, ecrireParId, ajouterUn, supprimerParId } from './store.js?v=1.14.0';
+import { ficheDeLigne } from './cuisine.js?v=1.14.0';
 
 const T_REC = 'Recettes', T_PLAN = 'Plans de semaine', T_INV = 'Inventaire', T_BIL = 'Bilans';
 const oui = (v) => /^(oui|true|vrai|1|__yes__)$/i.test(String(v || '').trim());
@@ -104,6 +104,28 @@ export async function saveHave() {
 export async function majRecette(r, valeurs) {
   await ecrire(T_REC, r.row, valeurs);
   const n = toRecipe(r.row); Object.assign(r, n); delete S.pages[r.id];
+}
+
+// D-G-044 : supprimer (et remettre) une recette, fusionner deux recettes en double.
+export const dansLaSemaine = (id) => S.plan.includes(id) || (S.dess || []).some((x) => x.id === id);
+export async function supprimerRecette(r) {
+  const ligne = await supprimerParId(ctx().drive, ctx().classeurId, T_REC, r.row);
+  S.book = S.book.filter((x) => x !== r);
+  for (const x of S.book) if (x.row._ligne > ligne) x.row._ligne -= 1;
+  delete S.pages[r.id]; rebuildPools();
+}
+export async function remettreRecette(row) {
+  const r = toRecipe(await ajout(T_REC, { ...row })); S.book.push(r); rebuildPools();
+  return r;
+}
+// Garde « garde » ; les semaines et bilans qui pointaient vers « double » pointent vers « garde », puis « double » est supprimée.
+export async function fusionnerRecettes(garde, double) {
+  let n = 0;
+  for (const p of (S.planAll || []).filter((x) => x['Recette id'] === double.id)) { await ecrire(T_PLAN, p, { 'Recette id': garde.id }); n++; }
+  for (const b of (await lireOnglet(ctx().drive, ctx().classeurId, T_BIL)).filter((x) => x['Recette id'] === double.id)) { await ecrire(T_BIL, b, { 'Recette id': garde.id }); n++; }
+  await supprimerRecette(double);
+  loadPlan();
+  return n;
 }
 
 /* ---------- inventaire ---------- */

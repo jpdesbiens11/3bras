@@ -67,3 +67,23 @@ test('D-G-036 : au poêle, la consigne dit à quelle étape la famille est rendu
   assert.doesNotMatch(consigneAdaptation('FICHE SUPERCHEF', 'Moins sucré.'), /rendue à l'étape/);
   assert.deepEqual(RACCOURCIS_CUISSON.map(([l]) => l), ['Il me manque…', 'Remplacer…', 'Moins de temps']);
 });
+
+test('D-G-044 : la fiche modifiée à la main garde l\'originale une fois et note le changement', async () => {
+  const { valeursTexte, valeursOriginales } = await import('../../dist/js/adaptation.js');
+  const v = valeursTexte(ROW, { ing: ['## Base', '45 ml de beurre'], etapes: ['Fondre le beurre 2 minutes.'], sous: [] }, '2026-11-12');
+  assert.deepEqual(v['Ingrédients'], ['## Base', '45 ml de beurre']);
+  assert.equal(v['Fiche complète'], true);
+  assert.equal(v.Adaptations, '2026-11-12 · modifiée à la main');
+  assert.equal(JSON.parse(v.Originale)['Ingrédients'], ROW['Ingrédients']);
+  const apres = { ...ROW, ...v, 'Ingrédients': v['Ingrédients'].join('\n') };
+  assert.ok(!('Originale' in valeursTexte(apres, { ing: ['x'], etapes: ['y'], sous: [] }, '2026-11-13')), 'originale gardée une seule fois');
+  assert.equal(valeursOriginales(apres, '2026-11-14')['Ingrédients'], ROW['Ingrédients']);
+});
+
+test('D-G-044 : doublons de recettes, du même type seulement', async () => {
+  const { doublonRecette } = await import('../../dist/js/doublons.js');
+  const b = [{ name: 'Poulet au beurre', type: 'Souper' }, { name: 'Pouding chômeur', type: 'Dessert' }, { name: 'Poulet au beurre (butter chicken)', type: 'Souper' }, { name: 'pouding chomeur', type: 'Souper' }];
+  assert.equal(doublonRecette(b[2], b), b[0]);
+  assert.equal(doublonRecette(b[3], b), null, 'même nom mais autre type');
+  assert.equal(doublonRecette(b[0], b), null);
+});
