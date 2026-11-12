@@ -66,3 +66,5 @@ a.btn{color:inherit;text-decoration:none}
 .rec-num{display:flex;align-items:center;gap:8px;flex:1 1 140px}
 .rec-num input{width:90px;min-height:var(--tap);border:1px solid var(--line-strong);background:transparent;color:var(--fg);font:inherit;padding:0 10px;border-radius:var(--radius)}
 .tx-zone{min-height:180px}
+/* D-G-045 : créer une recette avec Gemini. */
+.add-creer{margin-top:22px}
