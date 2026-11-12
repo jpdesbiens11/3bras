@@ -554,3 +554,72 @@ test('D-G-042 : 1re ligne de l\'onglet Recettes effacée, les kits s\'ajoutent q
   expect(c.onglets.Recettes).toHaveLength(21);
   expect(erreurs).toEqual([]);
 });
+
+test('D-G-043 : garde-manger filtré, mode Modifier, fusion des doublons, Au garde-manger dans Provigo', async ({ page }, info) => {
+  const { sim, erreurs } = await demarrer(page);
+  const inv = () => [...sim.classeurs.values()][0].onglets.Inventaire;
+  const ligne = (nom) => { const o = inv(), e = o[0], l = o.find((x) => x[1] === nom); return l && Object.fromEntries(e.map((c, i) => [c, l[i] ?? ''])); };
+  await page.locator('[data-go="livre"]').click();
+  await expect(page.locator('.inv-filtres .label')).toHaveText('3 articles');
+  await page.locator('[data-invetat="epuises"]').click();
+  await expect(page.locator('.inv-row')).toHaveCount(1);
+  await expect(page.locator('.inv-row')).toContainText('Citron');
+  await page.locator('[data-invetat="essentiels"]').click();
+  await expect(page.locator('.inv-row')).toHaveCount(2);
+  await page.locator('[data-invetat="tous"]').click();
+  await page.locator('#inv-q').pressSequentially('hui');
+  await expect(page.locator('.inv-row')).toHaveCount(1);
+  await expect(page.locator('#inv-q')).toBeFocused();
+  await page.locator('#inv-q').fill('');
+  await page.locator('[data-invzonef="Frigo"]').click();
+  await expect(page.locator('.inv-row')).toHaveCount(1);
+  await page.locator('[data-invzonef=""]').click();
+
+  // Un doublon ajouté par erreur, puis fusionné en mode Modifier
+  await page.locator('#inv-name').fill('huile olive');
+  await page.locator('#addinv button[type="submit"]').click();
+  await expect(page.locator('.inv-filtres .label')).toHaveText('4 articles');
+  await page.locator('#inv-edit').click();
+  await expect(page.locator('.inv-double')).toHaveCount(1);
+  await expect(page.locator('.inv-double')).toContainText('Doublon possible de « Huile d\'olive »');
+  await page.screenshot({ path: `tests/captures/${info.project.name}-garde-manger-modifier.png`, fullPage: true });
+  await page.locator('.inv-double [data-invfus]').click();
+  await expect(page.locator('#toast')).toContainText('fusionné dans « Huile d\'olive » (2)');
+  expect(ligne('huile olive')).toBeUndefined();
+  expect(ligne('Huile d\'olive')['Quantité']).toBe('2');
+
+  // Renommer, changer de zone, supprimer puis annuler
+  await page.getByLabel('Nom de Citron', { exact: true }).fill('Citrons');
+  await page.getByLabel('Nom de Citron', { exact: true }).press('Tab');
+  await expect(page.locator('#toast')).toContainText('« Citrons » mis à jour');
+  expect(ligne('Citrons')).toBeTruthy();
+  const ail = page.locator('.inv-edit', { has: page.getByLabel('Nom de Ail', { exact: true }) });
+  await ail.locator('[data-invzone]').selectOption('Frigo');
+  await expect.poll(() => ligne('Ail').Zone).toBe('Frigo');
+  await ail.locator('[data-invdel]').click();
+  await expect(page.locator('#toast')).toContainText('« Ail » supprimé');
+  expect(ligne('Ail')).toBeUndefined();
+  await page.locator('#toast button').click();
+  await expect.poll(() => !!ligne('Ail')).toBe(true);
+  await page.locator('#inv-edit').click();
+
+  // Provigo : « Au garde-manger » = toujours à la maison
+  await page.locator('[data-go="provigo"]').click();
+  const premier = page.locator('.glrow').first();
+  const nom = (await premier.locator('.t > span').textContent()).trim();
+  const avant = await page.locator('.glrow').count();
+  const ess = inv()[0].indexOf('Essentiel'), photo = JSON.stringify(inv());
+  const avantParId = new Map(inv().slice(1).map((l) => [l[0], l[ess]]));
+  await premier.locator('[data-augm]').click();
+  await expect(page.locator('#toast')).toContainText(`« ${nom} » est au garde-manger`);
+  await expect(page.locator('.glrow')).toHaveCount(avant - 1);
+  // Article nouveau (ajouté Essentiel) ou déjà là (passé Essentiel) : une seule ligne change, et elle est Essentiel.
+  const changees = inv().slice(1).filter((l) => avantParId.get(l[0]) !== l[ess]);
+  expect(changees).toHaveLength(1);
+  expect(changees[0][ess]).toBe('oui');
+  await page.locator('#toast button').click();                                   // Annuler
+  await expect(page.locator('.glrow')).toHaveCount(avant);
+  const sens = (t) => JSON.stringify(t.slice(1).filter((l) => l[0]).map((l) => [l[0], l[ess] === 'oui']));   // '' et « non » : pas essentiel
+  await expect.poll(() => sens(inv())).toBe(sens(JSON.parse(photo)));
+  expect(erreurs).toEqual([]);
+});

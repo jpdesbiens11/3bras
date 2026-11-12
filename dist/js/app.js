@@ -1,26 +1,26 @@
 // SuperChef.ai : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
-import { CONFIG } from './config.js?v=1.12.0';
-import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.12.0';
-import { el, ico, vider } from './el.js?v=1.12.0';
-import { creerAuth } from './auth.js?v=1.12.0';
-import { creerDrive } from './drive.js?v=1.12.0';
-import { ouvrirOuCreer, noterProprietaire, texteReparation } from './store.js?v=1.12.0';
-import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.12.0';
-import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.12.0';
-import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.12.0';
-import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.12.0';
-import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.12.0';
-import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.12.0';
-import { viewTri, loadTri, decide } from './vues/livre.js?v=1.12.0';
-import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.12.0';
-import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.12.0';
-import { viewCook, openCook, go, served, applyInvOff, cuisinerVersion, chargerLivre } from './vues/poele.js?v=1.12.0';
-import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.12.0';
-import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.12.0';
-import { openCompte, closeCompte, lireImport, chargerKits, majBiblio, majKits, recommencer, motRecommencer } from './vues/compte.js?v=1.12.0';
-import { openStock, closeStock, stockOuvert, cocherStock, cocherTout, ajouterStock } from './vues/stock.js?v=1.12.0';
-import { openGen, closeGen, genOuvert, majDemande, basculerCuisine, choisirNombre, copierConsigne, partagerConsigne, collerReponse, lireRecettes, cocher, ajouterChoisis } from './vues/generateur.js?v=1.12.0';
-import { openAdapt, closeAdapt, adaptOuvert, ajouterRaccourci, adapter, saveAdapt, revenirOriginale, cuisinerCeSoir } from './vues/adapter.js?v=1.12.0';
+import { CONFIG } from './config.js?v=1.13.0';
+import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.13.0';
+import { el, ico, vider, ajouter } from './el.js?v=1.13.0';
+import { creerAuth } from './auth.js?v=1.13.0';
+import { creerDrive } from './drive.js?v=1.13.0';
+import { ouvrirOuCreer, noterProprietaire, texteReparation } from './store.js?v=1.13.0';
+import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.13.0';
+import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.13.0';
+import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.13.0';
+import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.13.0';
+import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.13.0';
+import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.13.0';
+import { viewTri, loadTri, decide } from './vues/livre.js?v=1.13.0';
+import { viewInv, setQty, addInv, filtrerInv, modifierArticle, supprimerInv, fusionnerInv, focusInvQ } from './vues/garde-manger.js?v=1.13.0';
+import { viewProvigo, buildProvigo, toggleGrocery, auGardeManger } from './vues/provigo.js?v=1.13.0';
+import { viewCook, openCook, go, served, applyInvOff, cuisinerVersion, chargerLivre } from './vues/poele.js?v=1.13.0';
+import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.13.0';
+import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.13.0';
+import { openCompte, closeCompte, lireImport, chargerKits, majBiblio, majKits, recommencer, motRecommencer } from './vues/compte.js?v=1.13.0';
+import { openStock, closeStock, stockOuvert, cocherStock, cocherTout, ajouterStock } from './vues/stock.js?v=1.13.0';
+import { openGen, closeGen, genOuvert, majDemande, basculerCuisine, choisirNombre, copierConsigne, partagerConsigne, collerReponse, lireRecettes, cocher, ajouterChoisis } from './vues/generateur.js?v=1.13.0';
+import { openAdapt, closeAdapt, adaptOuvert, ajouterRaccourci, adapter, saveAdapt, revenirOriginale, cuisinerCeSoir } from './vues/adapter.js?v=1.13.0';
 
 let auth = null;
 const rouvrirFiche = (id) => { const jour = S.preview ? S.preview.day : null; openPreview(id, jour); render(); };
@@ -54,7 +54,7 @@ function doRender() {
   const kids = [];
   if (S.err) kids.push(noticeWarn(S.err, S.ctx ? null : el('button', { class: 'btn', id: 'connexion' }, 'Réessayer')));
   kids.push(...(!S.ctx ? viewConnexion() : (VUES[S.view] || viewWeek)()));
-  vider($('#main')).append(...kids);
+  ajouter(vider($('#main')), kids); // ajouter() saute null, false et '' (un « null » s'affichait sous les zones vides)
   if (S.view === 'poele') paintLock();
   $('#sync').textContent = !S.ctx ? (S.err ? 'Hors ligne' : 'Connexion à Google…') : S.loading ? 'Lecture du livre…' : `${S.recipes.length} soupers dans le livre`;
   $('#comptebtn').hidden = !S.ctx;
@@ -133,6 +133,13 @@ document.addEventListener('click', (e) => {
   if (d.ttog) { toggleTimer(d.ttog); return; }
   if (d.tdel) { dismissTimer(d.tdel); return; }
   if (d.havebtn) { toggleHave(d.havebtn); return; }
+  if (d.augm) { auGardeManger(d.augm); return; }
+  // D-G-043 : garde-manger, filtres et mode Modifier.
+  if (d.invzonef !== undefined) { filtrerInv('zone', d.invzonef); return; }
+  if (d.invetat) { filtrerInv('etat', d.invetat); return; }
+  if (b.id === 'inv-edit') { filtrerInv('edit'); return; }
+  if (d.invdel) { supprimerInv(d.invdel); return; }
+  if (d.invfus) { fusionnerInv(d.invfus, d.dans); return; }
   if (d.star) { setStars(d.star, +d.n); return; }
   if (d.tag && S.preview) { setTag(S.preview.id, d.tag, d.v); return; }
   if (d.setstatut && S.preview) { setStatut(S.preview.id, d.setstatut); return; }
@@ -161,6 +168,7 @@ document.addEventListener('input', (e) => {
   const t = e.target;
   if (t.id === 'neuf-mot') { const b = $('#recommencer'); if (b) b.disabled = !motRecommencer(t.value); return; }
   if (genOuvert() && /^gen-(mots|eviter|portions|type|soirs)$/.test(t.id)) { majDemande(); return; }
+  if (t.id === 'inv-q') { const pos = t.selectionStart; filtrerInv('q', t.value); focusInvQ(pos); return; }
   if (t.id === 'lib-q') { S.lib.q = t.value; const pos = t.selectionStart; render(); const i = $('#lib-q'); if (i) { i.focus(); try { i.setSelectionRange(pos, pos); } catch (_) {} } return; }
   if (t.id === 'd-q' && S.dpick) { S.dpick.q = t.value; const l = $('#dlist'); if (l) vider(l).append(...dessertList()); return; }
   if (t.id === 'pick-q' && S.picker) { S.picker.q = t.value; const l = $('#picklist'); if (l) vider(l).append(...pickList()); }
@@ -168,6 +176,10 @@ document.addEventListener('input', (e) => {
 document.addEventListener('change', (e) => {
   const t = e.target, d = t.dataset || {};
   if (d.gro !== undefined) toggleGrocery(d.gro);
+  if (d.invnom) modifierArticle(d.invnom, 'nom', t.value);
+  if (d.invzone) modifierArticle(d.invzone, 'zone', t.value);
+  if (d.invdept) modifierArticle(d.invdept, 'dept', t.value);
+  if (d.invess) modifierArticle(d.invess, 'ess', t.checked);
   if (d.breal) S.bil.form[d.breal].real = t.value;
   if (t.id === 'skin') applySkin(t.value);
   if (genOuvert() && /^gen-(type|soirs|portions)$/.test(t.id)) majDemande();

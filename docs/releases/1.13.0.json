@@ -1,0 +1,15 @@
+{
+  "version": "1.13.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — garde-manger en ordre",
+  "requis": ["R-06", "R-10"],
+  "nouveautes": [
+    "Garde-manger : cherche un article, filtre par zone, et affiche seulement ce qui est en stock, épuisé ou essentiel.",
+    "Mode « Modifier » : change le nom, la zone, le rayon ou « Essentiel » d'un article, ou supprime-le (avec « Annuler »).",
+    "Doublons : un article ajouté en double est signalé, et « Fusionner » n'en garde qu'un en additionnant les quantités.",
+    "Provigo : « Au garde-manger » à côté de « J'en ai » : l'article devient « toujours à la maison » et ne revient plus sur la liste.",
+    "Correction : un « null » s'affichait sous les zones vides du garde-manger."
+  ],
+  "decisions": ["D-G-043"],
+  "tests": { "unitaires": 60, "bout_en_bout": 34, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

@@ -50,3 +50,14 @@ a.btn{color:inherit;text-decoration:none}
 .kits .kit[aria-pressed="true"] b::before{content:"✓ ";color:var(--accent-ink)}
 /* D-G-040 : Recommencer à neuf. */
 .btn.danger{border-color:var(--warn);color:var(--warn)}
+/* D-G-043 : garde-manger, filtres et mode Modifier. */
+.inv-filtres{padding:12px 14px;display:grid;gap:10px;margin-bottom:14px}
+.inv-ligne{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.inv-ligne > input{flex:1 1 180px;min-width:0}
+.inv-ligne > select{flex:1 1 140px;min-width:0}
+.inv-filtres input,.inv-edit input:not([type=checkbox]),.inv-edit select{min-height:var(--tap);border:1px solid var(--line-strong);background:transparent;color:var(--fg);font:inherit;padding:0 10px;border-radius:var(--radius)}
+.inv-edit input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent);margin:0}
+.inv-edit{display:grid;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
+.inv-double{margin:0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn.icon.danger{border-color:var(--warn);color:var(--warn)}
+@media (max-width:620px){.glrow{flex-wrap:wrap}.glrow .gl{flex:1 1 100%}.glrow .havebtn{flex:1 1 auto}}
