@@ -1,0 +1,14 @@
+{
+  "version": "1.10.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — adapter une recette pendant qu'on cuisine",
+  "requis": ["R-12"],
+  "nouveautes": [
+    "05 Au poêle : bouton « Adapter avec Gemini » pendant qu'on cuisine, avec les raccourcis « Il me manque… », « Remplacer… » et « Moins de temps ».",
+    "Gemini sait à quelle étape tu es rendu et ne change pas ce qui est déjà fait.",
+    "« Cuisiner cette version ce soir » : on cuisine la version adaptée sans rien changer au livre, avec « Remettre la recette du livre » ; on reste à la même étape.",
+    "« Remplacer la recette » reste possible, au poêle comme dans la fiche : la recette devient la version de famille et l'originale est gardée."
+  ],
+  "decisions": ["D-G-036"],
+  "tests": { "unitaires": 48, "bout_en_bout": 28, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

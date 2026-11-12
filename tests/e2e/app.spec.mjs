@@ -425,3 +425,55 @@ test('D-G-035 : créer des recettes avec Claude, coller sa réponse, choisir, aj
   await expect(page.locator('[data-preview="g-sauce-bolognaise-mijotee"]')).toBeVisible();
   expect(erreurs).toEqual([]);
 });
+
+test('D-G-036 : adapter au poêle, cuisiner la version ce soir, remettre le livre, puis remplacer', async ({ page }, info) => {
+  const IA = { apiKey: 'AIza-test', projectId: 'projet-test', appId: '1:2:web:3', recaptcha: 'cle-site-test', modele: 'gemini-3.5-flash', modeleRapide: 'gemini-3.5-flash-lite' };
+  await page.addInitScript(() => { window.__reponseGemini = 'FICHE SUPERCHEF\nNom : Gratin partagé test\nPortions : 4\n\nINGRÉDIENTS\n- 30 ml (2 c. à soupe) de beurre\n- 125 ml (½ tasse) de chapelure\n- 4 pommes de terre\n\nÉTAPES\n1. Fondre 15 ml (1 c. à soupe) de beurre et dorer les pommes de terre 10 minutes.\n2. Ajouter la moitié de la chapelure.\n3. Ajouter le reste du beurre et le reste de la chapelure, puis gratiner 15 minutes.\n\nCHANGEMENTS\n- Chapelure au lieu du fromage'; });
+  const { sim, erreurs } = await demarrer(page, { ia: IA, livre: AVEC_GRATIN });
+  const ligne = () => { const o = [...sim.classeurs.values()][0].onglets.Recettes, e = o[0], l = o.find((x) => x[0] === 'r-gratin'); return Object.fromEntries(e.map((c, i) => [c, l[i] ?? ''])); };
+  await ouvrirGratin(page);
+  await page.locator('#sheet [data-cook="r-gratin"]').click();
+  await page.locator('#next').click();
+  await expect(page.locator('.step-no')).toHaveText('Étape 2 sur 3');
+
+  await page.locator('.cook-adapt [data-adapt="r-gratin"]').click();
+  await expect(page.locator('#adaptsheet')).toContainText('Tu es à l\'étape 2');
+  await page.locator('[data-adaptchip="0"]').click();                       // « Il me manque… »
+  await expect(page.locator('#adapt-q')).toHaveValue('Il me manque ');
+  await page.locator('#adapt-q').pressSequentially('de fromage râpé');
+  await page.locator('#adapt-go').click();
+  await expect(page.locator('#adapt-status')).toContainText('Voici la version adaptée');
+  const consigne = await page.evaluate(() => window.__gemini.parts.at(-1));
+  expect(consigne).toContain('« Il me manque de fromage râpé »');
+  expect(consigne).toContain('rendue à l\'étape 2');
+  await expect(page.locator('#adapt-soir')).toHaveClass(/primary/);         // au poêle, « ce soir » d'abord
+
+  // Ce soir seulement : on reste à l'étape 2, rien n'est écrit dans le livre
+  await page.locator('#adapt-soir').click();
+  await expect(page.locator('#adaptsheet')).toHaveCount(0);
+  await expect(page.locator('.step-no')).toHaveText('Étape 2 sur 3');
+  await expect(page.locator('.step-text')).toHaveText('Ajouter la moitié de la chapelure.');
+  await expect(page.locator('.cook .soir')).toContainText('Version de ce soir');
+  await expect(page.locator('.cook .soir')).toContainText('Chapelure au lieu du fromage');
+  await page.screenshot({ path: `tests/captures/${info.project.name}-poele-ce-soir.png`, fullPage: true });
+  expect(ligne()['Ingrédients']).toContain('250 ml (1 tasse) de fromage râpé');
+  expect(ligne().Originale).toBe('');
+
+  // Remettre la recette du livre
+  await page.locator('#remettre').click();
+  await expect(page.locator('.cook .soir')).toHaveCount(0);
+  await expect(page.locator('.step-text')).toHaveText('Ajouter la moitié du fromage.');
+
+  // Pour de bon : la recette est remplacée, on reste au poêle à la même étape
+  await page.locator('.cook-adapt [data-adapt="r-gratin"]').click();
+  await page.locator('#adapt-q').fill('Remplacer le fromage par de la chapelure.');
+  await page.locator('#adapt-go').click();
+  await page.locator('#adapt-save').click();
+  await expect(page.locator('#toast')).toContainText('Recette adaptée');
+  await expect(page.locator('.step-no')).toHaveText('Étape 2 sur 3');
+  await expect(page.locator('.step-text')).toHaveText('Ajouter la moitié de la chapelure.');
+  await expect(page.locator('.cook .soir')).toHaveCount(0);
+  expect(ligne()['Ingrédients']).toContain('125 ml (½ tasse) de chapelure');
+  expect(JSON.parse(ligne().Originale)['Ingrédients']).toContain('fromage râpé');
+  expect(erreurs).toEqual([]);
+});

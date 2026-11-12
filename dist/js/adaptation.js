@@ -15,11 +15,19 @@ export const RACCOURCIS = Object.freeze([
   ['Doubler', 'Doubler la recette.']
 ]);
 
-export function consigneAdaptation(fiche, demande) {
+// D-G-036 : au poêle, les raccourcis de la cuisine passent en premier (la personne finit la phrase).
+export const RACCOURCIS_CUISSON = Object.freeze([
+  ['Il me manque…', 'Il me manque '],
+  ['Remplacer…', 'Remplacer '],
+  ['Moins de temps', 'Je manque de temps : raccourcis la suite sans changer le résultat.']
+]);
+
+// etape : numéro (1…) de l'étape où la famille est rendue quand elle adapte au poêle, sinon null.
+export function consigneAdaptation(fiche, demande, etape = null) {
   return `Tu adaptes une recette du livre de recettes d'une famille québécoise (app SuperChef.ai). Français québécois.
 
 Changement demandé par la famille : « ${String(demande).slice(0, 600)} »
-
+${etape ? `\nLa famille cuisine en ce moment et elle est rendue à l'étape ${etape}.${etape > 1 ? ` Ne change pas les étapes déjà faites (1 à ${etape - 1}) sauf si c'est indispensable.` : ''} Garde le même nombre d'étapes si possible et adapte surtout la suite.\n` : ''}
 Règles :
 - Applique seulement ce changement. Garde tout le reste identique : mêmes ingrédients, mêmes étapes, mêmes temps et températures.
 - Ajuste les quantités touchées, métrique d'abord, impérial entre parenthèses si la recette le donne.

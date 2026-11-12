@@ -57,3 +57,13 @@ test('D-G-033 : revenir à l\'originale, puis annuler', () => {
   assert.equal(valeursOriginales({ ...ROW, Originale: '{pas du json' }, '2026-11-14'), null);
   assert.equal(valeursOriginales({ ...ROW, Originale: '["x"]' }, '2026-11-14'), null);
 });
+
+test('D-G-036 : au poêle, la consigne dit à quelle étape la famille est rendue', async () => {
+  const { RACCOURCIS_CUISSON } = await import('../../dist/js/adaptation.js');
+  const c = consigneAdaptation('FICHE SUPERCHEF', 'Il me manque la crème', 3);
+  assert.match(c, /rendue à l'étape 3\. Ne change pas les étapes déjà faites \(1 à 2\)/);
+  const c1 = consigneAdaptation('FICHE SUPERCHEF', 'Il me manque la crème', 1);
+  assert.match(c1, /rendue à l'étape 1\. Garde le même nombre d'étapes/);
+  assert.doesNotMatch(consigneAdaptation('FICHE SUPERCHEF', 'Moins sucré.'), /rendue à l'étape/);
+  assert.deepEqual(RACCOURCIS_CUISSON.map(([l]) => l), ['Il me manque…', 'Remplacer…', 'Moins de temps']);
+});

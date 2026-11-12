@@ -1,5 +1,20 @@
 # Déployer SuperChef.ai sur Hostinger (D-G-031)
 
+## État du compte (relevé le 2026-11-12, en lecture seulement)
+
+- **Aucun hébergement Web** (ni mutualisé, ni Agency) : les étapes « site statique » plus bas supposent qu'on en achète un.
+- **VPS KVM 2** `srv1980606.hstgr.cloud` (2.24.141.240), Ubuntu 24.04 avec Docker et Traefik. Projets Docker : `traefik` (réseau de l'hôte, ports 80 et 443, Let's Encrypt par défi HTTP, résolveur `letsencrypt`, HTTP redirigé vers HTTPS), `dynamite-agile` (demo.dynamiteagile.ca), `hermes-agent-dhhc`. Ne pas y toucher.
+- **Domaine dynamiteagile.ca**, DNS chez Hostinger : `@` et `www` vers GitHub Pages, `demo` vers le VPS.
+- JP a choisi d'attendre avant de déployer (2026-11-12).
+
+## Proposition pour le VPS (quand JP dit go)
+
+1. DNS : enregistrement A `superchef` → 2.24.141.240 sur dynamiteagile.ca (opération `dns_records_update`, sans écraser les autres).
+2. Projet Docker `superchef` (opération `vps_docker_create`, contenu YAML) : un nginx qui sert `dist/`, construit depuis le dépôt public à un tag (`https://github.com/jpdesbiens11/SuperChef.ai.git#v<version>`), avec un `Dockerfile` et un `nginx.conf` à ajouter dans `hostinger/` (mêmes en-têtes que `.htaccess`). Étiquettes Traefik sur le modèle de dynamite-agile : `traefik.enable=true`, `routers.superchef.rule=Host(\`superchef.dynamiteagile.ca\`)`, `entrypoints=websecure`, `tls.certresolver=letsencrypt`, port du service 80.
+3. Vérifier `https://superchef.dynamiteagile.ca/`, puis déclarer le domaine chez Google (étape 7 plus bas).
+4. Mise à jour : relancer `vps_docker_create` avec le nouveau tag (le projet est remplacé).
+
+
 Marche à suivre pour une session Claude Code, une fois le **connecteur Hostinger autorisé** dans claude.ai (Paramètres → Connecteurs) et une **nouvelle session** ouverte sur ce dépôt (les connecteurs sont lus au démarrage d'une session). Les questions à JP se posent par menus (AskUserQuestion).
 
 ## Ce qui est décidé
