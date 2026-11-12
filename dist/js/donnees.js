@@ -1,8 +1,8 @@
 // Couche de données : le classeur Google remplace les bases Notion de Gordon Rams.ai.
 // Toutes les écritures passent par ecrireParId (N-07) ou ajouterUn.
-import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.11.0';
-import { lireOnglets, ecrireParId, ajouterUn } from './store.js?v=1.11.0';
-import { ficheDeLigne } from './cuisine.js?v=1.11.0';
+import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.12.0';
+import { lireOnglets, ecrireParId, ajouterUn } from './store.js?v=1.12.0';
+import { ficheDeLigne } from './cuisine.js?v=1.12.0';
 
 const T_REC = 'Recettes', T_PLAN = 'Plans de semaine', T_INV = 'Inventaire', T_BIL = 'Bilans';
 const oui = (v) => /^(oui|true|vrai|1|__yes__)$/i.test(String(v || '').trim());
@@ -37,7 +37,9 @@ export function rebuildPools() {
 // Une lecture groupée au démarrage : recettes, plans, inventaire.
 export async function chargerTout() {
   const t = await lireOnglets(ctx().drive, ctx().classeurId, [T_REC, T_PLAN, T_INV]);
-  S.book = t[T_REC].filter((r) => r.id).map(toRecipe);
+  // D-G-042 : une recette écrite deux fois (titres effacés pendant un ajout) n'est montrée qu'une fois.
+  const vus = new Set();
+  S.book = t[T_REC].filter((r) => r.id && !vus.has(r.id) && vus.add(r.id)).map(toRecipe);
   S.planAll = t[T_PLAN].filter((r) => r.id);
   S.inv.items = t[T_INV].filter((r) => r.id).map(toItem).sort((a, b) => a.name.localeCompare(b.name, 'fr'));
   rebuildPools();

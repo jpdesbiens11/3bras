@@ -1,6 +1,6 @@
 // Planification de la semaine et règle des 3 semaines (R-07, R-08, R-09). Repris de Gordon Rams.ai.
-import { S, DAYS, GAP_DAYS, render, toast, errText } from './etat.js?v=1.11.0';
-import { majRecette } from './donnees.js?v=1.11.0';
+import { S, DAYS, GAP_DAYS, render, toast, errText } from './etat.js?v=1.12.0';
+import { majRecette } from './donnees.js?v=1.12.0';
 
 export function tooSoon(r) { if (!r.last) return false; const d = Math.abs((new Date(S.weekStart) - new Date(r.last + 'T12:00:00')) / 864e5); return d < GAP_DAYS; }
 export const isFixed = (id) => Object.values(S.fixed || {}).includes(id);

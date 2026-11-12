@@ -1,9 +1,9 @@
 // Feuille Compte : connexion, classeur, import (R-02). Même gabarit que les feuilles de Gordon Rams.ai.
-import { S, $, toast } from '../etat.js?v=1.11.0';
-import { el, ico, vider } from '../el.js?v=1.11.0';
-import { lienClasseur, lienDossier, reinitialiser } from '../store.js?v=1.11.0';
-import { valider, importer } from '../import.js?v=1.11.0';
-import { CONFIG } from '../config.js?v=1.11.0';
+import { S, $, toast } from '../etat.js?v=1.12.0';
+import { el, ico, vider } from '../el.js?v=1.12.0';
+import { lienClasseur, lienDossier, reinitialiser, texteReparation } from '../store.js?v=1.12.0';
+import { valider, importer } from '../import.js?v=1.12.0';
+import { CONFIG } from '../config.js?v=1.12.0';
 
 export function openCompte(surImporter) {
   if ($('#comptesheet')) return;
@@ -51,8 +51,10 @@ export function openCompte(surImporter) {
 }
 // Les kits sont publiés avec l'app (dist/kits/), mêmes règles que tout fichier d'import (D-G-025, D-G-038).
 export const KITS = [
+  { id: 'survie', nom: 'Survie : la base familiale', description: 'les soupers de semaine qui sauvent la soirée' },
   { id: 'quebecois', nom: 'Québécois', description: 'les classiques de chez nous' },
   { id: 'vege', nom: 'Végé', description: 'des soupers sans viande qui plaisent à tout le monde' },
+  { id: 'mexicaine', nom: 'Mexicain', description: 'tacos du mardi, burritos et fajitas' },
   { id: 'asiatique', nom: 'Asiatique', description: 'sautés, currys et nouilles' },
   { id: 'moyen-orient', nom: 'Moyen-Orient', description: 'grillades, falafels et mezzés' },
   { id: 'indienne', nom: 'Inde', description: 'currys doux, dal et riz parfumé' },
@@ -74,7 +76,7 @@ export async function chargerKits(apres) {
   const go = $('#chargerkits'); if (go) go.disabled = true;
   const st = el('p', { class: 'label' }, 'Lecture des kits…'); vider(res).append(st);
   try {
-    let total = 0, deja = 0; const attendus = [];
+    let total = 0, deja = 0, repare = ''; const attendus = [];
     for (const id of choisis) {
       const rep = await fetch(`kits/${id}.json?v=${CONFIG.version}`);
       if (!rep.ok) throw new Error(`kit ${id} introuvable`);
@@ -83,12 +85,13 @@ export async function chargerKits(apres) {
       st.textContent = `Ajout du kit ${KITS.find((k) => k.id === id).nom}…`;
       const r = await importer(S.ctx.drive, S.ctx.classeurId, v.donnees);
       total += r.creees.recettes; deja += r.deja.recettes; attendus.push(...v.donnees.recettes.map((x) => x.id));
+      repare = repare || texteReparation(r.reparation);
     }
     st.textContent = 'Relecture du classeur…';
     await apres();
     // D-G-038 : on relit le classeur et on vérifie que les recettes écrites y sont bien retrouvées.
     const lus = new Set(S.book.map((x) => x.id)), manquent = attendus.filter((id) => !lus.has(id)).length;
-    vider(res).append(el('p', {}, `${total} recettes ajoutées${deja ? ` (${deja} déjà là)` : ''}. Ton livre compte maintenant ${S.book.length} recettes ; les nouvelles sont « À trier » dans 01 Livre.`),
+    vider(res).append(repare && el('p', { class: 'hint' }, repare), el('p', {}, `${total} recettes ajoutées${deja ? ` (${deja} déjà là)` : ''}. Ton livre compte maintenant ${S.book.length} recettes ; les nouvelles sont « À trier » dans 01 Livre.`),
       manquent ? el('div', { class: 'notice warn' }, ico('alert'), el('p', {}, `${manquent} recettes sont dans ton classeur, mais l'app ne les retrouve pas. Ouvre l'onglet Recettes : la 1re ligne doit garder les titres des colonnes (id, Nom, Type…).`)) : null,
       el('button', { class: 'btn', id: 'voirlivre', type: 'button' }, ico('right'), 'Voir le livre'));
     toast(`${total} recettes ajoutées`);
@@ -125,7 +128,8 @@ export async function lireImport(fichier, apres) {
         el('li', {}, `Créés : ${c.recettes} recettes, ${c.plans} lignes de plan, ${c.inventaire} articles, ${c.bilans} bilans.`),
         el('li', {}, `Déjà présents (ignorés) : ${k.recettes} recettes, ${k.plans} lignes de plan, ${k.inventaire} articles.`),
         r.kits.length && el('li', {}, `${r.kits.length} recette${r.kits.length > 1 ? 's' : ''} de kit repas refusée${r.kits.length > 1 ? 's' : ''} (R-15) : ${r.kits.join(', ')}`),
-        el('li', {}, `${r.aVerifier.length} recettes marquées « à vérifier ».`)));
+        el('li', {}, `${r.aVerifier.length} recettes marquées « à vérifier ».`),
+        texteReparation(r.reparation) && el('li', {}, texteReparation(r.reparation))));
       toast('Import terminé'); await apres();
     } catch (e) {
       vider(res).append(el('div', { class: 'notice warn' }, ico('alert'), el('p', {}, `Oups, ça a brûlé un peu : ${e.message}. Relance l'import : rien ne sera dédoublé.`)));
