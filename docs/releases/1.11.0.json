@@ -1,0 +1,15 @@
+{
+  "version": "1.11.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — démarrer à neuf : kits, stock de base, remise à zéro",
+  "requis": ["R-01", "R-02", "R-06"],
+  "nouveautes": [
+    "Les kits de départ marchent pour de vrai : la feuille Compte se met à jour après l'ajout (« Ton livre compte maintenant N recettes », « Voir le livre ») et signale des recettes écrites mais introuvables.",
+    "Choix des kits clair : aucun kit coché d'office, un crochet sur les kits choisis, « Ajouter N kits (N×10 recettes) ».",
+    "5 nouveaux kits de 10 recettes : Moyen-Orient, Inde, Russe, Français, et Enfants (surgelés et mets faciles). Nouvelles cuisines : moyen-orientale, française, russe.",
+    "Stock de base : une liste à cocher qui combine les essentiels courants et les ingrédients de garde-manger de tes recettes ; seul ce qui est coché s'écrit dans l'onglet Inventaire, sans doublon.",
+    "Recommencer à neuf : après « RECOMMENCER », le classeur est vidé (recettes, inventaire, plans, bilans) et ses lignes de titres sont remises ; l'app repart comme à la première connexion."
+  ],
+  "decisions": ["D-G-038", "D-G-039", "D-G-040"],
+  "tests": { "unitaires": 56, "bout_en_bout": 30, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

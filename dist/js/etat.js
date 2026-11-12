@@ -1,5 +1,5 @@
 // État et constantes partagés, repris de Gordon Rams.ai.
-import { el } from './el.js?v=1.10.1';
+import { el } from './el.js?v=1.11.0';
 
 export const DAYS = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 export const BASE_DAYS = 4; // dimanche au mercredi par défaut ; jeudi à samedi au besoin
@@ -16,7 +16,7 @@ export const DEPTS = ['Fruits et légumes', 'Boulangerie', 'Viandes', 'Poissonne
 export const ZONES = ['Frigo', 'Congélateur', 'Garde-manger', 'Épices', 'Outils'];
 export const TYPES = ['Souper', 'Soupe', 'Accompagnement', 'Déjeuner', 'Dessert', 'Collation', 'Base & sauce'];
 export const PROTS = ['Bœuf', 'Porc', 'Poulet', 'Veau', 'Poisson & fruits de mer', 'Végé', 'Œufs'];
-export const CUIS = ['Québécoise', 'Italienne', 'Asiatique', 'Mexicaine', 'Indienne', 'Méditerranéenne', 'Classique'];
+export const CUIS = ['Québécoise', 'Italienne', 'Asiatique', 'Mexicaine', 'Indienne', 'Méditerranéenne', 'Moyen-orientale', 'Française', 'Russe', 'Classique'];
 export const OUTILS = ['Four', 'Mijoteuse', 'Instant Pot', 'BBQ', 'Wok', 'Sous-vide', 'Robot culinaire', 'Air fryer', 'Grill à panini'];
 export const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 export const GAP_DAYS = 21;

@@ -1,5 +1,5 @@
 // Lecture des fiches : ingrédients, étapes, minuteurs, rayons Provigo. Repris de Gordon Rams.ai.
-import { norm, S } from './etat.js?v=1.10.1';
+import { norm, S } from './etat.js?v=1.11.0';
 
 const STOP = new Set('avec dans pour plus sans tasse tasses cuillere cuilleres soupe environ facultatif hache hachee hachees haches finement coupe coupee coupees coupes cubes tranche tranches gousse gousses grosse gros petit petite moyen moyenne boite pelees pelee goutt bien chaud froid frais fraiche litre litres paquet morceaux reserve rincee rinces egoutte'.split(' '));
 export function keywords(line) {
@@ -102,7 +102,7 @@ const DEPT_RULES = [
   ['Surgelés', /surgele|congele/],
   ['Poissonnerie', /saumon|crevette|poisson|\bthon\b|morue|petoncle|tilapia|aiglefin/],
   ['Charcuterie et fromages', /jambon|bacon|chorizo|pancetta|prosciutto|fromage|cheddar|parmesan|ricotta|mozzarella|feta|chevre|boursin|monterey|emmental|gruyere|saucisson/],
-  ['Viandes', /boeuf|porc|poulet|veau|dinde|agneau|cotelettes?|cotes levees|filet mignon|hauts? de cuisse|poitrine|epaule|saucisse|rosbif|palette|escalope|cubes a ragout|interieur de ronde|\broti\b/],
+  ['Viandes', /boeuf|bifteck|surlonge|porc|poulet|veau|dinde|agneau|cotelettes?|cotes levees|filet mignon|hauts? de cuisse|poitrine|epaule|saucisse|rosbif|palette|escalope|cubes a ragout|interieur de ronde|\broti\b/],
   ['Produits laitiers et œufs', /\blait\b|creme|beurre|\boeufs?\b|yogourt|yaourt/],
   ['Boulangerie', /\bpains?\b|tortilla|naan|baguette|pita|vol au vent|vols au vent|croute|brioche|kaiser/],
   ['Épices', /cumin|paprika|origan|basilic seche|thym seche|\bcari\b|curry|garam|cardamome|cayenne|\bpoivre\b|\bsel\b|cannelle|muscade|laurier|piment broye|flocons de piment|assaisonnement|moutarde seche|poudre|epices|coriandre moulue|clou de girofle|herbes salees|curcuma/],

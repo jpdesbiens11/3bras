@@ -1,25 +1,26 @@
 // SuperChef.ai : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
-import { CONFIG } from './config.js?v=1.10.1';
-import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.10.1';
-import { el, ico, vider } from './el.js?v=1.10.1';
-import { creerAuth } from './auth.js?v=1.10.1';
-import { creerDrive } from './drive.js?v=1.10.1';
-import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.10.1';
-import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.10.1';
-import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.10.1';
-import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.10.1';
-import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.10.1';
-import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.10.1';
-import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.10.1';
-import { viewTri, loadTri, decide } from './vues/livre.js?v=1.10.1';
-import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.10.1';
-import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.10.1';
-import { viewCook, openCook, go, served, applyInvOff, cuisinerVersion, chargerLivre } from './vues/poele.js?v=1.10.1';
-import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.10.1';
-import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.10.1';
-import { openCompte, closeCompte, lireImport, chargerKits } from './vues/compte.js?v=1.10.1';
-import { openGen, closeGen, genOuvert, majDemande, basculerCuisine, choisirNombre, copierConsigne, partagerConsigne, collerReponse, lireRecettes, cocher, ajouterChoisis } from './vues/generateur.js?v=1.10.1';
-import { openAdapt, closeAdapt, adaptOuvert, ajouterRaccourci, adapter, saveAdapt, revenirOriginale, cuisinerCeSoir } from './vues/adapter.js?v=1.10.1';
+import { CONFIG } from './config.js?v=1.11.0';
+import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.11.0';
+import { el, ico, vider } from './el.js?v=1.11.0';
+import { creerAuth } from './auth.js?v=1.11.0';
+import { creerDrive } from './drive.js?v=1.11.0';
+import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.11.0';
+import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.11.0';
+import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.11.0';
+import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.11.0';
+import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.11.0';
+import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.11.0';
+import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.11.0';
+import { viewTri, loadTri, decide } from './vues/livre.js?v=1.11.0';
+import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.11.0';
+import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.11.0';
+import { viewCook, openCook, go, served, applyInvOff, cuisinerVersion, chargerLivre } from './vues/poele.js?v=1.11.0';
+import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.11.0';
+import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.11.0';
+import { openCompte, closeCompte, lireImport, chargerKits, majBiblio, majKits, recommencer, motRecommencer } from './vues/compte.js?v=1.11.0';
+import { openStock, closeStock, stockOuvert, cocherStock, cocherTout, ajouterStock } from './vues/stock.js?v=1.11.0';
+import { openGen, closeGen, genOuvert, majDemande, basculerCuisine, choisirNombre, copierConsigne, partagerConsigne, collerReponse, lireRecettes, cocher, ajouterChoisis } from './vues/generateur.js?v=1.11.0';
+import { openAdapt, closeAdapt, adaptOuvert, ajouterRaccourci, adapter, saveAdapt, revenirOriginale, cuisinerCeSoir } from './vues/adapter.js?v=1.11.0';
 
 let auth = null;
 const rouvrirFiche = (id) => { const jour = S.preview ? S.preview.day : null; openPreview(id, jour); render(); };
@@ -85,7 +86,15 @@ document.addEventListener('click', (e) => {
   if (d.chipdel !== undefined) { removeFile(+d.chipdel); return; }
   if (b.id === 'add-save') { saveRecipe((id) => openPreview(id)); return; }
   if (d.compteclose !== undefined) { closeCompte(); return; }
-  if (d.kit) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); return; }
+  if (d.kit) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); majKits(); return; }
+  if (b.id === 'voirlivre') { closeCompte(); setView('tri'); return; }
+  if (b.id === 'recommencer') { recommencer(recharger); return; }
+  // D-G-039 : stock de base (liste à cocher vers l'onglet Inventaire).
+  if (b.id === 'ouvrirstock') { openStock(); return; }
+  if (d.stockclose !== undefined) { closeStock(); return; }
+  if (d.stocktout) { cocherTout(d.stocktout === '1'); return; }
+  if (b.id === 'stock-ajouter') { ajouterStock(recharger); return; }
+  if (b.id === 'stock-voir') { closeStock(); closeCompte(); setView('livre'); return; }
   if (b.id === 'chargerkits') { chargerKits(recharger); return; }
   // D-G-035 : recettes de départ avec Claude (consigne à copier, réponse collée, liste à cocher).
   if (b.id === 'ouvrirgen') { openGen(); return; }
@@ -150,6 +159,7 @@ document.addEventListener('click', (e) => {
 });
 document.addEventListener('input', (e) => {
   const t = e.target;
+  if (t.id === 'neuf-mot') { const b = $('#recommencer'); if (b) b.disabled = !motRecommencer(t.value); return; }
   if (genOuvert() && /^gen-(mots|eviter|portions|type|soirs)$/.test(t.id)) { majDemande(); return; }
   if (t.id === 'lib-q') { S.lib.q = t.value; const pos = t.selectionStart; render(); const i = $('#lib-q'); if (i) { i.focus(); try { i.setSelectionRange(pos, pos); } catch (_) {} } return; }
   if (t.id === 'd-q' && S.dpick) { S.dpick.q = t.value; const l = $('#dlist'); if (l) vider(l).append(...dessertList()); return; }
@@ -161,6 +171,7 @@ document.addEventListener('change', (e) => {
   if (d.breal) S.bil.form[d.breal].real = t.value;
   if (t.id === 'skin') applySkin(t.value);
   if (genOuvert() && /^gen-(type|soirs|portions)$/.test(t.id)) majDemande();
+  if (d.stockpick !== undefined) { cocherStock(d.stockpick, t.checked); t.closest('.gen-item')?.classList.toggle('on', t.checked); }
   if (d.genpick !== undefined) { cocher(d.genpick, t.checked); t.closest('.gen-item')?.classList.toggle('on', t.checked); }
   if (t.id === 'snd') setSound(t.value);
   if (d.got !== undefined && S.cook.got) { const k = +d.got; t.checked ? S.cook.got.add(k) : S.cook.got.delete(k); t.closest('label')?.classList.toggle('on', t.checked); }
@@ -179,6 +190,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     if (adaptOuvert()) { closeAdapt(); return; }
     if (genOuvert()) { closeGen(); return; }
+    if (stockOuvert()) { closeStock(); return; }
     if (S.preview) { closePreview(); return; } if (S.dpick) { closeDessert(); return; } if (S.picker) { closePicker(); return; } if ($('#comptesheet')) { closeCompte(); return; } if ($('#addsheet')) { closeAdd(); return; }
   }
   if (S.view !== 'poele' || !S.cook.data) return;
@@ -222,7 +234,7 @@ async function boot() {
   S.loading = false; S.prov.lines = null; S.bil.items = null; S.tri.list = null; S.pages = {};
   setView(S.view);
 }
-async function recharger() { await boot(); }
+async function recharger() { await boot(); majBiblio(); }
 
 let enCours = false;
 async function connecter(autreCompte) {

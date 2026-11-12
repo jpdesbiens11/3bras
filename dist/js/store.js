@@ -1,8 +1,8 @@
 // Bibliothèque SuperChef.ai dans le Drive de la personne (R-01).
 // Trouve le dossier et le classeur créés par l'app, ou les crée.
 
-import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.10.1';
-import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.10.1';
+import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.11.0';
+import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.11.0';
 
 export async function ouvrirOuCreer(drive, { nomDossier, nomClasseur, version }, etape = () => {}) {
   etape('recherche');
@@ -87,6 +87,19 @@ export async function migrerSchema(drive, id) {
   donnees.push({ range: `'Schéma'!A${ligne}:B${ligne}`, values: [['version_schema', String(VERSION_SCHEMA)]] });
   await drive.ecrireValeurs(id, donnees);
   return { avant, apres: VERSION_SCHEMA, ajouts };
+}
+
+// D-G-040 : « Recommencer à neuf » — vide les onglets de données et remet leur ligne de titres au schéma
+// courant (un onglet supprimé est recréé). Le classeur, le dossier et l'onglet Schéma restent. Pas de copie.
+export const ONGLETS_DONNEES = Object.freeze(['Recettes', 'Plans de semaine', 'Inventaire', 'Bilans']);
+export async function reinitialiser(drive, id, titres = ONGLETS_DONNEES) {
+  const info = await drive.lireClasseur(id);
+  const presents = new Set(info.sheets.map((s) => s.properties.title));
+  const ajouts = titres.filter((t) => !presents.has(t)).map((t) => ({ addSheet: { properties: { title: t, gridProperties: { frozenRowCount: 1 } } } }));
+  if (ajouts.length) await drive.majClasseur(id, ajouts);
+  const avant = titres.filter((t) => presents.has(t));
+  if (avant.length) await drive.viderValeurs(id, avant.map((t) => `'${t}'`));
+  await drive.ecrireValeurs(id, titres.map((t) => { const o = onglet(t); return { range: plageEntete(o), values: [o.colonnes] }; }));
 }
 
 // Lit un onglet entier en objets { colonne: valeur, _ligne: n° de ligne dans Sheets }.

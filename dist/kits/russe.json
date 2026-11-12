@@ -1,0 +1,523 @@
+{
+ "format": "superchef-import",
+ "version": 1,
+ "schema": 2,
+ "genere_le": "2026-11-12",
+ "source": "Kit SuperChef.ai — Russe",
+ "kit": {
+  "id": "russe",
+  "nom": "Russe",
+  "description": "Les grands classiques russes et d'Europe de l'Est, du bortsch au Stroganoff en passant par les pelmenis, pour des soupers réconfortants."
+ },
+ "recettes": [
+  {
+   "id": "k-russe-boeuf-stroganoff",
+   "Nom": "Bœuf Stroganoff",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Bœuf",
+   "Cuisine": "Russe",
+   "Soir de semaine": false,
+   "Temps total (min)": 70,
+   "Portions": 4,
+   "Outils": "",
+   "Source": "Trois fois par jour",
+   "Ingrédients": [
+    "60 ml (1/4 tasse) de beurre",
+    "1 gros oignon haché",
+    "454 g (1 lb) de champignons tranchés (2 paquets de 227 g / 8 oz)",
+    "454 g (1 lb) de bœuf coupé en lanières",
+    "Farine tout usage, pour enrober",
+    "180 ml (3/4 tasse) de vin blanc",
+    "750 ml (3 tasses) de bouillon de bœuf",
+    "250 ml (1 tasse) de crème sure",
+    "1 boîte de 284 ml (10 oz) de crème de champignons condensée",
+    "30 ml (2 c. à soupe) de pâte de tomates",
+    "15 ml (1 c. à soupe) de moutarde de Dijon",
+    "1 pincée de paprika",
+    "Sel et poivre",
+    "Nouilles aux œufs cuites, pour servir"
+   ],
+   "Étapes": [
+    "Dans une grande poêle, faire fondre 30 ml (2 c. à soupe) de beurre à feu moyen. Cuire l'oignon et les champignons 5 minutes. Réserver dans une assiette.",
+    "Saler et poivrer les lanières de bœuf, puis les enrober légèrement de farine.",
+    "Dans la même poêle à feu vif, faire fondre le reste du beurre (30 ml / 2 c. à soupe). Saisir le bœuf rapidement et le réserver.",
+    "Déglacer la poêle avec le vin blanc. Ajouter le bouillon, la crème sure, la crème de champignons, la pâte de tomates et la moutarde. Bien mélanger.",
+    "Porter à ébullition, baisser le feu et laisser mijoter la sauce de 15 à 20 minutes.",
+    "Remettre le bœuf, l'oignon et les champignons dans la sauce. Poursuivre la cuisson de 15 à 20 minutes.",
+    "Saupoudrer de paprika et servir sur les nouilles aux œufs."
+   ],
+   "Tâches sous-chef": [
+    "Essuyer les champignons avec un linge humide",
+    "Mesurer le bouillon et la crème sure",
+    "Saupoudrer le paprika au moment de servir"
+   ],
+   "À vérifier": "La source ne précise ni la coupe de bœuf ni la quantité de farine (« selon le besoin »).",
+   "Fiche complète": true,
+   "Lien source": "https://www.troisfoisparjour.com/fr/themes/trois-fois-par-jour-moi/boeuf-stroganoff-de-ma-maman/",
+   "Notes": [
+    "Inspirée du bœuf Stroganoff de ma maman de Trois fois par jour."
+   ]
+  },
+  {
+   "id": "k-russe-bortsch-au-boeuf",
+   "Nom": "Bortsch au bœuf",
+   "Type": "Soupe",
+   "Statut": "À trier",
+   "Protéine": "Bœuf",
+   "Cuisine": "Russe",
+   "Soir de semaine": false,
+   "Temps total (min)": 110,
+   "Portions": 8,
+   "Outils": "",
+   "Source": "Ricardo",
+   "Ingrédients": [
+    "1 oignon émincé",
+    "2 poivrons de couleurs variées, épépinés et coupés en dés",
+    "1 petit piment fort haché (ou 1 ml (1/4 c. à thé) de flocons de piment broyés)",
+    "60 ml (1/4 tasse) de pâte de tomates",
+    "30 ml (2 c. à soupe) d'huile végétale",
+    "1 litre (4 tasses) de chou vert coupé en dés",
+    "2 betteraves pelées, en dés ou râpées",
+    "2 carottes pelées, en dés ou râpées",
+    "2 pommes de terre rouges pelées, en dés",
+    "2 tomates en dés",
+    "2 litres (8 tasses) de bouillon de bœuf",
+    "454 g (1 lb) de rôti de palette de bœuf désossé, en cubes",
+    "3 feuilles de laurier",
+    "250 ml (1 tasse) de haricots verts en tronçons",
+    "3 gousses d'ail hachées",
+    "15 ml (1 c. à soupe) de vinaigre blanc",
+    "60 ml (1/4 tasse) de persil plat haché",
+    "60 ml (1/4 tasse) d'aneth frais haché",
+    "125 ml (1/2 tasse) de crème sure",
+    "Sel et poivre"
+   ],
+   "Étapes": [
+    "Dans une grande casserole, attendrir l'oignon, les poivrons et le piment avec la pâte de tomates dans l'huile. Saler et poivrer.",
+    "Ajouter le chou, les betteraves, les carottes, les pommes de terre, les tomates, le bouillon, le bœuf et les feuilles de laurier.",
+    "Porter à ébullition. Couvrir et laisser mijoter environ 60 minutes, jusqu'à ce que la viande soit tendre.",
+    "Ajouter les haricots verts et cuire 10 minutes.",
+    "Ajouter l'ail et le vinaigre. Retirer les feuilles de laurier et rectifier l'assaisonnement.",
+    "Servir dans des bols, avec une cuillerée de crème sure, du persil et de l'aneth. Du pain de seigle l'accompagne bien."
+   ],
+   "Tâches sous-chef": [
+    "Casser les haricots verts en tronçons avec les doigts",
+    "Mesurer le bouillon",
+    "Garnir les bols de crème sure et d'herbes"
+   ],
+   "À vérifier": "",
+   "Fiche complète": true,
+   "Lien source": "https://www.ricardocuisine.com/en/recipes/6014-borscht",
+   "Notes": [
+    "Inspirée du bortsch de Ricardo."
+   ]
+  },
+  {
+   "id": "k-russe-pelmenis-porc-et-boeuf",
+   "Nom": "Pelmenis porc et bœuf",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Porc",
+   "Cuisine": "Russe",
+   "Soir de semaine": false,
+   "Temps total (min)": 90,
+   "Portions": 4,
+   "Outils": "Robot culinaire",
+   "Source": "Web autre",
+   "Ingrédients": [
+    "## Pâte",
+    "130 ml (1/2 tasse + 1 c. à thé) de lait ou d'eau",
+    "1 œuf",
+    "350 g (environ 12 oz) de farine tout usage",
+    "1 bonne pincée de sel",
+    "## Farce",
+    "100 g (3 1/2 oz) de porc haché maigre",
+    "100 g (3 1/2 oz) de bœuf haché maigre",
+    "2 petits oignons hachés finement",
+    "1 gousse d'ail écrasée",
+    "1 poignée de persil plat haché",
+    "Sel et poivre",
+    "## Pour servir",
+    "150 ml (2/3 tasse) de crème sure",
+    "1 petit bouquet d'aneth haché"
+   ],
+   "Étapes": [
+    "Chauffer le lait (ou l'eau) jusqu'à ce qu'il soit bien chaud au toucher, sans bouillir. Y fouetter l'œuf et le sel.",
+    "Verser le liquide sur la farine dans un grand bol. Pétrir jusqu'à ce que la pâte soit souple. Couvrir et laisser reposer 30 minutes.",
+    "Pendant ce temps, au robot culinaire, réduire le porc, le bœuf, les oignons, l'ail et le persil en une farce lisse. Saler et poivrer généreusement.",
+    "Diviser la pâte en trois. Rouler chaque morceau en boudin et le couper en 16 tronçons environ. Abaisser chaque tronçon en un petit cercle mince.",
+    "Déposer au centre de chaque cercle une boule de farce de la grosseur d'un raisin. Plier en demi-lune et bien sceller le bord, puis pincer les deux pointes ensemble.",
+    "Porter une grande casserole d'eau salée à ébullition. Cuire les pelmenis de 4 à 5 minutes, jusqu'à ce qu'ils flottent et que la farce soit cuite.",
+    "Bien égoutter. Servir nappés de crème sure et parsemés d'aneth."
+   ],
+   "Tâches sous-chef": [
+    "Effeuiller le persil et l'aneth",
+    "Déposer les petites boules de farce sur les cercles de pâte",
+    "Pincer les pointes des pelmenis ensemble"
+   ],
+   "À vérifier": "La source donne environ 1 heure de travail plus 30 minutes de repos, sans détail. Elle demande un pot de 142 ml de crème sure, arrondi ici à 150 ml.",
+   "Fiche complète": true,
+   "Lien source": "https://www.olivemagazine.com/recipes/meat-and-poultry/pelmeni-russian-dumplings/",
+   "Notes": [
+    "Inspirée des pelmeni d'Olive Magazine."
+   ]
+  },
+  {
+   "id": "k-russe-golubtsy-cigares-au-chou",
+   "Nom": "Golubtsy (cigares au chou)",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Bœuf",
+   "Cuisine": "Russe",
+   "Soir de semaine": false,
+   "Temps total (min)": 170,
+   "Portions": 8,
+   "Outils": "Four",
+   "Source": "Ricardo",
+   "Ingrédients": [
+    "## Chou",
+    "12 grandes feuilles de chou de Savoie, environ",
+    "## Farce",
+    "1 oignon haché",
+    "3 tranches de bacon émincées finement",
+    "30 ml (2 c. à soupe) d'huile d'olive",
+    "3 ou 4 gousses d'ail hachées finement",
+    "454 g (1 lb) de bœuf haché maigre",
+    "180 ml (3/4 tasse) de riz à grain long, non cuit",
+    "5 ml (1 c. à thé) de sel",
+    "5 ml (1 c. à thé) de moutarde sèche",
+    "1 ml (1/4 c. à thé) de thym séché",
+    "Poivre",
+    "## Sauce et garniture",
+    "750 ml (3 tasses) de sauce tomate",
+    "125 ml (1/2 tasse) de bouillon de bœuf ou de poulet",
+    "8 tranches de bacon"
+   ],
+   "Étapes": [
+    "Avec un couteau, amincir la grosse nervure à la base de chaque feuille de chou.",
+    "Blanchir les feuilles dans une grande casserole d'eau bouillante salée environ 5 minutes, jusqu'à ce qu'elles soient tendres. Les plonger dans l'eau glacée, égoutter et réserver.",
+    "Placer la grille au centre du four. Préchauffer le four à 180 °C (350 °F).",
+    "Dans une grande poêle, dorer l'oignon et les 3 tranches de bacon émincées dans l'huile. Saler et poivrer. Ajouter l'ail et cuire 1 minute. Transférer dans un grand bol et laisser tiédir.",
+    "Ajouter au bol le bœuf, le riz, 5 ml (1 c. à thé) de sel, la moutarde, le thym et 500 ml (2 tasses) de sauce tomate. Poivrer et bien mélanger à la main ou à la cuillère de bois.",
+    "Étaler le reste de la sauce tomate (250 ml / 1 tasse) et le bouillon dans un plat de 33 x 23 cm (13 x 9 po).",
+    "Façonner la farce en petits cigares. Déposer chacun sur une feuille de chou, replier les côtés et rouler. Placer les cigares côte à côte dans le plat, puis les couvrir des 8 tranches de bacon.",
+    "Couvrir de papier d'aluminium. Cuire au four de 90 à 120 minutes, jusqu'à ce que le chou soit tendre sous la fourchette."
+   ],
+   "Tâches sous-chef": [
+    "Mesurer le riz et les épices dans un petit bol",
+    "Étaler la sauce tomate dans le fond du plat",
+    "Rouler les cigares avec un adulte (mains bien lavées)"
+   ],
+   "À vérifier": "La source prévoit environ 12 feuilles de chou mais 8 tranches de bacon pour le dessus : répartir selon le nombre de cigares obtenus.",
+   "Fiche complète": true,
+   "Lien source": "https://www.ricardocuisine.com/en/recipes/3706-helene-laurendeau--s-stuffed-cabbage",
+   "Notes": [
+    "Inspirée des cigares au chou d'Hélène Laurendeau de Ricardo."
+   ]
+  },
+  {
+   "id": "k-russe-poulet-kiev",
+   "Nom": "Poulet Kiev",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Poulet",
+   "Cuisine": "Russe",
+   "Soir de semaine": false,
+   "Temps total (min)": 80,
+   "Portions": 4,
+   "Outils": "",
+   "Source": "Ricardo",
+   "Ingrédients": [
+    "## Beurre aux fines herbes",
+    "75 ml (1/3 tasse) de beurre ramolli",
+    "1 oignon vert haché",
+    "30 ml (2 c. à soupe) de persil haché",
+    "1 gousse d'ail hachée finement",
+    "15 ml (1 c. à soupe) de jus de citron",
+    "## Poulet",
+    "4 demi-poitrines de poulet désossées, sans peau",
+    "125 ml (1/2 tasse) de farine tout usage non blanchie",
+    "4 œufs légèrement battus",
+    "375 ml (1 1/2 tasse) de chapelure",
+    "Sel et poivre",
+    "4 cure-dents",
+    "Huile pour la friture"
+   ],
+   "Étapes": [
+    "Dans un bol, mélanger le beurre, l'oignon vert, le persil, l'ail et le jus de citron.",
+    "Sur une pellicule plastique, façonner le beurre en un carré de 10 cm (4 po). Emballer et congeler environ 20 minutes, jusqu'à ce qu'il soit ferme.",
+    "Couper le carré de beurre en 4 bâtonnets. Les garder au frigo.",
+    "Pratiquer une incision dans l'épaisseur de chaque demi-poitrine pour former une pochette, sans percer le bout. Y glisser un bâtonnet de beurre et refermer avec un cure-dent. Saler et poivrer.",
+    "Préchauffer l'huile de la friteuse à 170 °C (325 °F). Déposer une grille sur une plaque de cuisson.",
+    "Placer la farine, les œufs battus et la chapelure dans trois assiettes creuses. Fariner chaque poitrine et secouer l'excédent. La tremper dans l'œuf, puis dans la chapelure. Répéter une deuxième fois l'œuf et la chapelure.",
+    "Frire les poitrines 2 à la fois, environ 14 minutes par fournée. Égoutter sur la grille.",
+    "Servir aussitôt avec des haricots verts ou une salade verte. Avertir chacun du cure-dent caché et du beurre chaud qui gicle à la coupe."
+   ],
+   "Tâches sous-chef": [
+    "Mélanger le beurre aux fines herbes",
+    "Battre les œufs à la fourchette",
+    "Préparer les trois assiettes (farine, œufs, chapelure)"
+   ],
+   "À vérifier": "",
+   "Fiche complète": true,
+   "Lien source": "https://www.ricardocuisine.com/en/recipes/4926-chicken-kyiv",
+   "Notes": [
+    "Inspirée du poulet à la Kyiv de Ricardo."
+   ]
+  },
+  {
+   "id": "k-russe-kotlety-sauce-aux-champignons",
+   "Nom": "Kotlety, sauce aux champignons",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Porc",
+   "Cuisine": "Russe",
+   "Soir de semaine": true,
+   "Temps total (min)": 40,
+   "Portions": 6,
+   "Outils": "Four",
+   "Source": "Web autre",
+   "Ingrédients": [
+    "## Galettes",
+    "450 g (1 lb) de bœuf haché extra-maigre",
+    "450 g (1 lb) de porc haché extra-maigre",
+    "1 oignon moyen",
+    "1 tranche de pain blanc rassis",
+    "125 ml (1/2 tasse) de lait 3,25 %",
+    "5 ml (1 c. à thé) de sel",
+    "2,5 ml (1/2 c. à thé) de poivre",
+    "Huile pour la cuisson",
+    "## Sauce aux champignons",
+    "15 ml (1 c. à soupe) d'huile d'olive",
+    "1 oignon haché",
+    "3 gousses d'ail hachées",
+    "450 g (1 lb) de champignons sauvages ou mélangés (pleurotes, shiitakes, café), hachés",
+    "500 ml (2 tasses) de crème 35 %",
+    "1 petit bouquet de persil plat, tiges et feuilles hachées séparément",
+    "Sel et poivre"
+   ],
+   "Étapes": [
+    "Préchauffer le four à 200 °C (400 °F). Faire tremper le pain dans le lait 10 minutes.",
+    "Râper finement l'oignon moyen.",
+    "Dans un grand bol, mélanger à la main le bœuf, le porc, l'oignon râpé, le pain avec son lait, le sel et le poivre.",
+    "Façonner des galettes ovales d'environ 80 ml (1/3 tasse) chacune et les aplatir légèrement.",
+    "Dans une grande poêle, chauffer un peu d'huile à feu moyen. Dorer les galettes en plusieurs fois, de 5 à 7 minutes en tout, en les retournant.",
+    "Déposer les galettes en une seule couche dans un plat allant au four. Cuire au four 10 minutes.",
+    "Pendant ce temps, dans une autre poêle, attendrir l'oignon haché dans l'huile d'olive à feu doux de 7 à 10 minutes. Ajouter l'ail et les tiges de persil.",
+    "Ajouter les champignons, saler, poivrer et cuire 10 minutes.",
+    "Verser la crème, porter à ébullition, puis laisser mijoter à feu doux 5 minutes. Rectifier l'assaisonnement. Laisser la sauce telle quelle ou la mixer.",
+    "Servir les kotlety nappées de sauce et parsemées de feuilles de persil."
+   ],
+   "Tâches sous-chef": [
+    "Faire tremper le pain dans le lait",
+    "Effeuiller le persil",
+    "Façonner les galettes avec les mains bien lavées"
+   ],
+   "À vérifier": "La source donne de 6 à 8 portions : on a retenu 6.",
+   "Fiche complète": true,
+   "Lien source": "https://vikalinka.com/meat-patties-kotlety-with-wild-mushroom-sauce/",
+   "Notes": [
+    "Inspirée des kotlety à la sauce aux champignons sauvages de Vikalinka."
+   ]
+  },
+  {
+   "id": "k-russe-pierogis-pommes-de-terre-et-cheddar",
+   "Nom": "Pierogis pommes de terre et cheddar",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Végé",
+   "Cuisine": "Russe",
+   "Soir de semaine": false,
+   "Temps total (min)": 80,
+   "Portions": 4,
+   "Outils": "",
+   "Source": "Ricardo",
+   "Ingrédients": [
+    "## Pâte",
+    "500 ml (2 tasses) de farine tout usage non blanchie",
+    "2,5 ml (1/2 c. à thé) de poudre à pâte",
+    "2,5 ml (1/2 c. à thé) de sel",
+    "90 ml (6 c. à soupe) d'eau",
+    "60 ml (1/4 tasse) d'huile d'olive",
+    "1 œuf légèrement battu",
+    "## Farce",
+    "250 ml (1 tasse) de pommes de terre bouillies en purée, refroidies",
+    "250 ml (1 tasse) de cheddar fort râpé (100 g)",
+    "30 ml (2 c. à soupe) de ciboulette hachée",
+    "Sel et poivre",
+    "## Garniture",
+    "5 grosses échalotes françaises émincées",
+    "30 ml (2 c. à soupe) de beurre, plus au besoin",
+    "Crème sure, pour servir"
+   ],
+   "Étapes": [
+    "Dans un bol, mélanger la farine, la poudre à pâte et le sel. Creuser un puits au centre.",
+    "Verser l'eau, l'huile et l'œuf dans le puits. Mélanger, puis pétrir jusqu'à ce que la pâte soit lisse.",
+    "Façonner la pâte en disque, l'emballer et la réfrigérer 30 minutes.",
+    "Pendant ce temps, mélanger la purée, le cheddar et la ciboulette. Saler et poivrer.",
+    "Abaisser la pâte à 2 mm d'épaisseur. Découper 24 cercles avec un emporte-pièce de 7,5 cm (3 po).",
+    "Déposer environ 10 ml (2 c. à thé) de farce au centre de chaque cercle. Badigeonner le bord d'eau, plier en demi-lune et bien sceller.",
+    "Cuire les pierogis dans une grande casserole d'eau bouillante salée environ 4 minutes, jusqu'à ce qu'ils remontent à la surface. Égoutter sur une plaque légèrement huilée.",
+    "Dans une poêle antiadhésive, dorer les échalotes dans 30 ml (2 c. à soupe) de beurre. Ajouter les pierogis et les dorer des deux côtés, en ajoutant un peu de beurre au besoin.",
+    "Saler, poivrer et servir avec de la crème sure."
+   ],
+   "Tâches sous-chef": [
+    "Mélanger la purée, le cheddar et la ciboulette",
+    "Découper les cercles de pâte à l'emporte-pièce",
+    "Badigeonner les bords d'eau et sceller les pierogis"
+   ],
+   "À vérifier": "La source donne 24 pierogis sans nombre de portions : 4 portions estimées. La purée doit être cuite et refroidie à l'avance (temps non compté). Le temps de cuisson des échalotes n'est pas précisé.",
+   "Fiche complète": true,
+   "Lien source": "https://www.ricardocuisine.com/en/recipes/6093-pierogis",
+   "Notes": [
+    "Inspirée des pierogis de Ricardo."
+   ]
+  },
+  {
+   "id": "k-russe-plov-au-boeuf",
+   "Nom": "Plov au bœuf",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Bœuf",
+   "Cuisine": "Russe",
+   "Soir de semaine": false,
+   "Temps total (min)": 105,
+   "Portions": 10,
+   "Outils": "",
+   "Source": "Web autre",
+   "Ingrédients": [
+    "680 g (1 1/2 lb) de palette ou de surlonge de bœuf",
+    "80 ml (1/3 tasse) d'huile de canola",
+    "2 oignons moyens hachés finement",
+    "3 carottes moyennes en julienne ou râpées",
+    "5 ml (1 c. à thé) de sel, pour la viande",
+    "2,5 ml (1/2 c. à thé) de poivre noir moulu",
+    "5 ml (1 c. à thé) de paprika",
+    "5 ml (1 c. à thé) de cumin moulu",
+    "3 ou 4 feuilles de laurier",
+    "430 ml (1 3/4 tasse) d'eau chaude, pour la viande",
+    "750 ml (3 tasses) de riz à grain long (basmati ou jasmin)",
+    "1 litre (4 tasses) d'eau chaude, pour le riz",
+    "7,5 ml (1 1/2 c. à thé) de sel, pour le riz",
+    "5 ml (1 c. à thé) de coriandre moulue",
+    "1 tête d'ail"
+   ],
+   "Étapes": [
+    "Parer le bœuf, l'éponger et le couper en cubes de 1 à 2 cm (1/2 à 3/4 po).",
+    "Chauffer une grande cocotte à feu vif. Ajouter l'huile et saisir le bœuf à découvert 7 minutes, en remuant environ chaque minute.",
+    "Baisser à feu moyen. Ajouter les oignons et cuire 5 minutes.",
+    "Ajouter les carottes, 5 ml (1 c. à thé) de sel, le poivre, le paprika, le cumin et le laurier. Cuire 5 minutes, jusqu'à ce que les carottes ramollissent.",
+    "Verser 430 ml (1 3/4 tasse) d'eau chaude. Couvrir et laisser mijoter à feu moyen-doux 45 minutes, jusqu'à ce que la viande soit tendre.",
+    "Pendant ce temps, rincer le riz à l'eau froide jusqu'à ce que l'eau soit claire. Égoutter.",
+    "Étaler le riz sur la viande. Ajouter 1 litre (4 tasses) d'eau chaude et 7,5 ml (1 1/2 c. à thé) de sel, puis remuer légèrement la couche de riz seulement. Porter à ébullition, baisser le feu et cuire à découvert environ 10 minutes, jusqu'à ce que presque toute l'eau soit absorbée.",
+    "Couper la base de la tête d'ail et l'enfoncer, côté coupé vers le bas, au centre du riz. Saupoudrer le riz de coriandre.",
+    "Faire 7 à 10 trous dans le riz avec le manche d'une cuillère de bois. Couvrir et cuire à feu doux 15 minutes, jusqu'à ce que le riz soit tendre.",
+    "Retirer l'ail et les feuilles de laurier. Mélanger délicatement et servir."
+   ],
+   "Tâches sous-chef": [
+    "Rincer le riz jusqu'à ce que l'eau soit claire",
+    "Mesurer les épices dans un petit bol"
+   ],
+   "À vérifier": "La source donne de 10 à 12 portions : on a retenu 10.",
+   "Fiche complète": true,
+   "Lien source": "https://natashaskitchen.com/beef-plov-beef-rice-pilaf-recipe/",
+   "Notes": [
+    "Inspirée du plov au bœuf de Natasha's Kitchen."
+   ]
+  },
+  {
+   "id": "k-russe-salade-olivier-au-poulet",
+   "Nom": "Salade Olivier au poulet",
+   "Type": "Accompagnement",
+   "Statut": "À trier",
+   "Protéine": "Poulet",
+   "Cuisine": "Russe",
+   "Soir de semaine": true,
+   "Temps total (min)": 45,
+   "Portions": 8,
+   "Outils": "",
+   "Source": "Web autre",
+   "Ingrédients": [
+    "454 g (1 lb) de poitrines de poulet (environ 2), ou la chair d'un poulet rôti du commerce",
+    "3 pommes de terre russet moyennes ou grosses, pelées",
+    "3 grosses carottes pelées",
+    "500 ml (2 tasses) de petits pois surgelés, décongelés",
+    "5 gros œufs cuits durs, en dés",
+    "12 petits cornichons à l'aneth, en dés (500 ml / 2 tasses)",
+    "1 petit oignon jaune haché finement",
+    "60 ml (1/4 tasse) d'aneth frais haché",
+    "250 ml (1 tasse) de mayonnaise",
+    "2,5 ml (1/2 c. à thé) de sel",
+    "1 ml (1/4 c. à thé) de poivre",
+    "10 ml (2 c. à thé) de sel, pour l'eau de cuisson"
+   ],
+   "Étapes": [
+    "Couper les grosses poitrines en deux. Les couvrir d'eau dans une casserole et ajouter 5 ml (1 c. à thé) de sel. Porter à ébullition, baisser le feu, couvrir et mijoter de 15 à 20 minutes, jusqu'à ce que le poulet soit cuit. Égoutter, laisser tiédir et couper en dés.",
+    "Pendant ce temps, couper les pommes de terre et les carottes en dés de même grosseur. Les couvrir d'eau dans une autre casserole et ajouter 5 ml (1 c. à thé) de sel. Cuire à découvert de 10 à 12 minutes, jusqu'à tendreté.",
+    "Rincer les légumes à l'eau froide, bien les égoutter et les éponger avec du papier absorbant.",
+    "Dans un grand bol, réunir le poulet, les pommes de terre, les carottes, les petits pois, les œufs, les cornichons, l'oignon et l'aneth.",
+    "Incorporer la mayonnaise, puis saler et poivrer au goût. Servir."
+   ],
+   "Tâches sous-chef": [
+    "Écaler les œufs durs",
+    "Mesurer les petits pois et la mayonnaise",
+    "Mélanger délicatement la salade"
+   ],
+   "À vérifier": "La source indique de 8 à 10 portions en accompagnement : on a retenu 8. Le temps de cuisson des œufs durs n'est pas précisé.",
+   "Fiche complète": true,
+   "Lien source": "https://natashaskitchen.com/chicken-olivye-chicken-potato-salad/",
+   "Notes": [
+    "Inspirée de la salade Olivye au poulet de Natasha's Kitchen."
+   ]
+  },
+  {
+   "id": "k-russe-syrniki-crepes-au-fromage",
+   "Nom": "Syrniki (crêpes au fromage)",
+   "Type": "Déjeuner",
+   "Statut": "À trier",
+   "Protéine": "Végé",
+   "Cuisine": "Russe",
+   "Soir de semaine": true,
+   "Temps total (min)": 30,
+   "Portions": 4,
+   "Outils": "",
+   "Source": "Web autre",
+   "Ingrédients": [
+    "450 g (1 lb) de fromage fermier (type tvorog) ou de ricotta bien égouttée",
+    "2 gros œufs",
+    "30 ml (2 c. à soupe) d'huile végétale, pour la pâte",
+    "60 ml (4 c. à soupe) de sucre",
+    "80 g (3/4 tasse) de farine tout usage",
+    "2,5 ml (1/2 c. à thé) de poudre à pâte",
+    "5 ml (1 c. à thé) de vanille",
+    "45 ml (3 c. à soupe) d'huile de canola, pour la cuisson",
+    "Farine, pour façonner",
+    "Sucre à glacer, pour servir",
+    "Confiture, coulis de fruits ou crème sure, pour servir"
+   ],
+   "Étapes": [
+    "Au batteur électrique, battre le fromage, les œufs, le sucre, 30 ml (2 c. à soupe) d'huile, la farine, la poudre à pâte et la vanille de 2 à 3 minutes, jusqu'à ce que le mélange soit lisse. La pâte sera très collante.",
+    "Dans une poêle antiadhésive ou en fonte, chauffer 45 ml (3 c. à soupe) d'huile à feu moyen.",
+    "Fariner le plan de travail. Prélever la pâte à la cuillère à soupe, rouler chaque portion dans la farine et l'aplatir en galette. On obtient environ 14 syrniki.",
+    "Vérifier la chaleur de l'huile avec une pincée de farine : elle doit grésiller.",
+    "Cuire les syrniki comme des crêpes, en les retournant lorsqu'ils gonflent légèrement et sont bien dorés.",
+    "Égoutter sur du papier absorbant. Saupoudrer de sucre à glacer et servir avec de la confiture, un coulis ou de la crème sure."
+   ],
+   "Tâches sous-chef": [
+    "Casser les œufs et mesurer le sucre",
+    "Rouler les portions de pâte dans la farine",
+    "Saupoudrer le sucre à glacer"
+   ],
+   "À vérifier": "La source ne précise pas le temps de cuisson par côté : retourner les syrniki quand ils gonflent légèrement et sont dorés.",
+   "Fiche complète": true,
+   "Lien source": "https://vikalinka.com/russian-sweet-cheese-fritters-syrniki/",
+   "Notes": [
+    "Inspirée des syrniki de Vikalinka."
+   ]
+  }
+ ],
+ "plans": [],
+ "inventaire": [],
+ "bilans": []
+}

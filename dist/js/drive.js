@@ -81,6 +81,13 @@ export function creerDrive({ jetonValide, fetch = globalThis.fetch.bind(globalTh
       });
     },
 
+    // D-G-040 : efface les valeurs (pas les lignes) des plages données.
+    viderValeurs(id, plages) {
+      return appel(`${SHEETS}/${encodeURIComponent(id)}/values:batchClear`, {
+        methode: 'POST', corps: { ranges: plages }
+      });
+    },
+
     lireValeurs(id, plage) {
       return appel(`${SHEETS}/${encodeURIComponent(id)}/values/${encodeURIComponent(plage)}`);
     },
