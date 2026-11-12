@@ -8,8 +8,8 @@ import { KITS } from '../../dist/js/vues/compte.js';
 // Le kit Asiatique d'origine (1.3.0) a deux recettes sans lien d'inspiration : seule exception permise.
 const LIENS_MANQUANTS_PERMIS = { asiatique: 2 };
 
-test('D-G-038 : les 8 kits de Compte sont publiés et valides', async () => {
-  assert.deepEqual(KITS.map((k) => k.id), ['quebecois', 'vege', 'asiatique', 'moyen-orient', 'indienne', 'russe', 'francaise', 'enfants']);
+test('D-G-038 / D-G-041 : les 10 kits de Compte sont publiés et valides', async () => {
+  assert.deepEqual(KITS.map((k) => k.id), ['survie', 'quebecois', 'vege', 'mexicaine', 'asiatique', 'moyen-orient', 'indienne', 'russe', 'francaise', 'enfants']);
   for (const k of KITS) {
     const f = new URL(`../../dist/kits/${k.id}.json`, import.meta.url).pathname;
     assert.ok(existsSync(f), `kit ${k.id} absent`);

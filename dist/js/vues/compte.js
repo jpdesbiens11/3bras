@@ -51,8 +51,10 @@ export function openCompte(surImporter) {
 }
 // Les kits sont publiés avec l'app (dist/kits/), mêmes règles que tout fichier d'import (D-G-025, D-G-038).
 export const KITS = [
+  { id: 'survie', nom: 'Survie : la base familiale', description: 'les soupers de semaine qui sauvent la soirée' },
   { id: 'quebecois', nom: 'Québécois', description: 'les classiques de chez nous' },
   { id: 'vege', nom: 'Végé', description: 'des soupers sans viande qui plaisent à tout le monde' },
+  { id: 'mexicaine', nom: 'Mexicain', description: 'tacos du mardi, burritos et fajitas' },
   { id: 'asiatique', nom: 'Asiatique', description: 'sautés, currys et nouilles' },
   { id: 'moyen-orient', nom: 'Moyen-Orient', description: 'grillades, falafels et mezzés' },
   { id: 'indienne', nom: 'Inde', description: 'currys doux, dal et riz parfumé' },

@@ -162,7 +162,7 @@ test('première connexion : livre vide, kits de départ au choix', async ({ page
   await page.goto('./');
   await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
   await expect(page.locator('#comptesheet')).toBeVisible();
-  await expect(page.locator('[data-kit]')).toHaveCount(8);
+  await expect(page.locator('[data-kit]')).toHaveCount(10);
   await expect(page.locator('[data-kit][aria-pressed="true"]')).toHaveCount(0);       // D-G-038 : aucun kit coché d'office
   await expect(page.locator('#chargerkits')).toBeDisabled();
   await page.locator('[data-kit="quebecois"]').click();
