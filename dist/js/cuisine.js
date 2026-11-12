@@ -1,7 +1,7 @@
 // Lecture des fiches : ingrédients, étapes, minuteurs, rayons Provigo. Repris de Gordon Rams.ai.
-import { norm, S } from './etat.js?v=1.20.1';
+import { norm, S } from './etat.js?v=1.21.0';
 
-const STOP = new Set('avec dans pour plus sans tasse tasses cuillere cuilleres soupe environ facultatif hache hachee hachees haches finement coupe coupee coupees coupes cubes tranche tranches gousse gousses grosse gros petit petite moyen moyenne boite pelees pelee goutt bien chaud froid frais fraiche litre litres paquet morceaux reserve rincee rinces egoutte'.split(' '));
+const STOP = new Set('avec dans pour plus sans tasse tasses cuillere cuilleres soupe environ facultatif hache hachee hachees haches finement coupe coupee coupees coupes cubes tranche tranches gousse gousses grosse gros petit petite moyen moyenne boite pelees pelee goutt bien chaud froid frais fraiche litre litres paquet morceaux reserve rincee rinces egoutte preparee preparees prepare prepares'.split(' '));
 // D-G-050 : seul le nom compte (avant la virgule : « 4 gousses d'ail, coupées en deux » -> ail, pas « deux ») ;
 // les mots courts d'aliments (ail, sel, eau, riz) sont gardés.
 const COURTS = new Set(['ail', 'sel', 'eau', 'riz', 'vin']);
@@ -140,11 +140,16 @@ const CATEGORIES = [
 ];
 function rattacher(d, per) {
   const used = new Set(per.flat()), etapes = d.steps.map((st) => norm(st));
+  const motsLignes = new Set(d.ing.flatMap((x) => x.kw || keywords(x.text)));
   for (const [k, x] of d.ing.entries()) {
     if (used.has(k)) continue;
     const nom = norm(x.text).replace(/\(.*?\)/g, ' ').split(/,(?!\d)/)[0];
-    const mots = x.group ? norm(x.group).split(/[^a-z]+/).filter((w) => w.length >= 5) : [];
-    let si = mots.length ? etapes.findIndex((s) => mots.some((w) => motDans(s, w))) : -1;
+    // un mot faible (« sauce BBQ ») : la dernière étape qui le dit (souvent « Servir avec la sauce »)
+    const faibles = (x.kw || keywords(x.text)).filter((w) => FAIBLES.has(w));
+    let si = faibles.length ? etapes.map((s, i) => (faibles.some((w) => motDans(s, w)) ? i : -1)).filter((i) => i >= 0).pop() ?? -1 : -1;
+    // le nom de son groupe, s'il n'est pas déjà le nom d'un ingrédient (« Crudités », pas « Poulet et frites »)
+    const mots = x.group ? norm(x.group).split(/[^a-z]+/).filter((w) => w.length >= 5 && !motsLignes.has(w)) : [];
+    if (si < 0 && mots.length) si = etapes.findIndex((s) => mots.some((w) => motDans(s, w)));
     if (si < 0) for (const [re, ing] of CATEGORIES) if (ing.test(nom)) { si = etapes.findIndex((s) => re.test(s)); if (si >= 0) break; }
     if (si < 0) si = etapes.findIndex((s) => /(tous|toutes) les autres ingredients|le reste des ingredients/.test(s));
     if (si >= 0) { per[si] = [...per[si], k].sort((a, b) => a - b); used.add(k); }

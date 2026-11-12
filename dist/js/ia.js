@@ -2,7 +2,7 @@
 // Aucune clé secrète dans l'app : la configuration Firebase est publique, la clé Gemini reste chez Google,
 // et App Check (Fraud Defense, anciennement reCAPTCHA Enterprise) n'accepte que les appels qui viennent de SuperChef.ai.
 // La bibliothèque Firebase est chargée seulement à la première conversion.
-import { CONFIG } from './config.js?v=1.20.1';
+import { CONFIG } from './config.js?v=1.21.0';
 
 let modele = null;
 

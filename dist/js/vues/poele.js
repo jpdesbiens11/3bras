@@ -1,12 +1,12 @@
 // 05 · Au poêle : mode cuisine (R-12). Repris de Gordon Rams.ai.
-import { S, $, DAYS, iso, toast, errText, render } from '../etat.js?v=1.20.1';
-import { el, ico, svgGrand } from '../el.js?v=1.20.1';
-import { getRecipe, majRecette } from '../donnees.js?v=1.20.1';
-import { stepPlan, stepDurations, isBlocking, sousFor, ingKey, invMatch, portionDansEtape, ficheDeLigne } from '../cuisine.js?v=1.20.1';
-import { iaDisponible } from '../ia.js?v=1.20.1';
-import { SOUNDS, soundKey, wakeOn, fmt } from '../minuteurs.js?v=1.20.1';
-import { setQty } from './garde-manger.js?v=1.20.1';
-import { panelHead, noticeWarn } from './commun.js?v=1.20.1';
+import { S, $, DAYS, iso, toast, errText, render } from '../etat.js?v=1.21.0';
+import { el, ico, svgGrand } from '../el.js?v=1.21.0';
+import { getRecipe, majRecette } from '../donnees.js?v=1.21.0';
+import { stepPlan, stepDurations, isBlocking, sousFor, ingKey, invMatch, portionDansEtape, ficheDeLigne } from '../cuisine.js?v=1.21.0';
+import { iaDisponible } from '../ia.js?v=1.21.0';
+import { SOUNDS, soundKey, wakeOn, fmt } from '../minuteurs.js?v=1.21.0';
+import { setQty } from './garde-manger.js?v=1.21.0';
+import { panelHead, noticeWarn } from './commun.js?v=1.21.0';
 
 export function openCook(id) {
   S.cook = { id, data: null, idx: 0, loading: false, err: null };
