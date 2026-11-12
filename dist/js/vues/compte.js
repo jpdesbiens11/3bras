@@ -1,7 +1,7 @@
 // Feuille Compte : connexion, classeur, import (R-02). Même gabarit que les feuilles de Gordon Rams.ai.
 import { S, $, toast } from '../etat.js?v=1.10.1';
 import { el, ico, vider } from '../el.js?v=1.10.1';
-import { lienClasseur, lienDossier } from '../store.js?v=1.10.1';
+import { lienClasseur, lienDossier, reinitialiser } from '../store.js?v=1.10.1';
 import { valider, importer } from '../import.js?v=1.10.1';
 import { CONFIG } from '../config.js?v=1.10.1';
 
@@ -39,6 +39,11 @@ export function openCompte(surImporter) {
       el('div', { class: 'pick addf' }, el('label', { class: 'btn primary pickbtn' }, ico('file'), 'Choisir le fichier',
         el('input', { id: 'fichier-import', class: 'pickin', type: 'file', accept: '.json,application/json', 'aria-label': 'Choisir le fichier d\'import' }))),
       res,
+      el('h4', { id: 'neuf' }, 'Recommencer à neuf'),
+      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0 0 10px' }, 'Vide les recettes, l\'inventaire, les plans de semaine et les bilans de ton classeur, et remet les lignes de titres. Le classeur et le dossier restent les mêmes ; l\'app repart comme à ta première connexion. Aucune copie n\'est faite : seul l\'historique des versions de Google Sheets permet de revenir en arrière.'),
+      el('div', { class: 'addf' }, el('div', {}, el('label', { for: 'neuf-mot' }, 'Écris RECOMMENCER pour confirmer'), el('input', { id: 'neuf-mot', autocomplete: 'off', autocapitalize: 'characters' }))),
+      el('div', { class: 'add-acts' }, el('button', { class: 'btn danger', id: 'recommencer', type: 'button', disabled: true }, ico('alert'), 'Vider mon livre')),
+      el('div', { class: 'import-res', id: 'neuf-res', 'aria-live': 'polite' }),
       el('div', { class: 'sheet-acts' },
         el('button', { class: 'btn', id: 'deconnexion' }, 'Se déconnecter'),
         el('span', { class: 'label' }, `SuperChef.ai v${CONFIG.version}`))));
@@ -126,4 +131,22 @@ export async function lireImport(fichier, apres) {
       vider(res).append(el('div', { class: 'notice warn' }, ico('alert'), el('p', {}, `Oups, ça a brûlé un peu : ${e.message}. Relance l'import : rien ne sera dédoublé.`)));
     }
   });
+}
+
+// D-G-040 : Recommencer à neuf, seulement après « RECOMMENCER » tapé en toutes lettres.
+export const motRecommencer = (v) => String(v || '').trim().toUpperCase() === 'RECOMMENCER';
+export async function recommencer(apres) {
+  if (!motRecommencer($('#neuf-mot')?.value)) return;
+  const b = $('#recommencer'), res = $('#neuf-res'); if (b) b.disabled = true;
+  vider(res).append(el('p', { class: 'label' }, 'On vide ton classeur…'));
+  try {
+    await reinitialiser(S.ctx.drive, S.ctx.classeurId);
+    try { Object.keys(localStorage).filter((k) => k.startsWith('superchef-provigo-')).forEach((k) => localStorage.removeItem(k)); } catch (_) { /* stockage absent */ }
+    await apres();
+    closeCompte(); openCompte(true);
+    toast('Ton livre est vide : choisis tes kits, puis ton stock de base.');
+  } catch (e) {
+    vider(res).append(el('div', { class: 'notice warn' }, ico('alert'), el('p', {}, `Oups : ${e.message}. Réessaie : l'app remet les lignes de titres à chaque fois.`)));
+    if (b) b.disabled = false;
+  }
 }

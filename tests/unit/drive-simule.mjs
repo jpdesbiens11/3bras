@@ -86,6 +86,10 @@ export function creerDriveSimule() {
         }
         return json(200, {});
       }
+      if (reste === '/values:batchClear') {
+        for (const p of corps.ranges) { const t = parsePlage(p).onglet; if (c.onglets[t]) c.onglets[t] = []; }
+        return json(200, { clearedRanges: corps.ranges });
+      }
       if (reste === '/values:batchUpdate') {
         for (const d of corps.data) ecrire(c, d.range, d.values);
         return json(200, {});

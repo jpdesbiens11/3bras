@@ -510,3 +510,27 @@ test('D-G-036 : adapter au poêle, cuisiner la version ce soir, remettre le livr
   expect(JSON.parse(ligne().Originale)['Ingrédients']).toContain('fromage râpé');
   expect(erreurs).toEqual([]);
 });
+
+test('D-G-040 : recommencer à neuf vide le classeur et repart comme à la première connexion', async ({ page }, info) => {
+  const { sim, erreurs } = await demarrer(page);
+  const c = [...sim.classeurs.values()][0];
+  expect(c.onglets.Recettes.length).toBeGreaterThan(5);
+  await page.locator('#comptebtn').click();
+  await expect(page.locator('#recommencer')).toBeDisabled();
+  await page.locator('#neuf-mot').fill('recommence');
+  await expect(page.locator('#recommencer')).toBeDisabled();
+  await page.locator('#neuf-mot').fill('recommencer');                       // minuscules acceptées
+  await expect(page.locator('#recommencer')).toBeEnabled();
+  await page.locator('#neuf-mot').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `tests/captures/${info.project.name}-recommencer.png` });
+  await page.locator('#recommencer').click();
+  await expect(page.locator('#toast')).toContainText('Ton livre est vide');
+  await expect(page.locator('#compte-biblio')).toHaveText('0 recettes · 0 articles');
+  await expect(page.locator('[data-kit][aria-pressed="true"]')).toHaveCount(0);
+  for (const t of ['Recettes', 'Inventaire', 'Plans de semaine', 'Bilans']) expect(c.onglets[t]).toHaveLength(1);
+  expect(c.onglets.Recettes[0].slice(0, 3)).toEqual(['id', 'Nom', 'Type']);
+  await page.locator('[data-kit="quebecois"]').click();
+  await page.locator('#chargerkits').click();
+  await expect(page.locator('#kit-res')).toContainText('Ton livre compte maintenant 10 recettes');
+  expect(erreurs).toEqual([]);
+});

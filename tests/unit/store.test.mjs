@@ -101,3 +101,23 @@ test('D-G-030 : un renommage refusé par Google ne bloque pas l\'ouverture du li
   assert.equal(r.classeur.id, id);
   assert.equal(r.classeur.name, '3eBras — Livre');
 });
+
+// D-G-040 : Recommencer à neuf.
+test('D-G-040 : recommencer vide les 4 onglets de données et remet les titres, même effacés', async () => {
+  const { reinitialiser } = await import('../../dist/js/store.js');
+  const { sim, drive } = preparer();
+  const r = await ouvrirOuCreer(drive, OPTS);
+  const c = sim.classeurs.get(r.classeur.id);
+  c.onglets.Recettes = [['k-quebecois-pate', 'Pâté chinois']];                   // 1re ligne de titres effacée
+  c.onglets.Inventaire.push(['i-sel', 'Sel']);
+  c.onglets['Plans de semaine'].push(['p-1', '2026-11-08']);
+  delete c.onglets.Bilans; c.sheets = c.sheets.filter((s) => s.properties.title !== 'Bilans'); // onglet supprimé
+  const schemaAvant = JSON.stringify(c.onglets['Schéma']);
+  await reinitialiser(drive, r.classeur.id);
+  for (const o of ONGLETS.filter((x) => x.titre !== 'Schéma')) assert.deepEqual(c.onglets[o.titre], [o.colonnes], o.titre);
+  assert.equal(JSON.stringify(c.onglets['Schéma']), schemaAvant, 'onglet Schéma intact');
+  assert.equal(sim.fichiers.length, 5, 'aucun fichier créé ni supprimé');
+  const second = await ouvrirOuCreer(drive, OPTS);
+  assert.equal(second.nouveau, false);
+  assert.equal(second.classeur.id, r.classeur.id);
+});

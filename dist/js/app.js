@@ -17,7 +17,7 @@ import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.
 import { viewCook, openCook, go, served, applyInvOff, cuisinerVersion, chargerLivre } from './vues/poele.js?v=1.10.1';
 import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.10.1';
 import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.10.1';
-import { openCompte, closeCompte, lireImport, chargerKits, majBiblio, majKits } from './vues/compte.js?v=1.10.1';
+import { openCompte, closeCompte, lireImport, chargerKits, majBiblio, majKits, recommencer, motRecommencer } from './vues/compte.js?v=1.10.1';
 import { openStock, closeStock, stockOuvert, cocherStock, cocherTout, ajouterStock } from './vues/stock.js?v=1.10.1';
 import { openGen, closeGen, genOuvert, majDemande, basculerCuisine, choisirNombre, copierConsigne, partagerConsigne, collerReponse, lireRecettes, cocher, ajouterChoisis } from './vues/generateur.js?v=1.10.1';
 import { openAdapt, closeAdapt, adaptOuvert, ajouterRaccourci, adapter, saveAdapt, revenirOriginale, cuisinerCeSoir } from './vues/adapter.js?v=1.10.1';
@@ -88,6 +88,7 @@ document.addEventListener('click', (e) => {
   if (d.compteclose !== undefined) { closeCompte(); return; }
   if (d.kit) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); majKits(); return; }
   if (b.id === 'voirlivre') { closeCompte(); setView('tri'); return; }
+  if (b.id === 'recommencer') { recommencer(recharger); return; }
   // D-G-039 : stock de base (liste à cocher vers l'onglet Inventaire).
   if (b.id === 'ouvrirstock') { openStock(); return; }
   if (d.stockclose !== undefined) { closeStock(); return; }
@@ -158,6 +159,7 @@ document.addEventListener('click', (e) => {
 });
 document.addEventListener('input', (e) => {
   const t = e.target;
+  if (t.id === 'neuf-mot') { const b = $('#recommencer'); if (b) b.disabled = !motRecommencer(t.value); return; }
   if (genOuvert() && /^gen-(mots|eviter|portions|type|soirs)$/.test(t.id)) { majDemande(); return; }
   if (t.id === 'lib-q') { S.lib.q = t.value; const pos = t.selectionStart; render(); const i = $('#lib-q'); if (i) { i.focus(); try { i.setSelectionRange(pos, pos); } catch (_) {} } return; }
   if (t.id === 'd-q' && S.dpick) { S.dpick.q = t.value; const l = $('#dlist'); if (l) vider(l).append(...dessertList()); return; }
