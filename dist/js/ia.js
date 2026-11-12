@@ -2,7 +2,7 @@
 // Aucune clé secrète dans l'app : la configuration Firebase est publique, la clé Gemini reste chez Google,
 // et App Check (Fraud Defense, anciennement reCAPTCHA Enterprise) n'accepte que les appels qui viennent de SuperChef.ai.
 // La bibliothèque Firebase est chargée seulement à la première conversion.
-import { CONFIG } from './config.js?v=1.10.0';
+import { CONFIG } from './config.js?v=1.10.1';
 
 let modele = null;
 
@@ -47,7 +47,8 @@ export function erreurIA(e) {
   const code = String((e && e.code) || '');
   const msg = String((e && e.message) || '');
   const t = `${code} ${msg}`;
-  if (/app-check|appCheck|attestation|recaptcha/i.test(t)) return `La vérification anti-robot de Google a échoué (${msg.slice(0, 120)}).`;
+  // « App Check token is invalid » : le jeton anti-robot a été refusé (réglage reCAPTCHA chez Google, ou bloqueur du navigateur).
+  if (/app.?check|attestation|recaptcha|initial-throttle/i.test(t)) return 'La vérification anti-robot de Google a échoué, alors Gemini a refusé l\'appel. Réessaie dans une minute ; si ça revient, un bloqueur de pub ou un réglage chez Google est en cause.';
   if (/\b429\b|quota|RESOURCE_EXHAUSTED/i.test(t)) return 'La limite gratuite de Gemini est atteinte pour le moment. Réessaie plus tard, ou passe par le projet Claude SuperChef.ai.';
   if (/SAFETY/i.test(t)) return 'Gemini a refusé ce contenu. Essaie avec le texte de la recette.';
   if (/^(TypeError: )?(Failed to fetch|NetworkError|Load failed)/i.test(msg) || (typeof navigator !== 'undefined' && navigator.onLine === false)) return 'Pas de réseau pour joindre Gemini. Réessaie dans un moment.';
