@@ -1,8 +1,8 @@
 // Visite guidée (D-G-047) : les fonctions de l'app dans l'ordre où on s'en sert, en petites scènes dessinées
 // au trait (SVG animé en CSS, aucune bibliothèque, P-1). Elle s'ouvre à chaque visite tant que « Ne plus montrer »
 // n'est pas coché (gardé sur l'appareil) ; Compte → « Revoir la visite » la relance.
-import { $ } from '../etat.js?v=1.16.0';
-import { el, ico, vider } from '../el.js?v=1.16.0';
+import { $ } from '../etat.js?v=1.17.0';
+import { el, ico, vider } from '../el.js?v=1.17.0';
 
 const CLE = 'superchef-visite', SESSION = 'superchef-visite-vue';
 const NS = 'http://www.w3.org/2000/svg';

@@ -1,8 +1,8 @@
 // Couche de données : le classeur Google remplace les bases Notion de Gordon Rams.ai.
 // Toutes les écritures passent par ecrireParId (N-07) ou ajouterUn.
-import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.16.0';
-import { lireOnglets, lireOnglet, ecrireParId, ajouterUn, supprimerParId } from './store.js?v=1.16.0';
-import { ficheDeLigne } from './cuisine.js?v=1.16.0';
+import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.17.0';
+import { lireOnglets, lireOnglet, ecrireParId, ajouterUn, supprimerParId } from './store.js?v=1.17.0';
+import { ficheDeLigne } from './cuisine.js?v=1.17.0';
 
 const T_REC = 'Recettes', T_PLAN = 'Plans de semaine', T_INV = 'Inventaire', T_BIL = 'Bilans';
 const oui = (v) => /^(oui|true|vrai|1|__yes__)$/i.test(String(v || '').trim());

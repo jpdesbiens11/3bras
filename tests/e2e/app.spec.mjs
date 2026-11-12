@@ -107,13 +107,14 @@ test('D-G-030 : le compte et le thème gardés sous l\'ancien nom sont repris', 
   await page.addInitScript(() => {
     if (sessionStorage.getItem('deja')) return; sessionStorage.setItem('deja', '1');
     localStorage.setItem('3bras-compte', 'jp@exemple.ca'); localStorage.setItem('3ebras-skin', 'ardoise');
+    localStorage.setItem('superchef-theme-defaut', 'carnet-1.17');       // bascule vers Carnet déjà faite : on teste la reprise seule
   });
   await page.goto('./');
   await expect(page.getByRole('heading', { name: 'Content de te revoir' })).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-skin', 'ardoise');
   const cles = await page.evaluate(() => Object.keys(localStorage).sort());
-  // superchef-theme-carnet : bascule unique vers Carnet (D-G-046) ; superchef-visite : posée par brancher (D-G-047).
-  expect(cles).toEqual(['superchef-compte', 'superchef-skin', 'superchef-theme-carnet', 'superchef-visite']);
+  // superchef-theme-defaut : bascule unique vers Carnet (D-G-046) ; superchef-visite : posée par brancher (D-G-047).
+  expect(cles).toEqual(['superchef-compte', 'superchef-skin', 'superchef-theme-defaut', 'superchef-visite']);
 });
 
 test('ID client absent : message clair', async ({ page }) => {
@@ -137,22 +138,6 @@ test('mémoire du compte : le retour se fait en un toucher, sans garder le jeton
   await expect(page.locator('#sync')).toHaveText(/soupers dans le livre/);
   await expect(page.locator('.pickrow').first()).toBeVisible();
   expect(context).toBeTruthy();
-});
-
-test('partager une recette depuis le coin de sa fiche', async ({ page, context }) => {
-  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-  await demarrer(page);
-  await page.addInitScript(() => {});
-  await page.evaluate(() => { Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); });
-  await page.locator('[data-go="tri"]').click();
-  await page.getByRole('button', { name: /Poulet au citron test/ }).click();
-  await page.getByRole('button', { name: 'Partager la recette Poulet au citron test' }).click();
-  await expect(page.locator('#toast')).toContainText('Recette copiée');
-  const txt = await page.evaluate(() => navigator.clipboard.readText());
-  expect(txt).toContain('Poulet au citron test');
-  expect(txt).toContain('INGRÉDIENTS');
-  expect(txt).toContain('Marinade');
-  expect(txt).toContain('1. Mélanger la marinade.');
 });
 
 test('première connexion : livre vide, kits de départ au choix', async ({ page }, info) => {

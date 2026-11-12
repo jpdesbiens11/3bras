@@ -1,0 +1,27 @@
+{
+  "version": "1.17.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — partager une recette en PDF",
+  "requis": [
+    "R-04"
+  ],
+  "nouveautes": [
+    "Le bouton Partager de la fiche envoie maintenant la recette en PDF : logo SuperChef.ai, ingrédients, étapes numérotées, tâches sous-chef, adaptations de la famille et recette d'origine.",
+    "Au téléphone : la feuille de partage du système, PDF joint (texto, Messenger, WhatsApp, courriel, Drive…).",
+    "À l'ordinateur : Télécharger, Voir, Courriel, Gmail, Outlook, Texto, Messenger, WhatsApp, Telegram, Teams ; chaque choix télécharge d'abord le PDF pour le joindre au message.",
+    "« Lien Google Drive » : le PDF va dans ton dossier SuperChef.ai › Exports avec un lien lisible par qui l'a ; le message porte le lien et un code QR le passe au téléphone.",
+    "Carnet devient le thème de tous les appareils (une fois) ; un autre thème choisi ensuite reste gardé."
+  ],
+  "decisions": [
+    "D-G-046",
+    "D-G-048"
+  ],
+  "tests": {
+    "unitaires": 70,
+    "bout_en_bout": 44,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}

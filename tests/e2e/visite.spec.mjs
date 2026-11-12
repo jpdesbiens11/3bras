@@ -76,3 +76,15 @@ test('D-G-047 : « Revoir la visite » dans Compte, « Passer la visite » la fe
   expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
   expect(erreurs).toEqual([]);
 });
+
+test('D-G-046 : Carnet devient le thème de tout appareil une fois ; un choix fait ensuite est gardé', async ({ page }) => {
+  await brancher(page);
+  await page.addInitScript(() => { if (sessionStorage.getItem('deja')) return; sessionStorage.setItem('deja', '1'); localStorage.setItem('superchef-skin', 'magazine'); localStorage.setItem('superchef-theme-carnet', '1'); });
+  await page.goto('./');
+  await expect(page.locator('html')).toHaveAttribute('data-skin', 'carnet');
+  await expect(page.locator('#skin')).toHaveValue('carnet');
+  await page.locator('#skin').selectOption('ardoise');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-skin', 'ardoise');
+  expect(await page.evaluate(() => localStorage.getItem('superchef-theme-carnet'))).toBeNull();
+});

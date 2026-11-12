@@ -40,9 +40,35 @@ export function creerDriveSimule() {
   async function fetch(url, opts = {}) {
     const u = new URL(url);
     const methode = opts.method || 'GET';
-    const corps = opts.body ? JSON.parse(opts.body) : null;
+    const envoi = u.pathname.startsWith('/upload/');
+    const corps = opts.body && !envoi ? JSON.parse(opts.body) : null;
     appels.push({ methode, url, corps, auth: opts.headers?.Authorization });
     if (opts.headers?.Authorization !== 'Bearer jeton-test') return json(401, { error: { message: 'jeton' } });
+
+    // D-G-048 : fichiers déposés (multipart ou contenu seul) et lien de partage.
+    if (envoi) {
+      const brut = typeof opts.body === 'string' ? opts.body : Buffer.from(await new Response(opts.body).arrayBuffer()).toString('latin1');
+      const id = /^\/upload\/drive\/v3\/files\/([^/]+)$/.exec(u.pathname)?.[1];
+      if (methode === 'POST' && !id) {
+        const meta = JSON.parse(/\r\n\r\n(\{.*?\})\r\n--/s.exec(brut)[1]);
+        const contenu = brut.slice(brut.indexOf('\r\n\r\n', brut.indexOf('\r\n\r\n') + 4) + 4, brut.lastIndexOf('\r\n--'));
+        const f = { id: `f${++compteur}`, name: meta.name, mimeType: meta.mimeType, parents: meta.parents || [], appProperties: meta.appProperties,
+          webViewLink: `https://drive.google.com/file/d/f${compteur}/view?usp=drivesdk`, contenu, permissions: [] };
+        fichiers.push(f);
+        return json(200, { id: f.id, name: f.name, webViewLink: f.webViewLink });
+      }
+      const f = fichiers.find((x) => x.id === decodeURIComponent(id || ''));
+      if (!f) return json(404, { error: { message: 'introuvable' } });
+      f.contenu = brut; f.versions = (f.versions || 1) + 1;
+      return json(200, { id: f.id, name: f.name, webViewLink: f.webViewLink });
+    }
+    const perm = /^\/drive\/v3\/files\/([^/]+)\/permissions$/.exec(u.pathname);
+    if (perm && methode === 'POST') {
+      const f = fichiers.find((x) => x.id === decodeURIComponent(perm[1]));
+      if (!f) return json(404, { error: { message: 'introuvable' } });
+      (f.permissions ||= []).push(corps);
+      return json(200, { id: 'anyoneWithLink' });
+    }
 
     if (u.pathname === '/drive/v3/files' && methode === 'GET') {
       const q = u.searchParams.get('q');

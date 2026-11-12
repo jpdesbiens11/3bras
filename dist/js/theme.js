@@ -13,6 +13,10 @@ try {
 var SKINS = ['carnet', 'magazine', 'ardoise'];
 try {
   var k = localStorage.getItem('superchef-skin');
-  if (!localStorage.getItem('superchef-theme-carnet')) { if (k === null || k === 'plan') k = 'carnet'; localStorage.setItem('superchef-skin', k); localStorage.setItem('superchef-theme-carnet', '1'); }
+  // D-G-046 (1.17.0, demande de JP) : Carnet est le thème par défaut de tout appareil, une fois, quel que soit
+  // l'ancien choix ; un thème choisi ensuite dans le menu est gardé.
+  if (localStorage.getItem('superchef-theme-defaut') !== 'carnet-1.17') {
+    k = 'carnet'; localStorage.setItem('superchef-skin', k); localStorage.setItem('superchef-theme-defaut', 'carnet-1.17'); localStorage.removeItem('superchef-theme-carnet');
+  }
   if (SKINS.indexOf(k) >= 0) document.documentElement.setAttribute('data-skin', k);
 } catch (_) { document.documentElement.setAttribute('data-skin', 'carnet'); }

@@ -44,7 +44,7 @@ export async function brancher(page, { clientId = 'client-test.apps.googleuserco
     if (/googleapis\.com$/.test(url.hostname)) {
       const req = route.request();
       const rep = await sim.fetch(url.href, { method: req.method(), headers: req.headers().authorization
-        ? { Authorization: req.headers().authorization } : {}, body: req.postData() || undefined });
+        ? { Authorization: req.headers().authorization } : {}, body: url.pathname.startsWith('/upload/') ? req.postDataBuffer()?.toString('latin1') : req.postData() || undefined });
       return route.fulfill({ status: rep.status, contentType: 'application/json',
         headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify(await rep.json()) });
     }
