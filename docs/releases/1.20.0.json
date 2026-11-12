@@ -1,0 +1,26 @@
+{
+  "version": "1.20.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — mise en place guidée",
+  "requis": [
+    "R-01",
+    "R-07"
+  ],
+  "nouveautes": [
+    "Mise en place guidée : à ta première connexion (livre vide), un guide pas à pas met en évidence la bonne partie de l'interface et te dit quoi faire.",
+    "Tu fais chaque action, il passe seul à la suite : kits, stock de base, tri des recettes, garde-manger, soirs, déplacer un souper, approuver la semaine.",
+    "À la dernière étape, ta première semaine est en place et ta liste d'épicerie est prête pour le Provigo.",
+    "« Passer cette étape » et × en tout temps ; il reprend après un rechargement ; Compte → « Lancer le guide » le relance."
+  ],
+  "decisions": [
+    "D-G-051"
+  ],
+  "tests": {
+    "unitaires": 77,
+    "bout_en_bout": 50,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}

@@ -1,11 +1,11 @@
 // « Adapter avec Gemini » (D-G-033) : la famille retouche une recette (« moins sucré », « pour 6 »,
 // « quantités dans les étapes »), comme dans les commentaires d'un site de recettes, mais dans l'app.
-import { S, $, norm, iso, toast, errText } from '../etat.js?v=1.19.0';
-import { el, ico, vider } from '../el.js?v=1.19.0';
-import { getRecipe, majRecette } from '../donnees.js?v=1.19.0';
-import { parseTexte, ficheTexte } from '../lecture.js?v=1.19.0';
-import { convertirAvecGemini, erreurIA } from '../ia.js?v=1.19.0';
-import { RACCOURCIS, RACCOURCIS_CUISSON, consigneAdaptation, valeursAdaptees, valeursOriginales, valeursActuelles } from '../adaptation.js?v=1.19.0';
+import { S, $, norm, iso, toast, errText } from '../etat.js?v=1.20.0';
+import { el, ico, vider } from '../el.js?v=1.20.0';
+import { getRecipe, majRecette } from '../donnees.js?v=1.20.0';
+import { parseTexte, ficheTexte } from '../lecture.js?v=1.20.0';
+import { convertirAvecGemini, erreurIA } from '../ia.js?v=1.20.0';
+import { RACCOURCIS, RACCOURCIS_CUISSON, consigneAdaptation, valeursAdaptees, valeursOriginales, valeursActuelles } from '../adaptation.js?v=1.20.0';
 
 let A = null; // { id, demande, busy, result, cuisson, etape }
 const raccourcis = () => (A?.cuisson ? [...RACCOURCIS_CUISSON, ...RACCOURCIS] : RACCOURCIS);

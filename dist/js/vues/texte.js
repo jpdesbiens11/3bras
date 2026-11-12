@@ -1,9 +1,9 @@
 // D-G-044 : modifier à la main le texte d'une fiche (ingrédients, étapes, sous-chef). L'originale est gardée
 // comme avec « Adapter » (colonne Originale, une seule fois), et « Revenir à l'originale » la remet.
-import { S, $, iso, toast, errText } from '../etat.js?v=1.19.0';
-import { el, ico, vider } from '../el.js?v=1.19.0';
-import { majRecette } from '../donnees.js?v=1.19.0';
-import { valeursTexte } from '../adaptation.js?v=1.19.0';
+import { S, $, iso, toast, errText } from '../etat.js?v=1.20.0';
+import { el, ico, vider } from '../el.js?v=1.20.0';
+import { majRecette } from '../donnees.js?v=1.20.0';
+import { valeursTexte } from '../adaptation.js?v=1.20.0';
 
 let X = null; // { id }
 export const texteOuvert = () => !!X;

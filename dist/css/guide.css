@@ -1,0 +1,21 @@
+/* Mise en place guidée (D-G-051) : projecteur sur la partie de l'interface et bulle, au-dessus des feuilles. */
+.guide{position:fixed;inset:0;z-index:55;pointer-events:none}
+.guide[hidden]{display:none}
+.gd-anneau{position:fixed;border-radius:calc(var(--radius) + 4px);pointer-events:none;
+  box-shadow:0 0 0 4px var(--jaune,#ffd23f),0 0 0 7px var(--fg),0 0 0 9999px rgba(15,23,32,.32);transition:top .2s,left .2s,width .2s,height .2s;animation:gd-pouls 1.8s ease-in-out infinite}
+.gd-anneau[hidden]{display:none}
+@keyframes gd-pouls{50%{box-shadow:0 0 0 7px var(--jaune,#ffd23f),0 0 0 10px var(--fg),0 0 0 9999px rgba(15,23,32,.32)}}
+.gd-bulle{position:fixed;pointer-events:auto;width:min(360px,calc(100vw - 24px));left:12px;bottom:16px;background:var(--card,#fff);color:var(--fg);border:2px solid var(--line-strong);border-radius:var(--radius);
+  box-shadow:4px 4px 0 var(--line-strong);padding:10px 14px 12px;display:grid;gap:6px;transition:top .2s,left .2s;box-sizing:border-box}
+.gd-tete{display:flex;align-items:center;gap:8px}
+.gd-tete .label{flex:1;min-width:0;font-size:.72rem}
+.gd-tete .btn.icon{min-height:34px;min-width:34px;padding:0}
+.gd-barre{height:5px;border-radius:3px;background:var(--doux,var(--line));overflow:hidden}
+.gd-barre i{display:block;height:100%;background:var(--jaune,var(--accent))}
+.gd-bulle h3{margin:2px 0 0;font-size:1.15rem;text-transform:none;letter-spacing:0}
+.gd-bulle p{margin:0;color:var(--muted);font-size:.95rem;line-height:1.4}
+.gd-acts{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+.gd-attente{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--accent)}
+.gd-attente .ico{width:16px;height:16px}
+.gd-passer{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit;min-height:var(--tap)}
+@media (prefers-reduced-motion:reduce){.gd-anneau{animation:none;transition:none}.gd-bulle{transition:none}}

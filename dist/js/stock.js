@@ -2,11 +2,11 @@
 // Deux sources : les essentiels courants (dist/kits/stock-base.json) et les ingrédients de garde-manger
 // (épices, épicerie sèche, conserves) des recettes du livre. Rien n'est préchargé dans l'app : seul ce qui
 // est coché est écrit, par l'import validé (D-G-016). Sans DOM : testé à part.
-import { norm } from './etat.js?v=1.19.0';
-import { niceName, deptOf, zoneOf, ingKey, neverBuy } from './cuisine.js?v=1.19.0';
-import { FORMAT, valider } from './import.js?v=1.19.0';
-import { VERSION_SCHEMA } from './schema.js?v=1.19.0';
-import { slug } from './donnees.js?v=1.19.0';
+import { norm } from './etat.js?v=1.20.0';
+import { niceName, deptOf, zoneOf, ingKey, neverBuy } from './cuisine.js?v=1.20.0';
+import { FORMAT, valider } from './import.js?v=1.20.0';
+import { VERSION_SCHEMA } from './schema.js?v=1.20.0';
+import { slug } from './donnees.js?v=1.20.0';
 
 const PLACARD = ['Épices', 'Épicerie sèche', 'Conserves'];
 const GENERIQUES = new Set(['pate', 'pates', 'sauce', 'huile', 'riz', 'epices', 'assaisonnement']);

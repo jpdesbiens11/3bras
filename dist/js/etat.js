@@ -1,5 +1,5 @@
 // État et constantes partagés, repris de Gordon Rams.ai.
-import { el } from './el.js?v=1.19.0';
+import { el } from './el.js?v=1.20.0';
 
 export const DAYS = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 export const BASE_DAYS = 4; // dimanche au mercredi par défaut ; jeudi à samedi au besoin
