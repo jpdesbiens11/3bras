@@ -1,0 +1,12 @@
+{
+  "version": "1.10.1",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — Gemini rebranché (clé anti-robot)",
+  "requis": ["R-04"],
+  "nouveautes": [
+    "Nouvelle clé anti-robot (reCAPTCHA) créée dans le projet Firebase de l'app : Gemini était refusé avec « App Check token is invalid ».",
+    "Quand la vérification anti-robot échoue, l'app le dit clairement au lieu d'afficher le texte technique de Google."
+  ],
+  "decisions": ["D-G-037"],
+  "tests": { "unitaires": 49, "bout_en_bout": 28, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}
