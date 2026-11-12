@@ -534,3 +534,23 @@ test('D-G-040 : recommencer à neuf vide le classeur et repart comme à la premi
   await expect(page.locator('#kit-res')).toContainText('Ton livre compte maintenant 10 recettes');
   expect(erreurs).toEqual([]);
 });
+
+test('D-G-042 : 1re ligne de l\'onglet Recettes effacée, les kits s\'ajoutent quand même et se relisent', async ({ page }) => {
+  const erreurs = [];
+  page.on('pageerror', (e) => erreurs.push(e.message));
+  const { sim } = await brancher(page);
+  await page.goto('./');
+  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
+  await expect(page.locator('#comptesheet')).toBeVisible();
+  const c = [...sim.classeurs.values()][0];
+  c.onglets.Recettes.shift();                                                    // JP efface la 1re ligne dans Sheets
+  await page.locator('[data-kit="russe"]').click();
+  await page.locator('[data-kit="enfants"]').click();
+  await page.locator('#chargerkits').click();
+  await expect(page.locator('#kit-res')).toContainText('Classeur réparé : ligne de titres remise dans Recettes.');
+  await expect(page.locator('#kit-res')).toContainText('Ton livre compte maintenant 20 recettes');
+  await expect(page.locator('#kit-res .notice')).toHaveCount(0);
+  expect(c.onglets.Recettes[0][0]).toBe('id');
+  expect(c.onglets.Recettes).toHaveLength(21);
+  expect(erreurs).toEqual([]);
+});

@@ -79,6 +79,10 @@ export function creerDriveSimule() {
             c.onglets[r.updateSheetProperties.properties.title] = c.onglets[s.properties.title] || [];
             delete c.onglets[s.properties.title];
             s.properties.title = r.updateSheetProperties.properties.title;
+          } else if (r.insertDimension) {
+            const s = c.sheets.find((x) => x.properties.sheetId === r.insertDimension.range.sheetId);
+            const t = c.onglets[s.properties.title] ||= [];
+            t.splice(r.insertDimension.range.startIndex, 0, ...Array.from({ length: r.insertDimension.range.endIndex - r.insertDimension.range.startIndex }, () => []));
           } else if (r.addSheet) {
             c.sheets.push({ properties: { sheetId: c.sheets.length + 100, title: r.addSheet.properties.title } });
             c.onglets[r.addSheet.properties.title] = [];

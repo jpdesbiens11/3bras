@@ -4,7 +4,7 @@ import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } 
 import { el, ico, vider } from './el.js?v=1.11.0';
 import { creerAuth } from './auth.js?v=1.11.0';
 import { creerDrive } from './drive.js?v=1.11.0';
-import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.11.0';
+import { ouvrirOuCreer, noterProprietaire, texteReparation } from './store.js?v=1.11.0';
 import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.11.0';
 import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.11.0';
 import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.11.0';
@@ -252,7 +252,7 @@ async function connecter(autreCompte) {
     noterProprietaire(drive, b.classeur.id, { courriel, version: CONFIG.version }).catch(() => {});
     const m = b.migration;
     S.ctx = { drive, classeurId: b.classeur.id, dossier: b.dossier, courriel,
-      messageMigration: m && m.apres > m.avant ? `Classeur mis à jour (schéma ${m.avant} → ${m.apres}).` : '' };
+      messageMigration: [m && m.apres > m.avant ? `Classeur mis à jour (schéma ${m.avant} → ${m.apres}).` : '', texteReparation(b.reparation)].filter(Boolean).join(' ') };
     await boot();
     if (!S.book.length) { toast('Ton livre est vide : choisis un kit pour démarrer.'); openCompte(true); }
   } catch (e) { console.error(e); S.err = errText(e); render(); }

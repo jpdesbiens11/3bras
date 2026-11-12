@@ -11,12 +11,13 @@ export async function ouvrirOuCreer(drive, { nomDossier, nomClasseur, version },
     drive.chercher({ role: 'dossier', type: TYPE_DOSSIER })
   ]);
   if (classeurs.length) {
+    const reparation = await reparerEntetes(drive, classeurs[0].id);   // D-G-042 : avant toute migration ou écriture
     const migration = await migrerSchema(drive, classeurs[0].id);
     const [classeur, dossier] = await Promise.all([
       renommerAncien(drive, classeurs[0], nomClasseur),
       dossiers[0] ? renommerAncien(drive, dossiers[0], nomDossier) : null
     ]);
-    return { nouveau: false, classeur, dossier, migration };
+    return { nouveau: false, classeur, dossier, migration, reparation };
   }
 
   etape('creation');
@@ -89,9 +90,44 @@ export async function migrerSchema(drive, id) {
   return { avant, apres: VERSION_SCHEMA, ajouts };
 }
 
+export const ONGLETS_DONNEES = Object.freeze(['Recettes', 'Plans de semaine', 'Inventaire', 'Bilans']);
+
+// D-G-042 : prépare ou répare la ligne de titres des onglets de données avant d'écrire.
+// - onglet absent : recréé avec ses titres ; 1re ligne vide : titres remis ;
+// - 1re ligne effacée (des données remontées en ligne 1, ex. « k-quebecois-… ») : une ligne est insérée en haut
+//   et les titres y sont remis, sans rien perdre ;
+// - titres renommés à la main : rien n'est écrasé (comme D-G-015), c'est signalé.
+const ID_DONNEE = /^[a-z]-[A-Za-z0-9-]{1,80}$/;
+export async function reparerEntetes(drive, id, titres = ONGLETS_DONNEES) {
+  const info = await drive.lireClasseur(id);
+  const feuilles = new Map(info.sheets.map((s) => [s.properties.title, s.properties.sheetId]));
+  const absents = titres.filter((t) => !feuilles.has(t));
+  if (absents.length) await drive.majClasseur(id, absents.map((t) => ({ addSheet: { properties: { title: t, gridProperties: { frozenRowCount: 1 } } } })));
+  const presents = titres.filter((t) => feuilles.has(t));
+  const lus = presents.length ? await drive.lirePlusieurs(id, presents.map((t) => plageEntete(onglet(t)))) : { valueRanges: [] };
+  const inserer = [], titresAEcrire = [...absents], rapport = { recrees: absents, remises: [], inserees: [], modifiees: [] };
+  presents.forEach((t, i) => {
+    const a1 = String(lus.valueRanges?.[i]?.values?.[0]?.[0] ?? '').trim();
+    if (a1 === 'id') return;
+    if (!a1) { titresAEcrire.push(t); rapport.remises.push(t); }
+    else if (ID_DONNEE.test(a1)) {
+      inserer.push({ insertDimension: { range: { sheetId: feuilles.get(t), dimension: 'ROWS', startIndex: 0, endIndex: 1 }, inheritFromBefore: false } });
+      titresAEcrire.push(t); rapport.inserees.push(t);
+    } else rapport.modifiees.push(t);
+  });
+  if (inserer.length) await drive.majClasseur(id, inserer);
+  if (titresAEcrire.length) await drive.ecrireValeurs(id, titresAEcrire.map((t) => { const o = onglet(t); return { range: plageEntete(o), values: [o.colonnes] }; }));
+  return rapport;
+}
+export const texteReparation = (r) => {
+  if (!r) return '';
+  const faits = [...r.recrees, ...r.remises, ...r.inserees];
+  return [faits.length ? `Classeur réparé : ligne de titres remise dans ${faits.join(', ')}.` : '',
+    r.modifiees.length ? `Titres modifiés à la main dans ${r.modifiees.join(', ')} : l'app ne les écrase pas ; remets « id » en A1.` : ''].filter(Boolean).join(' ');
+};
+
 // D-G-040 : « Recommencer à neuf » — vide les onglets de données et remet leur ligne de titres au schéma
 // courant (un onglet supprimé est recréé). Le classeur, le dossier et l'onglet Schéma restent. Pas de copie.
-export const ONGLETS_DONNEES = Object.freeze(['Recettes', 'Plans de semaine', 'Inventaire', 'Bilans']);
 export async function reinitialiser(drive, id, titres = ONGLETS_DONNEES) {
   const info = await drive.lireClasseur(id);
   const presents = new Set(info.sheets.map((s) => s.properties.title));

@@ -121,3 +121,39 @@ test('D-G-040 : recommencer vide les 4 onglets de données et remet les titres, 
   assert.equal(second.nouveau, false);
   assert.equal(second.classeur.id, r.classeur.id);
 });
+
+// D-G-042 : le classeur est préparé ou réparé avant d'écrire.
+test('D-G-042 : 1re ligne effacée, recettes remontées : une ligne est insérée et les titres remis, rien n\'est perdu', async () => {
+  const { reparerEntetes } = await import('../../dist/js/store.js');
+  const { importer } = await import('../../dist/js/import.js');
+  const { lireOnglet } = await import('../../dist/js/store.js');
+  const { sim, drive } = preparer();
+  const r = await ouvrirOuCreer(drive, OPTS);
+  const c = sim.classeurs.get(r.classeur.id);
+  const rec = (id, nom) => { const l = ONGLETS[0].colonnes.map(() => ''); l[0] = id; l[1] = nom; l[2] = 'Souper'; return l; };
+  c.onglets.Recettes = [rec('k-russe-plov', 'Plov'), rec('k-russe-kiev', 'Poulet Kiev')];   // titres effacés
+  c.onglets.Inventaire = [];                                                                // 1re ligne vide
+  c.onglets.Bilans = [['ID', 'Date']];                                                      // titres renommés
+  const rap = await reparerEntetes(drive, r.classeur.id);
+  assert.deepEqual(rap, { recrees: [], remises: ['Inventaire'], inserees: ['Recettes'], modifiees: ['Bilans'] });
+  assert.deepEqual(c.onglets.Recettes[0], ONGLETS[0].colonnes);
+  assert.deepEqual((await lireOnglet(drive, r.classeur.id, 'Recettes')).map((x) => x.Nom), ['Plov', 'Poulet Kiev']);
+  assert.deepEqual(c.onglets.Bilans[0], ['ID', 'Date'], 'titres renommés : pas écrasés');
+  // Deuxième passage : plus rien à réparer, et un import après coup ne dédouble rien.
+  assert.deepEqual((await reparerEntetes(drive, r.classeur.id)).inserees, []);
+  c.onglets.Recettes.shift();                                                               // titres effacés de nouveau
+  const imp = await importer(drive, r.classeur.id, { recettes: [{ id: 'k-russe-plov', Nom: 'Plov' }, { id: 'k-russe-blinis', Nom: 'Blinis' }], plans: [], inventaire: [], bilans: [] });
+  assert.deepEqual(imp.reparation.inserees, ['Recettes']);
+  assert.equal(imp.creees.recettes, 1);
+  assert.deepEqual((await lireOnglet(drive, r.classeur.id, 'Recettes')).map((x) => x.Nom), ['Plov', 'Poulet Kiev', 'Blinis']);
+});
+
+test('D-G-042 : à l\'ouverture, un onglet supprimé est recréé avant la migration', async () => {
+  const { sim, drive } = preparer();
+  const r = await ouvrirOuCreer(drive, OPTS);
+  const c = sim.classeurs.get(r.classeur.id);
+  delete c.onglets['Plans de semaine']; c.sheets = c.sheets.filter((s) => s.properties.title !== 'Plans de semaine');
+  const b = await ouvrirOuCreer(drive, OPTS);
+  assert.deepEqual(b.reparation.recrees, ['Plans de semaine']);
+  assert.deepEqual(c.onglets['Plans de semaine'], [ONGLETS[1].colonnes]);
+});

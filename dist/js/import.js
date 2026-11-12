@@ -2,7 +2,7 @@
 // Le fichier est une donnée non fiable : on vérifie tout avant d'écrire une seule cellule.
 
 import { ONGLETS, VERSION_SCHEMA } from './schema.js?v=1.11.0';
-import { lireOnglet, ajouterObjets } from './store.js?v=1.11.0';
+import { lireOnglet, ajouterObjets, reparerEntetes } from './store.js?v=1.11.0';
 
 export const FORMAT = 'superchef-import';
 // Les fichiers faits avant SuperChef.ai (migration Notion, anciens kits) restent acceptés (D-G-030).
@@ -65,6 +65,7 @@ export function valider(brut) {
 // Écrit les lignes absentes du classeur. Ré-importer le même fichier ne crée rien de plus.
 export async function importer(drive, classeurId, donnees, etape = () => {}) {
   const rapport = { creees: {}, deja: {}, kits: [], aVerifier: [] };
+  rapport.reparation = await reparerEntetes(drive, classeurId, Object.values(SECTIONS)); // D-G-042 : avant d'écrire
   for (const [cle, titre] of Object.entries(SECTIONS)) {
     etape(titre);
     const existants = new Set((await lireOnglet(drive, classeurId, titre)).map((l) => l.id));
