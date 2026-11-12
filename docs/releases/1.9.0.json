@@ -1,0 +1,14 @@
+{
+  "version": "1.9.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — créer des recettes de départ avec Claude",
+  "requis": ["R-02", "R-04"],
+  "nouveautes": [
+    "Compte → « Créer des recettes avec Claude » : choisis des cuisines, des mots-clés, ce qu'il faut éviter, le type, les portions et le nombre (5 à 20).",
+    "L'app écrit la consigne pour Claude (Sonnet 5.5) : un toucher pour la copier, l'envoyer à l'app Claude ou ouvrir claude.ai. Les recettes déjà dans ton livre y sont listées pour ne pas les recevoir en double.",
+    "Colle la réponse de Claude telle quelle : chaque fiche apparaît dans une liste à cocher, avec un aperçu. Ce qui est déjà au livre, les kits repas et les fiches incomplètes ne sont pas cochés.",
+    "Les recettes choisies arrivent « À trier » dans 01 Livre ; recoller la même réponse n'ajoute rien en double."
+  ],
+  "decisions": ["D-G-035"],
+  "tests": { "unitaires": 47, "bout_en_bout": 26, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

@@ -1,5 +1,7 @@
 # Projet Claude « SuperChef.ai » — instructions
 
+Pour **plusieurs recettes d'un coup** (remplir le livre par cuisine ou mots-clés), pas besoin de projet : dans l'app, **Compte → Créer des recettes avec Claude** écrit la consigne à donner à Claude, et sa réponse se colle dans l'app (D-G-035).
+
 À coller dans les **instructions du projet** sur claude.ai (Projets → Nouveau projet → « SuperChef.ai » → Instructions). Le projet fait une courte entrevue, puis donne une **Fiche SuperChef** à coller dans l'app : **+ Recette → Ou colle le texte → Convertir**.
 
 ---

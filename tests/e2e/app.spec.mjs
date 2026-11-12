@@ -1,7 +1,7 @@
 // Parcours complet dans les 6 étapes, Google simulé (aucun réseau sortant).
 import { test, expect } from '@playwright/test';
 import { brancher } from './outils.mjs';
-import { LIVRE } from './fixture.mjs';
+import { LIVRE, REPONSE_CLAUDE } from './fixture.mjs';
 
 async function demarrer(page, { ia, livre = LIVRE } = {}) {
   const erreurs = [];
@@ -364,5 +364,64 @@ test('D-G-033 : adapter une recette avec Gemini, garder l\'originale, y revenir'
   expect(row['Ingrédients']).toBe('30 ml (2 c. à soupe) de beurre\n250 ml (1 tasse) de fromage râpé\n4 pommes de terre');
   expect(row.Portions).toBe('4');
   expect(row.Adaptations.split('\n')).toHaveLength(2);
+  expect(erreurs).toEqual([]);
+});
+
+test('D-G-035 : créer des recettes avec Claude, coller sa réponse, choisir, ajouter', async ({ page }, info) => {
+  await page.addInitScript(() => {
+    window.__presse = '';
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async (t) => { window.__presse = t; }, readText: async () => window.__presse } });
+  });
+  const { sim, erreurs } = await demarrer(page);
+  await page.locator('#comptebtn').click();
+  await page.locator('#ouvrirgen').click();
+  await expect(page.locator('#gen-h')).toHaveText('Créer des recettes avec Claude');
+
+  // 1. Ce que vous voulez
+  await page.locator('[data-gencuis="Italienne"]').click();
+  await expect(page.locator('[data-gencuis="Italienne"]')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('[data-gennb="5"]').click();
+  await page.locator('#gen-mots').fill('mijoteuse');
+  const consigne = page.locator('#gen-consigne');
+  await expect(consigne).toHaveValue(/Prépare 5 recettes/);
+  await expect(consigne).toHaveValue(/Cuisines : Italienne\n/);
+  await expect(consigne).toHaveValue(/Mots-clés : mijoteuse/);
+  await expect(consigne).toHaveValue(/ne les propose pas : .*Pâté chinois test/);
+
+  // 2. La consigne copiée pour Claude ; la demande reste sur l'appareil
+  await page.locator('#gen-copier').click();
+  await expect(page.locator('#toast')).toContainText('Consigne copiée');
+  expect(await page.evaluate(() => window.__presse)).toBe(await consigne.inputValue());
+  expect(JSON.parse(await page.evaluate(() => localStorage.getItem('superchef-generateur')))).toMatchObject({ cuisines: ['Italienne'], nombre: 5, motsCles: 'mijoteuse' });
+
+  // 3. La réponse de Claude collée, puis la liste à cocher
+  await page.evaluate((t) => { window.__presse = t; }, REPONSE_CLAUDE);
+  await page.locator('#gen-coller').click();
+  const items = page.locator('.gen-item');
+  await expect(items).toHaveCount(4);
+  await expect(items.nth(1)).toContainText('Déjà dans ton livre');
+  await expect(items.nth(2)).toContainText('Kit repas : refusée');
+  await expect(items.nth(3)).toContainText('Fiche incomplète');
+  await expect(page.locator('[data-genpick="2"]')).toBeDisabled();
+  await expect(page.locator('#gen-ajouter')).toHaveText('Ajouter 1 recette au livre');
+  await page.locator('[data-genpick="0"]').uncheck();
+  await expect(page.locator('#gen-ajouter')).toHaveText('Coche au moins une recette');
+  await page.locator('[data-genpick="0"]').check();
+  await items.nth(0).locator('summary').click();
+  await expect(items.nth(0)).toContainText('796 ml (28 oz) de tomates broyées');
+  await page.locator('.gen-res').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `tests/captures/${info.project.name}-generateur.png` });
+
+  await page.locator('#gen-ajouter').click();
+  await expect(page.locator('#gen-fin')).toContainText('1 recette ajoutée « À trier »');
+  const o = [...sim.classeurs.values()][0].onglets.Recettes, e = o[0], l = o.find((x) => x[0] === 'g-sauce-bolognaise-mijotee');
+  expect(l[e.indexOf('Statut')]).toBe('À trier');
+  expect(l[e.indexOf('Cuisine')]).toBe('Italienne');
+  expect(o.filter((x) => x[1] === 'Lasagne Goodfood express')).toHaveLength(0);
+
+  await page.locator('#gen-trier').click();
+  await expect(page.locator('#gensheet')).toHaveCount(0);
+  await expect(page.locator('#comptesheet')).toHaveCount(0);
+  await expect(page.locator('[data-preview="g-sauce-bolognaise-mijotee"]')).toBeVisible();
   expect(erreurs).toEqual([]);
 });

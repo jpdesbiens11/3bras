@@ -1,8 +1,8 @@
 // Fichier d'import SuperChef.ai (R-02, D-G-003) : validation puis écriture dans le classeur.
 // Le fichier est une donnée non fiable : on vérifie tout avant d'écrire une seule cellule.
 
-import { ONGLETS, VERSION_SCHEMA } from './schema.js?v=1.8.0';
-import { lireOnglet, ajouterObjets } from './store.js?v=1.8.0';
+import { ONGLETS, VERSION_SCHEMA } from './schema.js?v=1.9.0';
+import { lireOnglet, ajouterObjets } from './store.js?v=1.9.0';
 
 export const FORMAT = 'superchef-import';
 // Les fichiers faits avant SuperChef.ai (migration Notion, anciens kits) restent acceptés (D-G-030).

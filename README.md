@@ -9,7 +9,7 @@ Le livre de recettes familial qui vit dans **ton** Google Drive. Tu planifies la
 
 ## État
 
-Version 1.8.0 : « Adapter avec Gemini » (la recette devient la version de famille, l'originale est gardée) et la bonne portion d'ingrédient à chaque étape d'Au poêle. Voir `docs/releases/` et `docs/DECISIONS.md`.
+Version 1.9.0 : « Créer des recettes avec Claude » pour remplir le livre par cuisine ou mots-clés (consigne à copier, réponse collée, liste à cocher). Depuis 1.8.0 : « Adapter avec Gemini » et la bonne portion à chaque étape d'Au poêle. Voir `docs/releases/` et `docs/DECISIONS.md`.
 
 ## Développer
 
