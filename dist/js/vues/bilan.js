@@ -1,8 +1,8 @@
 // 06 · Bilan : noter les soupers de la semaine dernière (R-13). Repris de Gordon Rams.ai.
-import { S, MOIS, iso, starsOf, starLabel, toast, errText, render } from '../etat.js?v=1.6.2';
-import { el, ico } from '../el.js?v=1.6.2';
-import { majRecette, rebuildPools, ajouterBilan, semainePrecedente } from '../donnees.js?v=1.6.2';
-import { panelHead, skeleton, noticeWarn, frameEmpty, starRow } from './commun.js?v=1.6.2';
+import { S, MOIS, iso, starsOf, starLabel, toast, errText, render } from '../etat.js?v=1.7.0';
+import { el, ico } from '../el.js?v=1.7.0';
+import { majRecette, rebuildPools, ajouterBilan, semainePrecedente } from '../donnees.js?v=1.7.0';
+import { panelHead, skeleton, noticeWarn, frameEmpty, starRow } from './commun.js?v=1.7.0';
 
 export function loadBilan() {
   const prev = new Date(S.weekStart); prev.setDate(prev.getDate() - 7);
@@ -36,7 +36,7 @@ export function viewBilan() {
   const out = [panelHead('06 · Bilan', 'Bilan', 'Avant le prochain plan : comment se sont passés les soupers de la semaine dernière ?')];
   if (S.bil.err) return [...out, noticeWarn(S.bil.err)];
   if (S.loading || !S.bil.items) return [...out, skeleton()];
-  if (!S.bil.items.length) return [...out, frameEmpty(`Aucun souper planifié ni cuisiné la semaine du ${S.bil.week.getDate()} ${MOIS[S.bil.week.getMonth()]}. Le bilan se remplira après ta première semaine avec 3Bras.`)];
+  if (!S.bil.items.length) return [...out, frameEmpty(`Aucun souper planifié ni cuisiné la semaine du ${S.bil.week.getDate()} ${MOIS[S.bil.week.getMonth()]}. Le bilan se remplira après ta première semaine avec SuperChef.ai.`)];
   return [...out, ...S.bil.items.map((id) => {
     const r = S.all[id], f = S.bil.form[id], n = starsOf(r), done = S.bil.done[id];
     return el('div', { class: `frame bil ${done ? 'done' : ''}` }, el('h3', {}, r.name),

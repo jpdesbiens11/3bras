@@ -1,7 +1,7 @@
 # D-02 / D-05 / D-06 : tests, puis publication de dist/ sur GitHub Pages.
 # D-G-014 : chaque fusion dans main crée le tag et la release v<version de package.json>
 # (si absents), puis publie. Retour arrière : relancer à la main avec le tag précédent.
-name: Publier 3eBras
+name: Publier SuperChef.ai
 
 on:
   push:
@@ -61,6 +61,9 @@ jobs:
             node -e "const r=require('./docs/releases/'+process.argv[1]+'.json'); require('fs').writeFileSync('notes.md', r.mvp+'\n\n'+r.nouveautes.map(n=>'- '+n).join('\n')+'\n')" "$V"
             gh release create "v$V" --target "$GITHUB_SHA" --title "$V" --notes-file notes.md
           fi
+          # D-G-031 : l'archive à déployer sur Hostinger, jointe à la release.
+          node scripts/paquet.mjs
+          gh release upload "v$V" "paquet/superchef-$V.zip" --clobber
       - name: Joindre les notes de version
         run: mkdir -p dist/releases && cp docs/releases/*.json dist/releases/
       - uses: actions/configure-pages@v5

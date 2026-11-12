@@ -1,9 +1,9 @@
 // Feuille Compte : connexion, classeur, import (R-02). Même gabarit que les feuilles de Gordon Rams.ai.
-import { S, $, toast } from '../etat.js?v=1.6.2';
-import { el, ico, vider } from '../el.js?v=1.6.2';
-import { lienClasseur, lienDossier } from '../store.js?v=1.6.2';
-import { valider, importer } from '../import.js?v=1.6.2';
-import { CONFIG } from '../config.js?v=1.6.2';
+import { S, $, toast } from '../etat.js?v=1.7.0';
+import { el, ico, vider } from '../el.js?v=1.7.0';
+import { lienClasseur, lienDossier } from '../store.js?v=1.7.0';
+import { valider, importer } from '../import.js?v=1.7.0';
+import { CONFIG } from '../config.js?v=1.7.0';
 
 export function openCompte(surImporter) {
   if ($('#comptesheet')) return;
@@ -30,13 +30,13 @@ export function openCompte(surImporter) {
       el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', id: 'chargerkits', type: 'button' }, ico('plus'), 'Ajouter les kits choisis')),
       el('div', { class: 'import-res', id: 'kit-res', 'aria-live': 'polite' }),
       el('h4', { id: 'importer' }, 'Importer des recettes'),
-      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, 'Choisis un fichier d\'import 3Bras (.json). Tout est vérifié avant d\'écrire, et ré-importer le même fichier ne crée pas de doublons.'),
+      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, 'Choisis un fichier d\'import SuperChef.ai (.json). Tout est vérifié avant d\'écrire, et ré-importer le même fichier ne crée pas de doublons.'),
       el('div', { class: 'pick addf' }, el('label', { class: 'btn primary pickbtn' }, ico('file'), 'Choisir le fichier',
         el('input', { id: 'fichier-import', class: 'pickin', type: 'file', accept: '.json,application/json', 'aria-label': 'Choisir le fichier d\'import' }))),
       res,
       el('div', { class: 'sheet-acts' },
         el('button', { class: 'btn', id: 'deconnexion' }, 'Se déconnecter'),
-        el('span', { class: 'label' }, `3Bras v${CONFIG.version}`))));
+        el('span', { class: 'label' }, `SuperChef.ai v${CONFIG.version}`))));
   if (surImporter) $('#kits')?.scrollIntoView();
 }
 // Les kits sont publiés avec l'app (dist/kits/), mêmes règles que tout fichier d'import.

@@ -1,27 +1,27 @@
-// 3Bras : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
-import { CONFIG } from './config.js?v=1.6.2';
-import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.6.2';
-import { el, ico, vider } from './el.js?v=1.6.2';
-import { creerAuth } from './auth.js?v=1.6.2';
-import { creerDrive } from './drive.js?v=1.6.2';
-import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.6.2';
-import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.6.2';
-import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.6.2';
-import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.6.2';
-import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.6.2';
-import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.6.2';
-import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.6.2';
-import { viewTri, loadTri, decide } from './vues/livre.js?v=1.6.2';
-import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.6.2';
-import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.6.2';
-import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.6.2';
-import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.6.2';
-import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.6.2';
-import { openCompte, closeCompte, lireImport, chargerKits } from './vues/compte.js?v=1.6.2';
+// SuperChef.ai : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
+import { CONFIG } from './config.js?v=1.7.0';
+import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.7.0';
+import { el, ico, vider } from './el.js?v=1.7.0';
+import { creerAuth } from './auth.js?v=1.7.0';
+import { creerDrive } from './drive.js?v=1.7.0';
+import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.7.0';
+import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.7.0';
+import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.7.0';
+import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.7.0';
+import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.7.0';
+import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.7.0';
+import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.7.0';
+import { viewTri, loadTri, decide } from './vues/livre.js?v=1.7.0';
+import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.7.0';
+import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.7.0';
+import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.7.0';
+import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.7.0';
+import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.7.0';
+import { openCompte, closeCompte, lireImport, chargerKits } from './vues/compte.js?v=1.7.0';
 
 let auth = null;
 // Mémoire de l'utilisateur sur l'appareil : son courriel seulement, jamais le jeton (N-02).
-const CLE_COMPTE = '3bras-compte';
+const CLE_COMPTE = 'superchef-compte';
 const compteMemorise = () => { try { return localStorage.getItem(CLE_COMPTE) || ''; } catch (_) { return ''; } };
 const memoriser = (c) => { try { c ? localStorage.setItem(CLE_COMPTE, c) : localStorage.removeItem(CLE_COMPTE); } catch (_) {} };
 const VUES = { semaine: viewWeek, poele: viewCook, tri: viewTri, livre: viewInv, provigo: viewProvigo, bilan: viewBilan };
@@ -42,7 +42,7 @@ function viewConnexion() {
   }
   return [el('div', { class: 'frame connexion' },
     el('h3', {}, 'Ton livre t\'attend'),
-    el('p', {}, 'Tes recettes vivent dans ton Google Drive. 3Bras ne voit que les fichiers qu\'il crée. À ta première connexion, il crée ton livre.'),
+    el('p', {}, 'Tes recettes vivent dans ton Google Drive. SuperChef.ai ne voit que les fichiers qu\'il crée. À ta première connexion, il crée ton livre.'),
     el('button', { class: 'btn primary', id: 'connexion', disabled: !auth }, ico('users'), auth ? 'Se connecter avec Google' : 'On attend Google…'))];
 }
 function doRender() {
@@ -63,7 +63,7 @@ hooks.renderSheet = renderSheet;
 function applySkin(k) {
   if (k === 'magazine' || k === 'ardoise') document.documentElement.setAttribute('data-skin', k);
   else { document.documentElement.removeAttribute('data-skin'); k = 'plan'; }
-  try { localStorage.setItem('3ebras-skin', k); } catch (_) {}
+  try { localStorage.setItem('superchef-skin', k); } catch (_) {}
   const sel = $('#skin'); if (sel) sel.value = k;
 }
 

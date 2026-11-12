@@ -59,6 +59,13 @@ export function creerDriveSimule() {
       }
       return json(200, f);
     }
+    const r = /^\/drive\/v3\/files\/([^/]+)$/.exec(u.pathname);
+    if (r && methode === 'PATCH') {
+      const f = fichiers.find((x) => x.id === decodeURIComponent(r[1]));
+      if (!f) return json(404, { error: { message: 'introuvable' } });
+      Object.assign(f, corps);
+      return json(200, { id: f.id, name: f.name, webViewLink: f.webViewLink });
+    }
     const m = /^\/v4\/spreadsheets\/([^/:]+)(.*)$/.exec(u.pathname);
     if (m) {
       const c = classeurs.get(decodeURIComponent(m[1]));
@@ -107,8 +114,8 @@ export function creerDriveSimule() {
 
   // Crée un classeur au schéma 1 (comme celui de JP en 1.0.x), pour tester la migration.
   function classeurV1(colonnesV1) {
-    const dossier = { id: `f${++compteur}`, name: '3Bras', mimeType: 'application/vnd.google-apps.folder', parents: [], appProperties: { '3ebras': 'dossier' } };
-    const livre = { id: `f${++compteur}`, name: '3Bras — Livre', mimeType: 'application/vnd.google-apps.spreadsheet', parents: [dossier.id], appProperties: { '3ebras': 'livre' } };
+    const dossier = { id: `f${++compteur}`, name: '3eBras', mimeType: 'application/vnd.google-apps.folder', parents: [], appProperties: { '3ebras': 'dossier' } };
+    const livre = { id: `f${++compteur}`, name: '3eBras — Livre', mimeType: 'application/vnd.google-apps.spreadsheet', parents: [dossier.id], appProperties: { '3ebras': 'livre' } };
     fichiers.push(dossier, livre);
     const onglets = {};
     for (const [titre, cols] of Object.entries(colonnesV1)) onglets[titre] = [cols];

@@ -1,10 +1,12 @@
-// Fichier d'import 3Bras (R-02, D-G-003) : validation puis écriture dans le classeur.
+// Fichier d'import SuperChef.ai (R-02, D-G-003) : validation puis écriture dans le classeur.
 // Le fichier est une donnée non fiable : on vérifie tout avant d'écrire une seule cellule.
 
-import { ONGLETS, VERSION_SCHEMA } from './schema.js?v=1.6.2';
-import { lireOnglet, ajouterObjets } from './store.js?v=1.6.2';
+import { ONGLETS, VERSION_SCHEMA } from './schema.js?v=1.7.0';
+import { lireOnglet, ajouterObjets } from './store.js?v=1.7.0';
 
-export const FORMAT = '3ebras-import';
+export const FORMAT = 'superchef-import';
+// Les fichiers faits avant SuperChef.ai (migration Notion, anciens kits) restent acceptés (D-G-030).
+export const FORMATS = Object.freeze([FORMAT, '3ebras-import']);
 const SECTIONS = { recettes: 'Recettes', plans: 'Plans de semaine', inventaire: 'Inventaire', bilans: 'Bilans' };
 const MAX_CELLULE = 45000;           // Sheets plafonne une cellule à 50 000 caractères
 const MAX_LIGNES = 5000;
@@ -21,7 +23,7 @@ export function valider(brut) {
   const erreurs = [];
   let f;
   try { f = typeof brut === 'string' ? JSON.parse(brut) : brut; } catch { return { ok: false, erreurs: ['Ce fichier n\'est pas du JSON valide.'] }; }
-  if (!f || typeof f !== 'object' || f.format !== FORMAT) return { ok: false, erreurs: ['Ce n\'est pas un fichier d\'import 3Bras.'] };
+  if (!f || typeof f !== 'object' || !FORMATS.includes(f.format)) return { ok: false, erreurs: ['Ce n\'est pas un fichier d\'import SuperChef.ai.'] };
   if (!Number.isInteger(f.schema) || f.schema < 1 || f.schema > VERSION_SCHEMA) {
     erreurs.push(`Version de schéma ${f.schema} non prise en charge (max ${VERSION_SCHEMA}).`);
   }

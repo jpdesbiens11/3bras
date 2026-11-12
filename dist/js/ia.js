@@ -1,8 +1,8 @@
 // Gemini par Firebase AI Logic (D-G-029) : convertit une recette (texte, photo, PDF, lien) en fiche du livre.
 // Aucune clé secrète dans l'app : la configuration Firebase est publique, la clé Gemini reste chez Google,
-// et App Check (Fraud Defense, anciennement reCAPTCHA Enterprise) n'accepte que les appels qui viennent de 3Bras.
+// et App Check (Fraud Defense, anciennement reCAPTCHA Enterprise) n'accepte que les appels qui viennent de SuperChef.ai.
 // La bibliothèque Firebase est chargée seulement à la première conversion.
-import { CONFIG } from './config.js?v=1.6.2';
+import { CONFIG } from './config.js?v=1.7.0';
 
 let modele = null;
 
@@ -16,7 +16,7 @@ async function obtenirModele() {
     import('../vendor/firebase/firebase-ai.js')
   ]);
   const { apiKey, projectId, appId, recaptcha } = CONFIG.ia;
-  const app = initializeApp({ apiKey, projectId, appId, authDomain: `${projectId}.firebaseapp.com` }, '3bras');
+  const app = initializeApp({ apiKey, projectId, appId, authDomain: `${projectId}.firebaseapp.com` }, 'superchef');
   initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(recaptcha), isTokenAutoRefreshEnabled: true });
   const ai = getAI(app, { backend: new GoogleAIBackend() });
   modele = { ai, getGenerativeModel };
@@ -42,12 +42,12 @@ export async function convertirAvecGemini(consigne, parties, url) {
 // Message clair pour les erreurs de Google.
 export function erreurIA(e) {
   // Firebase classe toute réponse HTTP en « fetch-error » : on lit le message, pas le code.
-  try { console.error('[3Bras] Gemini', e); } catch { /* console absente */ }
+  try { console.error('[SuperChef.ai] Gemini', e); } catch { /* console absente */ }
   const code = String((e && e.code) || '');
   const msg = String((e && e.message) || '');
   const t = `${code} ${msg}`;
   if (/app-check|appCheck|attestation|recaptcha/i.test(t)) return `La vérification anti-robot de Google a échoué (${msg.slice(0, 120)}).`;
-  if (/\b429\b|quota|RESOURCE_EXHAUSTED/i.test(t)) return 'La limite gratuite de Gemini est atteinte pour le moment. Réessaie plus tard, ou passe par le projet Claude 3Bras.';
+  if (/\b429\b|quota|RESOURCE_EXHAUSTED/i.test(t)) return 'La limite gratuite de Gemini est atteinte pour le moment. Réessaie plus tard, ou passe par le projet Claude SuperChef.ai.';
   if (/SAFETY/i.test(t)) return 'Gemini a refusé ce contenu. Essaie avec le texte de la recette.';
   if (/^(TypeError: )?(Failed to fetch|NetworkError|Load failed)/i.test(msg) || (typeof navigator !== 'undefined' && navigator.onLine === false)) return 'Pas de réseau pour joindre Gemini. Réessaie dans un moment.';
   return `Gemini n'a pas pu convertir la recette : ${msg.slice(0, 200) || code}`;

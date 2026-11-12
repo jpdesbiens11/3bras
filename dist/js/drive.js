@@ -5,6 +5,9 @@ const DRIVE = 'https://www.googleapis.com/drive/v3';
 const SHEETS = 'https://sheets.googleapis.com/v4/spreadsheets';
 export const TYPE_DOSSIER = 'application/vnd.google-apps.folder';
 export const TYPE_CLASSEUR = 'application/vnd.google-apps.spreadsheet';
+// Étiquette Drive qui retrouve les fichiers de l'app (D-G-012). Clé technique figée depuis 3eBras :
+// la changer ferait perdre leur livre à ceux qui l'ont déjà (D-G-030).
+export const CLE_APP = '3ebras';
 
 export class ErreurGoogle extends Error {
   constructor(statut, message) { super(message || `HTTP ${statut}`); this.statut = statut; }
@@ -35,7 +38,7 @@ export function creerDrive({ jetonValide, fetch = globalThis.fetch.bind(globalTh
     // Cherche les fichiers créés par l'app portant une étiquette donnée.
     async chercher({ role, type }) {
       const q = [
-        `appProperties has { key='3ebras' and value='${echapper(role)}' }`,
+        `appProperties has { key='${CLE_APP}' and value='${echapper(role)}' }`,
         `mimeType='${echapper(type)}'`,
         'trashed=false'
       ].join(' and ');
@@ -50,8 +53,15 @@ export function creerDrive({ jetonValide, fetch = globalThis.fetch.bind(globalTh
           name: nom,
           mimeType: type,
           ...(parent ? { parents: [parent] } : {}),
-          appProperties: { '3ebras': role }
+          appProperties: { [CLE_APP]: role }
         }
+      });
+    },
+
+    // Renomme un fichier créé par l'app (portée drive.file).
+    renommer(id, nom) {
+      return appel(`${DRIVE}/files/${encodeURIComponent(id)}?fields=${encodeURIComponent('id,name,webViewLink')}`, {
+        methode: 'PATCH', corps: { name: nom }
       });
     },
 

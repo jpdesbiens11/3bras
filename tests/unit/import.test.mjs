@@ -22,7 +22,7 @@ const fichier = (extra = {}) => ({
 const preparer = async () => {
   const sim = creerDriveSimule();
   const drive = creerDrive({ jetonValide: async () => 'jeton-test', fetch: sim.fetch });
-  const b = await ouvrirOuCreer(drive, { nomDossier: '3Bras', nomClasseur: '3Bras — Livre', version: '1.1.0' });
+  const b = await ouvrirOuCreer(drive, { nomDossier: 'SuperChef.ai', nomClasseur: 'SuperChef.ai — Livre', version: '1.1.0' });
   return { sim, drive, id: b.classeur.id };
 };
 
@@ -34,7 +34,7 @@ test('R-02 : un fichier valide passe', () => {
 
 test('R-02 : refus clair des fichiers douteux, sans rien écrire', () => {
   assert.match(valider('pas du json').erreurs[0], /JSON/);
-  assert.match(valider({ format: 'autre' }).erreurs[0], /3Bras/);
+  assert.match(valider({ format: 'autre' }).erreurs[0], /SuperChef.ai/);
   const v = valider(fichier({
     recettes: [
       { id: 'r-a', Nom: 'X', '<img onerror>': 1 },
@@ -77,4 +77,10 @@ test('R-02 : import, rapport, puis ré-import sans doublon', async () => {
   const r2 = await importer(drive, id, donnees);
   assert.deepEqual(r2.creees, { recettes: 0, plans: 0, inventaire: 0, bilans: 0 });
   assert.equal(sim.classeurs.get(id).onglets.Recettes.length, 3, 'en-tête + 2 recettes, pas plus');
+});
+
+test('D-G-030 : les fichiers « 3ebras-import » d\'avant SuperChef.ai restent acceptés', () => {
+  assert.equal(FORMAT, 'superchef-import');
+  assert.deepEqual(valider(fichier({ format: '3ebras-import' })).erreurs, []);
+  assert.deepEqual(valider(fichier({ format: 'superchef-import' })).erreurs, []);
 });
