@@ -1,0 +1,543 @@
+{
+ "format": "superchef-import",
+ "version": 1,
+ "schema": 2,
+ "genere_le": "2026-11-12",
+ "source": "Kit SuperChef.ai — Moyen-Orient",
+ "kit": {
+  "id": "moyen-orient",
+  "nom": "Moyen-Orient",
+  "description": "Chich taouk, falafels, kefta et baklava : les saveurs chaleureuses du Moyen-Orient, avec des ingrédients faciles à trouver ici."
+ },
+ "recettes": [
+  {
+   "id": "k-moyen-orient-chich-taouk",
+   "Nom": "Chich taouk",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Poulet",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": true,
+   "Temps total (min)": 35,
+   "Portions": 4,
+   "Outils": "BBQ",
+   "Source": "Ricardo",
+   "Ingrédients": [
+    "## Sauce à l'ail (toum)",
+    "3 gousses d'ail, coupées en quatre (environ 15 g)",
+    "2 blancs d'œufs",
+    "30 ml (2 c. à soupe) de jus de citron",
+    "2,5 ml (1/2 c. à thé) de sel",
+    "375 ml (1 1/2 tasse) d'huile de canola",
+    "45 ml (3 c. à soupe) d'eau",
+    "## Poulet",
+    "45 ml (3 c. à soupe) de crème 35 %",
+    "30 ml (2 c. à soupe) d'huile de canola",
+    "15 ml (1 c. à soupe) de jus de citron",
+    "1 ml (1/4 c. à thé) de sept-épices libanais (ou de piment de la Jamaïque moulu)",
+    "1 ml (1/4 c. à thé) de thym séché",
+    "2,5 ml (1/2 c. à thé) de sel",
+    "675 g (1 1/2 lb) de poitrines de poulet désossées, sans peau (environ 3)",
+    "Poivre",
+    "Salade verte ou riz aux vermicelles, pour servir"
+   ],
+   "Étapes": [
+    "La veille, mettre l'ail, les blancs d'œufs, 30 ml (2 c. à soupe) de jus de citron et 2,5 ml (1/2 c. à thé) de sel dans un contenant haut et étroit. Réduire en purée lisse au mélangeur plongeant.",
+    "Sans arrêter le mélangeur, verser 250 ml (1 tasse) d'huile de canola en mince filet. En moins de 1 minute, la sauce prend la texture d'une mayonnaise.",
+    "Toujours en mélangeant, ajouter l'eau en alternance avec le reste de l'huile de la sauce (125 ml / 1/2 tasse).",
+    "Réserver 75 ml (1/3 tasse) de sauce à l'ail pour la marinade. Réfrigérer le reste dans un contenant hermétique.",
+    "Dans un bol, fouetter les 75 ml (1/3 tasse) de sauce réservée avec la crème, 30 ml (2 c. à soupe) d'huile de canola, 15 ml (1 c. à soupe) de jus de citron, le sept-épices, le thym et 2,5 ml (1/2 c. à thé) de sel. Poivrer.",
+    "Ajouter le poulet et bien l'enrober. Couvrir et réfrigérer de 8 à 12 heures.",
+    "Préchauffer le BBQ à puissance moyenne-élevée et huiler la grille.",
+    "Griller le poulet 8 minutes de chaque côté, jusqu'à ce qu'un thermomètre inséré au centre d'une poitrine indique 74 °C (165 °F).",
+    "Laisser reposer le poulet 5 minutes dans une assiette, puis le trancher.",
+    "Servir avec la sauce à l'ail, une salade verte ou du riz aux vermicelles."
+   ],
+   "Tâches sous-chef": [
+    "Mesurer la crème, le thym et les épices de la marinade",
+    "Presser les citrons",
+    "Laver et essorer la laitue de la salade"
+   ],
+   "À vérifier": "Prévoir de 8 à 12 heures de marinade la veille (non compté dans le temps total). La sauce à l'ail contient des blancs d'œufs crus ; le reste se garde 1 semaine au réfrigérateur.",
+   "Fiche complète": true,
+   "Lien source": "https://www.ricardocuisine.com/en/recipes/9460-chicken-shish-taouk-the-best",
+   "Notes": [
+    "Inspirée du poulet shish taouk (le meilleur) de Ricardo."
+   ]
+  },
+  {
+   "id": "k-moyen-orient-brochettes-de-kefta-au-boeuf",
+   "Nom": "Brochettes de kefta au bœuf",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Bœuf",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": true,
+   "Temps total (min)": 30,
+   "Portions": 4,
+   "Outils": "",
+   "Source": "Web autre",
+   "Ingrédients": [
+    "450 g (1 lb) de bœuf haché maigre",
+    "2 gousses d'ail hachées",
+    "2 oignons verts hachés finement",
+    "5 ml (1 c. à thé) de cumin moulu",
+    "5 ml (1 c. à thé) de coriandre moulue",
+    "5 ml (1 c. à thé) de paprika",
+    "2,5 ml (1/2 c. à thé) de cannelle moulue",
+    "60 ml (1/4 tasse) de persil frais haché",
+    "15 ml (1 c. à soupe) d'huile d'olive",
+    "Sel et poivre",
+    "8 brochettes de bois",
+    "Pitas et tzatziki, pour servir"
+   ],
+   "Étapes": [
+    "Faire tremper les brochettes de bois dans l'eau 10 minutes.",
+    "Dans un bol, mélanger le bœuf, l'ail, les oignons verts, le cumin, la coriandre, le paprika, la cannelle et le persil. Saler et poivrer.",
+    "Façonner 8 keftas allongés avec les mains, en pressant la viande autour de chaque brochette.",
+    "Chauffer l'huile dans une grande poêle à feu moyen-élevé. Cuire les keftas 6 minutes sans les déplacer.",
+    "Retourner les keftas et cuire encore 6 minutes, jusqu'à ce qu'ils soient bien cuits.",
+    "Servir dans des pitas avec du tzatziki."
+   ],
+   "Tâches sous-chef": [
+    "Mettre les brochettes à tremper dans l'eau",
+    "Mesurer les épices dans un petit bol",
+    "Ciseler le persil avec des ciseaux"
+   ],
+   "À vérifier": "",
+   "Fiche complète": true,
+   "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.keftas-de-buf.1.1461221.html",
+   "Notes": [
+    "Inspirée des keftas de bœuf de Noovo Moi."
+   ]
+  },
+  {
+   "id": "k-moyen-orient-falafels-au-four",
+   "Nom": "Falafels au four",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Végé",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": false,
+   "Temps total (min)": 55,
+   "Portions": 4,
+   "Outils": "Four, Robot culinaire",
+   "Source": "Ricardo",
+   "Ingrédients": [
+    "## Boulgour",
+    "60 ml (1/4 tasse) d'eau légèrement salée",
+    "45 g (1/4 tasse) de boulgour fin",
+    "## Falafels",
+    "1 boîte de 540 ml (19 oz) de pois chiches, rincés et égouttés",
+    "60 ml (1/4 tasse) de persil frais haché finement",
+    "60 ml (1/4 tasse) de coriandre fraîche hachée finement",
+    "1 échalote française hachée grossièrement",
+    "1 gousse d'ail hachée grossièrement",
+    "15 ml (1 c. à soupe) de coriandre moulue",
+    "15 ml (1 c. à soupe) de cumin moulu",
+    "2,5 ml (1/2 c. à thé) de sel",
+    "2,5 ml (1/2 c. à thé) de poudre à pâte",
+    "1 ml (1/4 c. à thé) de bicarbonate de soude",
+    "1 œuf",
+    "30 ml (2 c. à soupe) de farine de pois chiches ou de farine tout usage non blanchie",
+    "Huile d'olive, pour les mains et les galettes",
+    "## Pour servir",
+    "Pitas, crudités et sauce tahini ou hummus"
+   ],
+   "Étapes": [
+    "Porter l'eau salée à ébullition. Ajouter le boulgour, couvrir et retirer du feu. Laisser gonfler 10 minutes, puis égrainer à la fourchette.",
+    "Au robot culinaire, hacher les pois chiches. Ajouter le persil, la coriandre fraîche, l'échalote, l'ail, les épices, le sel, la poudre à pâte, le bicarbonate et l'œuf.",
+    "Mélanger jusqu'à ce que la préparation soit lisse, en raclant les parois quelques fois. Verser dans un bol.",
+    "Incorporer la farine et 125 ml (1/2 tasse) de boulgour cuit.",
+    "Placer la grille au centre du four et préchauffer à 220 °C (425 °F). Tapisser une plaque d'un tapis de silicone.",
+    "Avec une cuillère à crème glacée de 30 ml (2 c. à soupe), façonner des boules et les déposer sur la plaque.",
+    "Les mains légèrement huilées, aplatir chaque boule en galette d'environ 5 cm (2 po) de diamètre et 2,5 cm (1 po) d'épaisseur. Badigeonner les galettes d'huile.",
+    "Réfrigérer 15 minutes.",
+    "Cuire au four 20 minutes en retournant les falafels à mi-cuisson, jusqu'à ce qu'ils soient dorés et croustillants.",
+    "Servir dans des pitas avec des crudités et de la sauce tahini ou du hummus."
+   ],
+   "Tâches sous-chef": [
+    "Rincer et égoutter les pois chiches",
+    "Effeuiller le persil et la coriandre",
+    "Façonner les boules avec la cuillère à crème glacée"
+   ],
+   "À vérifier": "Les falafels sont meilleurs le jour même.",
+   "Fiche complète": true,
+   "Lien source": "https://ricardocuisine.com/en/recipes/9119-baked-falafel",
+   "Notes": [
+    "Inspirée des falafels au four de Ricardo."
+   ]
+  },
+  {
+   "id": "k-moyen-orient-samke-harra-morue-sauce-tahini",
+   "Nom": "Samke harra (morue sauce tahini)",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Poisson & fruits de mer",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": true,
+   "Temps total (min)": 30,
+   "Portions": 6,
+   "Outils": "Four",
+   "Source": "Web autre",
+   "Ingrédients": [
+    "## Poisson",
+    "1 kg (2,2 lb) de filets de morue ou d'aiglefin",
+    "30 ml (2 c. à soupe) d'huile d'olive",
+    "2,5 ml (1/2 c. à thé) de poivre blanc moulu (ou de poivre noir)",
+    "5 ml (1 c. à thé) d'assaisonnement au chili (ou 1 ml (1/4 c. à thé) de piment de Cayenne)",
+    "2,5 ml (1/2 c. à thé) de cumin moulu",
+    "5 ml (1 c. à thé) de sel",
+    "## Sauce tahini",
+    "15 ml (1 c. à soupe) d'huile d'olive",
+    "4 gousses d'ail écrasées",
+    "1 oignon jaune moyen haché finement",
+    "125 ml (1/2 tasse) de coriandre fraîche (ou de persil) hachée finement",
+    "125 ml (1/2 tasse) de tahini",
+    "125 ml (1/2 tasse) d'eau",
+    "80 ml (1/3 tasse) de jus de citron",
+    "4 ml (3/4 c. à thé) de sel",
+    "## Garniture",
+    "125 ml (1/2 tasse) d'amandes blanchies, de noix de cajou ou de pignons",
+    "125 ml (1/2 tasse) de persil frais haché",
+    "Riz ou pitas, pour servir"
+   ],
+   "Étapes": [
+    "Préchauffer le four à 200 °C (400 °F). Tapisser une plaque de papier parchemin.",
+    "Déposer les filets sur la plaque et bien les éponger. Badigeonner de 30 ml (2 c. à soupe) d'huile, puis assaisonner de poivre blanc, d'assaisonnement au chili, de cumin et de 5 ml (1 c. à thé) de sel.",
+    "Cuire au four 15 minutes. Vérifier : la chair doit être opaque et se défaire à la fourchette. Au besoin, poursuivre la cuisson jusqu'à 5 minutes.",
+    "Pendant ce temps, chauffer 15 ml (1 c. à soupe) d'huile dans une petite casserole. Faire revenir l'ail jusqu'à ce qu'il dégage son parfum.",
+    "Ajouter l'oignon et cuire de 5 à 7 minutes, jusqu'à ce qu'il soit translucide. Ajouter la coriandre et cuire 1 minute.",
+    "Ajouter le tahini, l'eau, le jus de citron et 4 ml (3/4 c. à thé) de sel. Fouetter jusqu'à ce que la sauce soit lisse.",
+    "Laisser mijoter 3 minutes, jusqu'à ce que la sauce soit nappante. Si elle épaissit trop, ajouter un peu d'eau. Rectifier le sel et le citron.",
+    "Dans une poêle à feu moyen, faire dorer les noix en remuant souvent.",
+    "Déposer le poisson dans un plat de service, napper de sauce tahini et garnir des noix grillées et du persil. Servir avec du riz ou des pitas."
+   ],
+   "Tâches sous-chef": [
+    "Éponger les filets avec du papier absorbant",
+    "Presser les citrons",
+    "Parsemer le persil et les noix sur le plat"
+   ],
+   "À vérifier": "La source indique à la fois 1/2 tasse et 235 ml de tahini : on a retenu 125 ml (1/2 tasse). Elle dit de laisser mijoter la sauce « quelques minutes » (3 minutes retenues) et ne précise pas le temps pour dorer les noix.",
+   "Fiche complète": true,
+   "Lien source": "https://www.hungrypaprikas.com/samke-harra/",
+   "Notes": [
+    "Inspirée du samke harra de Hungry Paprikas."
+   ]
+  },
+  {
+   "id": "k-moyen-orient-mujaddara-aux-oignons-caramelises",
+   "Nom": "Mujaddara aux oignons caramélisés",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Végé",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": true,
+   "Temps total (min)": 45,
+   "Portions": 4,
+   "Outils": "",
+   "Source": "Ricardo",
+   "Ingrédients": [
+    "## Riz",
+    "375 ml (1 1/2 tasse) de riz basmati brun, rincé et égoutté",
+    "125 ml (1/2 tasse) de quinoa, rincé et égoutté",
+    "750 ml (3 tasses) de bouillon de champignons ou de légumes",
+    "15 ml (1 c. à soupe) d'huile d'olive",
+    "2 gousses d'ail hachées",
+    "2 gousses de cardamome (facultatif)",
+    "1 bâton de cannelle de 3 cm (1 1/4 po)",
+    "2,5 ml (1/2 c. à thé) de curcuma moulu",
+    "## Oignons et garniture",
+    "45 ml (3 c. à soupe) d'huile d'olive",
+    "4 gros oignons émincés finement",
+    "1 boîte de 398 ml (14 oz) de lentilles brunes, rincées et égouttées",
+    "125 ml (1/2 tasse) de yogourt grec nature",
+    "5 ml (1 c. à thé) de cumin moulu",
+    "60 ml (1/4 tasse) de coriandre fraîche hachée finement",
+    "Quartiers de citron",
+    "Sel et poivre"
+   ],
+   "Étapes": [
+    "Dans une casserole, mettre le riz, le quinoa, le bouillon, 15 ml (1 c. à soupe) d'huile, l'ail, la cardamome, la cannelle et le curcuma. Saler et poivrer.",
+    "Porter à ébullition à feu vif. Couvrir et laisser mijoter à feu doux 20 minutes.",
+    "Retirer du feu et laisser reposer 5 minutes à couvert. Retirer la cardamome et le bâton de cannelle.",
+    "Pendant la cuisson du riz, chauffer 45 ml (3 c. à soupe) d'huile dans une grande poêle à feu vif. Dorer les oignons 10 minutes en remuant très souvent. Réserver.",
+    "Incorporer les lentilles au riz et verser dans un grand plat de service.",
+    "Garnir des oignons caramélisés et du yogourt. Parsemer de cumin et de coriandre. Servir avec les quartiers de citron."
+   ],
+   "Tâches sous-chef": [
+    "Rincer les lentilles dans une passoire",
+    "Mesurer le riz et le quinoa",
+    "Effeuiller la coriandre"
+   ],
+   "À vérifier": "",
+   "Fiche complète": true,
+   "Lien source": "https://www.ricardocuisine.com/en/recipes/8790-brown-rice-with-lentils-and-caramelized-onions",
+   "Notes": [
+    "Inspirée du riz brun aux lentilles et aux oignons caramélisés de Ricardo."
+   ]
+  },
+  {
+   "id": "k-moyen-orient-poulet-shawarma-express",
+   "Nom": "Poulet shawarma express",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Poulet",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": true,
+   "Temps total (min)": 40,
+   "Portions": 4,
+   "Outils": "",
+   "Source": "Ricardo",
+   "Ingrédients": [
+    "## Poulet",
+    "675 g (1 1/2 lb) de hauts de cuisses de poulet désossés, sans peau, coupés en lanières",
+    "2 oignons émincés finement",
+    "3 gousses d'ail hachées",
+    "30 ml (2 c. à soupe) de jus de citron",
+    "30 ml (2 c. à soupe) d'huile d'olive",
+    "10 ml (2 c. à thé) de poudre de cari",
+    "2,5 ml (1/2 c. à thé) de cannelle moulue",
+    "2,5 ml (1/2 c. à thé) de piment de la Jamaïque moulu",
+    "2,5 ml (1/2 c. à thé) de sel",
+    "## Garniture",
+    "250 ml (1 tasse) de hummus",
+    "12 tomates cerises coupées en deux",
+    "2 avocats tranchés",
+    "10 ml (2 c. à thé) de graines de sésame grillées",
+    "4 pitas épais"
+   ],
+   "Étapes": [
+    "Dans un grand bol, mélanger tous les ingrédients du poulet. Laisser mariner 5 minutes (ou toute une nuit au réfrigérateur).",
+    "Dans une grande poêle antiadhésive à feu vif, dorer la moitié du poulet et des oignons 10 minutes, jusqu'à ce que le poulet soit bien cuit. Réserver.",
+    "Essuyer la poêle si les épices ont collé. Cuire le reste du poulet et des oignons 10 minutes.",
+    "Servir le poulet avec le hummus, les tomates cerises et l'avocat. Parsemer de graines de sésame et accompagner de pitas."
+   ],
+   "Tâches sous-chef": [
+    "Mesurer les épices de la marinade",
+    "Étaler le hummus dans les assiettes",
+    "Parsemer les graines de sésame"
+   ],
+   "À vérifier": "",
+   "Fiche complète": true,
+   "Lien source": "https://www.ricardocuisine.com/en/recipes/7674-quick-and-easy-shawarma-style-chicken",
+   "Notes": [
+    "Inspirée du poulet style shawarma express de Ricardo."
+   ]
+  },
+  {
+   "id": "k-moyen-orient-kibbeh-au-four",
+   "Nom": "Kibbeh au four",
+   "Type": "Souper",
+   "Statut": "À trier",
+   "Protéine": "Bœuf",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": false,
+   "Temps total (min)": 90,
+   "Portions": 6,
+   "Outils": "Four, Robot culinaire",
+   "Source": "Web autre",
+   "Ingrédients": [
+    "## Farce",
+    "15 ml (1 c. à soupe) d'huile de canola",
+    "7,5 ml (1/2 c. à soupe) d'huile d'olive",
+    "1/2 oignon moyen coupé en dés",
+    "22 ml (1 1/2 c. à soupe) de pignons",
+    "200 g (7 oz) de bœuf haché extra-maigre",
+    "2,5 ml (1/2 c. à thé) de sel",
+    "2,5 ml (1/2 c. à thé) de piment de la Jamaïque moulu",
+    "1 ml (1/4 c. à thé) de poivre noir",
+    "2,5 ml (1/2 c. à thé) de sept-épices libanais",
+    "7,5 ml (1/2 c. à soupe) de beurre",
+    "15 ml (1 c. à soupe) de mélasse de grenade",
+    "## Pâte de kibbeh",
+    "200 g (7 oz) de boulgour fin",
+    "500 g (1,1 lb) de bœuf haché mi-maigre",
+    "1/2 oignon moyen",
+    "3 brins de menthe fraîche",
+    "4 ml (3/4 c. à thé) de piment de la Jamaïque moulu",
+    "1 ml (1/4 c. à thé) de cannelle moulue",
+    "2,5 ml (1/2 c. à thé) de sept-épices libanais",
+    "2,5 ml (1/2 c. à thé) de poivre noir",
+    "5 ml (1 c. à thé) de sel",
+    "5 ml (1 c. à thé) de menthe séchée",
+    "5 ml (1 c. à thé) de basilic séché",
+    "Quelques glaçons",
+    "15 ml (1 c. à soupe) d'huile, et un peu plus pour le plat",
+    "## Pour servir",
+    "Yogourt au concombre et pitas"
+   ],
+   "Étapes": [
+    "Farce : dans une poêle à feu moyen, chauffer l'huile de canola et l'huile d'olive. Cuire l'oignon en dés 5 minutes pour l'attendrir.",
+    "Ajouter les pignons et cuire 2 minutes, jusqu'à ce qu'ils changent de couleur.",
+    "Ajouter le bœuf extra-maigre et cuire en défaisant la viande jusqu'à ce qu'elle soit dorée et bien cuite.",
+    "Incorporer 2,5 ml (1/2 c. à thé) de sel, 2,5 ml (1/2 c. à thé) de piment de la Jamaïque, 1 ml (1/4 c. à thé) de poivre, 2,5 ml (1/2 c. à thé) de sept-épices et le beurre. Éteindre le feu, ajouter la mélasse de grenade et laisser tiédir.",
+    "Pâte : rincer le boulgour, l'égoutter et le laisser gonfler 5 minutes.",
+    "Au robot culinaire, mélanger le bœuf mi-maigre et le boulgour avec quelques glaçons, en deux ou trois fois pour ne pas surcharger le robot. Verser au fur et à mesure dans un grand bol.",
+    "Au robot, hacher finement la menthe fraîche et le 1/2 oignon. Ajouter une petite portion du mélange de viande, 4 ml (3/4 c. à thé) de piment de la Jamaïque, la cannelle, 2,5 ml (1/2 c. à thé) de sept-épices, 2,5 ml (1/2 c. à thé) de poivre, 5 ml (1 c. à thé) de sel, la menthe séchée, le basilic et un glaçon. Mélanger.",
+    "Verser dans le grand bol avec un ou deux glaçons. Pétrir à la main 3 minutes, jusqu'à ce que le tout soit homogène, en se mouillant les mains à l'eau froide au besoin.",
+    "Préchauffer le four à 200 °C (400 °F). Huiler un plat de 23 x 33 cm (9 x 13 po). Garder un bol d'eau glacée à portée de main.",
+    "Aplatir la moitié de la pâte entre les paumes et la presser dans le plat en une couche mince et égale.",
+    "Étaler la farce uniformément. Couvrir du reste de la pâte, aplatie en galettes, en soudant les morceaux avec les mains mouillées. Lisser le dessus.",
+    "Couper en carrés à travers les trois couches, puis tracer des lignes peu profondes sur le dessus avec la pointe du couteau. Badigeonner de 15 ml (1 c. à soupe) d'huile.",
+    "Cuire au four 40 minutes, jusqu'à ce que le dessus soit doré. Prolonger la cuisson jusqu'à 20 minutes si le kibbeh est épais.",
+    "Servir chaud avec du yogourt au concombre et des pitas."
+   ],
+   "Tâches sous-chef": [
+    "Rincer le boulgour dans une passoire",
+    "Mesurer les épices dans deux petits bols",
+    "Lisser le dessus du kibbeh avec les mains mouillées"
+   ],
+   "À vérifier": "Recette d'origine pour 12 portions (plaque de 33 x 46 cm), ramenée de moitié pour un plat de 23 x 33 cm. La source donne de 40 à 60 minutes de cuisson selon l'épaisseur. Le sept-épices libanais se remplace par du piment de la Jamaïque moulu.",
+   "Fiche complète": true,
+   "Lien source": "https://thematbakh.com/baked-stuffed-kibbeh/",
+   "Notes": [
+    "Inspirée du kibbeh farci au four de The Matbakh."
+   ]
+  },
+  {
+   "id": "k-moyen-orient-salade-fattouche",
+   "Nom": "Salade fattouche",
+   "Type": "Accompagnement",
+   "Statut": "À trier",
+   "Protéine": "Végé",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": true,
+   "Temps total (min)": 40,
+   "Portions": 6,
+   "Outils": "Four",
+   "Source": "Ricardo",
+   "Ingrédients": [
+    "## Croûtons de pita",
+    "3 pitas d'environ 20 cm (8 po), déchirés en gros morceaux",
+    "15 ml (1 c. à soupe) d'huile d'olive",
+    "## Vinaigrette",
+    "45 ml (3 c. à soupe) d'huile d'olive",
+    "45 ml (3 c. à soupe) de jus de citron",
+    "5 ml (1 c. à thé) de miel",
+    "1 petite gousse d'ail hachée finement",
+    "## Salade",
+    "4 concombres libanais non pelés, tranchés",
+    "1 poivron rouge épépiné, coupé en cubes",
+    "1 L (4 tasses) de laitue romaine déchiquetée",
+    "500 ml (2 tasses) de tomates cerises coupées en deux",
+    "2 oignons verts émincés",
+    "Sel et poivre"
+   ],
+   "Étapes": [
+    "Placer la grille au centre du four et préchauffer à 180 °C (350 °F). Tapisser une plaque de papier parchemin.",
+    "Mélanger les morceaux de pita avec 15 ml (1 c. à soupe) d'huile. Saler, poivrer et étaler sur la plaque.",
+    "Cuire au four 15 minutes, en remuant deux fois, jusqu'à ce que les pitas soient dorés. Laisser refroidir.",
+    "Dans un grand bol, fouetter 45 ml (3 c. à soupe) d'huile avec le jus de citron, le miel et l'ail. Saler et poivrer.",
+    "Au moment de servir, ajouter les légumes et les croûtons de pita. Bien mélanger et rectifier l'assaisonnement."
+   ],
+   "Tâches sous-chef": [
+    "Déchirer les pitas en morceaux",
+    "Laver et déchiqueter la laitue",
+    "Mélanger la salade juste avant de servir"
+   ],
+   "À vérifier": "",
+   "Fiche complète": true,
+   "Lien source": "https://www.ricardocuisine.com/en/recipes/7949-fattoush-salad",
+   "Notes": [
+    "Inspirée de la salade fattouche de Ricardo."
+   ]
+  },
+  {
+   "id": "k-moyen-orient-soupe-libanaise-aux-lentilles-rouges",
+   "Nom": "Soupe libanaise aux lentilles rouges",
+   "Type": "Soupe",
+   "Statut": "À trier",
+   "Protéine": "Végé",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": true,
+   "Temps total (min)": 45,
+   "Portions": 6,
+   "Outils": "",
+   "Source": "Web autre",
+   "Ingrédients": [
+    "15 ml (1 c. à soupe) d'huile végétale",
+    "1/2 oignon haché finement",
+    "2 gousses d'ail hachées",
+    "5 ml (1 c. à thé) de cumin moulu",
+    "4 ml (3/4 c. à thé) de curcuma moulu",
+    "2 L (8 tasses) de bouillon de poulet (ou de légumes)",
+    "375 ml (1 1/2 tasse) de lentilles rouges",
+    "Sel et poivre",
+    "1 citron coupé en quartiers"
+   ],
+   "Étapes": [
+    "Dans une grande casserole, chauffer l'huile à feu moyen-doux. Cuire l'oignon en remuant jusqu'à ce qu'il soit tendre, sans le laisser coller.",
+    "Ajouter l'ail, le cumin et le curcuma. Remuer 1 minute.",
+    "Verser le bouillon et monter à feu moyen-vif.",
+    "Rincer et égoutter les lentilles, puis les ajouter dans la casserole. Porter à ébullition.",
+    "Baisser le feu et laisser mijoter 35 minutes.",
+    "Saler et poivrer. Servir avec un quartier de citron à presser dans le bol."
+   ],
+   "Tâches sous-chef": [
+    "Rincer les lentilles dans une passoire fine",
+    "Mesurer le cumin et le curcuma",
+    "Déposer un quartier de citron près de chaque bol"
+   ],
+   "À vérifier": "",
+   "Fiche complète": true,
+   "Lien source": "https://marocmama.com/lebanese-shorbat-adas-lentil-soup/",
+   "Notes": [
+    "Inspirée de la shorbat adas libanaise de MarocMama."
+   ]
+  },
+  {
+   "id": "k-moyen-orient-baklava-simplifie",
+   "Nom": "Baklava simplifié",
+   "Type": "Dessert",
+   "Statut": "À trier",
+   "Protéine": "Aucune",
+   "Cuisine": "Moyen-orientale",
+   "Soir de semaine": false,
+   "Temps total (min)": 55,
+   "Portions": 24,
+   "Outils": "Four, Robot culinaire",
+   "Source": "Trois fois par jour",
+   "Ingrédients": [
+    "## Sirop",
+    "125 ml (1/2 tasse) de sucre",
+    "125 ml (1/2 tasse) de miel",
+    "Le jus et le zeste de 1 orange",
+    "180 ml (3/4 tasse) d'eau",
+    "## Baklava",
+    "250 ml (1 tasse) d'amandes entières",
+    "250 ml (1 tasse) de noix de Grenoble",
+    "250 ml (1 tasse) de pistaches écalées",
+    "1 ml (1/4 c. à thé) de cannelle moulue",
+    "8 feuilles de pâte phyllo",
+    "125 ml (1/2 tasse) de beurre fondu, et un peu plus pour le plat",
+    "45 ml (3 c. à soupe) de pistaches concassées, pour garnir"
+   ],
+   "Étapes": [
+    "Préchauffer le four à 180 °C (350 °F). Beurrer un plat de 25 x 35 cm (10 x 14 po).",
+    "Dans une casserole, porter à ébullition le sucre, le miel, le jus et le zeste d'orange et l'eau. Retirer du feu et laisser refroidir complètement.",
+    "Au robot culinaire, moudre les amandes, les noix, les pistaches écalées et la cannelle en poudre.",
+    "Badigeonner une feuille de phyllo de beurre fondu et la couvrir d'une deuxième feuille. Répéter avec les autres feuilles en badigeonnant chacune de beurre.",
+    "Couper la pile de phyllo en deux sur la longueur pour obtenir deux rectangles.",
+    "Déposer un rectangle dans le plat, parsemer du mélange de noix et couvrir du deuxième rectangle. Badigeonner du reste du beurre et couper en carrés.",
+    "Cuire au four 35 minutes.",
+    "Laisser tiédir à la température ambiante, puis verser le sirop sur le baklava. Laisser reposer au moins 2 heures.",
+    "Garnir de pistaches concassées avant de servir."
+   ],
+   "Tâches sous-chef": [
+    "Presser l'orange pour le sirop",
+    "Badigeonner les feuilles de phyllo de beurre au pinceau",
+    "Parsemer les pistaches concassées à la fin"
+   ],
+   "À vérifier": "Prévoir au moins 2 heures de repos après l'ajout du sirop (non compté dans le temps total).",
+   "Fiche complète": true,
+   "Lien source": "https://www.troisfoisparjour.com/en/recipes/desserts/bars-squares/baklava/",
+   "Notes": [
+    "Inspirée des baklavas de Marilou de Trois fois par jour."
+   ]
+  }
+ ],
+ "plans": [],
+ "inventaire": [],
+ "bilans": []
+}
