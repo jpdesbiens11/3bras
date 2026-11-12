@@ -9,8 +9,10 @@ window.google = { accounts: { oauth2: {
   revoke: (j, cb) => cb && cb()
 } } };`;
 
-export async function brancher(page, { clientId = 'client-test.apps.googleusercontent.com', ia } = {}) {
+export async function brancher(page, { clientId = 'client-test.apps.googleusercontent.com', ia, visite = false } = {}) {
   const sim = creerDriveSimule();
+  // D-G-047 : la visite guidée est déjà vue dans les tests, sauf ceux qui la testent.
+  if (!visite) await page.addInitScript(() => { try { localStorage.setItem('superchef-visite', 'cachee'); } catch (_) {} });
   const sorties = [];
   await page.route('**/*', async (route) => {
     const url = new URL(route.request().url());

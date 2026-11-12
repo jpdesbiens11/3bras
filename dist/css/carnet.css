@@ -1,0 +1,59 @@
+/* Thème « Carnet » (D-G-046) : la famille DynamiteAgile. Papier quadrillé, trait foncé, cartes et boutons
+   à ombre décalée, surligneur jaune, numéros d'étape dans des ronds. Polices locales (Nunito Sans, P-1). */
+html:root[data-skin="carnet"]{
+  --bg:#fcfbf7; --fg:#26323f; --muted:#56636f; --line:#dfe6ee; --line-strong:#26323f;
+  --accent:#1b5fd6; --accent-ink:#164fb3; --tint:#fff4cc; --on-accent:#ffffff;
+  --warn:#c2410c; --ok:#178a7c; --card:#ffffff; --radius:12px; --shadow:4px 4px 0 var(--line-strong);
+  --display:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --jaune:#ffd23f; --ombre-bleue:#0f3d8f; --doux:#e8eef6; color-scheme:light}
+@media (prefers-color-scheme: dark){html:root[data-skin="carnet"]:not([data-theme="light"]){
+  --bg:#1a1f26; --fg:#e9eef3; --muted:#a3adb8; --line:#2c343e; --line-strong:#cfd8e2;
+  --accent:#5b8ff0; --accent-ink:#a9c4f8; --tint:#3a3320; --on-accent:#0b1220; --card:#222831;
+  --warn:#f59e6b; --ok:#5fc7b6; --shadow:4px 4px 0 #05070a; --ombre-bleue:#05070a; --doux:#2c343e; color-scheme:dark}}
+html[data-skin="carnet"] body{background-size:22px 22px}
+html[data-skin="carnet"] .sheet{background-color:var(--bg);background-image:linear-gradient(color-mix(in srgb,var(--line) 70%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--line) 70%,transparent) 1px,transparent 1px);background-size:22px 22px}
+html[data-skin="carnet"] .frame::before{display:none}
+html[data-skin="carnet"] .frame{border:2px solid var(--line-strong)}
+/* titres : pas de majuscules, gras, un trait de surligneur sous les titres de panneau */
+html[data-skin="carnet"] h1,html[data-skin="carnet"] h2,html[data-skin="carnet"] h3,html[data-skin="carnet"] .brand h1,html[data-skin="carnet"] .panel-head h2,
+html[data-skin="carnet"] .sheet h2,html[data-skin="carnet"] .day h3,html[data-skin="carnet"] .tri-card h3,html[data-skin="carnet"] .connexion h3{text-transform:none;letter-spacing:-.005em;font-weight:700}
+html[data-skin="carnet"] .panel-head h2::after{content:"";display:block;width:2.6em;height:.3em;margin-top:.06em;background:var(--jaune);border-radius:4px;transform:rotate(-1deg)}
+html[data-skin="carnet"] .label,html[data-skin="carnet"] .step-no{font-family:var(--body);letter-spacing:.05em;font-weight:700}
+/* en-tête : papier translucide et trait ondulé dessiné à la main */
+html[data-skin="carnet"] header{background:color-mix(in srgb,var(--bg) 92%,transparent);border-bottom:0}
+html[data-skin="carnet"] header::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:9px;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='9'%3E%3Cpath d='M0 4.5 Q11 0 22 4.5 T44 4.5' fill='none' stroke='%2326323f' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x left center/44px 9px}
+@media (prefers-color-scheme: dark){html[data-skin="carnet"]:not([data-theme="light"]) header::after{filter:invert(.85)}}
+html[data-skin="carnet"] .brand h1{font-size:1.5rem}
+html[data-skin="carnet"] .brand .slogan{font-family:var(--body);text-transform:none;letter-spacing:0;font-weight:600}
+/* étapes : numéro dans un rond, étape courante surlignée en jaune */
+html[data-skin="carnet"] nav.steps i{font-family:var(--body);text-transform:none;letter-spacing:0;font-weight:700}
+html[data-skin="carnet"] nav.steps b{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 3px;border:2px solid var(--line-strong);border-radius:999px;background:var(--card);font-family:var(--body);font-weight:700;letter-spacing:0}
+html[data-skin="carnet"] nav.steps button[aria-current="page"]{color:var(--fg);border-bottom:4px solid var(--jaune)}
+html[data-skin="carnet"] nav.steps button[aria-current="page"] b{background:var(--jaune);color:#26323f}
+/* boutons : trait foncé et ombre décalée ; primaire bleu à ombre marine */
+html[data-skin="carnet"] .btn{border:2px solid var(--line-strong);border-radius:9px;background:var(--card);box-shadow:3px 3px 0 var(--line-strong);font-weight:700;transition:transform .08s,box-shadow .08s}
+html[data-skin="carnet"] .btn:hover{color:var(--fg);transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--line-strong)}
+html[data-skin="carnet"] .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line-strong)}
+html[data-skin="carnet"] .btn.primary{background:var(--accent);border-color:var(--ombre-bleue);color:var(--on-accent);box-shadow:3px 3px 0 var(--ombre-bleue);font-family:var(--body);text-transform:none;letter-spacing:0;font-size:1.02rem}
+html[data-skin="carnet"] .btn.primary:hover{box-shadow:4px 4px 0 var(--ombre-bleue)}
+html[data-skin="carnet"] .btn.icon{box-shadow:2px 2px 0 var(--line-strong)}
+html[data-skin="carnet"] .btn[disabled]{box-shadow:none;opacity:.55;transform:none}
+html[data-skin="carnet"] .btn[aria-pressed="true"]{background:var(--tint);border-color:var(--line-strong);color:var(--fg)}
+/* pastilles et avis */
+html[data-skin="carnet"] .chip{border:0;border-radius:6px;background:var(--doux);color:var(--fg);font-family:var(--body);text-transform:none;letter-spacing:0;font-weight:700;padding:3px 9px}
+html[data-skin="carnet"] .chip.acc{background:#dff3ee;color:#0f6b5f}
+html[data-skin="carnet"] .chip.warn{background:#ffe9dc;color:#9a3412}
+html[data-skin="carnet"] .notice{border:2px solid var(--line-strong);border-radius:12px;background:var(--tint);box-shadow:3px 3px 0 var(--line-strong)}
+html[data-skin="carnet"] .toast{border-radius:10px;box-shadow:3px 3px 0 #0b0e12}
+/* champs */
+html[data-skin="carnet"] input:not([type=checkbox]):not([type=radio]):not(.pickin),html[data-skin="carnet"] select,html[data-skin="carnet"] textarea{border:2px solid var(--line-strong)!important;border-radius:9px!important;background:var(--card)}
+html[data-skin="carnet"] input[type=checkbox]{accent-color:var(--accent)}
+
+/* Logo et nom (D-G-046), dans tous les thèmes : carré jaune, toque, éclair ; « Super » orange, « Chef » sarcelle. */
+.brand h1{display:inline-flex;align-items:center;gap:8px}
+.logo-mark{width:1.55em;height:1.55em;flex:none}
+.m-super{color:#e2622f}.m-chef{color:#178a7c}.m-ai{color:var(--muted)}
+html[data-skin="ardoise"] .m-super{color:#f39a6b}html[data-skin="ardoise"] .m-chef{color:#5fc7b6}
+@media (prefers-color-scheme: dark){html:not([data-skin="ardoise"]):not([data-theme="light"]) .m-super{color:#f39a6b}html:not([data-skin="ardoise"]):not([data-theme="light"]) .m-chef{color:#5fc7b6}}

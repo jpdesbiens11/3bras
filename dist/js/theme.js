@@ -9,4 +9,10 @@ try {
     localStorage.removeItem(c);
   });
 } catch (_) {}
-try { var k = localStorage.getItem('superchef-skin'); if (k === 'magazine' || k === 'ardoise') document.documentElement.setAttribute('data-skin', k); } catch (_) {}
+// D-G-046 : « Carnet » devient le thème par défaut ; un appareil resté sur l'ancien défaut (Plan technique) y passe une fois.
+var SKINS = ['carnet', 'magazine', 'ardoise'];
+try {
+  var k = localStorage.getItem('superchef-skin');
+  if (!localStorage.getItem('superchef-theme-carnet')) { if (k === null || k === 'plan') k = 'carnet'; localStorage.setItem('superchef-skin', k); localStorage.setItem('superchef-theme-carnet', '1'); }
+  if (SKINS.indexOf(k) >= 0) document.documentElement.setAttribute('data-skin', k);
+} catch (_) { document.documentElement.setAttribute('data-skin', 'carnet'); }

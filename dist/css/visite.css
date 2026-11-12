@@ -1,0 +1,64 @@
+/* Visite guidée (D-G-047) : scènes dessinées au trait, animées en CSS. Les couleurs suivent le thème. */
+.visite .wrap{max-width:720px}
+.vis-corps{padding-top:14px;padding-bottom:36px;display:grid;gap:4px}
+.vis-dessin{padding:10px 12px;margin-bottom:12px;overflow:hidden}
+.vis-svg{width:100%;height:auto;max-height:42vh;display:block;margin:0 auto}
+.vis-etape{justify-self:start}
+.vis-scene h2{font-size:clamp(1.5rem,5vw,2rem);margin:8px 0 4px}
+.vis-texte{margin:0;color:var(--muted);font-size:1.05rem;max-width:58ch}
+.vis-points{display:flex;justify-content:center;gap:2px;margin:16px 0 6px}
+.vis-points button{width:28px;height:28px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center}
+.vis-points button::before{content:"";width:12px;height:12px;border-radius:50%;border:2px solid var(--fg);background:transparent}
+.vis-points button[aria-current="step"]::before{background:var(--jaune,var(--accent));width:24px;border-radius:999px}
+.vis-nav{display:flex;justify-content:space-between;gap:10px}
+.vis-nav .btn{flex:1;max-width:240px}
+.vis-plus{display:flex;align-items:center;gap:10px;margin-top:14px;min-height:var(--tap);color:var(--muted)}
+.vis-plus input{width:22px;height:22px;accent-color:var(--accent);margin:0}
+.vis-passer{justify-self:center;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;min-height:var(--tap);font:inherit}
+/* traits et formes */
+.v-papier{fill:var(--card,#fff);stroke:var(--fg);stroke-width:2.5;stroke-linejoin:round}
+.v-trait{fill:none;stroke:var(--fg);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.v-fin{fill:none;stroke:var(--muted);stroke-width:2.2;stroke-linecap:round}
+.v-ligne{fill:var(--doux,#e8eef6);stroke:none}
+.v-jaune{fill:#ffd23f;stroke:var(--fg);stroke-width:2.5;stroke-linejoin:round}
+.v-bleu{fill:var(--accent);stroke:var(--fg);stroke-width:2.5}
+.v-blanc-trait{fill:#fff;stroke:#26323f;stroke-width:2;stroke-linejoin:round}
+.v-eclair{fill:none;stroke:#e2622f;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.v-point{fill:var(--fg)}
+.v-cercle{fill:var(--card,#fff);stroke:var(--line,#dfe6ee);stroke-width:7}
+.v-minuteur{fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;stroke-dasharray:214;transform:rotate(-90deg);transform-origin:236px 84px;animation:v-minuteur 8s linear infinite}
+.v-fin-cercle{fill:none;stroke:var(--muted);stroke-width:2}
+.v-etoile{fill:#ffd23f;stroke:var(--fg);stroke-width:2.2;stroke-linejoin:round;animation:v-etoile .35s ease-out both;animation-delay:var(--d,0s)}
+.v-flash{fill:#fff;stroke:none;opacity:0;animation:v-flash 3s ease-out infinite}
+.v-txt{font:700 13px var(--body);fill:var(--fg)}
+.v-gros{font-size:22px}
+.v-petit{font:600 11px var(--body);fill:var(--muted)}
+.v-blanc{font:700 13px var(--body);fill:#fff}
+/* animations : l'état de base est l'état final (rien ne disparaît si les animations sont coupées) */
+.v-pop,.v-tombe,.v-retourne,.v-de,.v-pouls,.v-brille,.v-glisse,.v-vapeur{transform-box:fill-box;transform-origin:center}
+.v-pop{animation:v-pop .5s cubic-bezier(.3,1.5,.5,1) both;animation-delay:var(--d,0s)}
+.v-tombe{animation:v-tombe .6s cubic-bezier(.3,1.4,.5,1) both;animation-delay:var(--d,0s)}
+.v-retourne{animation:v-retourne .6s ease-in-out both;animation-delay:var(--d,0s)}
+.v-coche{stroke-dasharray:24;animation:v-coche .35s ease-out both;animation-delay:var(--d,0s)}
+.v-raye{animation:v-raye .4s ease-out both;animation-delay:var(--d,0s)}
+.v-flux{stroke-dasharray:7 7;animation:v-flux .9s linear infinite}
+.v-glisse{animation:v-glisse 4s ease-in-out infinite}
+.v-de{animation:v-de 2.6s ease-in-out infinite}
+.v-pouls{animation:v-pouls 1.6s ease-in-out infinite 1.6s}
+.v-brille{animation:v-brille 1.8s ease-in-out infinite}
+.v-vapeur{animation:v-vapeur 2.4s ease-out infinite;animation-delay:var(--d,0s)}
+@keyframes v-pop{from{opacity:0;transform:scale(.5)}}
+@keyframes v-tombe{from{opacity:0;transform:translateY(-34px)}}
+@keyframes v-retourne{0%{transform:scaleX(1)}50%{transform:scaleX(.05)}100%{transform:scaleX(1)}}
+@keyframes v-coche{from{stroke-dashoffset:24}}
+@keyframes v-raye{from{opacity:0}to{opacity:1}}
+@keyframes v-flux{to{stroke-dashoffset:-28}}
+@keyframes v-glisse{0%,18%{transform:none;opacity:1}50%,62%{transform:translate(78px,6px) rotate(11deg);opacity:1}80%{transform:translate(120px,12px) rotate(16deg);opacity:0}81%{transform:none;opacity:0}100%{transform:none;opacity:1}}
+@keyframes v-de{0%,55%,100%{transform:rotate(0)}12%{transform:rotate(-22deg)}24%{transform:rotate(16deg)}36%{transform:rotate(-8deg)}}
+@keyframes v-pouls{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes v-brille{0%,100%{transform:scale(.8) rotate(0);opacity:.7}50%{transform:scale(1.15) rotate(18deg);opacity:1}}
+@keyframes v-vapeur{0%{opacity:0;transform:translateY(8px)}35%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+@keyframes v-minuteur{from{stroke-dashoffset:0}to{stroke-dashoffset:214}}
+@keyframes v-etoile{from{fill:transparent}}
+@keyframes v-flash{0%,70%,100%{opacity:0}76%{opacity:.85}}
+@media (prefers-reduced-motion:reduce){.visite *{animation:none!important}.v-flash{opacity:0}}

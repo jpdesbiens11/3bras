@@ -1,0 +1,26 @@
+{
+  "version": "1.16.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — thème Carnet, logo et visite guidée",
+  "requis": [
+    "R-04"
+  ],
+  "nouveautes": [
+    "Nouveau thème « Carnet », par défaut : papier quadrillé, traits d'encre, boutons à ombre décalée, étapes numérotées dans des cercles. Plan technique, Magazine et Ardoise restent au choix.",
+    "Logo SuperChef.ai : une toque avec un éclair, et le nom en couleurs dans tous les thèmes (icône d'onglet comprise).",
+    "Visite guidée à l'ouverture : 9 petites scènes animées qui montrent les fonctions dans l'ordre (Compte, Livre, Garde-manger, Semaine, Provigo, Au poêle, Bilan, + Recette).",
+    "« Ne plus montrer cette visite » la cache pour de bon sur l'appareil ; Compte → « Revoir la visite » la relance."
+  ],
+  "decisions": [
+    "D-G-046",
+    "D-G-047"
+  ],
+  "tests": {
+    "unitaires": 63,
+    "bout_en_bout": 42,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}
