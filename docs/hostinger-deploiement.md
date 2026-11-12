@@ -6,7 +6,7 @@ Marche à suivre pour une session Claude Code, une fois le **connecteur Hostinge
 
 - Site statique : aucun PHP, aucune base de données, aucun secret. L'archive à déployer est `superchef-<version>.zip` (jointe à chaque release GitHub, ou `npm run paquet`) : `index.html` à la racine, `.htaccess` (HTTPS forcé, en-têtes de sécurité), notes de version.
 - Adresse : un **sous-domaine d'un domaine que JP a déjà chez Hostinger** (choix du 2026-11-12), par exemple `superchef.<domaine>`.
-- GitHub Pages (https://jpdesbiens11.github.io/superchef-ai/) reste la copie de secours.
+- GitHub Pages (https://jpdesbiens11.github.io/SuperChef.ai/) reste la copie de secours.
 
 ## Étapes
 

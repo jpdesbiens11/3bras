@@ -2,7 +2,7 @@
 
 Le livre de recettes familial qui vit dans **ton** Google Drive. Tu planifies la semaine, tu fais l'épicerie, tu cuisines et tu notes les soupers. (Anciennement 3Bras, 3eBras et Gordon Rams.ai.)
 
-- App : sur un sous-domaine Hostinger (D-G-031, `docs/hostinger-deploiement.md`) ; copie de secours : https://jpdesbiens11.github.io/superchef-ai/ (D-G-034)
+- App : sur un sous-domaine Hostinger (D-G-031, `docs/hostinger-deploiement.md`) ; copie de secours : https://jpdesbiens11.github.io/SuperChef.ai/ (D-G-034)
 - Aucune recette ne passe par un serveur. L'app parle directement à Google depuis ton navigateur, au téléphone comme à l'ordinateur.
 - Ta semaine planifiée est gardée dans l'onglet « Plans de semaine » de ton classeur Google et revient à chaque connexion.
 - Portée Google `drive.file` : SuperChef.ai ne voit que les fichiers qu'il a créés.
