@@ -1,12 +1,12 @@
 // 02 · Garde-manger (R-06). Repris de Gordon Rams.ai.
 // D-G-043 : filtres (recherche, zone, état) et mode « Modifier » (nom, zone, rayon, essentiel, supprimer,
 // fusionner les doublons probables). Tout s'écrit dans l'onglet Inventaire du classeur.
-import { S, $, ZONES, DEPTS, norm, toast, errText, render } from '../etat.js?v=1.18.0';
-import { el, ico } from '../el.js?v=1.18.0';
-import { majQuantite, ajouterArticle, majArticle, supprimerArticle, remettreArticle, fusionnerArticles } from '../donnees.js?v=1.18.0';
-import { deptOf, zoneOf } from '../cuisine.js?v=1.18.0';
-import { couvre } from '../stock.js?v=1.18.0';
-import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.18.0';
+import { S, $, ZONES, DEPTS, norm, toast, errText, render } from '../etat.js?v=1.19.0';
+import { el, ico } from '../el.js?v=1.19.0';
+import { majQuantite, ajouterArticle, majArticle, supprimerArticle, remettreArticle, fusionnerArticles } from '../donnees.js?v=1.19.0';
+import { deptOf, zoneOf } from '../cuisine.js?v=1.19.0';
+import { couvre } from '../stock.js?v=1.19.0';
+import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.19.0';
 
 const ETATS = [['tous', 'Tous'], ['stock', 'En stock'], ['epuises', 'Épuisés'], ['essentiels', 'Essentiels']];
 const F = () => (S.inv.f ||= { q: '', zone: '', etat: 'tous', edit: false });

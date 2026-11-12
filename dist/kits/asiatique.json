@@ -1,531 +1,531 @@
 {
- "format": "superchef-import",
- "version": 1,
- "schema": 2,
- "genere_le": "2026-11-06",
- "source": "Kit SuperChef.ai — Asiatique",
- "kit": {
-  "id": "asiatique",
-  "nom": "Asiatique",
-  "description": "Les grands classiques du resto asiatique et indien, version maison pour les soupers de semaine : général Tao, pad thaï, pho, poulet au beurre et compagnie."
- },
- "recettes": [
-  {
-   "id": "k-asiatique-poulet-general-tao",
-   "Nom": "Poulet général Tao",
-   "Type": "Souper",
-   "Statut": "À trier",
-   "Protéine": "Poulet",
-   "Cuisine": "Asiatique",
-   "Soir de semaine": false,
-   "Temps total (min)": 50,
-   "Portions": 6,
-   "Outils": "Wok",
-   "Source": "Web autre",
-   "Ingrédients": [
-    "## Sauce",
-    "90 ml (6 c. à soupe) de sauce soya",
-    "90 ml (6 c. à soupe) de bouillon de poulet",
-    "90 ml (6 c. à soupe) de vinaigre de riz",
-    "30 ml (2 c. à soupe) de gingembre frais râpé",
-    "3 gousses d'ail hachées",
-    "20 ml (4 c. à thé) de fécule de maïs",
-    "10 ml (2 c. à thé) de paprika",
-    "10 ml (2 c. à thé) de sambal oelek",
-    "5 ml (1 c. à thé) d'huile de sésame grillé",
-    "250 ml (1 tasse) de sucre",
-    "45 ml (3 c. à soupe) d'eau",
-    "## Poulet et légumes",
-    "900 g (2 lb) de poitrines ou de hauts de cuisse de poulet sans peau, en cubes",
-    "125 ml (1/2 tasse) de farine tout usage",
-    "180 ml (3/4 tasse) d'huile végétale",
-    "2 poivrons rouges en lanières",
-    "1 poivron vert en lanières",
-    "2 oignons verts émincés",
-    "Riz blanc pour servir"
-   ],
-   "Étapes": [
-    "Dans un bol, fouetter la sauce soya, le bouillon, le vinaigre, le gingembre, l'ail, la fécule, le paprika, le sambal et l'huile de sésame. Réserver.",
-    "Dans une grande poêle, porter le sucre et l'eau à ébullition. Laisser bouillir sans brasser jusqu'à un caramel blond, environ 8 minutes.",
-    "Verser le mélange de sauce dans le caramel (attention aux éclaboussures) et laisser épaissir en remuant. Réserver au chaud.",
-    "Dans le wok, sauter les poivrons dans un peu d'huile 5 minutes. Réserver.",
-    "Fariner les cubes de poulet et secouer l'excédent.",
-    "Chauffer le reste de l'huile dans le wok à feu moyen. Dorer le poulet en deux fois, environ 10 minutes par fournée.",
-    "Égoutter le poulet, l'enrober de sauce avec les poivrons. Garnir d'oignons verts et servir sur le riz."
-   ],
-   "Tâches sous-chef": [
-    "Rincer les poivrons",
-    "Mesurer la sauce soya et le vinaigre dans le bol",
-    "Émincer les oignons verts avec un couteau à beurre"
-   ],
-   "À vérifier": "La page source indique 46 portions et « 2 l » de poulet (coquilles) : on a retenu 6 portions et 900 g (2 lb).",
-   "Fiche complète": true,
-   "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.poulet-general-tao.1.1889118.html",
-   "Notes": [
-    "Inspirée de la recette de poulet général Tao de Noovo Moi."
-   ]
+  "format": "superchef-import",
+  "version": 1,
+  "schema": 2,
+  "genere_le": "2026-11-06",
+  "source": "Kit SuperChef.ai — Asiatique",
+  "kit": {
+    "id": "asiatique",
+    "nom": "Asiatique",
+    "description": "Les grands classiques du resto asiatique et indien, version maison pour les soupers de semaine : général Tao, pad thaï, pho, poulet au beurre et compagnie."
   },
-  {
-   "id": "k-asiatique-pad-thai-aux-crevettes",
-   "Nom": "Pad thaï aux crevettes",
-   "Type": "Souper",
-   "Statut": "À trier",
-   "Protéine": "Poisson & fruits de mer",
-   "Cuisine": "Asiatique",
-   "Soir de semaine": true,
-   "Temps total (min)": 30,
-   "Portions": 4,
-   "Outils": "Wok",
-   "Source": "Web autre",
-   "Ingrédients": [
-    "## Sauce",
-    "60 ml (1/4 tasse) de sauce chili douce",
-    "45 ml (3 c. à soupe) de sauce soya",
-    "30 ml (2 c. à soupe) de jus de lime",
-    "15 ml (1 c. à soupe) de sauce de poisson",
-    "15 ml (1 c. à soupe) de sucre",
-    "## Sauté",
-    "1 paquet de 225 g (8 oz) de nouilles de riz plates",
-    "30 ml (2 c. à soupe) d'huile de canola",
-    "450 g (1 lb) de crevettes moyennes crues, décortiquées",
-    "1 oignon émincé",
-    "10 pois mange-tout émincés",
-    "1/2 poivron rouge en dés",
-    "80 ml (1/3 tasse) d'arachides grillées hachées",
-    "250 ml (1 tasse) de fèves germées",
-    "2 oignons verts émincés",
-    "30 ml (2 c. à soupe) de coriandre fraîche hachée",
-    "1 lime en quartiers"
-   ],
-   "Étapes": [
-    "Mélanger tous les ingrédients de la sauce dans un petit bol.",
-    "Faire tremper les nouilles dans l'eau tiède environ 15 minutes, jusqu'à ce qu'elles soient souples. Égoutter.",
-    "Chauffer l'huile dans le wok à feu moyen-vif. Saisir les crevettes et l'oignon 2 minutes.",
-    "Verser la sauce et laisser bouillonner 1 minute.",
-    "Ajouter les nouilles, les pois mange-tout, le poivron et les arachides. Sauter 3 minutes en remuant sans arrêt.",
-    "Retirer du feu, ajouter les fèves germées, les oignons verts et la coriandre. Servir avec la lime."
-   ],
-   "Tâches sous-chef": [
-    "Rincer les fèves germées",
-    "Presser les quartiers de lime pour la sauce",
-    "Mélanger la sauce dans le bol"
-   ],
-   "À vérifier": "",
-   "Fiche complète": true,
-   "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.pad-thai-aux-crevettes.1.1072555.html",
-   "Notes": [
-    "Inspirée du pad thaï aux crevettes de Noovo Moi (Pratico achat)."
-   ]
-  },
-  {
-   "id": "k-asiatique-saute-de-boeuf-au-brocoli",
-   "Nom": "Sauté de bœuf au brocoli",
-   "Type": "Souper",
-   "Statut": "À trier",
-   "Protéine": "Bœuf",
-   "Cuisine": "Asiatique",
-   "Soir de semaine": true,
-   "Temps total (min)": 45,
-   "Portions": 4,
-   "Outils": "Wok",
-   "Source": "Web autre",
-   "Ingrédients": [
-    "## Marinade",
-    "450 g (1 lb) de bifteck de surlonge en fines lanières",
-    "15 ml (1 c. à soupe) de vinaigre de riz",
-    "15 ml (1 c. à soupe) de sauce soya",
-    "5 ml (1 c. à thé) de sucre",
-    "## Sauce",
-    "125 ml (1/2 tasse) de bouillon de poulet",
-    "45 ml (3 c. à soupe) de sauce aux huîtres",
-    "45 ml (3 c. à soupe) de sauce soya",
-    "15 ml (1 c. à soupe) de fécule de maïs",
-    "5 ml (1 c. à thé) de sucre",
-    "## Sauté",
-    "45 ml (3 c. à soupe) d'huile végétale",
-    "2 gousses d'ail hachées",
-    "1 gros brocoli en bouquets, tige tranchée",
-    "1 oignon émincé",
-    "Riz blanc pour servir"
-   ],
-   "Étapes": [
-    "Mélanger le vinaigre, la soya et le sucre. Y enrober le bœuf et laisser reposer 30 minutes au frigo.",
-    "Dans un bol, fouetter les ingrédients de la sauce jusqu'à ce que la fécule soit dissoute.",
-    "Chauffer la moitié de l'huile dans le wok à feu moyen-vif. Sauter l'ail, le brocoli et l'oignon 4 minutes, jusqu'à ce que le brocoli soit vert vif. Réserver dans un bol.",
-    "Ajouter le reste de l'huile. Égoutter le bœuf et le saisir en une seule couche, environ 1 minute par côté.",
-    "Remettre les légumes, verser la sauce et cuire 2 minutes, jusqu'à ce qu'elle nappe. Servir sur le riz."
-   ],
-   "Tâches sous-chef": [
-    "Défaire le brocoli en petits bouquets",
-    "Fouetter la sauce dans le bol"
-   ],
-   "À vérifier": "",
-   "Fiche complète": true,
-   "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.saute-buf-et-brocoli.1.1599913.html",
-   "Notes": [
-    "Inspirée du sauté bœuf et brocoli de Jennifer Pallian sur Noovo Moi."
-   ]
-  },
-  {
-   "id": "k-asiatique-riz-frit-au-porc",
-   "Nom": "Riz frit au porc",
-   "Type": "Souper",
-   "Statut": "À trier",
-   "Protéine": "Porc",
-   "Cuisine": "Asiatique",
-   "Soir de semaine": true,
-   "Temps total (min)": 30,
-   "Portions": 4,
-   "Outils": "Wok",
-   "Source": "Web autre",
-   "Ingrédients": [
-    "1 L (4 tasses) de riz au jasmin cuit la veille et refroidi (environ 300 g / 1 1/2 tasse cru)",
-    "3 œufs battus",
-    "60 ml (1/4 tasse) d'huile végétale",
-    "450 g (1 lb) de porc haché",
-    "1/2 oignon haché",
-    "1 poivron rouge en dés",
-    "2 gousses d'ail hachées",
-    "15 ml (1 c. à soupe) de gingembre frais râpé",
-    "250 ml (1 tasse) de petits pois surgelés",
-    "30 ml (2 c. à soupe) de sauce de poisson",
-    "15 ml (1 c. à soupe) de sauce soya",
-    "5 ml (1 c. à thé) de sucre",
-    "3 oignons verts émincés",
-    "Sel et poivre"
-   ],
-   "Étapes": [
-    "La veille, cuire le riz, l'étaler pour qu'il tiédisse, puis le réfrigérer à découvert.",
-    "Chauffer un peu d'huile dans le wok. Cuire les œufs en omelette mince 2 minutes, la rouler et la couper en lanières. Réserver.",
-    "Ajouter le reste de l'huile. Sauter l'oignon, le poivron, l'ail, le gingembre et les pois 5 minutes.",
-    "Ajouter le porc et le défaire à la cuillère. Cuire 6 minutes, jusqu'à ce qu'il ne soit plus rosé. Assaisonner avec la sauce de poisson, la soya et le sucre.",
-    "Ajouter le riz froid et brasser 3 minutes pour bien séparer les grains.",
-    "Remettre l'omelette, parsemer d'oignons verts, rectifier sel et poivre et servir."
-   ],
-   "Tâches sous-chef": [
-    "Casser et battre les œufs dans un bol",
-    "Défaire les grains de riz froid avec les mains propres",
-    "Mesurer les petits pois"
-   ],
-   "À vérifier": "La source ne précise ni portions, ni temps, ni quantité de porc : quantités établies selon l'usage courant.",
-   "Fiche complète": true,
-   "Lien source": "https://legacy.lacuisinedebernard.com/wprm_print/riz-frit-au-porc-et-legumes",
-   "Notes": [
-    "Inspirée du riz frit au porc et légumes de La cuisine de Bernard."
-   ]
-  },
-  {
-   "id": "k-asiatique-poulet-au-beurre",
-   "Nom": "Poulet au beurre",
-   "Type": "Souper",
-   "Statut": "À trier",
-   "Protéine": "Poulet",
-   "Cuisine": "Indienne",
-   "Soir de semaine": false,
-   "Temps total (min)": 90,
-   "Portions": 4,
-   "Outils": "Four",
-   "Source": "Web autre",
-   "Ingrédients": [
-    "## Poulet mariné",
-    "675 g (1 1/2 lb) de poitrines ou de hauts de cuisse de poulet sans peau, en gros cubes",
-    "30 ml (2 c. à soupe) de pâte ou de sauce tandoori",
-    "15 ml (1 c. à soupe) de yogourt nature",
-    "15 ml (1 c. à soupe) de jus de lime",
-    "## Sauce",
-    "30 ml (2 c. à soupe) de beurre",
-    "1 oignon haché",
-    "2 gousses d'ail hachées",
-    "15 ml (1 c. à soupe) de gingembre frais râpé",
-    "5 ml (1 c. à thé) de cumin moulu",
-    "10 ml (2 c. à thé) de garam masala",
-    "1 boîte de 156 ml (5,5 oz) de pâte de tomates",
-    "250 ml (1 tasse) d'eau",
-    "125 ml (1/2 tasse) de crème 35 %",
-    "15 ml (1 c. à soupe) de jus de lime",
-    "Coriandre fraîche hachée",
-    "Riz basmati et pains naan pour servir",
-    "Sel et poivre"
-   ],
-   "Étapes": [
-    "Mélanger la pâte tandoori, le yogourt et le jus de lime. Y enrober le poulet, couvrir et réfrigérer 60 minutes.",
-    "Préchauffer le four à 180 °C (350 °F). Étaler le poulet sur une plaque et cuire 20 minutes, jusqu'à ce que l'intérieur ne soit plus rosé.",
-    "Pendant ce temps, fondre le beurre dans une poêle. Attendrir l'oignon, l'ail et le gingembre 5 minutes.",
-    "Ajouter le cumin et le garam masala et remuer 1 minute pour réveiller les épices.",
-    "Incorporer la pâte de tomates et l'eau. Porter à ébullition.",
-    "Ajouter le poulet et son jus. Mijoter 10 minutes à feu doux.",
-    "Verser la crème et le jus de lime, chauffer 2 minutes sans bouillir. Saler, poivrer, garnir de coriandre. Servir avec le riz et le naan."
-   ],
-   "Tâches sous-chef": [
-    "Mélanger le yogourt et la lime pour la marinade",
-    "Effeuiller la coriandre",
-    "Placer les naans sur la plaque pour les réchauffer (avec un adulte)"
-   ],
-   "À vérifier": "La source utilise une crème de soya Belsoy ; remplacée ici par de la crème 35 %, avec oignon, ail et gingembre ajoutés selon l'usage courant.",
-   "Fiche complète": true,
-   "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.poulet-indien-au-beurre.1.1064297.html",
-   "Notes": [
-    "Inspirée du poulet indien au beurre de Caroline Allen sur Noovo Moi."
-   ]
-  },
-  {
-   "id": "k-asiatique-soupe-tonkinoise-au-boeuf",
-   "Nom": "Soupe tonkinoise au bœuf (pho)",
-   "Type": "Soupe",
-   "Statut": "À trier",
-   "Protéine": "Bœuf",
-   "Cuisine": "Asiatique",
-   "Soir de semaine": true,
-   "Temps total (min)": 45,
-   "Portions": 4,
-   "Outils": "",
-   "Source": "Ricardo",
-   "Ingrédients": [
-    "## Bouillon",
-    "1 oignon émincé",
-    "15 ml (1 c. à soupe) d'huile végétale",
-    "1 morceau de gingembre frais de 5 cm (2 po), pelé et haché",
-    "2 gousses d'ail hachées",
-    "2 L (8 tasses) de bouillon de poulet",
-    "30 ml (2 c. à soupe) de sauce de poisson",
-    "2 anis étoilés",
-    "2 clous de girofle",
-    "1 petit bâton de cannelle",
-    "## Bols",
-    "1 paquet de 227 g (8 oz) de nouilles de riz",
-    "350 g (3/4 lb) de bœuf tranché mince pour fondue chinoise",
-    "250 ml (1 tasse) de fèves germées",
-    "100 g (3 1/2 oz) de champignons enoki ou blancs tranchés",
-    "## Garnitures",
-    "4 oignons verts émincés",
-    "Basilic thaï ou coriandre",
-    "Piment oiseau haché (facultatif)",
-    "1 lime en quartiers"
-   ],
-   "Étapes": [
-    "Dans une grande casserole, dorer l'oignon dans l'huile. Ajouter le gingembre et l'ail, cuire 3 minutes.",
-    "Verser le bouillon et la sauce de poisson, ajouter l'anis, les clous et la cannelle. Porter à ébullition, couvrir et mijoter 5 minutes.",
-    "Filtrer le bouillon, goûter, rectifier l'assaisonnement et le garder frémissant.",
-    "Cuire les nouilles dans l'eau bouillante 3 minutes. Égoutter et rincer à l'eau froide.",
-    "Répartir les nouilles dans quatre grands bols. Y déposer le bœuf cru, les fèves germées et les champignons.",
-    "Verser le bouillon très chaud sur le bœuf pour le cuire. Chacun garnit son bol à table."
-   ],
-   "Tâches sous-chef": [
-    "Rincer les fèves germées et les herbes",
-    "Disposer les garnitures sur une assiette de service"
-   ],
-   "À vérifier": "",
-   "Fiche complète": true,
-   "Lien source": "https://www.ricardocuisine.com/recettes/334-soupe-tonkinoise",
-   "Notes": [
-    "Inspirée de la soupe tonkinoise de Ricardo."
-   ]
-  },
-  {
-   "id": "k-asiatique-saumon-teriyaki",
-   "Nom": "Saumon teriyaki",
-   "Type": "Souper",
-   "Statut": "À trier",
-   "Protéine": "Poisson & fruits de mer",
-   "Cuisine": "Asiatique",
-   "Soir de semaine": true,
-   "Temps total (min)": 40,
-   "Portions": 4,
-   "Outils": "Four",
-   "Source": "Web autre",
-   "Ingrédients": [
-    "## Sauce teriyaki",
-    "125 ml (1/2 tasse) de sauce soya",
-    "60 ml (1/4 tasse) de cassonade",
-    "60 ml (1/4 tasse) de mirin ou de jus de pomme",
-    "15 ml (1 c. à soupe) de gingembre frais râpé",
-    "1 gousse d'ail hachée",
-    "15 ml (1 c. à soupe) de fécule de maïs délayée dans 30 ml (2 c. à soupe) d'eau",
-    "## Saumon",
-    "4 filets de saumon de 150 g (5 oz) chacun",
-    "10 ml (2 c. à thé) de graines de sésame",
-    "2 oignons verts émincés",
-    "Riz blanc et brocoli vapeur pour servir"
-   ],
-   "Étapes": [
-    "Dans une petite casserole, chauffer la soya, la cassonade, le mirin, le gingembre et l'ail. Ajouter la fécule délayée et laisser épaissir 2 minutes en brassant.",
-    "Déposer le saumon dans un plat, le napper de la moitié de la sauce et laisser mariner 15 minutes.",
-    "Préchauffer le four à 200 °C (400 °F) et tapisser une plaque de papier parchemin.",
-    "Placer les filets sur la plaque et cuire 12 minutes, jusqu'à ce que la chair se défasse à la fourchette.",
-    "Badigeonner du reste de sauce, parsemer de sésame et d'oignons verts. Servir avec le riz et le brocoli."
-   ],
-   "Tâches sous-chef": [
-    "Mesurer la sauce soya et la cassonade",
-    "Tapisser la plaque de papier parchemin",
-    "Parsemer les graines de sésame à la fin"
-   ],
-   "À vérifier": "La source de Metro marine le saumon 60 minutes dans une sauce teriyaki du commerce avec un vin apéritif et le grille ; version maison au four adaptée pour un soir de semaine.",
-   "Fiche complète": true,
-   "Lien source": "",
-   "Notes": [
-    "Inspirée des darnes de saumon teriyaki de Metro.",
-    "Lien vers la page d'origine (Metro) non vérifié : retiré."
-   ]
-  },
-  {
-   "id": "k-asiatique-porc-aigre-doux-a-l-ananas",
-   "Nom": "Porc aigre-doux à l'ananas",
-   "Type": "Souper",
-   "Statut": "À trier",
-   "Protéine": "Porc",
-   "Cuisine": "Asiatique",
-   "Soir de semaine": false,
-   "Temps total (min)": 55,
-   "Portions": 4,
-   "Outils": "Wok",
-   "Source": "Web autre",
-   "Ingrédients": [
-    "## Porc",
-    "800 g (1 3/4 lb) de longe de porc en lanières",
-    "30 ml (2 c. à soupe) de fécule de maïs",
-    "1 œuf",
-    "35 g (1/4 tasse) de farine tout usage",
-    "125 ml (1/2 tasse) d'huile végétale",
-    "Sel",
-    "## Sauce",
-    "250 ml (1 tasse) de jus d'ananas",
-    "45 ml (3 c. à soupe) de vinaigre de xérès ou de riz",
-    "30 ml (2 c. à soupe) de sucre",
-    "5 ml (1 c. à thé) de sauce soya",
-    "20 g (2 c. à soupe) de gingembre frais râpé",
-    "2 tomates pelées en dés",
-    "15 ml (1 c. à soupe) de fécule de maïs",
-    "## Garniture",
-    "4 tranches d'ananas en morceaux",
-    "1 piment fort entier (facultatif)",
-    "1 poivron vert en carrés",
-    "Riz blanc pour servir"
-   ],
-   "Étapes": [
-    "Enrober les lanières de porc de fécule.",
-    "Battre l'œuf avec la farine et une pincée de sel pour faire une pâte. Y tremper le porc.",
-    "Chauffer l'huile dans le wok à feu moyen-vif. Frire le porc en petites fournées environ 12 minutes au total, jusqu'à ce qu'il soit doré. Égoutter sur du papier absorbant.",
-    "Retirer presque toute l'huile. Sauter l'ananas, le poivron et le piment 3 minutes.",
-    "Délayer la fécule dans un peu d'eau tiède, puis la mélanger avec le jus d'ananas, le vinaigre, le sucre, la soya, le gingembre et les tomates.",
-    "Verser la sauce dans le wok et mijoter 5 minutes, jusqu'à ce qu'elle soit luisante et épaisse.",
-    "Remettre le porc, bien l'enrober et chauffer 3 minutes. Retirer le piment et servir sur le riz."
-   ],
-   "Tâches sous-chef": [
-    "Mélanger les ingrédients de la sauce dans une tasse à mesurer",
-    "Placer le papier absorbant sur une assiette"
-   ],
-   "À vérifier": "",
-   "Fiche complète": true,
-   "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.porc-a-l-ananas-aigre-doux.1.1070895.html",
-   "Notes": [
-    "Inspirée du porc à l'ananas aigre-doux de Jean Soulard sur Noovo Moi."
-   ]
-  },
-  {
-   "id": "k-asiatique-curry-vert-thai-au-poulet",
-   "Nom": "Curry vert thaï au poulet",
-   "Type": "Souper",
-   "Statut": "À trier",
-   "Protéine": "Poulet",
-   "Cuisine": "Asiatique",
-   "Soir de semaine": true,
-   "Temps total (min)": 30,
-   "Portions": 4,
-   "Outils": "",
-   "Source": "Web autre",
-   "Ingrédients": [
-    "4 poitrines de poulet sans peau (environ 675 g / 1 1/2 lb), en bouchées",
-    "15 ml (1 c. à soupe) d'huile végétale",
-    "2 gousses d'ail hachées",
-    "1 échalote française émincée",
-    "15 à 30 ml (1 à 2 c. à soupe) de pâte de curry vert",
-    "2 boîtes de 400 ml (14 oz) de lait de coco",
-    "10 ml (2 c. à thé) de sucre de canne ou de cassonade",
-    "10 ml (2 c. à thé) de citronnelle hachée",
-    "15 ml (1 c. à soupe) de sauce de poisson (facultatif)",
-    "1 lime en quartiers",
-    "Basilic thaï ou coriandre",
-    "Riz au jasmin pour servir",
-    "Sel"
-   ],
-   "Étapes": [
-    "Couper le poulet en bouchées. Émincer l'ail et l'échalote.",
-    "Chauffer l'huile dans une grande poêle à feu moyen-vif. Dorer le poulet avec l'ail et l'échalote environ 5 minutes.",
-    "Ajouter la pâte de curry et remuer 1 minute pour la faire griller légèrement.",
-    "Verser le lait de coco, puis ajouter le sucre, la citronnelle et la sauce de poisson. Bien mélanger.",
-    "Mijoter à découvert 10 minutes, jusqu'à ce que le poulet soit cuit. Saler au goût.",
-    "Servir sur le riz avec la lime et les herbes fraîches."
-   ],
-   "Tâches sous-chef": [
-    "Secouer et ouvrir les boîtes de lait de coco (avec un adulte)",
-    "Rincer et effeuiller le basilic",
-    "Couper la lime en quartiers avec un adulte"
-   ],
-   "À vérifier": "Doser la pâte de curry selon la tolérance des enfants : commencer par 15 ml.",
-   "Fiche complète": true,
-   "Lien source": "https://ileauxepices.com/blog/2016/12/01/recette-poulet-au-curry-vert-thai/wpid11891/",
-   "Notes": [
-    "Inspirée du poulet curry vert thaïlandais de L'île aux épices."
-   ]
-  },
-  {
-   "id": "k-asiatique-bibimbap-au-tofu",
-   "Nom": "Bibimbap au tofu",
-   "Type": "Souper",
-   "Statut": "À trier",
-   "Protéine": "Végé",
-   "Cuisine": "Asiatique",
-   "Soir de semaine": true,
-   "Temps total (min)": 40,
-   "Portions": 4,
-   "Outils": "",
-   "Source": "Web autre",
-   "Ingrédients": [
-    "## Riz",
-    "375 ml (1 1/2 tasse) de riz blanc à grain court ou au jasmin",
-    "## Tofu",
-    "1 bloc de 454 g (1 lb) de tofu ferme, en tranches minces",
-    "30 ml (2 c. à soupe) d'huile de sésame",
-    "45 ml (3 c. à soupe) de sauce soya",
-    "15 ml (1 c. à soupe) de sirop d'érable",
-    "2 gousses d'ail hachées",
-    "## Légumes",
-    "15 ml (1 c. à soupe) d'huile de sésame",
-    "2 gousses d'ail hachées",
-    "1 sac de 142 g (5 oz) de bébés épinards",
-    "500 ml (2 tasses) de fèves germées",
-    "2 carottes en julienne",
-    "1 concombre anglais en fines tranches",
-    "4 œufs (facultatif)",
-    "Sel",
-    "## Pour servir",
-    "Gochujang ou sriracha, au goût",
-    "Graines de sésame"
-   ],
-   "Étapes": [
-    "Cuire le riz selon le paquet, environ 15 minutes. Garder au chaud.",
-    "Mélanger la soya, le sirop d'érable, l'ail et la moitié de l'huile de sésame. Y retourner les tranches de tofu.",
-    "Dans une poêle à feu vif, dorer le tofu dans le reste de l'huile environ 3 minutes par côté. Verser la marinade restante à la fin pour le laquer. Réserver.",
-    "Dans la même poêle, chauffer l'huile de sésame et l'ail. Sauter séparément les carottes 3 minutes, les fèves germées 2 minutes, puis les épinards 1 minute. Saler chaque légume.",
-    "Au goût, cuire les œufs au miroir 3 minutes.",
-    "Répartir le riz dans des bols. Disposer le tofu, les légumes et le concombre en sections, puis l'œuf au centre.",
-    "Garnir de sésame et servir avec la sauce piquante. On mélange tout à table."
-   ],
-   "Tâches sous-chef": [
-    "Laver les épinards et les fèves germées",
-    "Disposer les légumes en sections dans les bols",
-    "Parsemer les graines de sésame"
-   ],
-   "À vérifier": "Recette source pour 2 portions, doublée ici ; œuf ajouté en option, comme dans le bibimbap traditionnel.",
-   "Fiche complète": true,
-   "Lien source": "",
-   "Notes": [
-    "Inspirée de l'Easy Bibimbap with Tofu de VegKit.",
-    "Lien vers la page d'origine (VegKit) non vérifié : retiré."
-   ]
-  }
- ],
- "plans": [],
- "inventaire": [],
- "bilans": []
+  "recettes": [
+    {
+      "id": "k-asiatique-poulet-general-tao",
+      "Nom": "Poulet général Tao",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poulet",
+      "Cuisine": "Asiatique",
+      "Soir de semaine": false,
+      "Temps total (min)": 50,
+      "Portions": 6,
+      "Outils": "Wok",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Sauce",
+        "90 ml (6 c. à soupe) de sauce soya",
+        "90 ml (6 c. à soupe) de bouillon de poulet",
+        "90 ml (6 c. à soupe) de vinaigre de riz",
+        "30 ml (2 c. à soupe) de gingembre frais râpé",
+        "3 gousses d'ail hachées",
+        "20 ml (4 c. à thé) de fécule de maïs",
+        "10 ml (2 c. à thé) de paprika",
+        "10 ml (2 c. à thé) de sambal oelek",
+        "5 ml (1 c. à thé) d'huile de sésame grillé",
+        "250 ml (1 tasse) de sucre",
+        "45 ml (3 c. à soupe) d'eau",
+        "## Poulet et légumes",
+        "900 g (2 lb) de poitrines ou de hauts de cuisse de poulet sans peau, en cubes",
+        "125 ml (1/2 tasse) de farine tout usage",
+        "180 ml (3/4 tasse) d'huile végétale",
+        "2 poivrons rouges en lanières",
+        "1 poivron vert en lanières",
+        "2 oignons verts émincés",
+        "Riz blanc pour servir"
+      ],
+      "Étapes": [
+        "Dans un bol, fouetter la sauce soya, le bouillon, le vinaigre, le gingembre, l'ail, la fécule, le paprika, le sambal et l'huile de sésame. Réserver.",
+        "Dans une grande poêle, porter le sucre et l'eau à ébullition. Laisser bouillir sans brasser jusqu'à un caramel blond, environ 8 minutes.",
+        "Verser le mélange de sauce dans le caramel (attention aux éclaboussures) et laisser épaissir en remuant. Réserver au chaud.",
+        "Dans le wok, sauter les poivrons dans un peu d'huile 5 minutes. Réserver.",
+        "Fariner les cubes de poulet et secouer l'excédent.",
+        "Chauffer le reste de l'huile dans le wok à feu moyen. Dorer le poulet en deux fois, environ 10 minutes par fournée.",
+        "Égoutter le poulet, l'enrober de sauce avec les poivrons. Garnir d'oignons verts et servir sur le riz."
+      ],
+      "Tâches sous-chef": [
+        "Rincer les poivrons",
+        "Mesurer la sauce soya et le vinaigre dans le bol",
+        "Émincer les oignons verts avec un couteau à beurre"
+      ],
+      "À vérifier": "La page source indique 46 portions et « 2 l » de poulet (coquilles) : on a retenu 6 portions et 900 g (2 lb).",
+      "Fiche complète": true,
+      "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.poulet-general-tao.1.1889118.html",
+      "Notes": [
+        "Inspirée de la recette de poulet général Tao de Noovo Moi."
+      ]
+    },
+    {
+      "id": "k-asiatique-pad-thai-aux-crevettes",
+      "Nom": "Pad thaï aux crevettes",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poisson & fruits de mer",
+      "Cuisine": "Asiatique",
+      "Soir de semaine": true,
+      "Temps total (min)": 30,
+      "Portions": 4,
+      "Outils": "Wok",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Sauce",
+        "60 ml (1/4 tasse) de sauce chili douce",
+        "45 ml (3 c. à soupe) de sauce soya",
+        "30 ml (2 c. à soupe) de jus de lime",
+        "15 ml (1 c. à soupe) de sauce de poisson",
+        "15 ml (1 c. à soupe) de sucre",
+        "## Sauté",
+        "1 paquet de 225 g (8 oz) de nouilles de riz plates",
+        "30 ml (2 c. à soupe) d'huile de canola",
+        "450 g (1 lb) de crevettes moyennes crues, décortiquées",
+        "1 oignon émincé",
+        "10 pois mange-tout émincés",
+        "1/2 poivron rouge en dés",
+        "80 ml (1/3 tasse) d'arachides grillées hachées",
+        "250 ml (1 tasse) de fèves germées",
+        "2 oignons verts émincés",
+        "30 ml (2 c. à soupe) de coriandre fraîche hachée",
+        "1 lime en quartiers"
+      ],
+      "Étapes": [
+        "Mélanger tous les ingrédients de la sauce dans un petit bol.",
+        "Faire tremper les nouilles dans l'eau tiède environ 15 minutes, jusqu'à ce qu'elles soient souples. Égoutter.",
+        "Chauffer l'huile dans le wok à feu moyen-vif. Saisir les crevettes et l'oignon 2 minutes.",
+        "Verser la sauce et laisser bouillonner 1 minute.",
+        "Ajouter les nouilles, les pois mange-tout, le poivron et les arachides. Sauter 3 minutes en remuant sans arrêt.",
+        "Retirer du feu, ajouter les fèves germées, les oignons verts et la coriandre. Servir avec la lime."
+      ],
+      "Tâches sous-chef": [
+        "Rincer les fèves germées",
+        "Presser les quartiers de lime pour la sauce",
+        "Mélanger la sauce dans le bol"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.pad-thai-aux-crevettes.1.1072555.html",
+      "Notes": [
+        "Inspirée du pad thaï aux crevettes de Noovo Moi (Pratico achat)."
+      ]
+    },
+    {
+      "id": "k-asiatique-saute-de-boeuf-au-brocoli",
+      "Nom": "Sauté de bœuf au brocoli",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Asiatique",
+      "Soir de semaine": true,
+      "Temps total (min)": 45,
+      "Portions": 4,
+      "Outils": "Wok",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Marinade",
+        "450 g (1 lb) de bifteck de surlonge de bœuf, en fines lanières",
+        "15 ml (1 c. à soupe) de vinaigre de riz",
+        "15 ml (1 c. à soupe) de sauce soya",
+        "5 ml (1 c. à thé) de sucre",
+        "## Sauce",
+        "125 ml (1/2 tasse) de bouillon de poulet",
+        "45 ml (3 c. à soupe) de sauce aux huîtres",
+        "45 ml (3 c. à soupe) de sauce soya",
+        "15 ml (1 c. à soupe) de fécule de maïs",
+        "5 ml (1 c. à thé) de sucre",
+        "## Sauté",
+        "45 ml (3 c. à soupe) d'huile végétale",
+        "2 gousses d'ail hachées",
+        "1 gros brocoli en bouquets, tige tranchée",
+        "1 oignon émincé",
+        "Riz blanc pour servir"
+      ],
+      "Étapes": [
+        "Mélanger le vinaigre, la soya et le sucre. Y enrober le bœuf et laisser reposer 30 minutes au frigo.",
+        "Dans un bol, fouetter les ingrédients de la sauce jusqu'à ce que la fécule soit dissoute.",
+        "Chauffer la moitié de l'huile dans le wok à feu moyen-vif. Sauter l'ail, le brocoli et l'oignon 4 minutes, jusqu'à ce que le brocoli soit vert vif. Réserver dans un bol.",
+        "Ajouter le reste de l'huile. Égoutter le bœuf et le saisir en une seule couche, environ 1 minute par côté.",
+        "Remettre les légumes, verser la sauce et cuire 2 minutes, jusqu'à ce qu'elle nappe. Servir sur le riz."
+      ],
+      "Tâches sous-chef": [
+        "Défaire le brocoli en petits bouquets",
+        "Fouetter la sauce dans le bol"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.saute-buf-et-brocoli.1.1599913.html",
+      "Notes": [
+        "Inspirée du sauté bœuf et brocoli de Jennifer Pallian sur Noovo Moi."
+      ]
+    },
+    {
+      "id": "k-asiatique-riz-frit-au-porc",
+      "Nom": "Riz frit au porc",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Porc",
+      "Cuisine": "Asiatique",
+      "Soir de semaine": true,
+      "Temps total (min)": 30,
+      "Portions": 4,
+      "Outils": "Wok",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "1 L (4 tasses) de riz au jasmin cuit la veille et refroidi (environ 300 g / 1 1/2 tasse cru)",
+        "3 œufs battus",
+        "60 ml (1/4 tasse) d'huile végétale",
+        "450 g (1 lb) de porc haché",
+        "1/2 oignon haché",
+        "1 poivron rouge en dés",
+        "2 gousses d'ail hachées",
+        "15 ml (1 c. à soupe) de gingembre frais râpé",
+        "250 ml (1 tasse) de petits pois surgelés",
+        "30 ml (2 c. à soupe) de sauce de poisson",
+        "15 ml (1 c. à soupe) de sauce soya",
+        "5 ml (1 c. à thé) de sucre",
+        "3 oignons verts émincés",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "La veille, cuire le riz, l'étaler pour qu'il tiédisse, puis le réfrigérer à découvert.",
+        "Chauffer un peu d'huile dans le wok. Cuire les œufs en omelette mince 2 minutes, la rouler et la couper en lanières. Réserver.",
+        "Ajouter le reste de l'huile. Sauter l'oignon, le poivron, l'ail, le gingembre et les pois 5 minutes.",
+        "Ajouter le porc et le défaire à la cuillère. Cuire 6 minutes, jusqu'à ce qu'il ne soit plus rosé. Assaisonner avec la sauce de poisson, la soya et le sucre.",
+        "Ajouter le riz froid et brasser 3 minutes pour bien séparer les grains.",
+        "Remettre l'omelette, parsemer d'oignons verts, rectifier sel et poivre et servir."
+      ],
+      "Tâches sous-chef": [
+        "Casser et battre les œufs dans un bol",
+        "Défaire les grains de riz froid avec les mains propres",
+        "Mesurer les petits pois"
+      ],
+      "À vérifier": "La source ne précise ni portions, ni temps, ni quantité de porc : quantités établies selon l'usage courant.",
+      "Fiche complète": true,
+      "Lien source": "https://legacy.lacuisinedebernard.com/wprm_print/riz-frit-au-porc-et-legumes",
+      "Notes": [
+        "Inspirée du riz frit au porc et légumes de La cuisine de Bernard."
+      ]
+    },
+    {
+      "id": "k-asiatique-poulet-au-beurre",
+      "Nom": "Poulet au beurre",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poulet",
+      "Cuisine": "Indienne",
+      "Soir de semaine": false,
+      "Temps total (min)": 90,
+      "Portions": 4,
+      "Outils": "Four",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Poulet mariné",
+        "675 g (1 1/2 lb) de poitrines ou de hauts de cuisse de poulet sans peau, en gros cubes",
+        "30 ml (2 c. à soupe) de pâte ou de sauce tandoori",
+        "15 ml (1 c. à soupe) de yogourt nature",
+        "15 ml (1 c. à soupe) de jus de lime",
+        "## Sauce",
+        "30 ml (2 c. à soupe) de beurre",
+        "1 oignon haché",
+        "2 gousses d'ail hachées",
+        "15 ml (1 c. à soupe) de gingembre frais râpé",
+        "5 ml (1 c. à thé) de cumin moulu",
+        "10 ml (2 c. à thé) de garam masala",
+        "1 boîte de 156 ml (5,5 oz) de pâte de tomates",
+        "250 ml (1 tasse) d'eau",
+        "125 ml (1/2 tasse) de crème 35 %",
+        "15 ml (1 c. à soupe) de jus de lime",
+        "Coriandre fraîche hachée",
+        "Riz basmati et pains naan pour servir",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "Mélanger la pâte tandoori, le yogourt et le jus de lime. Y enrober le poulet, couvrir et réfrigérer 60 minutes.",
+        "Préchauffer le four à 180 °C (350 °F). Étaler le poulet sur une plaque et cuire 20 minutes, jusqu'à ce que l'intérieur ne soit plus rosé.",
+        "Pendant ce temps, fondre le beurre dans une poêle. Attendrir l'oignon, l'ail et le gingembre 5 minutes.",
+        "Ajouter le cumin et le garam masala et remuer 1 minute pour réveiller les épices.",
+        "Incorporer la pâte de tomates et l'eau. Porter à ébullition.",
+        "Ajouter le poulet et son jus. Mijoter 10 minutes à feu doux.",
+        "Verser la crème et le jus de lime, chauffer 2 minutes sans bouillir. Saler, poivrer, garnir de coriandre. Servir avec le riz et le naan."
+      ],
+      "Tâches sous-chef": [
+        "Mélanger le yogourt et la lime pour la marinade",
+        "Effeuiller la coriandre",
+        "Placer les naans sur la plaque pour les réchauffer (avec un adulte)"
+      ],
+      "À vérifier": "La source utilise une crème de soya Belsoy ; remplacée ici par de la crème 35 %, avec oignon, ail et gingembre ajoutés selon l'usage courant.",
+      "Fiche complète": true,
+      "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.poulet-indien-au-beurre.1.1064297.html",
+      "Notes": [
+        "Inspirée du poulet indien au beurre de Caroline Allen sur Noovo Moi."
+      ]
+    },
+    {
+      "id": "k-asiatique-soupe-tonkinoise-au-boeuf",
+      "Nom": "Soupe tonkinoise au bœuf (pho)",
+      "Type": "Soupe",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Asiatique",
+      "Soir de semaine": true,
+      "Temps total (min)": 45,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Bouillon",
+        "1 oignon émincé",
+        "15 ml (1 c. à soupe) d'huile végétale",
+        "1 morceau de gingembre frais de 5 cm (2 po), pelé et haché",
+        "2 gousses d'ail hachées",
+        "2 L (8 tasses) de bouillon de poulet",
+        "30 ml (2 c. à soupe) de sauce de poisson",
+        "2 anis étoilés",
+        "2 clous de girofle",
+        "1 petit bâton de cannelle",
+        "## Bols",
+        "1 paquet de 227 g (8 oz) de nouilles de riz",
+        "350 g (3/4 lb) de bœuf tranché mince pour fondue chinoise",
+        "250 ml (1 tasse) de fèves germées",
+        "100 g (3 1/2 oz) de champignons enoki ou blancs tranchés",
+        "## Garnitures",
+        "4 oignons verts émincés",
+        "Basilic thaï ou coriandre",
+        "Piment oiseau haché (facultatif)",
+        "1 lime en quartiers"
+      ],
+      "Étapes": [
+        "Dans une grande casserole, dorer l'oignon dans l'huile. Ajouter le gingembre et l'ail, cuire 3 minutes.",
+        "Verser le bouillon et la sauce de poisson, ajouter l'anis, les clous et la cannelle. Porter à ébullition, couvrir et mijoter 5 minutes.",
+        "Filtrer le bouillon, goûter, rectifier l'assaisonnement et le garder frémissant.",
+        "Cuire les nouilles dans l'eau bouillante 3 minutes. Égoutter et rincer à l'eau froide.",
+        "Répartir les nouilles dans quatre grands bols. Y déposer le bœuf cru, les fèves germées et les champignons.",
+        "Verser le bouillon très chaud sur le bœuf pour le cuire. Garnir d'oignons verts, de basilic thaï ou de coriandre et de piment oiseau au goût, puis servir avec les quartiers de lime."
+      ],
+      "Tâches sous-chef": [
+        "Rincer les fèves germées et les herbes",
+        "Disposer les garnitures sur une assiette de service"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/334-soupe-tonkinoise",
+      "Notes": [
+        "Inspirée de la soupe tonkinoise de Ricardo."
+      ]
+    },
+    {
+      "id": "k-asiatique-saumon-teriyaki",
+      "Nom": "Saumon teriyaki",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poisson & fruits de mer",
+      "Cuisine": "Asiatique",
+      "Soir de semaine": true,
+      "Temps total (min)": 40,
+      "Portions": 4,
+      "Outils": "Four",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Sauce teriyaki",
+        "125 ml (1/2 tasse) de sauce soya",
+        "60 ml (1/4 tasse) de cassonade",
+        "60 ml (1/4 tasse) de mirin ou de jus de pomme",
+        "15 ml (1 c. à soupe) de gingembre frais râpé",
+        "1 gousse d'ail hachée",
+        "15 ml (1 c. à soupe) de fécule de maïs délayée dans 30 ml (2 c. à soupe) d'eau",
+        "## Saumon",
+        "4 filets de saumon de 150 g (5 oz) chacun",
+        "10 ml (2 c. à thé) de graines de sésame",
+        "2 oignons verts émincés",
+        "Riz blanc et brocoli vapeur pour servir"
+      ],
+      "Étapes": [
+        "Dans une petite casserole, chauffer la soya, la cassonade, le mirin, le gingembre et l'ail. Ajouter la fécule délayée et laisser épaissir 2 minutes en brassant.",
+        "Déposer le saumon dans un plat, le napper de la moitié de la sauce et laisser mariner 15 minutes.",
+        "Préchauffer le four à 200 °C (400 °F) et tapisser une plaque de papier parchemin.",
+        "Placer les filets sur la plaque et cuire 12 minutes, jusqu'à ce que la chair se défasse à la fourchette.",
+        "Badigeonner du reste de sauce, parsemer de sésame et d'oignons verts. Servir avec le riz et le brocoli."
+      ],
+      "Tâches sous-chef": [
+        "Mesurer la sauce soya et la cassonade",
+        "Tapisser la plaque de papier parchemin",
+        "Parsemer les graines de sésame à la fin"
+      ],
+      "À vérifier": "La source de Metro marine le saumon 60 minutes dans une sauce teriyaki du commerce avec un vin apéritif et le grille ; version maison au four adaptée pour un soir de semaine.",
+      "Fiche complète": true,
+      "Lien source": "",
+      "Notes": [
+        "Inspirée des darnes de saumon teriyaki de Metro.",
+        "Lien vers la page d'origine (Metro) non vérifié : retiré."
+      ]
+    },
+    {
+      "id": "k-asiatique-porc-aigre-doux-a-l-ananas",
+      "Nom": "Porc aigre-doux à l'ananas",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Porc",
+      "Cuisine": "Asiatique",
+      "Soir de semaine": false,
+      "Temps total (min)": 55,
+      "Portions": 4,
+      "Outils": "Wok",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Porc",
+        "800 g (1 3/4 lb) de longe de porc en lanières",
+        "30 ml (2 c. à soupe) de fécule de maïs",
+        "1 œuf",
+        "35 g (1/4 tasse) de farine tout usage",
+        "125 ml (1/2 tasse) d'huile végétale",
+        "Sel",
+        "## Sauce",
+        "250 ml (1 tasse) de jus d'ananas",
+        "45 ml (3 c. à soupe) de vinaigre de xérès ou de riz",
+        "30 ml (2 c. à soupe) de sucre",
+        "5 ml (1 c. à thé) de sauce soya",
+        "20 g (2 c. à soupe) de gingembre frais râpé",
+        "2 tomates pelées en dés",
+        "15 ml (1 c. à soupe) de fécule de maïs",
+        "## Garniture",
+        "4 tranches d'ananas en morceaux",
+        "1 piment fort entier (facultatif)",
+        "1 poivron vert en carrés",
+        "Riz blanc pour servir"
+      ],
+      "Étapes": [
+        "Enrober les lanières de porc de fécule.",
+        "Battre l'œuf avec la farine et une pincée de sel pour faire une pâte. Y tremper le porc.",
+        "Chauffer l'huile dans le wok à feu moyen-vif. Frire le porc en petites fournées environ 12 minutes au total, jusqu'à ce qu'il soit doré. Égoutter sur du papier absorbant.",
+        "Retirer presque toute l'huile. Sauter l'ananas, le poivron et le piment 3 minutes.",
+        "Délayer la fécule dans un peu d'eau tiède, puis la mélanger avec le jus d'ananas, le vinaigre, le sucre, la soya, le gingembre et les tomates.",
+        "Verser la sauce dans le wok et mijoter 5 minutes, jusqu'à ce qu'elle soit luisante et épaisse.",
+        "Remettre le porc, bien l'enrober et chauffer 3 minutes. Retirer le piment et servir sur le riz."
+      ],
+      "Tâches sous-chef": [
+        "Mélanger les ingrédients de la sauce dans une tasse à mesurer",
+        "Placer le papier absorbant sur une assiette"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.porc-a-l-ananas-aigre-doux.1.1070895.html",
+      "Notes": [
+        "Inspirée du porc à l'ananas aigre-doux de Jean Soulard sur Noovo Moi."
+      ]
+    },
+    {
+      "id": "k-asiatique-curry-vert-thai-au-poulet",
+      "Nom": "Curry vert thaï au poulet",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poulet",
+      "Cuisine": "Asiatique",
+      "Soir de semaine": true,
+      "Temps total (min)": 30,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "4 poitrines de poulet sans peau (environ 675 g / 1 1/2 lb), en bouchées",
+        "15 ml (1 c. à soupe) d'huile végétale",
+        "2 gousses d'ail hachées",
+        "1 échalote française émincée",
+        "15 à 30 ml (1 à 2 c. à soupe) de pâte de curry vert",
+        "2 boîtes de 400 ml (14 oz) de lait de coco",
+        "10 ml (2 c. à thé) de sucre de canne ou de cassonade",
+        "10 ml (2 c. à thé) de citronnelle hachée",
+        "15 ml (1 c. à soupe) de sauce de poisson (facultatif)",
+        "1 lime en quartiers",
+        "Basilic thaï ou coriandre",
+        "Riz au jasmin pour servir",
+        "Sel"
+      ],
+      "Étapes": [
+        "Couper le poulet en bouchées. Émincer l'ail et l'échalote.",
+        "Chauffer l'huile dans une grande poêle à feu moyen-vif. Dorer le poulet avec l'ail et l'échalote environ 5 minutes.",
+        "Ajouter la pâte de curry et remuer 1 minute pour la faire griller légèrement.",
+        "Verser le lait de coco, puis ajouter le sucre, la citronnelle et la sauce de poisson. Bien mélanger.",
+        "Mijoter à découvert 10 minutes, jusqu'à ce que le poulet soit cuit. Saler au goût.",
+        "Servir sur le riz avec les quartiers de lime et le basilic thaï ou la coriandre."
+      ],
+      "Tâches sous-chef": [
+        "Secouer et ouvrir les boîtes de lait de coco (avec un adulte)",
+        "Rincer et effeuiller le basilic",
+        "Couper la lime en quartiers avec un adulte"
+      ],
+      "À vérifier": "Doser la pâte de curry selon la tolérance des enfants : commencer par 15 ml.",
+      "Fiche complète": true,
+      "Lien source": "https://ileauxepices.com/blog/2016/12/01/recette-poulet-au-curry-vert-thai/wpid11891/",
+      "Notes": [
+        "Inspirée du poulet curry vert thaïlandais de L'île aux épices."
+      ]
+    },
+    {
+      "id": "k-asiatique-bibimbap-au-tofu",
+      "Nom": "Bibimbap au tofu",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Végé",
+      "Cuisine": "Asiatique",
+      "Soir de semaine": true,
+      "Temps total (min)": 40,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Riz",
+        "375 ml (1 1/2 tasse) de riz blanc à grain court ou au jasmin",
+        "## Tofu",
+        "1 bloc de 454 g (1 lb) de tofu ferme, en tranches minces",
+        "30 ml (2 c. à soupe) d'huile de sésame",
+        "45 ml (3 c. à soupe) de sauce soya",
+        "15 ml (1 c. à soupe) de sirop d'érable",
+        "2 gousses d'ail hachées",
+        "## Légumes",
+        "15 ml (1 c. à soupe) d'huile de sésame",
+        "2 gousses d'ail hachées",
+        "1 sac de 142 g (5 oz) de bébés épinards",
+        "500 ml (2 tasses) de fèves germées",
+        "2 carottes en julienne",
+        "1 concombre anglais en fines tranches",
+        "4 œufs (facultatif)",
+        "Sel",
+        "## Pour servir",
+        "Gochujang ou sriracha, au goût",
+        "Graines de sésame"
+      ],
+      "Étapes": [
+        "Cuire le riz selon le paquet, environ 15 minutes. Garder au chaud.",
+        "Mélanger la soya, le sirop d'érable, l'ail et la moitié de l'huile de sésame. Y retourner les tranches de tofu.",
+        "Dans une poêle à feu vif, dorer le tofu dans le reste de l'huile environ 3 minutes par côté. Verser la marinade restante à la fin pour le laquer. Réserver.",
+        "Dans la même poêle, chauffer l'huile de sésame et l'ail. Sauter séparément les carottes 3 minutes, les fèves germées 2 minutes, puis les épinards 1 minute. Saler chaque légume.",
+        "Au goût, cuire les œufs au miroir 3 minutes.",
+        "Répartir le riz dans des bols. Disposer le tofu, les légumes et le concombre en sections, puis l'œuf au centre.",
+        "Garnir de graines de sésame et servir avec le gochujang ou la sriracha. On mélange tout à table."
+      ],
+      "Tâches sous-chef": [
+        "Laver les épinards et les fèves germées",
+        "Disposer les légumes en sections dans les bols",
+        "Parsemer les graines de sésame"
+      ],
+      "À vérifier": "Recette source pour 2 portions, doublée ici ; œuf ajouté en option, comme dans le bibimbap traditionnel.",
+      "Fiche complète": true,
+      "Lien source": "",
+      "Notes": [
+        "Inspirée de l'Easy Bibimbap with Tofu de VegKit.",
+        "Lien vers la page d'origine (VegKit) non vérifié : retiré."
+      ]
+    }
+  ],
+  "plans": [],
+  "inventaire": [],
+  "bilans": []
 }
