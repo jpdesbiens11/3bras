@@ -1,0 +1,398 @@
+{
+ "format": "superchef-stock",
+ "version": 1,
+ "nom": "Stock de base",
+ "description": "Les essentiels qu'on a souvent à la maison. Une proposition à cocher : rien n'entre dans l'inventaire sans ton choix.",
+ "articles": [
+  {
+   "Nom": "Sel",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Poivre noir",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Paprika",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Cumin moulu",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Cannelle moulue",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Origan séché",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Thym séché",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Basilic séché",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Poudre d'ail",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Poudre d'oignon",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Flocons de piment",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Feuilles de laurier",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Cari en poudre",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Gingembre moulu",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Muscade moulue",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Curcuma moulu",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Garam masala",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Assaisonnement au chili",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Herbes de Provence",
+   "Zone": "Épices",
+   "Département": "Épices",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Huile d'olive",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Huile végétale",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Vinaigre blanc",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Vinaigre balsamique",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Farine tout usage",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Sucre",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Cassonade",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Poudre à pâte",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Bicarbonate de soude",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Fécule de maïs",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Extrait de vanille",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Riz blanc",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Riz basmati",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Spaghetti",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Pâtes courtes",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Chapelure",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Bouillon de poulet",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Bouillon de bœuf",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Bouillon de légumes",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Sauce soya",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Moutarde de Dijon",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Ketchup",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Miel",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Sirop d'érable",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Flocons d'avoine",
+   "Zone": "Garde-manger",
+   "Département": "Épicerie sèche",
+   "Essentiel": true
+  },
+  {
+   "Nom": "Tomates en dés",
+   "Zone": "Garde-manger",
+   "Département": "Conserves",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Pâte de tomates",
+   "Zone": "Garde-manger",
+   "Département": "Conserves",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Sauce tomate",
+   "Zone": "Garde-manger",
+   "Département": "Conserves",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Lait de coco",
+   "Zone": "Garde-manger",
+   "Département": "Conserves",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Pois chiches",
+   "Zone": "Garde-manger",
+   "Département": "Conserves",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Haricots noirs",
+   "Zone": "Garde-manger",
+   "Département": "Conserves",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Thon en conserve",
+   "Zone": "Garde-manger",
+   "Département": "Conserves",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Oignons",
+   "Zone": "Garde-manger",
+   "Département": "Fruits et légumes",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Ail",
+   "Zone": "Garde-manger",
+   "Département": "Fruits et légumes",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Pommes de terre",
+   "Zone": "Garde-manger",
+   "Département": "Fruits et légumes",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Beurre",
+   "Zone": "Frigo",
+   "Département": "Produits laitiers et œufs",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Lait",
+   "Zone": "Frigo",
+   "Département": "Produits laitiers et œufs",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Œufs",
+   "Zone": "Frigo",
+   "Département": "Produits laitiers et œufs",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Fromage cheddar",
+   "Zone": "Frigo",
+   "Département": "Charcuterie et fromages",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Parmesan",
+   "Zone": "Frigo",
+   "Département": "Charcuterie et fromages",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Crème sure",
+   "Zone": "Frigo",
+   "Département": "Produits laitiers et œufs",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Yogourt nature",
+   "Zone": "Frigo",
+   "Département": "Produits laitiers et œufs",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Mayonnaise",
+   "Zone": "Frigo",
+   "Département": "Épicerie sèche",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Petits pois surgelés",
+   "Zone": "Congélateur",
+   "Département": "Surgelés",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Maïs surgelé",
+   "Zone": "Congélateur",
+   "Département": "Surgelés",
+   "Essentiel": false
+  },
+  {
+   "Nom": "Légumes mélangés surgelés",
+   "Zone": "Congélateur",
+   "Département": "Surgelés",
+   "Essentiel": false
+  }
+ ]
+}

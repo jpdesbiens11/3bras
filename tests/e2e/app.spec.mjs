@@ -162,17 +162,50 @@ test('première connexion : livre vide, kits de départ au choix', async ({ page
   await page.goto('./');
   await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
   await expect(page.locator('#comptesheet')).toBeVisible();
-  await expect(page.locator('[data-kit][aria-pressed="true"]')).toHaveCount(3);       // les 3 kits cochés par défaut
-  await page.locator('[data-kit="asiatique"]').click();                                // on en retire un
+  await expect(page.locator('[data-kit]')).toHaveCount(8);
+  await expect(page.locator('[data-kit][aria-pressed="true"]')).toHaveCount(0);       // D-G-038 : aucun kit coché d'office
+  await expect(page.locator('#chargerkits')).toBeDisabled();
+  await page.locator('[data-kit="quebecois"]').click();
+  await page.locator('[data-kit="vege"]').click();
+  await expect(page.locator('#chargerkits')).toHaveText('Ajouter 2 kits (20 recettes)');
   await page.screenshot({ path: `tests/captures/${info.project.name}-kits.png`, fullPage: true });
   await page.locator('#chargerkits').click();
   await expect(page.locator('#kit-res')).toContainText('20 recettes ajoutées');
+  await expect(page.locator('#kit-res')).toContainText('Ton livre compte maintenant 20 recettes');
+  await expect(page.locator('#compte-biblio')).toHaveText(/^20 recettes/);           // D-G-038 : le compteur suit
+  await expect(page.locator('#kit-res .notice')).toHaveCount(0);
   const rec = [...sim.classeurs.values()][0].onglets.Recettes;
   expect(rec.length).toBe(21);                                                         // en-tête + 20
-  await page.locator('[data-chargerkits], #chargerkits').click();                      // recharger : aucun doublon
-  await expect(page.locator('#kit-res')).toContainText('0 recettes ajoutées');
-  await page.locator('[data-compteclose]').click();
+  await page.locator('#chargerkits').click();                                          // recharger : aucun doublon
+  await expect(page.locator('#kit-res')).toContainText('0 recettes ajoutées (20 déjà là)');
+  await page.locator('#voirlivre').click();
+  await expect(page.locator('#comptesheet')).toHaveCount(0);
+  await expect(page.locator('[data-go="tri"]')).toHaveAttribute('aria-current', 'page');
+  await page.locator('[data-go="semaine"]').click();
   await expect(page.locator('.frame.day')).toHaveCount(4);                             // la semaine se pige dans les kits
+
+  // D-G-039 : stock de base, à cocher, vers l'onglet Inventaire
+  await page.locator('#comptebtn').click();
+  await page.locator('#ouvrirstock').click();
+  await expect(page.locator('#stock-h')).toHaveText('Ton stock de base');
+  await expect(page.locator('#stocksheet')).toContainText('de ton livre');            // ingrédients tirés des recettes
+  await page.locator('[data-stocktout="0"]').click();
+  await expect(page.locator('#stock-ajouter')).toHaveText('Coche au moins un article');
+  const cocher = (nom) => page.locator('#stocksheet .gen-item', { has: page.locator('b', { hasText: new RegExp(`^${nom}$`) }) }).locator('input').check();
+  await cocher('Sel'); await cocher('Huile d\'olive');
+  await expect(page.locator('#stock-ajouter')).toHaveText('Ajouter 2 articles à l\'inventaire');
+  await page.locator('#stock-h').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `tests/captures/${info.project.name}-stock.png` });
+  await page.locator('#stock-ajouter').click();
+  await expect(page.locator('#stock-fin')).toContainText('2 articles ajoutés');
+  const inv = [...sim.classeurs.values()][0].onglets.Inventaire;
+  expect(inv.slice(1).map((l) => l[1]).sort()).toEqual(['Huile d\'olive', 'Sel']);
+  await page.locator('#stock-voir').click();
+  await expect(page.locator('[data-go="livre"]')).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('#main')).toContainText('Huile d\'olive');
+  await page.locator('#comptebtn').click();
+  await page.locator('#ouvrirstock').click();
+  await expect(page.locator('#stocksheet .gen-item', { has: page.locator('b', { hasText: /^Sel$/ }) })).toContainText('Déjà dans ton inventaire');
   expect(erreurs).toEqual([]);
 });
 

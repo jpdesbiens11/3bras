@@ -102,7 +102,7 @@ const DEPT_RULES = [
   ['Surgelés', /surgele|congele/],
   ['Poissonnerie', /saumon|crevette|poisson|\bthon\b|morue|petoncle|tilapia|aiglefin/],
   ['Charcuterie et fromages', /jambon|bacon|chorizo|pancetta|prosciutto|fromage|cheddar|parmesan|ricotta|mozzarella|feta|chevre|boursin|monterey|emmental|gruyere|saucisson/],
-  ['Viandes', /boeuf|porc|poulet|veau|dinde|agneau|cotelettes?|cotes levees|filet mignon|hauts? de cuisse|poitrine|epaule|saucisse|rosbif|palette|escalope|cubes a ragout|interieur de ronde|\broti\b/],
+  ['Viandes', /boeuf|bifteck|surlonge|porc|poulet|veau|dinde|agneau|cotelettes?|cotes levees|filet mignon|hauts? de cuisse|poitrine|epaule|saucisse|rosbif|palette|escalope|cubes a ragout|interieur de ronde|\broti\b/],
   ['Produits laitiers et œufs', /\blait\b|creme|beurre|\boeufs?\b|yogourt|yaourt/],
   ['Boulangerie', /\bpains?\b|tortilla|naan|baguette|pita|vol au vent|vols au vent|croute|brioche|kaiser/],
   ['Épices', /cumin|paprika|origan|basilic seche|thym seche|\bcari\b|curry|garam|cardamome|cayenne|\bpoivre\b|\bsel\b|cannelle|muscade|laurier|piment broye|flocons de piment|assaisonnement|moutarde seche|poudre|epices|coriandre moulue|clou de girofle|herbes salees|curcuma/],

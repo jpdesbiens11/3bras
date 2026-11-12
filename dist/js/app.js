@@ -17,7 +17,8 @@ import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.
 import { viewCook, openCook, go, served, applyInvOff, cuisinerVersion, chargerLivre } from './vues/poele.js?v=1.10.1';
 import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.10.1';
 import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.10.1';
-import { openCompte, closeCompte, lireImport, chargerKits } from './vues/compte.js?v=1.10.1';
+import { openCompte, closeCompte, lireImport, chargerKits, majBiblio, majKits } from './vues/compte.js?v=1.10.1';
+import { openStock, closeStock, stockOuvert, cocherStock, cocherTout, ajouterStock } from './vues/stock.js?v=1.10.1';
 import { openGen, closeGen, genOuvert, majDemande, basculerCuisine, choisirNombre, copierConsigne, partagerConsigne, collerReponse, lireRecettes, cocher, ajouterChoisis } from './vues/generateur.js?v=1.10.1';
 import { openAdapt, closeAdapt, adaptOuvert, ajouterRaccourci, adapter, saveAdapt, revenirOriginale, cuisinerCeSoir } from './vues/adapter.js?v=1.10.1';
 
@@ -85,7 +86,14 @@ document.addEventListener('click', (e) => {
   if (d.chipdel !== undefined) { removeFile(+d.chipdel); return; }
   if (b.id === 'add-save') { saveRecipe((id) => openPreview(id)); return; }
   if (d.compteclose !== undefined) { closeCompte(); return; }
-  if (d.kit) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); return; }
+  if (d.kit) { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); majKits(); return; }
+  if (b.id === 'voirlivre') { closeCompte(); setView('tri'); return; }
+  // D-G-039 : stock de base (liste à cocher vers l'onglet Inventaire).
+  if (b.id === 'ouvrirstock') { openStock(); return; }
+  if (d.stockclose !== undefined) { closeStock(); return; }
+  if (d.stocktout) { cocherTout(d.stocktout === '1'); return; }
+  if (b.id === 'stock-ajouter') { ajouterStock(recharger); return; }
+  if (b.id === 'stock-voir') { closeStock(); closeCompte(); setView('livre'); return; }
   if (b.id === 'chargerkits') { chargerKits(recharger); return; }
   // D-G-035 : recettes de départ avec Claude (consigne à copier, réponse collée, liste à cocher).
   if (b.id === 'ouvrirgen') { openGen(); return; }
@@ -161,6 +169,7 @@ document.addEventListener('change', (e) => {
   if (d.breal) S.bil.form[d.breal].real = t.value;
   if (t.id === 'skin') applySkin(t.value);
   if (genOuvert() && /^gen-(type|soirs|portions)$/.test(t.id)) majDemande();
+  if (d.stockpick !== undefined) { cocherStock(d.stockpick, t.checked); t.closest('.gen-item')?.classList.toggle('on', t.checked); }
   if (d.genpick !== undefined) { cocher(d.genpick, t.checked); t.closest('.gen-item')?.classList.toggle('on', t.checked); }
   if (t.id === 'snd') setSound(t.value);
   if (d.got !== undefined && S.cook.got) { const k = +d.got; t.checked ? S.cook.got.add(k) : S.cook.got.delete(k); t.closest('label')?.classList.toggle('on', t.checked); }
@@ -179,6 +188,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     if (adaptOuvert()) { closeAdapt(); return; }
     if (genOuvert()) { closeGen(); return; }
+    if (stockOuvert()) { closeStock(); return; }
     if (S.preview) { closePreview(); return; } if (S.dpick) { closeDessert(); return; } if (S.picker) { closePicker(); return; } if ($('#comptesheet')) { closeCompte(); return; } if ($('#addsheet')) { closeAdd(); return; }
   }
   if (S.view !== 'poele' || !S.cook.data) return;
@@ -222,7 +232,7 @@ async function boot() {
   S.loading = false; S.prov.lines = null; S.bil.items = null; S.tri.list = null; S.pages = {};
   setView(S.view);
 }
-async function recharger() { await boot(); }
+async function recharger() { await boot(); majBiblio(); }
 
 let enCours = false;
 async function connecter(autreCompte) {
