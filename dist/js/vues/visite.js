@@ -1,10 +1,11 @@
 // Visite guidée (D-G-047) : les fonctions de l'app dans l'ordre où on s'en sert, en petites scènes dessinées
-// au trait (SVG animé en CSS, aucune bibliothèque, P-1). Elle s'ouvre à chaque visite tant que « Ne plus montrer »
-// n'est pas coché (gardé sur l'appareil) ; Compte → « Revoir la visite » la relance.
-import { $ } from '../etat.js?v=1.17.0';
-import { el, ico, vider } from '../el.js?v=1.17.0';
+// au trait (SVG animé en CSS, aucune bibliothèque, P-1). Elle s'ouvre à chaque chargement de la page (rechargement
+// compris, 1.18.0) tant que « Ne plus montrer » n'est pas coché (gardé sur l'appareil) ; « Visite guidée » à l'accueil
+// et Compte → « Revoir la visite » la relancent.
+import { $ } from '../etat.js?v=1.18.0';
+import { el, ico, vider } from '../el.js?v=1.18.0';
 
-const CLE = 'superchef-visite', SESSION = 'superchef-visite-vue';
+const CLE = 'superchef-visite';
 const NS = 'http://www.w3.org/2000/svg';
 function s(tag, a = {}, ...kids) {
   const n = document.createElementNS(NS, tag);
@@ -74,12 +75,12 @@ export const NB_SCENES = SCENES.length;
 
 const lire = (st, k) => { try { return st.getItem(k); } catch (_) { return null; } };
 export const visiteCachee = () => lire(localStorage, CLE) === 'cachee';
-export const peutMontrerVisite = () => !visiteCachee() && !lire(sessionStorage, SESSION);
+export const peutMontrerVisite = () => !visiteCachee();
 export function cacherVisite(on) { try { on ? localStorage.setItem(CLE, 'cachee') : localStorage.removeItem(CLE); } catch (_) { /* stockage absent */ } }
 
 let V = null; // { i }
 export const visiteOuverte = () => !!V;
-export function openVisite(i = 0) { V = { i: 0 }; try { sessionStorage.setItem(SESSION, '1'); } catch (_) { /* stockage absent */ } allerScene(i); }
+export function openVisite(i = 0) { V = { i: 0 }; allerScene(i); }
 export function closeVisite() { V = null; $('#visite')?.remove(); document.body.style.overflow = ($('#comptesheet') || $('#sheet')) ? 'hidden' : ''; }
 export function pasVisite(delta) { if (V) allerScene(V.i + delta); }
 export function allerScene(i) {

@@ -1,15 +1,17 @@
 // 03 · Semaine : plan, choix, desserts, approbation (R-07 à R-09). Repris de Gordon Rams.ai.
-import { S, $, DAYS, MOIS, dayDate, weekLabel, norm, toast, errText, render } from '../etat.js?v=1.17.0';
-import { el, ico, vider } from '../el.js?v=1.17.0';
-import { savePlan as ecrirePlan } from '../donnees.js?v=1.17.0';
-import { pickFor, setDay, setFixed, recentFor } from '../planif.js?v=1.17.0';
-import { panelHead, frameEmpty, skeleton, starRow, recipeMeta, chips, dname } from './commun.js?v=1.17.0';
+import { S, $, DAYS, MOIS, dayDate, weekLabel, norm, toast, errText, render } from '../etat.js?v=1.18.0';
+import { el, ico, vider } from '../el.js?v=1.18.0';
+import { savePlan as ecrirePlan } from '../donnees.js?v=1.18.0';
+import { pickFor, setDay, setFixed, recentFor } from '../planif.js?v=1.18.0';
+import { panelHead, frameEmpty, skeleton, starRow, recipeMeta, chips, dname } from './commun.js?v=1.18.0';
 
 export function viewWeek() {
   const out = [panelHead('03 · Plan de semaine', weekLabel(), 'Dimanche au mercredi par défaut ; ajoute un soir au besoin. Choisis toi-même un souper (une fois ou chaque semaine), puis pige le reste. Aucune recette des 3 dernières semaines, sauf les fixes.')];
   out.push(el('div', { class: 'daytog', role: 'group', 'aria-label': 'Soirs à planifier' },
     DAYS.map((d, i) => el('button', { class: 'btn', 'data-dtog': i, 'aria-pressed': String(S.on[i]) }, ico(S.on[i] ? 'check' : 'plus'), d.slice(0, 3)))));
   if (S.loading) return [...out, el('div', { class: 'week' }, DAYS.filter((d, i) => S.on[i]).map(() => skeleton()))];
+  const soupers = S.plan.filter((id, i) => S.on[i] && id && S.byId[id]).length;
+  if (S.recipes.length && soupers >= 1) out.push(el('p', { class: 'hint dp-astuce', 'data-new': '1.18.0-deplacer' }, 'Astuce : tiens un souper 2 secondes pour le glisser vers un autre soir.'));
   if (!S.recipes.length) return [...out, frameEmpty('Aucun souper Au livre ou À trier dans le classeur pour l\'instant. Importe tes recettes depuis le bouton Compte, en haut.')];
   out.push(el('div', { class: 'week' }, DAYS.map((d, i) => {
     if (!S.on[i]) return null;
@@ -22,7 +24,7 @@ export function viewWeek() {
     }
     const pinTag = S.fixed[i] === r.id ? el('span', { class: 'chip acc' }, ico('check'), `Chaque ${d.toLowerCase()}`)
       : S.pins.has(i) ? el('span', { class: 'chip acc' }, ico('check'), 'Choisi par toi') : null;
-    return el('div', { class: 'frame day' }, left,
+    return el('div', { class: 'frame day', 'data-jour': String(i) }, left,
       el('div', { style: 'min-width:0' },
         el('button', { class: 'title-btn', 'data-preview': r.id, 'data-day': i, 'aria-label': `Voir la recette ${r.name}` }, el('h3', {}, r.name), el('span', { class: 'peek' }, ico('right'), 'Voir la recette')),
         starRow(r), recipeMeta(r), pinTag && el('div', { class: 'chips' }, pinTag), chips(r)),
@@ -47,7 +49,9 @@ export function viewWeek() {
   out.push(el('div', { class: 'week-foot' },
     el('button', { class: 'btn primary', id: 'save', disabled: S.saving || S.saved }, ico('save'), S.saving ? 'Enregistrement…' : S.saved ? 'Semaine approuvée' : 'Approuver la semaine'),
     el('button', { class: 'btn', id: 'redraw' }, ico('dice'), S.pins.size ? 'Piger le reste' : 'Piger une autre semaine'),
-    el('span', { class: 'status' }, S.saved && S.planRows.length ? 'Synchronisée avec ton classeur.' : S.saved ? '' : 'Brouillon : touche un souper pour voir la recette, puis approuve.')));
+    soupers >= 1 && el('button', { class: 'btn', id: 'deplacer-btn', 'data-new': '1.18.0-deplacer' }, ico('move'), 'Déplacer'),
+    el('span', { class: 'status' }, S.saved && S.planRows.length ? 'Synchronisée avec ton classeur.' : S.saved ? ''
+      : S.planRows.some((x) => x['Recette id']) ? 'Modifiée : approuve de nouveau la semaine pour l\'enregistrer dans ton classeur.' : 'Brouillon : touche un souper pour voir la recette, puis approuve.')));
   out.push(el('p', { class: 'label', style: 'margin-top:22px' }, 'Le frigo et l\'inventaire entreront dans le choix quand l\'écran Livre sera livré.'));
   return out;
 }

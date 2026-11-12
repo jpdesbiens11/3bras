@@ -36,11 +36,15 @@ test('D-G-047 : la visite s\'ouvre, se parcourt et ne revient plus une fois coch
   await expect(page.getByRole('button', { name: 'Suivant' })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Passer la visite' })).toHaveCount(0);
 
-  // Sans cocher : fermée pour cette visite, mais elle revient à la prochaine ouverture de l'app (nouvel onglet).
+  // Sans cocher : fermée, mais elle revient au prochain chargement, rechargement compris (Ctrl+Maj+R, 1.18.0).
   await page.getByRole('button', { name: 'C\'est parti' }).click();
   await expect(page.locator('#visite')).toHaveCount(0);
   await page.reload();
-  await expect(page.locator('#visite')).toHaveCount(0);                            // même onglet : déjà vue
+  await expect(page.locator('#visite')).toBeVisible();
+  await page.getByRole('button', { name: 'Passer la visite' }).click();
+  await page.getByRole('button', { name: 'Visite guidée' }).click();               // relancée depuis l'accueil
+  await expect(page.getByRole('dialog', { name: 'Bienvenue dans SuperChef.ai' })).toBeVisible();
+  await page.keyboard.press('Escape');
   const p2 = await page.context().newPage();
   await brancher(p2, { visite: true });
   await p2.goto('./');
