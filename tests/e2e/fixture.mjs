@@ -24,3 +24,48 @@ export const LIVRE = {
   ],
   bilans: []
 };
+
+// D-G-035 : réponse de Claude telle qu'on la copie (phrase, bloc de code, 4 fiches : une nouvelle,
+// une déjà au livre, une de kit repas, une incomplète).
+export const ficheClaude = (nom, extra = '') => `FICHE SUPERCHEF
+Nom : ${nom}
+Type : Souper
+Protéine : Bœuf
+Cuisine : Italienne
+Portions : 4
+Temps total : 40 min
+Outils : Mijoteuse
+Source : Ricardo
+Lien : https://www.ricardocuisine.com/recettes/1-${nom.length}
+${extra}
+INGRÉDIENTS
+Sauce :
+- 796 ml (28 oz) de tomates broyées
+- 1 oignon, haché
+Viande :
+- 450 g (1 lb) de bœuf haché
+
+ÉTAPES
+1. Dorer le bœuf et l'oignon 8 minutes.
+2. Ajouter les tomates et mijoter 30 minutes.
+
+SOUS-CHEF
+- Ouvrir la boîte de tomates avec un adulte
+
+À VÉRIFIER
+- (rien)`;
+export const REPONSE_CLAUDE = `Voici 4 recettes italiennes pour la mijoteuse !
+
+\`\`\`
+${ficheClaude('Sauce bolognaise mijotée')}
+
+${ficheClaude('Pâté chinois test')}
+
+${ficheClaude('Lasagne Goodfood express')}
+
+FICHE SUPERCHEF
+Nom : Minestrone sans étapes
+INGRÉDIENTS
+- 1 l de bouillon
+\`\`\``;
+

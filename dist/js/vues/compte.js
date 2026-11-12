@@ -1,9 +1,9 @@
 // Feuille Compte : connexion, classeur, import (R-02). Même gabarit que les feuilles de Gordon Rams.ai.
-import { S, $, toast } from '../etat.js?v=1.8.0';
-import { el, ico, vider } from '../el.js?v=1.8.0';
-import { lienClasseur, lienDossier } from '../store.js?v=1.8.0';
-import { valider, importer } from '../import.js?v=1.8.0';
-import { CONFIG } from '../config.js?v=1.8.0';
+import { S, $, toast } from '../etat.js?v=1.9.0';
+import { el, ico, vider } from '../el.js?v=1.9.0';
+import { lienClasseur, lienDossier } from '../store.js?v=1.9.0';
+import { valider, importer } from '../import.js?v=1.9.0';
+import { CONFIG } from '../config.js?v=1.9.0';
 
 export function openCompte(surImporter) {
   if ($('#comptesheet')) return;
@@ -29,6 +29,9 @@ export function openCompte(surImporter) {
       el('p', { class: 'hint', id: 'kitdesc' }, KITS.map((k) => `${k.nom} : ${k.description}`).join(' · ')),
       el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', id: 'chargerkits', type: 'button' }, ico('plus'), 'Ajouter les kits choisis')),
       el('div', { class: 'import-res', id: 'kit-res', 'aria-live': 'polite' }),
+      el('h4', { id: 'generer', 'data-new': '1.9.0-generateur' }, 'Créer des recettes avec Claude'),
+      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0 0 10px' }, 'Par cuisine ou par mots-clés : l\'app écrit la consigne, Claude (Sonnet 5.5) écrit les fiches, tu colles sa réponse et tu choisis ce qui entre dans ton livre.'),
+      el('div', { class: 'add-acts' }, el('button', { class: 'btn', id: 'ouvrirgen', type: 'button' }, ico('chef'), 'Créer des recettes avec Claude')),
       el('h4', { id: 'importer' }, 'Importer des recettes'),
       el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, 'Choisis un fichier d\'import SuperChef.ai (.json). Tout est vérifié avant d\'écrire, et ré-importer le même fichier ne crée pas de doublons.'),
       el('div', { class: 'pick addf' }, el('label', { class: 'btn primary pickbtn' }, ico('file'), 'Choisir le fichier',

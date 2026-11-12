@@ -20,3 +20,20 @@ a.btn{color:inherit;text-decoration:none}
 .adapt-res .add-acts{display:flex;flex-wrap:wrap;gap:10px}
 .histo{margin-top:12px}
 .histo ul{margin:6px 0 0;padding-left:1.2em;color:var(--muted)}
+/* D-G-035 : Créer des recettes avec Claude. */
+.gen{display:grid;gap:18px;padding-bottom:40px}
+.gen-intro{color:var(--muted);max-width:60ch;margin:0}
+.gen-etape{display:grid;gap:12px;border-top:1px solid var(--line);padding-top:16px}
+.gen-etape h3{display:flex;align-items:center;gap:10px;margin:0;font-size:1.15rem;text-transform:uppercase}
+.gen-etape h3 b{display:inline-grid;place-items:center;min-width:30px;height:30px;border:1px solid var(--accent);color:var(--accent-ink);background:var(--tint)}
+.gen-ligne{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gen-coche{display:flex;gap:10px;align-items:center;min-height:var(--tap)}
+.gen-consigne{min-height:140px;font-size:.85rem;color:var(--muted)}
+.gen-res{display:grid;gap:10px}
+.gen-item{border:1px solid var(--line);padding:10px 12px;display:grid;gap:6px}
+.gen-item.on{border-color:var(--accent)}
+.gen-item label{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.gen-item input{width:24px;height:24px;flex:none;accent-color:var(--accent);margin:2px 0 0}
+.gen-item small{display:block;color:var(--muted)}
+.gen-item details ul,.gen-item details ol{margin:6px 0;padding-left:1.2em}
+.hint.err{color:var(--warn)}
