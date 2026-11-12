@@ -1,0 +1,26 @@
+{
+  "version": "1.21.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — mise en place guidée en 10 étapes",
+  "requis": [
+    "R-01",
+    "R-07"
+  ],
+  "nouveautes": [
+    "La mise en place guidée passe en 10 étapes et va jusqu'au bout : kits, stock de base, tri, garde-manger, semaine, déplacer un souper, approuver, Provigo, puis Au poêle à l'étape 1 du souper de lundi.",
+    "Le guide ouvre lui-même chaque écran : ce qu'il encadre est toujours visible, jamais caché sous une feuille.",
+    "◀ ▶ en haut à droite de la bulle pour reculer ou avancer ; ▾ réduit la bulle pour voir ce qu'elle cache.",
+    "Au poêle : « Moutarde préparée » ne tombe plus dans « Préparer les crudités », et la sauce « pour servir » va à l'étape où on sert."
+  ],
+  "decisions": [
+    "D-G-053"
+  ],
+  "tests": {
+    "unitaires": 77,
+    "bout_en_bout": 51,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}
