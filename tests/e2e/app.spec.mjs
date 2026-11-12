@@ -114,7 +114,7 @@ test('D-G-030 : le compte et le thème gardés sous l\'ancien nom sont repris', 
   await expect(page.locator('html')).toHaveAttribute('data-skin', 'ardoise');
   const cles = await page.evaluate(() => Object.keys(localStorage).sort());
   // superchef-theme-defaut : bascule unique vers Carnet (D-G-046) ; superchef-visite : posée par brancher (D-G-047).
-  expect(cles).toEqual(['superchef-compte', 'superchef-skin', 'superchef-theme-defaut', 'superchef-visite']);
+  expect(cles).toEqual(['superchef-compte', 'superchef-guide-fin', 'superchef-skin', 'superchef-theme-defaut', 'superchef-visite']);
 });
 
 test('ID client absent : message clair', async ({ page }) => {
