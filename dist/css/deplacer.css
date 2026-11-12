@@ -34,3 +34,5 @@
   border-radius:var(--radius);box-shadow:4px 4px 0 var(--line-strong);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;rotate:-2deg}
 .dp-fantome .ico{width:18px;height:18px;flex:none}
 @media (prefers-reduced-motion:reduce){.week .day.tenir{transform:none;transition:none}.dp-case{transition:none}.dp-fantome{rotate:none}}
+/* 1.20.1 : quatre actions par souper (Choisir, Piger, Au poêle, PDF) : deux rangées de deux au téléphone */
+@media (max-width:620px){.day .acts{flex-wrap:wrap}.day .acts .btn{flex:1 1 calc(50% - 4px)}}

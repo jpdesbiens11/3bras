@@ -1,9 +1,9 @@
 // 03 · Semaine : plan, choix, desserts, approbation (R-07 à R-09). Repris de Gordon Rams.ai.
-import { S, $, DAYS, MOIS, dayDate, weekLabel, norm, toast, errText, render } from '../etat.js?v=1.20.0';
-import { el, ico, vider } from '../el.js?v=1.20.0';
-import { savePlan as ecrirePlan } from '../donnees.js?v=1.20.0';
-import { pickFor, setDay, setFixed, recentFor } from '../planif.js?v=1.20.0';
-import { panelHead, frameEmpty, skeleton, starRow, recipeMeta, chips, dname } from './commun.js?v=1.20.0';
+import { S, $, DAYS, MOIS, dayDate, weekLabel, norm, toast, errText, render } from '../etat.js?v=1.20.1';
+import { el, ico, vider } from '../el.js?v=1.20.1';
+import { savePlan as ecrirePlan } from '../donnees.js?v=1.20.1';
+import { pickFor, setDay, setFixed, recentFor } from '../planif.js?v=1.20.1';
+import { panelHead, frameEmpty, skeleton, starRow, recipeMeta, chips, dname } from './commun.js?v=1.20.1';
 
 export function viewWeek() {
   const out = [panelHead('03 · Plan de semaine', weekLabel(), 'Dimanche au mercredi par défaut ; ajoute un soir au besoin. Choisis toi-même un souper (une fois ou chaque semaine), puis pige le reste. Aucune recette des 3 dernières semaines, sauf les fixes.')];
@@ -31,7 +31,8 @@ export function viewWeek() {
       el('div', { class: 'acts' },
         el('button', { class: 'btn', 'data-pick': i, 'aria-label': `Choisir le souper du ${d}` }, ico('fork'), 'Choisir'),
         el('button', { class: 'btn', 'data-swap': i, 'aria-label': `Piger un autre souper le ${d}` }, ico('shuffle'), 'Piger'),
-        el('button', { class: 'btn', 'data-cook': r.id, disabled: !r.complete, title: r.complete ? null : 'Fiche à compléter' }, ico('flame'), 'Au poêle')));
+        el('button', { class: 'btn', 'data-cook': r.id, disabled: !r.complete, title: r.complete ? null : 'Fiche à compléter' }, ico('flame'), 'Au poêle'),
+        el('button', { class: 'btn', 'data-partager': r.id, 'aria-label': `Partager ${r.name} en PDF`, title: 'Partager en PDF', 'data-new': '1.20.1-pdf' }, ico('share'), 'PDF')));
   })));
   out.push(el('div', { class: 'dess-head' }, el('h3', { class: 'label' }, 'Desserts de la semaine'),
     el('button', { class: 'btn', id: 'adddess' }, ico('plus'), `Dessert (${(S.desserts || []).length})`)));

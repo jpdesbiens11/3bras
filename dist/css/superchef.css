@@ -41,7 +41,7 @@ a.btn{color:inherit;text-decoration:none}
 .cook .soir{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--tint)}
 .cook .soir > div{flex:1 1 220px}
 .cook .soir p{margin:2px 0 0}
-.cook-adapt{padding:10px 14px;border-top:1px solid var(--line)}
+.cook-adapt{padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap}
 /* D-G-038 : kits de départ, choix visible. */
 .kits{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
 .kits .kit{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;text-align:left;padding:10px 12px;min-height:var(--tap)}
