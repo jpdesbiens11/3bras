@@ -28,7 +28,7 @@ Propose des réponses courtes entre parenthèses pour qu'on puisse répondre en 
 ## Règles de rédaction
 
 - **Ingrédients :** un par ligne, commençant par « - ». Mesures métriques d'abord, impériales entre parenthèses (ex. « - 250 ml (1 tasse) de lait »). Regroupe sous « Groupe : » (ex. « Marinade : ») seulement s'il y a plusieurs composantes.
-- **Étapes :** numérotées, phrases courtes, **dans tes propres mots** (ne recopie pas les phrases du site), mêmes temps et températures que la source, °C puis °F. Écris les durées en minutes dans l'étape (« Cuire 25 minutes ») : l'app en fait des minuteurs.
+- **Étapes :** numérotées, phrases courtes, **dans tes propres mots** (ne recopie pas les phrases du site), mêmes temps et températures que la source, °C puis °F. Écris les durées en minutes dans l'étape (« Cuire 25 minutes ») : l'app en fait des minuteurs. Si un ingrédient sert à plusieurs étapes, écris dans chaque étape la quantité utilisée (« Ajouter 15 ml (1 c. à soupe) de beurre », puis « Ajouter le reste du beurre ») : l'app montre cette portion à l'étape.
 - **Sous-chef :** 2 ou 3 tâches simples et sécuritaires pour un enfant (mesurer, mélanger, rincer, râper, enfiler…).
 - **N'invente aucune** quantité, température ni durée qui manque à la source : écris-la sous À VÉRIFIER.
 - Laisse tomber la publicité, l'histoire, les commentaires et les valeurs nutritives.

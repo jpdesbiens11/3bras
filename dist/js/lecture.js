@@ -1,6 +1,6 @@
 // Lecture de recettes sans bibliothèque externe (P-1, N-10) : texte, Word (.docx), PDF simple,
 // et réponse JSON de Claude (même format que la conversion de Gordon Rams.ai).
-import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.7.0';
+import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.8.0';
 
 /* ---------- .docx : zip natif (DecompressionStream) + XML ---------- */
 async function inflerBrut(octets) {
@@ -84,13 +84,14 @@ const trouve = (v, liste) => liste.find((x) => norm(x) === norm(v)) || null;
 
 export function parseTexte(texte, type) {
   const lignes = String(texte).split(/\r?\n/).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
-  let nom = '', sec = null, groupe = null; const ingredients = [], etapes = [], notes = [], sous = [], verif = [], meta = {};
+  let nom = '', sec = null, groupe = null; const ingredients = [], etapes = [], notes = [], sous = [], verif = [], chg = [], meta = {};
   const titreSec = (l) => {
     const n = norm(l).replace(/^#+\s*/, '').replace(/[:\s]+$/, '');
     if (/^(ingredients?|ce qu'il (vous )?faut|liste d'ingredients)$/.test(n)) return 'ing';
     if (/^(preparation|etapes?|instructions?|methode|directions|marche a suivre|mode de preparation)$/.test(n)) return 'eta';
     if (/^(sous-chef|taches? (du )?sous-chef)$/.test(n)) return 'sous';
     if (/^a verifier$/.test(n)) return 'verif';
+    if (/^changements?$/.test(n)) return 'chg';
     return null;
   };
   const puce = /^(?:[-*•▪◦·]|\[[ xX]\])\s*/, numero = /^(?:etape\s*)?\d+\s*[.)\-:]\s*/i;
@@ -109,6 +110,7 @@ export function parseTexte(texte, type) {
       if (numero.test(norm(l)) || numero.test(l) || !etapes.length) etapes.push(l.replace(numero, '').replace(puce, ''));
       else etapes[etapes.length - 1] += ' ' + l;
     } else if (sec === 'sous') sous.push(l.replace(puce, ''));
+    else if (sec === 'chg') chg.push(l.replace(puce, ''));
     else if (sec === 'verif') { const v = l.replace(puce, ''); if (!/^\(?\s*(rien|aucun|nothing)\b/i.test(v)) verif.push(v); }
     else notes.push(l);
   }
@@ -136,7 +138,23 @@ export function parseTexte(texte, type) {
     outils: String(meta.outils || '').split(/[,;]/).map((o) => trouve(o.trim(), OUTILS)).filter(Boolean),
     source_nom: src || 'Inconnue', source_cat: trouve(src, SRC_CAT) || (/famille|maison|grand-?m/i.test(norm(src)) ? 'Famille' : 'Web autre'),
     lien: /^https:\/\/\S+$/.test(meta.lien || '') ? meta.lien : '',
-    ingredients: ingredients.filter((g) => g.items.length), etapes: etapes.filter(Boolean), sous,
+    ingredients: ingredients.filter((g) => g.items.length), etapes: etapes.filter(Boolean), sous, changements: chg,
     a_verifier: verif.join(' ') || (fiche ? '' : 'Lue automatiquement dans le texte : vérifie les ingrédients et les étapes.')
   };
+}
+
+// Recette du livre → Fiche SuperChef en texte (pour l'adapter avec Gemini, D-G-033) : l'inverse de parseTexte.
+// ing : [{ text, group }] ; steps, sous : [texte].
+export function ficheTexte(r, { ing = [], steps = [], sous = [] }) {
+  const out = ['FICHE SUPERCHEF', `Nom : ${r.name || 'Recette'}`];
+  if (r.type) out.push(`Type : ${r.type}`);
+  if (r.prot) out.push(`Protéine : ${r.prot}`);
+  if (r.portions) out.push(`Portions : ${r.portions}`);
+  if (r.time) out.push(`Temps total : ${Math.round(r.time)} min`);
+  out.push('', 'INGRÉDIENTS');
+  let g = null;
+  for (const x of ing) { if (x.group && x.group !== g) { g = x.group; out.push(`${g} :`); } out.push(`- ${x.text}`); }
+  out.push('', 'ÉTAPES', ...steps.map((s, i) => `${i + 1}. ${s}`));
+  if (sous.length) out.push('', 'SOUS-CHEF', ...sous.map((s) => `- ${s}`));
+  return out.join('\n');
 }

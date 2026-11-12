@@ -2,7 +2,7 @@
 // Aucune clé secrète dans l'app : la configuration Firebase est publique, la clé Gemini reste chez Google,
 // et App Check (Fraud Defense, anciennement reCAPTCHA Enterprise) n'accepte que les appels qui viennent de SuperChef.ai.
 // La bibliothèque Firebase est chargée seulement à la première conversion.
-import { CONFIG } from './config.js?v=1.7.0';
+import { CONFIG } from './config.js?v=1.8.0';
 
 let modele = null;
 
@@ -24,10 +24,11 @@ async function obtenirModele() {
 }
 
 // parties : [{ texte }] ou [{ mimeType, data (base64) }] ; url : lien à lire par Gemini (outil URL context).
-export async function convertirAvecGemini(consigne, parties, url) {
+// rapide : modèle léger (Flash-Lite) pour les petites retouches de texte (D-G-033).
+export async function convertirAvecGemini(consigne, parties, url, { rapide = false } = {}) {
   const { ai, getGenerativeModel } = await obtenirModele();
   const m = getGenerativeModel(ai, {
-    model: CONFIG.ia.modele || 'gemini-3.5-flash',
+    model: (rapide && CONFIG.ia.modeleRapide) || CONFIG.ia.modele || 'gemini-3.5-flash',
     generationConfig: { temperature: 0.2, maxOutputTokens: 4096 },
     ...(url ? { tools: [{ urlContext: {} }] } : {})
   });

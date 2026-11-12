@@ -1,5 +1,5 @@
 // Lecture des fiches : ingrédients, étapes, minuteurs, rayons Provigo. Repris de Gordon Rams.ai.
-import { norm, S } from './etat.js?v=1.7.0';
+import { norm, S } from './etat.js?v=1.8.0';
 
 const STOP = new Set('avec dans pour plus sans tasse tasses cuillere cuilleres soupe environ facultatif hache hachee hachees haches finement coupe coupee coupees coupes cubes tranche tranches gousse gousses grosse gros petit petite moyen moyenne boite pelees pelee goutt bien chaud froid frais fraiche litre litres paquet morceaux reserve rincee rinces egoutte'.split(' '));
 export function keywords(line) {
@@ -41,12 +41,37 @@ export function stepDurations(step) {
 /* étape qui bloque la suite (repos, refroidissement, marinade, levée) */
 const BLOCK_RE = /(laisser|faire)\s+(reposer|refroidir|tiedir|lever|mariner|macerer|gonfler|hydrater|degorger)|refrigerer|au frigo|congeler|mariner|reposer\s+\d/;
 export const isBlocking = (step) => BLOCK_RE.test(norm(step));
-/* ingrédients de chaque étape ; ceux qu'aucune étape ne nomme (sel, poivre…) vont à la 1re étape */
+/* ingrédients de chaque étape ; ceux qu'aucune étape ne nomme (sel, poivre…) vont à la 1re étape.
+   usage[k] : les étapes où sert l'ingrédient k (D-G-032 : un ingrédient partagé n'est pas tout mis d'un coup). */
 export function stepPlan(d) {
   if (d._plan) return d._plan;
   const per = d.steps.map((st) => stepIngredients(st, d.ing).map((x) => d.ing.indexOf(x)));
   const used = new Set(per.flat()); const extra = d.ing.map((x, k) => k).filter((k) => !used.has(k));
-  return (d._plan = { per, extra });
+  const usage = d.ing.map((x, k) => per.map((l, si) => (l.includes(k) ? si : -1)).filter((si) => si >= 0));
+  return (d._plan = { per, extra, usage });
+}
+
+/* D-G-032 : portion d'un ingrédient écrite dans l'étape (« Ajouter 15 ml (1 c. à soupe) de beurre »,
+   « la moitié du fromage »). Renvoie le texte de l'étape tel qu'écrit, ou null. */
+const NOMBRE = '(?:\\d+(?:[.,/]\\d+)?|[½¼¾⅓⅔])(?: ?(?:a|-|ou) ?\\d+(?:[.,]\\d+)?)?';
+const UNITE = '(?:ml|cl|l|g|kg|lb|oz|tasses?|c\\. ?a (?:soupe|the)|c\\. ?[stc]\\.?|cuilleres? a (?:soupe|the)|pincees?|gousses?|tranches?|boites?|sachets?|enveloppes?)';
+const PART = '(?:la moitie|le tiers|le quart|les deux tiers|les trois quarts|le reste|le restant)';
+const PORTION_RE = new RegExp(`(?:${NOMBRE} ?${UNITE}?\\.?(?: ?\\([^)]*\\))? ?|${PART} )(?:de la |de l'|de |d'|du |des |la |le |les |l')?(?:[a-z-]+ )?$`);
+function avecPositions(s) { // texte normalisé et, pour chaque caractère, sa position dans l'original
+  let n = ''; const pos = [];
+  for (let i = 0; i < s.length; i++) { const c = norm(s[i]).replace(/[’]/g, "'"); n += c; for (let k = 0; k < c.length; k++) pos.push(i); }
+  pos.push(s.length);
+  return { n, pos };
+}
+export function portionDansEtape(step, ing) {
+  const { n, pos } = avecPositions(String(step));
+  for (const k of ing.kw || keywords(ing.text)) {
+    const p = k.slice(0, Math.max(4, k.length - 2)), i = n.indexOf(p); if (i < 0) continue;
+    const m = PORTION_RE.exec(n.slice(Math.max(0, i - 50), i)); if (!m) continue;
+    const debut = i - m[0].length, fin = i + (/^[a-z-]*/.exec(n.slice(i))[0].length);
+    return String(step).slice(pos[debut], pos[fin]).trim();
+  }
+  return null;
 }
 
 /* ---------- ingrédients : clé, département, zone ---------- */

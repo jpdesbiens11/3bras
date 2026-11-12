@@ -1,10 +1,11 @@
 // Aperçu d'une recette et « déjà à la maison ». Repris de Gordon Rams.ai.
-import { S, $, DAYS, norm, toast, errText, render } from '../etat.js?v=1.7.0';
-import { el, ico, vider } from '../el.js?v=1.7.0';
-import { getRecipe, saveHave } from '../donnees.js?v=1.7.0';
-import { ingKey, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.7.0';
-import { lienClasseur } from '../store.js?v=1.7.0';
-import { starRow, recipeMeta, chips, tagEditor, noticeWarn } from './commun.js?v=1.7.0';
+import { S, $, DAYS, norm, toast, errText, render } from '../etat.js?v=1.8.0';
+import { el, ico, vider } from '../el.js?v=1.8.0';
+import { getRecipe, saveHave } from '../donnees.js?v=1.8.0';
+import { ingKey, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.8.0';
+import { lienClasseur } from '../store.js?v=1.8.0';
+import { starRow, recipeMeta, chips, tagEditor, noticeWarn } from './commun.js?v=1.8.0';
+import { iaDisponible } from '../ia.js?v=1.8.0';
 
 export const weekIds = () => new Set([...S.plan.filter(Boolean), ...(S.dess || []).map((x) => x.id)]);
 export const frozen = () => !!(S.saved && S.planRows.length);
@@ -67,6 +68,8 @@ export function renderSheet() {
     }
     body.push(el('h4', {}, 'Étapes'), el('ol', {}, d.steps.map((s) => el('li', {}, s))),
       d.sous.length && el('h4', {}, 'Tâches sous-chef'), d.sous.length && el('ul', {}, d.sous.map((s) => el('li', {}, s))));
+    const histo = String(r.row?.Adaptations || '').split('\n').map((l) => l.trim()).filter(Boolean);
+    if (histo.length) body.push(el('details', { class: 'histo' }, el('summary', {}, `Adaptations de la famille (${histo.length})`), el('ul', {}, histo.map((l) => el('li', {}, l)))));
   }
   const lien = /^https:\/\/\S+$/.test(r.lien || '') ? r.lien : '';
   vider(n).append(
@@ -77,6 +80,8 @@ export function renderSheet() {
       el('div', { class: 'sheet-acts' },
         p.day !== null && el('button', { class: 'btn', 'data-sheetswap': p.day }, ico('shuffle'), 'Échanger ce souper'),
         r.complete && el('button', { class: 'btn', 'data-cook': p.id }, ico('flame'), 'Au poêle'),
+        S.ctx && iaDisponible() && d && (d.ing.length || d.steps.length) && el('button', { class: 'btn', 'data-adapt': p.id, 'data-new': '1.8.0-adapter' }, ico('chef'), 'Adapter avec Gemini'),
+        S.ctx && r.adaptee && el('button', { class: 'btn', 'data-adaptrevert': p.id }, ico('reset'), 'Revenir à l\'originale'),
         lien && el('a', { class: 'btn', href: lien, target: '_blank', rel: 'noopener noreferrer' }, 'Recette d\'origine'),
         S.ctx && el('a', { class: 'btn', href: lienClasseur(S.ctx.classeurId), target: '_blank', rel: 'noopener' }, 'Ouvrir le classeur'),
         el('button', { class: 'btn primary', 'data-close': '' }, 'Retour à la semaine'))));

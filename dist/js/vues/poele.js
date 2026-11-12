@@ -1,11 +1,11 @@
 // 05 · Au poêle : mode cuisine (R-12). Repris de Gordon Rams.ai.
-import { S, $, DAYS, iso, toast, errText, render } from '../etat.js?v=1.7.0';
-import { el, ico, svgGrand } from '../el.js?v=1.7.0';
-import { getRecipe, majRecette } from '../donnees.js?v=1.7.0';
-import { stepPlan, stepDurations, isBlocking, sousFor, ingKey, invMatch } from '../cuisine.js?v=1.7.0';
-import { SOUNDS, soundKey, wakeOn, fmt } from '../minuteurs.js?v=1.7.0';
-import { setQty } from './garde-manger.js?v=1.7.0';
-import { panelHead, noticeWarn } from './commun.js?v=1.7.0';
+import { S, $, DAYS, iso, toast, errText, render } from '../etat.js?v=1.8.0';
+import { el, ico, svgGrand } from '../el.js?v=1.8.0';
+import { getRecipe, majRecette } from '../donnees.js?v=1.8.0';
+import { stepPlan, stepDurations, isBlocking, sousFor, ingKey, invMatch, portionDansEtape } from '../cuisine.js?v=1.8.0';
+import { SOUNDS, soundKey, wakeOn, fmt } from '../minuteurs.js?v=1.8.0';
+import { setQty } from './garde-manger.js?v=1.8.0';
+import { panelHead, noticeWarn } from './commun.js?v=1.8.0';
 
 export function openCook(id) {
   S.cook = { id, data: null, idx: 0, loading: false, err: null };
@@ -70,7 +70,13 @@ export function viewCook() {
   } else {
     const step = d.steps[si], plan = stepPlan(d), mine = plan.per[si], extra = si === 0 ? plan.extra : [], durs = stepDurations(step), block = isBlocking(step);
     S.cook.got = S.cook.got || new Set();
-    const row = (k) => el('label', { class: S.cook.got.has(k) ? 'on' : '' }, el('input', { type: 'checkbox', 'data-got': k, checked: S.cook.got.has(k) }), el('span', {}, d.ing[k].text));
+    // D-G-032 : un ingrédient partagé entre plusieurs étapes montre la portion de cette étape, sinon les autres étapes où il sert.
+    const row = (k) => {
+      const autres = (plan.usage[k] || []).filter((x) => x !== si), part = autres.length ? portionDansEtape(step, d.ing[k]) : null;
+      const note = autres.length && [part ? `Sur ${d.ing[k].text}` : null, `Aussi à l'étape${autres.length > 1 ? 's' : ''} ${autres.map((x) => x + 1).join(', ').replace(/, (\d+)$/, ' et $1')}`].filter(Boolean).join(' · ');
+      return el('label', { class: S.cook.got.has(k) ? 'on' : '' }, el('input', { type: 'checkbox', 'data-got': k, checked: S.cook.got.has(k) }),
+        el('span', {}, part || d.ing[k].text, note && el('small', { class: 'partage' }, note)));
+    };
     stage = el('div', { class: 'slide', style: 'display:flex;flex-direction:column;gap:18px' },
       el('div', { class: 'step-no' }, `Étape ${si + 1} sur ${d.steps.length}`),
       el('div', { class: 'step-text' }, step),

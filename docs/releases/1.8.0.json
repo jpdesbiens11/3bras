@@ -1,0 +1,15 @@
+{
+  "version": "1.8.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — adapter une recette et portions à chaque étape",
+  "requis": ["R-04", "R-12"],
+  "nouveautes": [
+    "« Adapter avec Gemini » dans la fiche : écris ce que vous changez (moins sucré, pour 6, sans lactose…) ou touche un raccourci, vois les lignes changées, puis remplace la recette. Elle devient la version de famille.",
+    "La recette originale est gardée dans le classeur, avec l'historique des adaptations ; « Revenir à l'originale » la remet en un toucher.",
+    "Au poêle : un ingrédient partagé entre plusieurs étapes montre la portion de l'étape (« 15 ml de beurre », « le reste du fromage ») et les autres étapes où il sert.",
+    "Raccourci « Quantités dans les étapes » pour corriger les recettes déjà au livre ; Gemini et le projet Claude écrivent maintenant la quantité dans chaque étape.",
+    "Modèle léger Gemini 3.5 Flash-Lite pour les adaptations ; schéma 3 du classeur (colonnes Originale et Adaptations ajoutées à la fin)."
+  ],
+  "decisions": ["D-G-032", "D-G-033", "D-G-034"],
+  "tests": { "unitaires": 42, "bout_en_bout": 24, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}
