@@ -2,11 +2,11 @@
 // 3. sa réponse collée, cochée, puis ajoutée « À trier ». La personne garde la main à chaque étape.
 // « Créer des recettes avec Gemini » (D-G-054) : même demande, mais Gemini écrit les fiches lui-même (lots de 5),
 // sans copier-coller ; on coche ensuite ce qui entre dans le livre.
-import { S, $, CUIS, iso, toast, norm } from '../etat.js?v=1.22.0';
-import { el, ico, vider } from '../el.js?v=1.22.0';
-import { importer } from '../import.js?v=1.22.0';
-import { NOMBRES, TYPES_LOT, DEMANDE_VIDE, PAR_LOT_GEMINI, consigneGenerateur, consigneGemini, lireReponse, preparerChoix, fichierImport } from '../generateur.js?v=1.22.0';
-import { convertirAvecGemini, erreurIA } from '../ia.js?v=1.22.0';
+import { S, $, CUIS, iso, toast, norm } from '../etat.js?v=1.22.1';
+import { el, ico, vider } from '../el.js?v=1.22.1';
+import { importer } from '../import.js?v=1.22.1';
+import { NOMBRES, TYPES_LOT, DEMANDE_VIDE, PAR_LOT_GEMINI, consigneGenerateur, consigneGemini, lireReponse, preparerChoix, fichierImport } from '../generateur.js?v=1.22.1';
+import { ecrireAvecGemini, erreurIA } from '../ia.js?v=1.22.1';
 
 const CLE = 'superchef-generateur'; // la demande reste sur l'appareil le temps d'aller dans Claude
 let G = null; // { d: demande, items: [], res, par: 'Claude' | 'Gemini', occupe, avance }
@@ -45,8 +45,9 @@ function paint() {
           el('label', { class: 'gen-coche' }, el('input', { id: 'gen-soirs', type: 'checkbox', checked: d.soirs }), 'Surtout des soirs de semaine (45 min ou moins)'))),
       parGemini() ? etape('2', 'Gemini écrit les recettes',
         el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', id: 'gen-gemini', type: 'button', disabled: G.occupe }, ico('chef'),
-          G.occupe ? 'Gemini écrit…' : `Créer ${d.nombre} recettes avec Gemini`)),
-        el('p', { class: 'hint', id: 'gen-avance', 'aria-live': 'polite' }, G.avance || `Par lots de ${PAR_LOT_GEMINI} : compte environ 20 secondes par lot. Les recettes déjà dans ton livre ne reviennent pas.`),
+          G.occupe ? 'Gemini écrit…' : `Créer ${d.nombre} recettes avec Gemini`),
+          G.occupe && el('button', { class: 'btn', id: 'gen-stop', type: 'button' }, 'Arrêter')),
+        el('p', { class: 'hint', id: 'gen-avance', 'aria-live': 'polite' }, G.avance || `Par lots de ${PAR_LOT_GEMINI} : compte de 20 à 60 secondes par lot. Les recettes déjà dans ton livre ne reviennent pas.`),
         el('div', { id: 'gen-liste', 'aria-live': 'polite' }, liste())) : null,
       !parGemini() && etape('2', 'Donne la consigne à Claude',
         el('label', { class: 'sr', for: 'gen-consigne' }, 'Consigne pour Claude'),
@@ -98,32 +99,54 @@ export function lireRecettes() {
   vider($('#gen-liste')).append(liste());
 }
 // D-G-054 : lots de 5 jusqu'au nombre voulu ; les fiches déjà écrites (ou au livre) sont données à Gemini pour ne pas revenir.
+// D-G-055 : le texte arrive en flux ; on montre ce qui est écrit, les secondes, et on peut arrêter (on garde ce qui est fini).
 export async function creerAvecGemini() {
   if (!G || G.occupe) return;
   majDemande();
-  const voulu = G.d.nombre, livre = (S.book || []).map((r) => r.name), vus = new Set(livre.map((x) => norm(x).trim()));
-  const fiches = []; G.occupe = true; G.items = []; G.res = null; G.avance = `Gemini écrit les recettes… 0 sur ${voulu}`; paint();
-  try {
-    for (let essai = 0; fiches.length < voulu && essai < Math.ceil(voulu / PAR_LOT_GEMINI) + 1; essai++) {
-      const texte = await convertirAvecGemini(consigneGemini(G.d, [...livre, ...fiches.map((f) => f.r.nom)]), [], '', { max: 12000 });
-      if (!G) return;   // feuille fermée pendant l'appel
-      for (const f of lireReponse(texte, G.d.type === 'Mélange' ? 'Souper' : G.d.type).fiches) {
-        const k = norm(f.r.nom).trim();
-        if (!f.valide || !f.r.nom || vus.has(k) || fiches.length >= voulu) continue;   // seulement des fiches complètes, nouvelles
-        vus.add(k);
-        f.r.source_nom = 'Gemini'; f.r.source_cat = 'Web autre'; f.r.lien = '';   // pas de web ici : aucun lien n'est sûr
-        f.r.a_verifier = ['Recette créée par Gemini : à essayer et à ajuster.', f.r.a_verifier].filter(Boolean).join(' ');
-        fiches.push(f);
-      }
-      G.avance = `Gemini écrit les recettes… ${fiches.length} sur ${voulu}`;
-      const a = $('#gen-avance'); if (a) a.textContent = G.avance;
+  const g = G, voulu = g.d.nombre, livre = (S.book || []).map((r) => r.name), vus = new Set(livre.map((x) => norm(x).trim()));
+  const fiches = [], debut = Date.now(), type = g.d.type === 'Mélange' ? 'Souper' : g.d.type;
+  let enFlux = '';
+  Object.assign(g, { occupe: true, items: [], res: null, arret: false, ctrl: new AbortController(), avance: '' });
+  const garderFiches = (texte) => {
+    for (const f of lireReponse(texte, type).fiches) {
+      const k = norm(f.r.nom).trim();
+      if (!f.valide || !f.r.nom || vus.has(k) || fiches.length >= voulu) continue;   // seulement des fiches complètes, nouvelles
+      vus.add(k);
+      f.r.source_nom = 'Gemini'; f.r.source_cat = 'Web autre'; f.r.lien = '';   // pas de web ici : aucun lien n'est sûr
+      f.r.a_verifier = ['Recette créée par Gemini : à essayer et à ajuster.', f.r.a_verifier].filter(Boolean).join(' ');
+      fiches.push(f);
     }
-    G.avance = fiches.length ? `${fiches.length} recette${fiches.length > 1 ? 's' : ''} écrite${fiches.length > 1 ? 's' : ''} par Gemini. Vérifie-les avant de les ajouter.` : 'Gemini n\'a renvoyé aucune fiche complète. Précise ta demande et réessaie.';
-  } catch (e) { G.res = erreurIA(e); G.avance = fiches.length ? `${fiches.length} recette${fiches.length > 1 ? 's' : ''} écrite${fiches.length > 1 ? 's' : ''} avant l'arrêt.` : ''; }
-  if (!G) return;
-  G.items = preparerChoix(fiches, livre, { lot: lot(), jour: iso(new Date()), par: 'Gemini' });
-  G.occupe = false; paint();
+    g.items = preparerChoix(fiches, livre, { lot: lot(), jour: iso(new Date()), par: 'Gemini' });
+    const l = $('#gen-liste'); if (l && G === g) vider(l).append(liste());
+  };
+  const dire = () => {
+    if (G !== g) return;
+    const s = Math.round((Date.now() - debut) / 1000), enCours = Math.max(0, (enFlux.match(/FICHE SUPERCHEF/gi) || []).length - 1);
+    g.avance = !enFlux ? `Gemini réfléchit… ${s} s` : `Gemini écrit les recettes… ${Math.min(voulu, fiches.length + enCours)} sur ${voulu} · ${s} s`;
+    const a = $('#gen-avance'); if (a) a.textContent = g.avance;
+  };
+  paint(); dire();
+  const minuterie = setInterval(dire, 1000);
+  try {
+    for (let essai = 0; fiches.length < voulu && !g.arret && essai < Math.ceil(voulu / PAR_LOT_GEMINI) + 1; essai++) {
+      enFlux = '';
+      const texte = await ecrireAvecGemini(consigneGemini(g.d, [...livre, ...fiches.map((f) => f.r.nom)]), { max: 12000, signal: g.ctrl.signal, suivi: (t) => { enFlux = t; } });
+      if (G !== g) return;   // feuille fermée pendant l'appel
+      garderFiches(texte); enFlux = '';
+    }
+  } catch (e) {
+    if (G !== g) return;
+    if (enFlux) garderFiches(enFlux);                                   // on garde les fiches finies avant l'arrêt
+    if (!g.arret) g.res = erreurIA(e);
+  } finally { clearInterval(minuterie); }
+  if (G !== g) return;
+  const k = fiches.length;
+  g.avance = g.arret ? `Arrêté : ${k} recette${k > 1 ? 's' : ''} gardée${k > 1 ? 's' : ''}.`
+    : k ? `${k} recette${k > 1 ? 's' : ''} écrite${k > 1 ? 's' : ''} par Gemini en ${Math.round((Date.now() - debut) / 1000)} s. Vérifie-les avant de les ajouter.`
+      : g.res ? '' : 'Gemini n\'a renvoyé aucune fiche complète. Précise ta demande et réessaie.';
+  g.occupe = false; paint();
 }
+export function arreterGemini() { if (G?.occupe) { G.arret = true; G.ctrl?.abort(); } }
 
 export function cocher(i, on) { const x = G?.items[+i]; if (x) { x.choisi = on; const b = $('#gen-ajouter'); if (b) b.textContent = texteAjout(); } }
 const nbChoisis = () => G.items.filter((x) => x.choisi).length;

@@ -5,8 +5,8 @@
 // son classeur (kits, stock, tri, approbation) ; le guide passe seul à la suite quand c'est fait. ◀ ▶ en haut à droite
 // de la bulle pour reculer ou avancer à volonté. Il finit à l'étape 1 du souper de lundi, au poêle. Il démarre seul quand le livre est vide, se reprend après un
 // rechargement, et Compte → « Lancer le guide » le relance.
-import { S, $ } from '../etat.js?v=1.22.0';
-import { el, ico, vider } from '../el.js?v=1.22.0';
+import { S, $ } from '../etat.js?v=1.22.1';
+import { el, ico, vider } from '../el.js?v=1.22.1';
 
 const CLE = 'superchef-guide', FIN = 'superchef-guide-fin';
 // ce qui se voit vraiment (au téléphone, une page plus large que l'écran agrandit innerWidth)

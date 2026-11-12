@@ -2,8 +2,8 @@
 // au trait (SVG animé en CSS, aucune bibliothèque, P-1). Elle s'ouvre à chaque chargement de la page (rechargement
 // compris, 1.18.0) tant que « Ne plus montrer » n'est pas coché (gardé sur l'appareil) ; « Visite guidée » à l'accueil
 // et Compte → « Revoir la visite » la relancent.
-import { $ } from '../etat.js?v=1.22.0';
-import { el, ico, vider } from '../el.js?v=1.22.0';
+import { $ } from '../etat.js?v=1.22.1';
+import { el, ico, vider } from '../el.js?v=1.22.1';
 
 const CLE = 'superchef-visite';
 const NS = 'http://www.w3.org/2000/svg';

@@ -33,7 +33,21 @@ export async function brancher(page, { clientId = 'client-test.apps.googleuserco
           'firebase-app-check.js': 'export class ReCaptchaEnterpriseProvider { constructor(k) { this.k = k; } } export const initializeAppCheck = (app, o) => { window.__appcheck = o.provider.k; };',
           'firebase-ai.js': `export class GoogleAIBackend {}
             export const getAI = () => ({});
-            export const getGenerativeModel = (ai, o) => ({ generateContent: async (parts) => { window.__gemini = { modele: o.model, outils: o.tools || [], parts }; return { response: { text: () => window.__reponseGemini } }; } });`
+            export const getGenerativeModel = (ai, o) => ({
+              generateContent: async (parts) => { window.__gemini = { modele: o.model, outils: o.tools || [], parts }; return { response: { text: () => window.__reponseGemini } }; },
+              // D-G-055 : en flux, une fiche à la fois ; window.__geminiLent (ms) ralentit chaque morceau ; le signal arrête tout
+              generateContentStream: async (parts, opts = {}) => {
+                window.__gemini = { modele: o.model, outils: o.tools || [], parts, flux: true, delai: opts.timeout, max: o.generationConfig?.maxOutputTokens };
+                window.__appelsGemini = (window.__appelsGemini || 0) + 1;
+                const morceaux = String(window.__reponseGemini).split(/(?=FICHE SUPERCHEF)/);
+                return { stream: (async function* () {
+                  for (const m of morceaux) {
+                    await new Promise((ok, non) => { const t = setTimeout(ok, window.__geminiLent || 30); opts.signal?.addEventListener('abort', () => { clearTimeout(t); non(new DOMException('arrêt', 'AbortError')); }); });
+                    yield { text: () => m };
+                  }
+                })() };
+              }
+            });`
         }[nom];
         return route.fulfill({ contentType: 'text/javascript', body: faux });
       }

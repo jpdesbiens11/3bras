@@ -70,3 +70,8 @@ a.btn{color:inherit;text-decoration:none}
 .add-creer{margin-top:22px}
 /* D-G-054 : Gemini sous Claude, dans Compte */
 .gen-choix{flex-direction:column;align-items:flex-start}
+/* D-G-055 : un choix (cuisine, nombre…) se voit dans tous les thèmes, pas seulement Carnet */
+.raccourcis .btn[aria-pressed="true"]{border-color:var(--accent);background:var(--tint);color:var(--accent-ink);font-weight:700;box-shadow:inset 0 0 0 1px var(--accent)}
+.raccourcis .btn[aria-pressed="true"]::before{content:"✓";margin-right:6px}
+.gen-coche input{width:22px;height:22px;flex:none;margin:0;accent-color:var(--accent)}
+.addf .gen-coche{display:flex;flex-direction:row;align-items:center;gap:10px}
