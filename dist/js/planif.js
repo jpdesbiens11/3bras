@@ -1,6 +1,6 @@
 // Planification de la semaine et règle des 3 semaines (R-07, R-08, R-09). Repris de Gordon Rams.ai.
-import { S, DAYS, GAP_DAYS, render, toast, errText } from './etat.js?v=1.17.0';
-import { majRecette } from './donnees.js?v=1.17.0';
+import { S, DAYS, GAP_DAYS, render, toast, errText } from './etat.js?v=1.18.0';
+import { majRecette } from './donnees.js?v=1.18.0';
 
 export function tooSoon(r) { if (!r.last) return false; const d = Math.abs((new Date(S.weekStart) - new Date(r.last + 'T12:00:00')) / 864e5); return d < GAP_DAYS; }
 export const isFixed = (id) => Object.values(S.fixed || {}).includes(id);
@@ -32,9 +32,12 @@ export function pickFor(dayIdx, plan, exclude = new Set()) {
 }
 export function draftWeek() {
   const plan = DAYS.map(() => null), keep = S.pins || new Set();
+  // D-G-049 : un souper fixe déplacé à un autre soir (et gardé là) n'est pas repris en double sur son soir fixe.
+  const gardes = new Map([...keep].filter((j) => S.on[j] && S.plan[j]).map((j) => [S.plan[j], j]));
   DAYS.forEach((d, i) => {
     if (!S.on[i]) return;
-    if (S.fixed[i]) { plan[i] = S.fixed[i]; keep.add(i); } else if (keep.has(i) && S.plan[i]) plan[i] = S.plan[i];
+    const ailleurs = S.fixed[i] && gardes.has(S.fixed[i]) && gardes.get(S.fixed[i]) !== i;
+    if (S.fixed[i] && !ailleurs) { plan[i] = S.fixed[i]; keep.add(i); } else if (keep.has(i) && S.plan[i]) plan[i] = S.plan[i];
   });
   S.pins = new Set([...keep].filter((i) => S.on[i] && plan[i]));
   DAYS.forEach((d, i) => { if (S.on[i] && !plan[i]) plan[i] = pickFor(i, plan); });

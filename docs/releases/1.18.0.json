@@ -1,0 +1,26 @@
+{
+  "version": "1.18.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — déplacer les soupers de la semaine",
+  "requis": [
+    "R-07"
+  ],
+  "nouveautes": [
+    "03 Semaine : tiens un souper 2 secondes ; la vue compacte des 7 soirs s'ouvre et tu glisses le souper au doigt. Au relâchement, il se dépose sur le soir choisi et les deux soirs échangent.",
+    "On jongle autant qu'on veut (doigt, souris, ou toucher un souper puis un soir) ; « Enregistrer » revient à la semaine, « Annuler » ne change rien. Le bouton « Déplacer » ouvre la même vue.",
+    "Un soir libre reçoit le souper et le soir quitté se libère. Les changements restent un brouillon : approuve (ou réapprouve) la semaine pour les écrire dans ton classeur Google.",
+    "Visite guidée : elle revient à chaque chargement de la page, rechargement compris (Ctrl+Maj+R), tant que « Ne plus montrer » n'est pas coché ; bouton « Visite guidée » à l'accueil."
+  ],
+  "decisions": [
+    "D-G-047",
+    "D-G-049"
+  ],
+  "tests": {
+    "unitaires": 73,
+    "bout_en_bout": 46,
+    "appareils": [
+      "Galaxy S25 360 px (tactile)",
+      "PC 1440 px (souris)"
+    ]
+  }
+}
