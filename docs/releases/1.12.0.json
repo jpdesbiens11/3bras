@@ -1,0 +1,14 @@
+{
+  "version": "1.12.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — kits Survie et Mexicain, classeur qui se répare",
+  "requis": ["R-01", "R-02"],
+  "nouveautes": [
+    "Kit « Survie : la base familiale », en tête de liste : soupe et grilled cheese, pâté chinois de semaine, spaghetti bolognaise, pâtes rosées, pâté à la viande, pâté au poulet, poulet BBQ et frites, hamburgers, hot-dogs, paninis.",
+    "Kit « Mexicain » : tacos du mardi, tacos au poisson, fajitas, burritos végés, quesadillas, enchiladas, chili con carne, bols burrito, nachos et guacamole.",
+    "Le classeur se prépare ou se répare avant chaque écriture et à chaque ouverture : 1re ligne de titres effacée ou vide, onglet supprimé. Les recettes déjà écrites réapparaissent, sans doublon.",
+    "Compte dit ce qui a été réparé."
+  ],
+  "decisions": ["D-G-041", "D-G-042"],
+  "tests": { "unitaires": 58, "bout_en_bout": 32, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

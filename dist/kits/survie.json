@@ -1,0 +1,499 @@
+{
+  "format": "superchef-import",
+  "version": 1,
+  "schema": 2,
+  "genere_le": "2026-11-12",
+  "source": "Kit SuperChef.ai — Survie : la base familiale",
+  "kit": {
+    "id": "survie",
+    "nom": "Survie : la base familiale",
+    "description": "Les soupers de semaine qui sauvent la soirée, du grilled cheese au pâté chinois, avec ce qu'on a presque toujours sous la main."
+  },
+  "recettes": [
+    {
+      "id": "k-survie-soupe-aux-tomates-et-grilled-cheese",
+      "Nom": "Soupe aux tomates et grilled cheese",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Végé",
+      "Cuisine": "Classique",
+      "Soir de semaine": true,
+      "Temps total (min)": 40,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Soupe",
+        "2 carottes, pelées et coupées en dés",
+        "1 oignon, haché",
+        "2 gousses d'ail, hachées",
+        "30 ml (2 c. à soupe) d'huile d'olive",
+        "2 boîtes de 796 ml (28 oz) de tomates italiennes",
+        "500 ml (2 tasses) de bouillon de poulet ou de légumes",
+        "Sel et poivre",
+        "## Grilled cheese",
+        "60 ml (1/4 tasse) de beurre ramolli",
+        "8 tranches de pain blanc",
+        "8 tranches de fromage cheddar"
+      ],
+      "Étapes": [
+        "Dans une grande casserole à feu moyen-élevé, attendrir les carottes, l'oignon et l'ail dans l'huile d'olive, en remuant.",
+        "Ajouter les tomates et le bouillon. Porter à ébullition, puis laisser mijoter doucement environ 20 minutes, jusqu'à ce que les carottes soient tendres.",
+        "Pendant que la soupe mijote, beurrer un côté des 8 tranches de pain avec 60 ml (1/4 tasse) de beurre, soit environ 7,5 ml (1/2 c. à soupe) par tranche.",
+        "Déposer 2 tranches de cheddar sur le côté non beurré de 4 tranches de pain. Refermer avec les 4 autres tranches, côté beurré vers l'extérieur.",
+        "Dans une poêle antiadhésive à feu moyen, cuire 2 sandwichs à la fois 3 minutes, jusqu'à ce que le dessous soit doré.",
+        "Retourner les sandwichs et les presser légèrement avec une spatule. Cuire encore environ 3 minutes, jusqu'à ce que les deux côtés soient dorés et que le fromage soit fondu. Répéter avec les 2 autres sandwichs.",
+        "Laisser reposer les grilled cheese 2 minutes, puis les couper en pointes.",
+        "Au mélangeur ou au pied mélangeur, réduire la soupe en purée lisse (remplir le mélangeur à moitié au plus : la vapeur pousse le couvercle). Allonger d'un peu d'eau au besoin. Saler, poivrer et servir avec les grilled cheese.",
+        "Pour avoir en réserve : la soupe se congèle. Doubler la recette, laisser refroidir la moitié en trop et la congeler en portions jusqu'à 3 mois. Réchauffer à feu moyen en remuant jusqu'à ce qu'elle soit bien chaude."
+      ],
+      "Tâches sous-chef": [
+        "Peler les carottes avec un économe",
+        "Beurrer les tranches de pain avec un couteau à beurre",
+        "Déposer 2 tranches de cheddar sur chaque sandwich"
+      ],
+      "À vérifier": "La source ne précise pas la durée du mijotage (25 minutes de cuisson en tout) : environ 20 minutes estimées, jusqu'à ce que les carottes soient tendres. Grilled cheese : recette de Ricardo pour 1 portion, multipliée par 4 ; le temps du 2e côté (environ 3 minutes) est déduit des 6 minutes de cuisson de la source. Durée de congélation de la soupe (3 mois) : règle prudente, la source dit seulement qu'elle se congèle.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/4953-creme-de-tomates",
+      "Notes": [
+        "Inspirée de la crème de tomates et du grilled cheese classique de Ricardo."
+      ]
+    },
+    {
+      "id": "k-survie-pate-chinois-de-semaine",
+      "Nom": "Pâté chinois de semaine",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Québécoise",
+      "Soir de semaine": false,
+      "Temps total (min)": 55,
+      "Portions": 4,
+      "Outils": "Four",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Viande",
+        "450 g (1 lb) de bœuf haché maigre",
+        "1 oignon moyen, haché finement",
+        "1 carotte moyenne, en tranches fines",
+        "125 ml (1/2 tasse) d'eau",
+        "30 ml (2 c. à soupe) de ketchup",
+        "15 ml (1 c. à soupe) de sauce Worcestershire",
+        "1 petit pot de bouillon de bœuf concentré (style maison)",
+        "Sel et poivre",
+        "## Étages",
+        "250 ml (1 tasse) de maïs en crème",
+        "750 ml (3 tasses) de purée de pommes de terre chaude (restes, maison ou du commerce)"
+      ],
+      "Étapes": [
+        "Préchauffer le four à 200 °C (400 °F).",
+        "Dans un grand poêlon de 30 cm (12 po) à feu moyen-vif, cuire le bœuf, l'oignon et la carotte environ 6 minutes, en défaisant la viande et en remuant de temps en temps.",
+        "Ajouter l'eau, le ketchup, la sauce Worcestershire et le bouillon. Cuire 5 minutes en remuant de temps en temps. Saler et poivrer.",
+        "Étaler la viande dans une assiette à tarte profonde de 25 cm (10 po). Couvrir uniformément du maïs en crème, puis de la purée de pommes de terre.",
+        "Cuire au four 30 minutes, jusqu'à ce que ça bouillonne sur les bords.",
+        "Pour avoir en réserve : monter un deuxième pâté dans un plat qui va au four et au congélateur, le laisser refroidir, bien l'emballer et le congeler jusqu'à 3 mois. Le décongeler au réfrigérateur toute la nuit, puis le cuire à 200 °C (400 °F) jusqu'à ce que le centre soit bien chaud."
+      ],
+      "Tâches sous-chef": [
+        "Mesurer le ketchup et la sauce Worcestershire",
+        "Étaler le maïs en crème avec le dos d'une cuillère",
+        "Lisser la purée et y tracer des sillons avec une fourchette"
+      ],
+      "À vérifier": "Version de semaine : la purée est déjà prête (restes, purée du commerce ou instantanée). La source ne compte pas sa préparation : prévoir environ 25 minutes de plus avec des pommes de terre fraîches. Congélation et réchauffage non précisés par la source : le centre doit être bien chaud (74 °C / 165 °F) avant de servir.",
+      "Fiche complète": true,
+      "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.pate-chinois.1.1187574.html",
+      "Notes": [
+        "Inspirée du pâté chinois de Knorr sur Noovo Moi."
+      ]
+    },
+    {
+      "id": "k-survie-spaghetti-sauce-bolognaise",
+      "Nom": "Spaghetti sauce bolognaise",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Italienne",
+      "Soir de semaine": false,
+      "Temps total (min)": 140,
+      "Portions": 8,
+      "Outils": "",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Sauce",
+        "55 g (2 oz) de pancetta douce, hachée finement",
+        "60 ml (1/4 tasse) d'huile d'olive",
+        "2 oignons, hachés finement",
+        "2 carottes, coupées en dés",
+        "2 branches de céleri, coupées en dés",
+        "4 gousses d'ail, hachées finement",
+        "1 kg (2,2 lb) de bœuf haché maigre",
+        "375 ml (1 1/2 tasse) de vin rouge",
+        "250 ml (1 tasse) de lait",
+        "2 boîtes de 796 ml (28 oz) de tomates italiennes",
+        "15 ml (1 c. à soupe) d'origan séché",
+        "15 ml (1 c. à soupe) de basilic séché",
+        "1 feuille de laurier",
+        "Muscade moulue, au goût",
+        "Sel et poivre",
+        "## Pour servir",
+        "Spaghettis, cuits al dente"
+      ],
+      "Étapes": [
+        "Dans un grand bol, écraser les tomates avec les mains. Réserver.",
+        "Dans une grande casserole à feu moyen-élevé, dorer la pancetta dans l'huile.",
+        "Ajouter les oignons, les carottes, le céleri et l'ail. Cuire 5 minutes en remuant.",
+        "Ajouter le bœuf et cuire en l'émiettant à la cuillère de bois, jusqu'à ce qu'il commence à dorer et que le liquide soit évaporé.",
+        "Verser le vin et laisser réduire de moitié.",
+        "Verser le lait, mélanger et laisser mijoter doucement 5 minutes.",
+        "Ajouter les tomates écrasées, l'origan, le basilic, le laurier et la muscade. Mélanger et laisser mijoter à feu doux 2 heures, en remuant de temps en temps. Retirer le laurier, saler et poivrer.",
+        "Cuire les spaghettis al dente dans une grande casserole d'eau bouillante salée. Égoutter et servir avec la moitié de la sauce (4 portions).",
+        "Pour avoir en réserve : laisser refroidir l'autre moitié de la sauce, la répartir dans des contenants ou des sacs à congélation (à plat) et congeler jusqu'à 3 mois. Décongeler au réfrigérateur toute la nuit, puis réchauffer à feu moyen en remuant jusqu'à ce que la sauce soit bien chaude."
+      ],
+      "Tâches sous-chef": [
+        "Écraser les tomates avec les mains dans un grand bol",
+        "Mesurer l'origan et le basilic séchés",
+        "Coller une étiquette datée sur chaque contenant de sauce"
+      ],
+      "À vérifier": "Sauce longue (2 heures de mijotage) : la cuire la fin de semaine et garder la moitié au congélateur ; un soir pressé, il ne reste que les pâtes à cuire. Durée de congélation (3 mois) : règle prudente, la source dit seulement « Se congèle ».",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/577-spaghetti-sauce-bolognaise",
+      "Notes": [
+        "Inspirée du spaghetti sauce bolognaise de Ricardo."
+      ]
+    },
+    {
+      "id": "k-survie-pates-sauce-rosee",
+      "Nom": "Pâtes sauce rosée",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Végé",
+      "Cuisine": "Italienne",
+      "Soir de semaine": true,
+      "Temps total (min)": 35,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "1 oignon, haché",
+        "2 gousses d'ail, hachées",
+        "30 ml (2 c. à soupe) d'huile d'olive",
+        "1 boîte de 796 ml (28 oz) de tomates italiennes broyées ou entières",
+        "45 ml (3 c. à soupe) de pâte de tomates",
+        "125 ml (1/2 tasse) de crème 15 % à cuisson",
+        "340 g (3/4 lb) de pâtes longues ou courtes, au choix",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "Dans une casserole à feu moyen, attendrir l'oignon et l'ail dans l'huile 3 minutes.",
+        "Ajouter les tomates et la pâte de tomates. Mélanger et porter à ébullition.",
+        "Laisser mijoter 15 minutes en remuant souvent. Saler et poivrer.",
+        "Pendant ce temps, cuire les 340 g (3/4 lb) de pâtes al dente dans une grande casserole d'eau bouillante salée. Égoutter.",
+        "Au mélangeur ou au pied mélangeur, réduire la sauce en purée lisse, puis la remettre dans la casserole.",
+        "Ajouter la crème et réchauffer en remuant. Rectifier l'assaisonnement.",
+        "Ajouter les pâtes égouttées à la sauce rosée et bien mélanger pour les enrober. Servir aussitôt."
+      ],
+      "Tâches sous-chef": [
+        "Choisir la forme de pâtes du soir",
+        "Mesurer la pâte de tomates et la crème",
+        "Brasser les pâtes dans la sauce, casserole retirée du feu"
+      ],
+      "À vérifier": "Version rapide suggérée dans la note de la source : 125 ml de crème 15 % ajoutée à la sauce tomate au lieu de la béchamel (beurre, farine, lait). La source annonce 55 minutes avec la béchamel ; environ 35 minutes estimées avec la crème, en cuisant les pâtes pendant que la sauce mijote.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/211-pates-sauce-rosee",
+      "Notes": [
+        "Inspirée des pâtes sauce rosée de Ricardo."
+      ]
+    },
+    {
+      "id": "k-survie-pate-a-la-viande-et-salade-verte",
+      "Nom": "Pâté à la viande et salade verte",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Porc",
+      "Cuisine": "Québécoise",
+      "Soir de semaine": false,
+      "Temps total (min)": 90,
+      "Portions": 6,
+      "Outils": "Four",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Pâté",
+        "15 ml (1 c. à soupe) d'huile végétale",
+        "1 oignon, haché très finement",
+        "2 ou 3 gousses d'ail, hachées très finement",
+        "450 g (1 lb) d'un mélange de bœuf, porc et veau hachés",
+        "125 à 250 ml (1/2 à 1 tasse) de chapelure",
+        "Sel et poivre",
+        "2 abaisses de pâte brisée du commerce de 23 cm (9 po)",
+        "1 jaune d'œuf (facultatif, pour la dorure)",
+        "15 ml (1 c. à soupe) de lait (facultatif, pour la dorure)",
+        "## Salade verte",
+        "60 ml (1/4 tasse) d'huile d'olive",
+        "20 ml (4 c. à thé) de vinaigre balsamique",
+        "7,5 ml (1/2 c. à soupe) de moutarde de Dijon",
+        "7,5 ml (1/2 c. à soupe) de moutarde à l'ancienne",
+        "210 g (9 tasses) de mesclun"
+      ],
+      "Étapes": [
+        "Dans une grande casserole à feu moyen, chauffer 15 ml (1 c. à soupe) d'huile végétale. Cuire l'oignon en remuant souvent, jusqu'à ce qu'il soit translucide.",
+        "Ajouter l'ail et cuire 2 minutes en remuant.",
+        "Ajouter la viande et cuire 15 à 20 minutes en remuant souvent, jusqu'à ce qu'il ne reste plus de rose.",
+        "Incorporer la chapelure 60 à 125 ml (1/4 à 1/2 tasse) à la fois, jusqu'à ce que la viande soit luisante, sans gras liquide au fond de la casserole. Saler, poivrer et goûter.",
+        "Placer la grille au plus bas et préchauffer le four à 190 °C (375 °F).",
+        "Foncer une assiette à tarte avec 1 abaisse. Y verser la viande et couvrir avec l'autre abaisse.",
+        "Couper l'excédent de pâte en laissant un petit rebord. Pincer le tour avec les doigts ou une fourchette et faire quelques incisions au centre.",
+        "Si désiré, mélanger le jaune d'œuf et le lait, puis badigeonner la pâte.",
+        "Cuire au four environ 50 minutes, jusqu'à ce que la croûte soit bien dorée.",
+        "Pendant la cuisson, dans un grand bol, fouetter 60 ml (1/4 tasse) d'huile d'olive, le vinaigre et les moutardes. Au moment de servir, ajouter le mesclun et bien mélanger. Saler et poivrer.",
+        "Pour avoir en réserve : la viande peut se préparer la veille (on assemble alors le pâté à froid). Le pâté se congèle cru ou cuit, bien emballé, jusqu'à 3 mois. Le cuire ou le réchauffer directement du congélateur à 220 °C (425 °F), de 60 à 90 minutes."
+      ],
+      "Tâches sous-chef": [
+        "Pincer le tour de la pâte avec une fourchette",
+        "Badigeonner la dorure au pinceau",
+        "Fouetter la vinaigrette dans le grand bol"
+      ],
+      "À vérifier": "Plus long qu'un soir de semaine (environ 1 h 30) : préparer la viande la veille ou garder un pâté au congélateur. La quantité de chapelure dépend du gras de la viande. Durée de congélation (3 mois) : règle prudente, non précisée par la source. Salade verte à la moutarde de Ricardo ramenée de 4 à 6 portions.",
+      "Fiche complète": true,
+      "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/pate-viande-3-variantes-gourmandes.html",
+      "Notes": [
+        "Inspirée du pâté à la viande de Noovo Moi et de la salade verte à la moutarde de Ricardo."
+      ]
+    },
+    {
+      "id": "k-survie-pate-au-poulet-et-salade-verte",
+      "Nom": "Pâté au poulet et salade verte",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poulet",
+      "Cuisine": "Québécoise",
+      "Soir de semaine": true,
+      "Temps total (min)": 45,
+      "Portions": 4,
+      "Outils": "Four",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Pâté",
+        "15 ml (1 c. à soupe) d'huile d'olive",
+        "1/2 oignon, émincé",
+        "2 poitrines de poulet désossées, coupées en dés",
+        "60 ml (1/4 tasse) de beurre",
+        "60 ml (1/4 tasse) de farine tout usage",
+        "500 ml (2 tasses) de lait",
+        "Sel et poivre",
+        "750 ml (3 tasses) de macédoine de légumes surgelée",
+        "1 abaisse de pâte feuilletée du commerce (idéalement au beurre), décongelée",
+        "## Salade verte",
+        "45 ml (3 c. à soupe) d'huile d'olive",
+        "15 ml (1 c. à soupe) de vinaigre balsamique",
+        "5 ml (1 c. à thé) de moutarde de Dijon",
+        "5 ml (1 c. à thé) de moutarde à l'ancienne",
+        "140 g (6 tasses) de mesclun"
+      ],
+      "Étapes": [
+        "Préchauffer le four à 200 °C (400 °F).",
+        "Dans une grande poêle allant au four, à feu moyen, attendrir l'oignon dans 15 ml (1 c. à soupe) d'huile d'olive 2 minutes.",
+        "Ajouter le poulet et cuire environ 5 minutes, jusqu'à ce qu'il soit cuit. Réserver le poulet et l'oignon dans un bol.",
+        "Raccourci : avec un reste de poulet ou environ la moitié d'un petit poulet BBQ désossé et défait en morceaux, sauter la cuisson du poulet et l'ajouter avec la macédoine.",
+        "Dans la même poêle à feu moyen, fondre le beurre. Ajouter la farine et cuire 2 minutes en fouettant.",
+        "Verser le lait en fouettant et cuire quelques minutes, jusqu'à ébullition, pour que la sauce épaississe. Saler et poivrer généreusement.",
+        "Ajouter la macédoine, le poulet et l'oignon. Réchauffer quelques minutes en remuant, puis retirer du feu.",
+        "Dérouler la pâte feuilletée directement sur la poêle. Couper l'excédent, replier le bord et percer quelques fentes pour laisser sortir la vapeur.",
+        "Cuire au four 20 à 25 minutes, jusqu'à ce que la pâte soit bien dorée et que la garniture bouillonne.",
+        "Pendant la cuisson, dans un grand bol, fouetter 45 ml (3 c. à soupe) d'huile d'olive, le vinaigre et les moutardes. Au moment de servir, ajouter le mesclun et bien mélanger. Saler et poivrer.",
+        "Pour avoir en réserve : garder une pâte feuilletée et un sac de macédoine au congélateur. Avec un reste de poulet BBQ, ce pâté devient le souper le plus rapide de la semaine."
+      ],
+      "Tâches sous-chef": [
+        "Mesurer la macédoine surgelée",
+        "Percer des fentes dans la pâte avec une fourchette",
+        "Fouetter la vinaigrette dans le grand bol"
+      ],
+      "À vérifier": "Version raccourcie (pâte feuilletée du commerce, tout cuit dans la même poêle) : un pâté au poulet classique à pâte brisée maison prend environ 2 heures. La source ne précise ni la taille de la poêle ni le format de la pâte feuilletée.",
+      "Fiche complète": true,
+      "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.pate-au-poulet-facile-dans-une-poele.1.3318267.html",
+      "Notes": [
+        "Inspirée du pâté au poulet facile dans une poêle de Noovo Moi et de la salade verte à la moutarde de Ricardo."
+      ]
+    },
+    {
+      "id": "k-survie-poulet-bbq-frites-et-salade-de-chou",
+      "Nom": "Poulet BBQ, frites et salade de chou",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poulet",
+      "Cuisine": "Québécoise",
+      "Soir de semaine": true,
+      "Temps total (min)": 40,
+      "Portions": 4,
+      "Outils": "Four, Air fryer, Robot culinaire",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Salade de chou crémeuse",
+        "750 ml (3 tasses) de chou vert haché finement au robot ou au couteau (environ 1/2 petit chou)",
+        "125 ml (1/2 tasse) de céleri haché finement",
+        "30 ml (2 c. à soupe) d'oignon haché finement",
+        "60 ml (1/4 tasse) de relish",
+        "90 ml (6 c. à soupe) de mayonnaise",
+        "30 ml (2 c. à soupe) de lait",
+        "15 ml (1 c. à soupe) de vinaigre blanc",
+        "15 ml (1 c. à soupe) de sucre",
+        "Sel et poivre",
+        "## Poulet et frites",
+        "1 poulet rôti (poulet BBQ) du commerce",
+        "1 sac de 650 g (1 1/2 lb) de frites surgelées",
+        "Sauce BBQ en bouteille, pour servir"
+      ],
+      "Étapes": [
+        "Préchauffer le four à 220 °C (425 °F), ou l'air fryer à 200 °C (400 °F), selon l'emballage des frites.",
+        "Salade de chou : dans un grand bol, mélanger le chou, le céleri, l'oignon, la relish, la mayonnaise, le lait, le vinaigre et le sucre. Saler, poivrer et réfrigérer pendant le reste du repas (idéalement une heure).",
+        "Étaler les frites en une seule couche sur une plaque. Cuire au four environ 20 minutes en les retournant à mi-cuisson (ou à l'air fryer environ 15 minutes en secouant le panier), jusqu'à ce qu'elles soient dorées.",
+        "Si le poulet a refroidi, l'envelopper de papier d'aluminium et le réchauffer au four avec les frites, jusqu'à ce qu'il soit bien chaud (74 °C / 165 °F).",
+        "Découper le poulet en morceaux (cuisses, poitrines, ailes). Servir avec les frites, la sauce BBQ et la salade de chou.",
+        "Pour avoir en réserve : la salade de chou se garde de 2 à 3 jours au réfrigérateur, alors on peut la faire la veille. Désosser les restes de poulet et les garder au réfrigérateur jusqu'à 3 jours pour le pâté au poulet de ce kit."
+      ],
+      "Tâches sous-chef": [
+        "Mesurer la mayonnaise, la relish et le lait",
+        "Mélanger la salade de chou avec une grosse cuillère",
+        "Étaler les frites en une seule couche sur la plaque froide"
+      ],
+      "À vérifier": "Temps et température des frites : suivre l'emballage (four ou air fryer). Réchauffage du poulet non précisé : viser 74 °C (165 °F). La source laisse reposer la salade de chou une heure au frigo ; ici elle repose pendant la cuisson des frites, ou on la prépare la veille. Salade de chou ramenée à la moitié de la recette (1 litre). Conservation des restes de poulet (3 jours) : règle prudente.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/3426-salade-de-chou-cremeuse",
+      "Notes": [
+        "Inspirée de la salade de chou crémeuse de Ricardo."
+      ]
+    },
+    {
+      "id": "k-survie-hamburgers-maison",
+      "Nom": "Hamburgers maison",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Classique",
+      "Soir de semaine": true,
+      "Temps total (min)": 35,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Sauce",
+        "125 ml (1/2 tasse) de mayonnaise",
+        "20 ml (4 c. à thé) de ketchup",
+        "10 ml (2 c. à thé) de moutarde préparée",
+        "## Burgers",
+        "454 g (1 lb) de bœuf haché maigre",
+        "Sel et poivre",
+        "15 ml (1 c. à soupe) d'huile d'olive",
+        "4 tranches de fromage suisse ou orangé",
+        "4 pains à hamburger",
+        "4 tranches de tomate",
+        "375 ml (1 1/2 tasse) de laitue iceberg émincée"
+      ],
+      "Étapes": [
+        "Dans un bol, mélanger la mayonnaise, le ketchup et la moutarde. Réserver au réfrigérateur.",
+        "Avec les mains, façonner 4 galettes avec le bœuf. Saler et poivrer.",
+        "Dans une grande poêle antiadhésive, chauffer l'huile. Cuire les galettes de 4 à 5 minutes de chaque côté, jusqu'à ce qu'elles soient bien cuites (71 °C / 160 °F au centre).",
+        "Déposer 1 tranche de fromage sur chaque galette et poursuivre la cuisson jusqu'à ce qu'il commence à fondre. Réserver au chaud dans une assiette.",
+        "Essuyer la poêle et y griller les 4 pains, côté coupé vers le bas.",
+        "Tartiner l'intérieur des pains de sauce. Y déposer les galettes, la tomate et la laitue. Refermer.",
+        "Pour avoir en réserve : façonner des galettes en double, les empiler en les séparant de papier parchemin et les congeler à plat dans un sac à congélation jusqu'à 2 mois. Les décongeler au réfrigérateur toute la nuit avant de les cuire."
+      ],
+      "Tâches sous-chef": [
+        "Mélanger la sauce mayo-ketchup-moutarde",
+        "Façonner les galettes avec les mains, puis bien se laver les mains",
+        "Monter les burgers : sauce, galette, tomate et laitue"
+      ],
+      "À vérifier": "La source ne précise pas l'intensité du feu : viser 71 °C (160 °F) au centre des galettes. Elle permet aussi le barbecue, sans temps précis. Durée de congélation des galettes (2 mois) : règle prudente, non précisée par la source.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/7163-burgers-tout-garnis",
+      "Notes": [
+        "Inspirée des burgers tout garnis de Ricardo."
+      ]
+    },
+    {
+      "id": "k-survie-hot-dogs-et-crudites",
+      "Nom": "Hot-dogs et crudités",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Porc",
+      "Cuisine": "Classique",
+      "Soir de semaine": true,
+      "Temps total (min)": 20,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Hot-dogs",
+        "8 saucisses à hot-dog",
+        "20 ml (4 c. à thé) de beurre",
+        "8 pains à hot-dog, légèrement beurrés",
+        "Mayonnaise, au goût",
+        "Moutarde préparée, au goût",
+        "## Crudités",
+        "2 carottes, pelées et coupées en bâtonnets",
+        "2 branches de céleri, coupées en bâtonnets",
+        "1 poivron rouge, coupé en lanières",
+        "1/2 concombre anglais, coupé en bâtonnets",
+        "125 ml (1/2 tasse) de trempette du commerce ou de houmous"
+      ],
+      "Étapes": [
+        "Préparer les crudités et les disposer dans une assiette avec la trempette. Réserver au réfrigérateur.",
+        "Dans une grande poêle antiadhésive à feu moyen-élevé, dorer les saucisses dans 20 ml (4 c. à thé) de beurre environ 8 minutes, en les tournant souvent, jusqu'à ce qu'elles soient bien chaudes.",
+        "Réserver les saucisses dans une assiette. Dans la même poêle, dorer rapidement les 8 pains de chaque côté.",
+        "Tartiner l'intérieur des pains de mayonnaise, y déposer les saucisses et ajouter un trait de moutarde. Servir avec les crudités."
+      ],
+      "Tâches sous-chef": [
+        "Laver les crudités",
+        "Disposer les crudités et la trempette dans une assiette",
+        "Tartiner les pains de mayonnaise"
+      ],
+      "À vérifier": "Crudités et trempette au choix, quantités indicatives : la source sert ses hot-dogs avec une salade de chou. Recette de 3 portions (6 hot-dogs) portée à 4 portions (8 hot-dogs).",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/7367-hot-dogs-a-la-salade-de-chou",
+      "Notes": [
+        "Inspirée des hot-dogs à la salade de chou de Ricardo."
+      ]
+    },
+    {
+      "id": "k-survie-paninis-jambon-fromage",
+      "Nom": "Paninis jambon-fromage",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Porc",
+      "Cuisine": "Classique",
+      "Soir de semaine": true,
+      "Temps total (min)": 20,
+      "Portions": 4,
+      "Outils": "Grill à panini",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Paninis",
+        "4 petits pains à panini ou pains ciabatta, coupés en deux sur l'épaisseur",
+        "8 tranches de jambon",
+        "8 tranches de fromage provolone doux",
+        "## Crudités",
+        "2 carottes, pelées et coupées en bâtonnets",
+        "1/2 concombre anglais, coupé en bâtonnets",
+        "250 ml (1 tasse) de tomates cerises"
+      ],
+      "Étapes": [
+        "Laver et couper les crudités. Réserver.",
+        "Préchauffer le grill à panini, ou chauffer une poêle striée.",
+        "Répartir 2 tranches de jambon et 2 tranches de fromage sur la base de chaque pain. Refermer les pains.",
+        "Griller les paninis, 2 à la fois, environ 5 minutes, jusqu'à ce que le fromage soit fondu. À la poêle striée, les presser avec une casserole lourde et les retourner à mi-cuisson.",
+        "Couper les paninis en deux et servir avec les crudités."
+      ],
+      "Tâches sous-chef": [
+        "Monter les paninis : 2 tranches de jambon et 2 de fromage par pain",
+        "Laver les crudités et les placer dans une assiette"
+      ],
+      "À vérifier": "La source donne seulement un temps de cuisson approximatif (5 minutes) ; la méthode à la poêle (presser, retourner) est ajoutée. Recette de Ricardo pour 1 portion, multipliée par 4. Crudités : quantités indicatives.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/7778-panini-au-jambon-et-au-fromage",
+      "Notes": [
+        "Inspirée du panini au jambon et au fromage de Ricardo."
+      ]
+    }
+  ],
+  "plans": [],
+  "inventaire": [],
+  "bilans": []
+}

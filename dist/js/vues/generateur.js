@@ -1,9 +1,9 @@
 // « Créer des recettes avec Claude » (D-G-035) : 1. ce que tu veux, 2. la consigne à donner à Claude,
 // 3. sa réponse collée, cochée, puis ajoutée « À trier ». La personne garde la main à chaque étape.
-import { S, $, CUIS, iso, toast } from '../etat.js?v=1.11.0';
-import { el, ico, vider } from '../el.js?v=1.11.0';
-import { importer } from '../import.js?v=1.11.0';
-import { NOMBRES, TYPES_LOT, DEMANDE_VIDE, consigneGenerateur, lireReponse, preparerChoix, fichierImport } from '../generateur.js?v=1.11.0';
+import { S, $, CUIS, iso, toast } from '../etat.js?v=1.12.0';
+import { el, ico, vider } from '../el.js?v=1.12.0';
+import { importer } from '../import.js?v=1.12.0';
+import { NOMBRES, TYPES_LOT, DEMANDE_VIDE, consigneGenerateur, lireReponse, preparerChoix, fichierImport } from '../generateur.js?v=1.12.0';
 
 const CLE = 'superchef-generateur'; // la demande reste sur l'appareil le temps d'aller dans Claude
 let G = null; // { d: demande, items: [], res }
