@@ -608,13 +608,18 @@ test('D-G-043 : garde-manger filtré, mode Modifier, fusion des doublons, Au gar
   const premier = page.locator('.glrow').first();
   const nom = (await premier.locator('.t > span').textContent()).trim();
   const avant = await page.locator('.glrow').count();
+  const ess = inv()[0].indexOf('Essentiel'), photo = JSON.stringify(inv());
+  const avantParId = new Map(inv().slice(1).map((l) => [l[0], l[ess]]));
   await premier.locator('[data-augm]').click();
   await expect(page.locator('#toast')).toContainText(`« ${nom} » est au garde-manger`);
   await expect(page.locator('.glrow')).toHaveCount(avant - 1);
-  const ajoute = inv().slice(1).find((l) => l[1] === nom);
-  expect(ajoute).toBeTruthy();
-  expect(ajoute[inv()[0].indexOf('Essentiel')]).toBe('oui');
+  // Article nouveau (ajouté Essentiel) ou déjà là (passé Essentiel) : une seule ligne change, et elle est Essentiel.
+  const changees = inv().slice(1).filter((l) => avantParId.get(l[0]) !== l[ess]);
+  expect(changees).toHaveLength(1);
+  expect(changees[0][ess]).toBe('oui');
   await page.locator('#toast button').click();                                   // Annuler
   await expect(page.locator('.glrow')).toHaveCount(avant);
+  const sens = (t) => JSON.stringify(t.slice(1).filter((l) => l[0]).map((l) => [l[0], l[ess] === 'oui']));   // '' et « non » : pas essentiel
+  await expect.poll(() => sens(inv())).toBe(sens(JSON.parse(photo)));
   expect(erreurs).toEqual([]);
 });
