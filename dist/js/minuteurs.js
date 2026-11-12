@@ -1,6 +1,6 @@
 // Minuteurs : plusieurs à la fois, sons maison, écran verrouillé, écran allumé. Repris de Gordon Rams.ai.
-import { S, $, toast, render } from './etat.js?v=1.6.2';
-import { el, ico, vider } from './el.js?v=1.6.2';
+import { S, $, toast, render } from './etat.js?v=1.7.0';
+import { el, ico, vider } from './el.js?v=1.7.0';
 
 let audioCtx = null, master = null;
 export function ac() { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (_) {} return audioCtx; }
@@ -18,8 +18,8 @@ export const SOUNDS = {
   coucou: { nom: 'Coucou', play() { [0, 1.0].forEach((b) => { note(740, b, 0.32, 'sine', 0.4); note(587, b + 0.36, 0.5, 'sine', 0.4); }); } },
   tambour: { nom: 'Roulement et cymbale', play() { const c = ac(); if (!c) return; for (let i = 0; i < 14; i++) note(110 + ((i % 2) * 14), i * 0.05, 0.06, 'triangle', 0.25); note(1568, 0.75, 0.9, 'square', 0.05); note(2093, 0.75, 0.9, 'sawtooth', 0.03); } }
 };
-export function soundKey() { try { const k = localStorage.getItem('3ebras-son'); return SOUNDS[k] ? k : 'ding'; } catch (_) { return 'ding'; } }
-export function setSound(k) { try { localStorage.setItem('3ebras-son', k); } catch (_) {} }
+export function soundKey() { try { const k = localStorage.getItem('superchef-son'); return SOUNDS[k] ? k : 'ding'; } catch (_) { return 'ding'; } }
+export function setSound(k) { try { localStorage.setItem('superchef-son', k); } catch (_) {} }
 function alarm() { try { SOUNDS[soundKey()].play(); } catch (_) {} try { navigator.vibrate && navigator.vibrate([300, 150, 300, 150, 300]); } catch (_) {} }
 
 export const fmt = (s) => { s = Math.max(0, Math.ceil(s)); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };
@@ -66,10 +66,10 @@ function bgSync() {
   if (!('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') return;
   const list = ids.map((k) => S.timers[k]).sort((a, b) => (b.done - a.done) || (a.left - b.left)), first = list[0];
   const title = first.done ? `PRÊT : ${first.label}` : `${fmt(first.left)} · ${first.label}`;
-  const artist = list.length > 1 ? list.slice(1).map((t) => `${t.done ? 'prêt' : fmt(t.left)} ${t.label}`).join(' | ') : '3Bras';
+  const artist = list.length > 1 ? list.slice(1).map((t) => `${t.done ? 'prêt' : fmt(t.left)} ${t.label}`).join(' | ') : 'SuperChef.ai';
   if (title + artist === lastMeta) return; lastMeta = title + artist;
   try {
-    navigator.mediaSession.metadata = new MediaMetadata({ title, artist, album: first.done ? 'Touche pause pour arrêter l\'alarme' : 'Minuteurs 3Bras' });
+    navigator.mediaSession.metadata = new MediaMetadata({ title, artist, album: first.done ? 'Touche pause pour arrêter l\'alarme' : 'Minuteurs SuperChef.ai' });
     navigator.mediaSession.playbackState = 'playing';
     if (navigator.mediaSession.setPositionState && !first.done) navigator.mediaSession.setPositionState({ duration: first.total, position: Math.min(first.total, first.total - first.left), playbackRate: 1 });
   } catch (_) {}

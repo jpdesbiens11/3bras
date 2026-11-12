@@ -5,7 +5,7 @@ import { ouvrirOuCreer, lireOnglet } from '../../dist/js/store.js';
 import { ONGLETS, VERSION_SCHEMA, colonnesManquantes, onglet } from '../../dist/js/schema.js';
 import { creerDriveSimule } from './drive-simule.mjs';
 
-const OPTS = { nomDossier: '3Bras', nomClasseur: '3Bras — Livre', version: '1.1.0' };
+const OPTS = { nomDossier: 'SuperChef.ai', nomClasseur: 'SuperChef.ai — Livre', version: '1.1.0' };
 const V1 = {
   Recettes: ['id', 'Nom', 'Type', 'Statut', 'Protéine', 'Cuisine', 'Soir de semaine', 'Temps total (min)', 'Portions', 'Jour fixe', 'Dernière fois cuisinée', 'Note globale /10', 'Outils', 'Étiquettes', 'Source', 'Ingrédients', 'Étapes'],
   'Plans de semaine': ['id', 'Semaine du', 'Jour', 'Recette id', 'Épinglé', 'Dessert', 'Notes'],

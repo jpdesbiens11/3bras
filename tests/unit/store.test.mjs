@@ -5,7 +5,7 @@ import { ouvrirOuCreer } from '../../dist/js/store.js';
 import { ONGLETS, lettre, VERSION_SCHEMA } from '../../dist/js/schema.js';
 import { creerDriveSimule } from './drive-simule.mjs';
 
-const OPTS = { nomDossier: '3Bras', nomClasseur: '3Bras — Livre', version: '1.0.0' };
+const OPTS = { nomDossier: 'SuperChef.ai', nomClasseur: 'SuperChef.ai — Livre', version: '1.0.0' };
 const preparer = (jeton = 'jeton-test') => {
   const sim = creerDriveSimule();
   const drive = creerDrive({ jetonValide: async () => jeton, fetch: sim.fetch });
@@ -19,8 +19,8 @@ test('R-01 : première visite, crée dossier, sous-dossiers et classeur', async 
   assert.equal(r.nouveau, true);
   assert.deepEqual(etapes, ['recherche', 'creation']);
   const noms = sim.fichiers.map((f) => f.name).sort();
-  assert.deepEqual(noms, ['3Bras', '3Bras — Livre', 'Exports', 'Fiches', 'Photos']);
-  const dossier = sim.fichiers.find((f) => f.name === '3Bras');
+  assert.deepEqual(noms, ['Exports', 'Fiches', 'Photos', 'SuperChef.ai', 'SuperChef.ai — Livre']);
+  const dossier = sim.fichiers.find((f) => f.name === 'SuperChef.ai');
   for (const f of sim.fichiers.filter((x) => x !== dossier)) assert.deepEqual(f.parents, [dossier.id]);
 });
 
@@ -62,4 +62,42 @@ test('lettre de colonne', () => {
   assert.equal(lettre(17), 'Q');
   assert.equal(lettre(52), 'AZ');
   assert.equal(lettre(27), 'AA');
+});
+
+// D-G-030 : un livre créé sous 3eBras/3Bras est retrouvé par son étiquette et prend le nom SuperChef.ai.
+const V1_MIN = { Recettes: ['id', 'Nom'], 'Plans de semaine': ['id'], Inventaire: ['id'], Bilans: ['id'], 'Schéma': ['clé', 'valeur'] };
+
+test('D-G-030 : un livre 3eBras retrouvé prend le nom SuperChef.ai, sans rien recréer', async () => {
+  const sim = creerDriveSimule();
+  const id = sim.classeurV1(V1_MIN);
+  const drive = creerDrive({ jetonValide: async () => 'jeton-test', fetch: sim.fetch });
+  const avant = sim.fichiers.length;
+  const r = await ouvrirOuCreer(drive, OPTS);
+  assert.equal(r.nouveau, false);
+  assert.equal(r.classeur.id, id);
+  assert.equal(r.classeur.name, 'SuperChef.ai — Livre');
+  assert.equal(r.dossier.name, 'SuperChef.ai');
+  assert.deepEqual(sim.fichiers.map((f) => f.name).sort(), ['SuperChef.ai', 'SuperChef.ai — Livre']);
+  assert.equal(sim.fichiers.length, avant);
+  assert.equal(sim.fichiers.find((f) => f.id === id).appProperties['3ebras'], 'livre', 'étiquette technique gardée');
+});
+
+test('D-G-030 : un nom choisi par la personne n\'est jamais touché', async () => {
+  const sim = creerDriveSimule();
+  const id = sim.classeurV1(V1_MIN);
+  sim.fichiers.find((f) => f.id === id).name = 'Recettes de la famille';
+  const drive = creerDrive({ jetonValide: async () => 'jeton-test', fetch: sim.fetch });
+  const r = await ouvrirOuCreer(drive, OPTS);
+  assert.equal(r.classeur.name, 'Recettes de la famille');
+  assert.equal(sim.appels.filter((a) => a.methode === 'PATCH' && a.url.includes(id)).length, 0);
+});
+
+test('D-G-030 : un renommage refusé par Google ne bloque pas l\'ouverture du livre', async () => {
+  const sim = creerDriveSimule();
+  const id = sim.classeurV1(V1_MIN);
+  const fetch = (url, o = {}) => (o.method === 'PATCH' ? Promise.resolve(new Response('{}', { status: 403 })) : sim.fetch(url, o));
+  const drive = creerDrive({ jetonValide: async () => 'jeton-test', fetch });
+  const r = await ouvrirOuCreer(drive, OPTS);
+  assert.equal(r.classeur.id, id);
+  assert.equal(r.classeur.name, '3eBras — Livre');
 });

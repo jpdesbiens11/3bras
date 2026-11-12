@@ -1,0 +1,15 @@
+{
+  "version": "1.7.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — nouveau nom et paquet Hostinger",
+  "requis": ["R-01", "R-02"],
+  "nouveautes": [
+    "3Bras devient SuperChef.ai partout : en-tête, onglet du navigateur, minuteurs, partage, kits, projet Claude. Slogan : « Ton renfort au souper ».",
+    "Ton livre est retrouvé comme avant : le dossier et le classeur qui portent encore l'ancien nom par défaut prennent le nom SuperChef.ai à l'ouverture (un nom choisi à la main n'est jamais touché).",
+    "Rien à refaire sur l'appareil : le compte mémorisé, le thème, le son des minuteurs et la liste Provigo sont repris de l'ancien nom.",
+    "Les anciennes « FICHE 3BRAS » et les fichiers d'import 3eBras sont toujours acceptés.",
+    "Paquet pour Hostinger : npm run paquet produit superchef-1.7.0.zip avec un .htaccess (HTTPS forcé, en-têtes de sécurité) ; l'archive est jointe à la release."
+  ],
+  "decisions": ["D-G-030", "D-G-031"],
+  "tests": { "unitaires": 36, "bout_en_bout": 20, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

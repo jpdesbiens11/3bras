@@ -1,9 +1,9 @@
 {
-  "format": "3ebras-import",
+  "format": "superchef-import",
   "version": 1,
   "schema": 2,
   "genere_le": "2026-11-06",
-  "source": "Kit 3Bras — Végé",
+  "source": "Kit SuperChef.ai — Végé",
   "kit": {
     "id": "vege",
     "nom": "Végé",

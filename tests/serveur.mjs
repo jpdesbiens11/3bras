@@ -1,4 +1,5 @@
-// Serveur statique local qui imite GitHub Pages : dist/ servi sous /3ebras/.
+// Serveur statique local : dist/ servi sous un sous-dossier (/superchef/), pour vérifier que l'app
+// marche autant à la racine d'un domaine (Hostinger) que dans un sous-dossier (GitHub Pages).
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { join, extname, normalize } from 'node:path';
@@ -10,8 +11,8 @@ const PORT = Number(process.env.PORT || 4173);
 
 createServer(async (req, res) => {
   const chemin = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  if (!chemin.startsWith('/3ebras/')) { res.writeHead(302, { Location: '/3ebras/' }).end(); return; }
-  let rel = normalize(chemin.slice('/3ebras/'.length)).replace(/^(\.\.[/\\])+/, '');
+  if (!chemin.startsWith('/superchef/')) { res.writeHead(302, { Location: '/superchef/' }).end(); return; }
+  let rel = normalize(chemin.slice('/superchef/'.length)).replace(/^(\.\.[/\\])+/, '');
   if (rel === '' || rel === '.' || rel.endsWith('/')) rel = join(rel, 'index.html');
   try {
     const corps = await readFile(join(RACINE, rel));
@@ -19,4 +20,4 @@ createServer(async (req, res) => {
   } catch {
     res.writeHead(404).end('introuvable');
   }
-}).listen(PORT, () => console.log(`3Bras sur http://localhost:${PORT}/3ebras/`));
+}).listen(PORT, () => console.log(`SuperChef.ai sur http://localhost:${PORT}/superchef/`));

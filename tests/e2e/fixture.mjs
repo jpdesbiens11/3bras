@@ -4,7 +4,7 @@ const r = (id, Nom, Type, Statut, Protéine, temps, ing, eta, extra = {}) => ({
   'Fiche complète': true, Ingrédients: ing, Étapes: eta, 'Tâches sous-chef': ['Rincer les légumes', 'Mesurer les épices'], ...extra
 });
 export const LIVRE = {
-  format: '3ebras-import', version: 1, schema: 2, genere_le: '2026-11-06', source: 'tests',
+  format: 'superchef-import', version: 1, schema: 2, genere_le: '2026-11-06', source: 'tests',
   recettes: [
     r('r-pate', 'Pâté chinois test', 'Souper', 'Au livre', 'Bœuf', 50, ['500 g de bœuf haché', '1 oignon haché', '1 boîte de maïs en crème', '6 pommes de terre'], ['Faire revenir le bœuf et l\'oignon 8 minutes.', 'Étaler le maïs.', 'Couvrir de purée et cuire au four 25 minutes.'], { 'Jour fixe': '' }),
     r('r-poulet', 'Poulet au citron test', 'Souper', 'Au livre', 'Poulet', 35, ['## Marinade', '2 c. à soupe d\'huile d\'olive', '1 citron', '## Plat', '4 hauts de cuisse de poulet', '1 tasse de riz'], ['Mélanger la marinade.', 'Cuire le poulet 20 minutes.', 'Servir avec le riz.']),

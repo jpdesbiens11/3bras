@@ -1,0 +1,33 @@
+# SuperChef.ai sur Hostinger (LiteSpeed, compatible Apache). Ajouté à l'archive par scripts/paquet.mjs (D-G-031).
+# Site statique : aucun PHP, aucune base de données. La CSP est dans index.html.
+Options -Indexes
+DirectoryIndex index.html
+
+# Toujours en HTTPS (Google refuse la connexion depuis une page en HTTP).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+AddType text/javascript .js .mjs
+AddType application/json .json
+AddType image/svg+xml .svg
+AddType font/woff2 .woff2
+AddCharset utf-8 .html .js .css .json .svg .md .txt
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000"
+  # Page, code et kits : toujours revalidés (une nouvelle version arrive tout de suite, N-05).
+  <FilesMatch "\.(html|js|css|json)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  # Polices : ne changent jamais.
+  <FilesMatch "\.woff2$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>

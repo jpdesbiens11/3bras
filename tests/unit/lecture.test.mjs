@@ -40,9 +40,9 @@ test('réponse de Claude collée, avec ou sans bloc de code', () => {
   assert.equal(parseLoose('pas du json'), null);
 });
 
-test('Fiche 3Bras du projet Claude : toutes les propriétés sont lues', async () => {
+test('Fiche SuperChef du projet Claude : toutes les propriétés sont lues', async () => {
   const { readFileSync } = await import('node:fs');
-  const doc = readFileSync(new URL('../../docs/projet-claude-3bras.md', import.meta.url), 'utf8');
+  const doc = readFileSync(new URL('../../docs/projet-claude-superchef.md', import.meta.url), 'utf8');
   const fiche = doc.split('```')[1];                     // l'exemple des instructions du projet
   const r = parseTexte(fiche, 'Dessert');
   assert.equal(r.nom, 'Pâté chinois');
@@ -59,4 +59,13 @@ test('Fiche 3Bras du projet Claude : toutes les propriétés sont lues', async (
   assert.equal(r.etapes[5], 'Cuire au four 30 minutes.');
   assert.deepEqual(r.sous, ['Ouvrir la boîte de maïs avec un adulte', 'Étendre la purée avec une spatule']);
   assert.equal(r.a_verifier, ''); // « (rien…) » = rien à vérifier
+});
+
+test('D-G-030 : une ancienne « FICHE 3BRAS » est encore lue comme une Fiche SuperChef', () => {
+  for (const entete of ['FICHE 3BRAS', 'FICHE SUPERCHEF', 'Fiche SuperChef.ai']) {
+    const r = parseTexte(`${entete}\nNom : Soupe aux pois\nType : Soupe\n\nINGRÉDIENTS\n- 1 l d'eau\n\nÉTAPES\n1. Mijoter 60 minutes.`, 'Souper');
+    assert.equal(r.nom, 'Soupe aux pois', entete);
+    assert.equal(r.type, 'Soupe', entete);
+    assert.equal(r.a_verifier, '', entete);
+  }
 });

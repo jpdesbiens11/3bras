@@ -1,11 +1,11 @@
 // « + Recette » : même feuille que Gordon Rams.ai (lien, photo ou fichier, texte collé, type, aperçu, ajouter au livre).
 // Hors de claude.ai, l'app n'a pas Claude : le texte, Word et PDF sont lus ici ; une photo ou un lien seul passent
 // par l'app Claude, dont on colle la réponse dans la boîte de texte (D-G-004, D-G-026).
-import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render } from '../etat.js?v=1.6.2';
-import { el, ico, vider } from '../el.js?v=1.6.2';
-import { ajouterRecette } from '../donnees.js?v=1.6.2';
-import { lireDocx, lirePdf, parseLoose, parseTexte } from '../lecture.js?v=1.6.2';
-import { iaDisponible, convertirAvecGemini, erreurIA } from '../ia.js?v=1.6.2';
+import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render, norm } from '../etat.js?v=1.7.0';
+import { el, ico, vider } from '../el.js?v=1.7.0';
+import { ajouterRecette } from '../donnees.js?v=1.7.0';
+import { lireDocx, lirePdf, parseLoose, parseTexte, ENTETE_FICHE } from '../lecture.js?v=1.7.0';
+import { iaDisponible, convertirAvecGemini, erreurIA } from '../ia.js?v=1.7.0';
 
 const SRC_CAT = ['Famille', 'Ricardo', 'Di Stasio', 'Recettes du Québec', 'Labriski', 'Trois fois par jour', 'Web autre'];
 const A = { files: [], result: null, busy: false };
@@ -18,7 +18,7 @@ export function openAdd() {
     el('div', { class: 'sheet-bar' }, el('div', { class: 'wrap' }, el('span', { class: 'label' }, 'Ajouter une recette'),
       el('button', { class: 'btn icon', 'data-addclose': '', 'aria-label': 'Fermer' }, ico('left')))),
     el('div', { class: 'wrap' }, el('h2', {}, 'Nouvelle recette'),
-      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, `Donne un PDF, un fichier Word, une photo ou une capture d'écran, ou colle le texte. ${iaDisponible() ? 'Gemini' : '3Bras'} la met au format du livre, puis tu l'ajoutes à ton classeur.`),
+      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0' }, `Donne un PDF, un fichier Word, une photo ou une capture d'écran, ou colle le texte. ${iaDisponible() ? 'Gemini' : 'SuperChef.ai'} la met au format du livre, puis tu l'ajoutes à ton classeur.`),
       el('form', { class: 'addf', id: 'addform' },
         el('div', {}, el('label', { for: 'add-url' }, 'Lien de la recette (facultatif)'), el('input', { id: 'add-url', type: 'url', inputmode: 'url', placeholder: 'https://…', autocomplete: 'off' }),
           el('p', { class: 'hint' }, iaDisponible() ? 'Avec un fichier, une capture ou du texte, le lien sert de source. Donné seul, Gemini lit la page et en fait la fiche.' : 'Avec un fichier, une capture ou du texte, le lien sert de source. Donné seul, le lien est envoyé à Claude, qui lit la page et te renvoie la fiche.')),
@@ -28,8 +28,8 @@ export function openAdd() {
             el('label', { class: 'btn pickbtn' }, ico('file'), 'Galerie ou fichier', el('input', { id: 'add-file', class: 'pickin', type: 'file', multiple: true, accept: 'image/*,.pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain' }))),
           el('div', { class: 'chips', id: 'add-chips' }),
           el('p', { class: 'hint' }, 'Photo du livre ou capture d\'écran (une recette sur deux pages : prends 2 photos). Aussi PDF, Word (.docx) ou texte.')),
-        el('div', {}, el('label', { for: 'add-text' }, 'Ou colle le texte (ou la Fiche 3Bras de ton projet Claude)'), el('textarea', { id: 'add-text', placeholder: 'Ingrédients, étapes…' })),
-        el('p', { class: 'hint', 'data-new': '1.5.0-projet-claude' }, 'Pas de recette sous la main ? Ton projet Claude « 3Bras » te pose 3 ou 4 questions, puis te donne une Fiche 3Bras à coller ici.'),
+        el('div', {}, el('label', { for: 'add-text' }, 'Ou colle le texte (ou la Fiche SuperChef de ton projet Claude)'), el('textarea', { id: 'add-text', placeholder: 'Ingrédients, étapes…' })),
+        el('p', { class: 'hint', 'data-new': '1.5.0-projet-claude' }, 'Pas de recette sous la main ? Ton projet Claude « SuperChef.ai » te pose 3 ou 4 questions, puis te donne une Fiche SuperChef à coller ici.'),
         el('div', {}, el('label', { for: 'add-type' }, 'Type'), el('select', { id: 'add-type' }, TYPES.map((t) => el('option', {}, t)))),
         el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', type: 'submit', id: 'add-go', 'data-new': '1.4.0-convertir' }, ico('file'), iaDisponible() ? 'Convertir avec Gemini' : 'Convertir')),
         el('div', { class: 'add-status', id: 'add-status', 'aria-live': 'polite' })),
@@ -48,15 +48,15 @@ export function paintChips() {
 export function addFiles(list) { A.files = A.files.concat([...(list || [])]).slice(-8); paintChips(); }
 export function removeFile(i) { A.files.splice(i, 1); paintChips(); }
 
-// Consigne pour Claude (photo ou lien seul) : même fiche texte que le projet Claude 3Bras (D-G-028).
+// Consigne pour Claude (photo ou lien seul) : même fiche texte que le projet Claude SuperChef.ai (D-G-028).
 function consigne(type, url, nbImages) {
-  return `Convertis cette recette en « Fiche 3Bras » pour mon livre de recettes familial. Français québécois.
+  return `Convertis cette recette en « Fiche SuperChef » pour mon livre de recettes familial. Français québécois.
 
 Règles : ingrédients fidèles (métrique d'abord, impérial entre parenthèses si la source le donne) ; étapes réécrites dans tes mots, phrases courtes, mêmes temps et températures (°C puis °F), durées en minutes ; n'invente rien qui manque, liste-le sous À VÉRIFIER ; 2 ou 3 tâches simples pour un enfant sous SOUS-CHEF ; laisse tomber la pub, l'histoire et les valeurs nutritives.
 
 Réponds avec seulement ce bloc de texte, prêt à coller :
 
-FICHE 3BRAS
+FICHE SUPERCHEF
 Nom : …
 Type : ${type} (ou ${TYPES.filter((t) => t !== type).join(', ')})
 Protéine : ${PROTS.join(', ')} ou Aucune
@@ -85,7 +85,7 @@ ${url ? `Lien de la recette (lis cette page) : ${url}\n` : ''}${nbImages ? `Rece
 async function versClaude(type, url, images) {
   const texte = consigne(type, url, images.length);
   try {
-    if (images.length && navigator.canShare && navigator.canShare({ files: images })) { await navigator.share({ files: images, text: texte, title: 'Recette pour 3Bras' }); }
+    if (images.length && navigator.canShare && navigator.canShare({ files: images })) { await navigator.share({ files: images, text: texte, title: 'Recette pour SuperChef.ai' }); }
     else window.open(`https://claude.ai/new?q=${encodeURIComponent(texte)}`, '_blank', 'noopener');
   } catch (e) { if (!(e && e.name === 'AbortError')) window.open(`https://claude.ai/new?q=${encodeURIComponent(texte)}`, '_blank', 'noopener'); }
   addStatus([el('b', {}, 'Claude prend le relais. '), images.length && !(navigator.canShare && navigator.canShare({ files: images })) ? 'Joins ta photo dans Claude. ' : '',
@@ -118,7 +118,7 @@ export async function convertRecipe() {
     if (json.erreur) { addStatus('Claude : ' + json.erreur, true); return; }
     A.result = normRecipe(json, lien, type); addStatus('Fiche de Claude lue. Vérifie-la, puis ajoute-la.'); renderAddPreview(); return;
   }
-  const ficheCollee = /^\s*(```\w*\s*)?fiche 3 ?bras/i.test(pasted);
+  const ficheCollee = ENTETE_FICHE.test(norm(pasted.replace(/^\s*```\w*\s*/, '').split(/\r?\n/)[0].trim()));
   if (iaDisponible() && !ficheCollee) { await viaGemini(type, lien, files, pasted); return; }
   if (images.length || (!files.length && !pasted && lien)) { await versClaude(type, lien, images); return; }
   if (!files.length && !pasted) { addStatus('Ajoute un lien, un fichier, une capture ou colle le texte de la recette.', true); return; }
@@ -136,7 +136,7 @@ export async function convertRecipe() {
     const r = parseTexte(text.slice(0, 40000), type);
     if (!r.ingredients.length && !r.etapes.length) throw { local: 'Aucune recette trouvée dans ce texte. Essaie avec Claude : prends une capture ou donne le lien.' };
     A.result = { ...r, url: lien || r.lien };
-    addStatus(r.a_verifier ? 'Recette lue. Vérifie et corrige la fiche, puis ajoute-la.' : 'Fiche 3Bras lue. Vérifie-la, puis ajoute-la.');
+    addStatus(r.a_verifier ? 'Recette lue. Vérifie et corrige la fiche, puis ajoute-la.' : 'Fiche SuperChef lue. Vérifie-la, puis ajoute-la.');
     renderAddPreview();
   } catch (e) { addStatus(e && e.local ? e.local : 'La lecture a été interrompue. Réessaie.', true); }
   A.busy = false; const g = $('#add-go'); if (g) g.disabled = false;
@@ -232,7 +232,7 @@ export async function saveRecipe(apres) {
       'Tâches sous-chef': r.sous.length ? r.sous : ['Aider à mesurer les ingrédients'],
       'À vérifier': ('Ajoutée depuis l\'app, à essayer. ' + r.a_verifier).trim(),
       'Lien source': /^https:\/\/\S+$/.test(r.url || '') ? r.url : '',
-      Notes: [`D'après ${r.source_nom}.${r.portions ? ` ${r.portions} portions.` : ''} Ajoutée avec 3Bras.`]
+      Notes: [`D'après ${r.source_nom}.${r.portions ? ` ${r.portions} portions.` : ''} Ajoutée avec SuperChef.ai.`]
     });
     closeAdd(); render();
     toast(`Ajoutée au livre : ${rec.name}`, { label: 'Voir', fn: () => apres(rec.id) });

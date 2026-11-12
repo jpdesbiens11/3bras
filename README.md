@@ -1,14 +1,15 @@
-# 3Bras
+# SuperChef.ai
 
-Le livre de recettes familial qui vit dans **ton** Google Drive. Tu planifies la semaine, tu fais l'épicerie, tu cuisines et tu notes les soupers.
+Le livre de recettes familial qui vit dans **ton** Google Drive. Tu planifies la semaine, tu fais l'épicerie, tu cuisines et tu notes les soupers. (Anciennement 3Bras, 3eBras et Gordon Rams.ai.)
 
-- App : https://jpdesbiens11.github.io/3ebras/
-- Aucune recette ne passe par un serveur. L'app parle directement à Google depuis ton navigateur.
-- Portée Google `drive.file` : 3Bras ne voit que les fichiers qu'il a créés.
+- App : sur le site Hostinger de SuperChef.ai (D-G-031) ; copie de secours : https://jpdesbiens11.github.io/3bras/
+- Aucune recette ne passe par un serveur. L'app parle directement à Google depuis ton navigateur, au téléphone comme à l'ordinateur.
+- Ta semaine planifiée est gardée dans l'onglet « Plans de semaine » de ton classeur Google et revient à chaque connexion.
+- Portée Google `drive.file` : SuperChef.ai ne voit que les fichiers qu'il a créés.
 
 ## État
 
-Version 1.0.0, MVP 0 (socle) : connexion Google, puis création du dossier `3Bras` et du classeur `3Bras — Livre`. Voir `docs/releases/` et `docs/DECISIONS.md`.
+Version 1.7.0 : nouveau nom SuperChef.ai et paquet pour Hostinger. Voir `docs/releases/` et `docs/DECISIONS.md`.
 
 ## Développer
 
@@ -19,21 +20,22 @@ npm ci
 npm test                       # tests unitaires, Drive simulé, sans réseau
 npx playwright install chromium
 npm run test:e2e               # bout en bout au téléphone (S25) et à 1440 px
-npm run serve                  # http://localhost:4173/3ebras/
+npm run serve                  # http://localhost:4173/superchef/
 ```
 
 Règles du dépôt (vérifiées par les tests) : fichiers JS et CSS sous 500 lignes, aucun `innerHTML`, aucune ressource externe sauf Google, CSP dans chaque page, aucun secret.
 
 ## Publier une version
 
-1. `node scripts/version.mjs 1.0.x` et une note `docs/releases/1.0.x.json`, dans une branche `version/1.0.x`.
+1. `node scripts/version.mjs 1.x.y` et une note `docs/releases/1.x.y.json`, dans une branche `version/1.x.y`.
 2. PR vers `main` ; les tests tournent sur la PR.
-3. Fusionner : GitHub Actions crée le tag et la release `v1.0.x`, puis publie `dist/` sur Pages (D-G-014).
-4. Retour arrière : Actions → « Publier 3Bras » → *Run workflow* avec le tag précédent.
+3. Fusionner : GitHub Actions crée le tag et la release `v1.x.y` (avec l'archive `superchef-1.x.y.zip`), puis publie `dist/` sur Pages (D-G-014).
+4. Hostinger : `npm run paquet` produit `paquet/superchef-<version>.zip`, déployé dans `public_html` par le connecteur Hostinger (D-G-031).
+5. Retour arrière : Actions → « Publier SuperChef.ai » → *Run workflow* avec le tag précédent ; sur Hostinger, redéployer l'archive de la release précédente.
 
 ## Héberger ta propre copie
 
-Le guide complet viendra au MVP 3. En bref : forker le dépôt, activer Pages (source : GitHub Actions), créer ton ID client OAuth « Application Web » dans Google Cloud, puis le mettre dans `dist/js/config.js`.
+Forker le dépôt, créer ton ID client OAuth « Application Web » dans Google Cloud et le mettre dans `dist/js/config.js`, puis publier `dist/` (Pages, ou l'archive de `npm run paquet` sur n'importe quel hébergement statique). Le domaine doit être déclaré à Google : voir `docs/firebase-gemini.md`, section « Nouveau domaine ».
 
 ## Licence
 

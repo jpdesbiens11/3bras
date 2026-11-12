@@ -1,8 +1,8 @@
-// Bibliothèque 3Bras dans le Drive de la personne (R-01).
+// Bibliothèque SuperChef.ai dans le Drive de la personne (R-01).
 // Trouve le dossier et le classeur créés par l'app, ou les crée.
 
-import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.6.2';
-import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.6.2';
+import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.7.0';
+import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.7.0';
 
 export async function ouvrirOuCreer(drive, { nomDossier, nomClasseur, version }, etape = () => {}) {
   etape('recherche');
@@ -12,7 +12,11 @@ export async function ouvrirOuCreer(drive, { nomDossier, nomClasseur, version },
   ]);
   if (classeurs.length) {
     const migration = await migrerSchema(drive, classeurs[0].id);
-    return { nouveau: false, classeur: classeurs[0], dossier: dossiers[0] || null, migration };
+    const [classeur, dossier] = await Promise.all([
+      renommerAncien(drive, classeurs[0], nomClasseur),
+      dossiers[0] ? renommerAncien(drive, dossiers[0], nomDossier) : null
+    ]);
+    return { nouveau: false, classeur, dossier, migration };
   }
 
   etape('creation');
@@ -25,6 +29,14 @@ export async function ouvrirOuCreer(drive, { nomDossier, nomClasseur, version },
   const classeur = await drive.creerFichier({ nom: nomClasseur, type: TYPE_CLASSEUR, parent: dossier.id, role: 'livre' });
   await preparerOnglets(drive, classeur.id, version);
   return { nouveau: true, classeur, dossier };
+}
+
+// D-G-030 : le dossier et le classeur qui portent encore un ancien nom par défaut prennent le nom
+// SuperChef.ai. Un nom choisi par la personne n'est jamais touché ; un échec de renommage ne bloque rien.
+export const ANCIENS_NOMS = Object.freeze(['3eBras', '3Bras', '3eBras — Livre', '3Bras — Livre']);
+async function renommerAncien(drive, fichier, nom) {
+  if (!nom || !ANCIENS_NOMS.includes(fichier.name)) return fichier;
+  try { return { ...fichier, ...await drive.renommer(fichier.id, nom) }; } catch { return fichier; }
 }
 
 export async function preparerOnglets(drive, id, version) {
@@ -43,7 +55,7 @@ export async function preparerOnglets(drive, id, version) {
     range: "'Schéma'!A2:B4",
     values: [
       ['version_schema', String(VERSION_SCHEMA)],
-      ['cree_par', `3Bras ${version}`],
+      ['cree_par', `SuperChef.ai ${version}`],
       ['cree_le', new Date().toISOString().slice(0, 10)]
     ]
   });

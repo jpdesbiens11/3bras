@@ -1,6 +1,6 @@
 // Lecture de recettes sans bibliothèque externe (P-1, N-10) : texte, Word (.docx), PDF simple,
 // et réponse JSON de Claude (même format que la conversion de Gordon Rams.ai).
-import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.6.2';
+import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.7.0';
 
 /* ---------- .docx : zip natif (DecompressionStream) + XML ---------- */
 async function inflerBrut(octets) {
@@ -75,9 +75,11 @@ export function parseLoose(text) {
 
 /* ---------- texte libre → fiche ---------- */
 const PROT_MOTS = [['Poisson & fruits de mer', /saumon|crevette|poisson|thon|morue|petoncle|tilapia|aiglefin|moule/], ['Poulet', /poulet|dinde/], ['Bœuf', /boeuf|bavette|steak/], ['Porc', /porc|bacon|jambon|saucisse/], ['Veau', /\bveau\b/], ['Œufs', /\boeufs?\b/]];
-// Fiche 3Bras (texte produit par le projet Claude 3Bras, D-G-028) ou texte libre.
+// Fiche SuperChef (texte du projet Claude SuperChef.ai, D-G-028 ; « FICHE 3BRAS » toujours lue) ou texte libre.
 const SRC_CAT = ['Famille', 'Ricardo', 'Di Stasio', 'Recettes du Québec', 'Labriski', 'Trois fois par jour', 'Web autre'];
 const META = { nom: 'nom', type: 'type', proteine: 'proteine', cuisine: 'cuisine', portions: 'portions', 'temps total': 'temps', temps: 'temps', outils: 'outils', source: 'source', lien: 'lien' };
+// En-tête d'une fiche du projet Claude : « FICHE SUPERCHEF », ou « FICHE 3BRAS » d'avant le changement de nom.
+export const ENTETE_FICHE = /^fiche (3 ?bras|super ?chef(\.ai)?)$/i;
 const trouve = (v, liste) => liste.find((x) => norm(x) === norm(v)) || null;
 
 export function parseTexte(texte, type) {
@@ -93,7 +95,7 @@ export function parseTexte(texte, type) {
   };
   const puce = /^(?:[-*•▪◦·]|\[[ xX]\])\s*/, numero = /^(?:etape\s*)?\d+\s*[.)\-:]\s*/i;
   for (const l of lignes) {
-    if (/^fiche 3 ?bras$/i.test(norm(l))) continue;
+    if (ENTETE_FICHE.test(norm(l))) continue;
     const s = titreSec(l);
     if (s) { sec = s; groupe = null; continue; }
     const m = !sec && /^([^:]{2,14})\s*:\s*(.+)$/.exec(l);

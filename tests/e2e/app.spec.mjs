@@ -19,12 +19,12 @@ async function demarrer(page) {
   return { ...b, erreurs };
 }
 
-test('les 6 étapes de Gordon Rams.ai sur 3Bras', async ({ page }, info) => {
+test('les 6 étapes de SuperChef.ai', async ({ page }, info) => {
   const P = info.project.name;
   const { sim, erreurs } = await demarrer(page);
 
   // En-tête identique : marque, 6 étapes numérotées
-  await expect(page.locator('.brand h1')).toHaveText('3Bras');
+  await expect(page.locator('.brand h1')).toHaveText('SuperChef.ai');
   await expect(page.locator('#steps button')).toHaveCount(6);
   await expect(page.locator('#steps button[aria-current="page"] i')).toHaveText('Semaine');
   await expect(page.locator('#sync')).toHaveText(/soupers dans le livre/);
@@ -102,6 +102,19 @@ test('texte hostile dans le classeur affiché comme texte', async ({ page }) => 
   expect(b.sim).toBeTruthy();
 });
 
+test('D-G-030 : le compte et le thème gardés sous l\'ancien nom sont repris', async ({ page }) => {
+  await brancher(page);
+  await page.addInitScript(() => {
+    if (sessionStorage.getItem('deja')) return; sessionStorage.setItem('deja', '1');
+    localStorage.setItem('3bras-compte', 'jp@exemple.ca'); localStorage.setItem('3ebras-skin', 'ardoise');
+  });
+  await page.goto('./');
+  await expect(page.getByRole('heading', { name: 'Content de te revoir' })).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-skin', 'ardoise');
+  const cles = await page.evaluate(() => Object.keys(localStorage).sort());
+  expect(cles).toEqual(['superchef-compte', 'superchef-skin']);
+});
+
 test('ID client absent : message clair', async ({ page }) => {
   await brancher(page, { clientId: '' });
   await page.goto('./');
@@ -111,7 +124,7 @@ test('ID client absent : message clair', async ({ page }) => {
 test('mémoire du compte : le retour se fait en un toucher, sans garder le jeton', async ({ page, context }, info) => {
   const { sim } = await demarrer(page);
   const stock = await page.evaluate(() => Object.fromEntries(Object.keys(localStorage).map((k) => [k, localStorage.getItem(k)])));
-  expect(stock['3bras-compte']).toBe('jp@exemple.ca');
+  expect(stock['superchef-compte']).toBe('jp@exemple.ca');
   expect(JSON.stringify(stock)).not.toContain('jeton-test');           // N-02 : jamais le jeton
   const schema = [...sim.classeurs.values()][0].onglets['Schéma'];
   expect(schema.find((l) => l[0] === 'proprietaire')?.[1]).toBe('jp@exemple.ca');
@@ -200,19 +213,19 @@ test('+ Recette : texte collé, réponse de Claude, photo vers Claude', async ({
   await expect(page.locator('#add-status')).toContainText('Claude prend le relais');
   const ouvert = await page.evaluate(() => window.__ouvert[0]);
   expect(ouvert).toMatch(/^https:\/\/claude\.ai\/new\?q=/);
-  expect(decodeURIComponent(ouvert)).toContain('3Bras');
+  expect(decodeURIComponent(ouvert)).toContain('FICHE SUPERCHEF');
   expect(erreurs).toEqual([]);
 });
 
-test('+ Recette : Fiche 3Bras du projet Claude collée telle quelle', async ({ page }) => {
+test('+ Recette : Fiche SuperChef du projet Claude collée telle quelle', async ({ page }) => {
   const { readFileSync } = await import('node:fs');
-  const fiche = readFileSync(new URL('../../docs/projet-claude-3bras.md', import.meta.url), 'utf8').split('```')[1].trim();
+  const fiche = readFileSync(new URL('../../docs/projet-claude-superchef.md', import.meta.url), 'utf8').split('```')[1].trim();
   const { sim, erreurs } = await demarrer(page);
   await page.locator('#addbtn').click();
-  await expect(page.locator('#addsheet')).toContainText('projet Claude « 3Bras »');
+  await expect(page.locator('#addsheet')).toContainText('projet Claude « SuperChef.ai »');
   await page.locator('#add-text').fill(fiche);
   await page.locator('#add-go').click();
-  await expect(page.locator('#add-status')).toContainText('Fiche 3Bras lue');
+  await expect(page.locator('#add-status')).toContainText('Fiche SuperChef lue');
   await expect(page.locator('#add-name')).toHaveValue('Pâté chinois');
   await expect(page.locator('#add-prev')).toContainText('Ricardo');
   await page.locator('#add-save').click();
@@ -233,7 +246,7 @@ test('+ Recette avec Gemini (Firebase simulé) : photo et lien deviennent une fi
   const erreurs = [];
   page.on('pageerror', (e) => erreurs.push(e.message));
   const { sim } = await brancher(page, { ia: IA });
-  await page.addInitScript(() => { window.__reponseGemini = '```\nFICHE 3BRAS\nNom : Tarte au sucre\nType : Dessert\nProtéine : Aucune\nPortions : 8\nTemps total : 60 min\nSource : Ricardo\nLien : https://www.ricardocuisine.com/recettes/1234-tarte-au-sucre\n\nINGRÉDIENTS\n- 1 abaisse de pâte\n- 250 ml de cassonade\n\nÉTAPES\n1. Préchauffer le four à 180 °C (350 °F).\n2. Cuire 45 minutes.\n\nSOUS-CHEF\n- Mesurer la cassonade\n```'; });
+  await page.addInitScript(() => { window.__reponseGemini = '```\nFICHE SUPERCHEF\nNom : Tarte au sucre\nType : Dessert\nProtéine : Aucune\nPortions : 8\nTemps total : 60 min\nSource : Ricardo\nLien : https://www.ricardocuisine.com/recettes/1234-tarte-au-sucre\n\nINGRÉDIENTS\n- 1 abaisse de pâte\n- 250 ml de cassonade\n\nÉTAPES\n1. Préchauffer le four à 180 °C (350 °F).\n2. Cuire 45 minutes.\n\nSOUS-CHEF\n- Mesurer la cassonade\n```'; });
   await page.goto('./');
   await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
   await page.locator('[data-compteclose]').click();
@@ -264,11 +277,11 @@ test('+ Recette avec Gemini (Firebase simulé) : photo et lien deviennent une fi
   await expect(page.locator('#add-name')).toHaveValue('Tarte au sucre');
   expect(await page.evaluate(() => window.__gemini.outils)).toEqual([{ urlContext: {} }]);
 
-  // Une Fiche 3Bras collée ne repasse pas par Gemini
+  // Une Fiche SuperChef collée ne repasse pas par Gemini
   await page.evaluate(() => { window.__gemini = null; });
   await page.locator('[data-addclose]').click();
   await page.locator('#addbtn').click();
-  await page.locator('#add-text').fill('FICHE 3BRAS\nNom : Soupe test\nType : Soupe\n\nINGRÉDIENTS\n- 1 l d\'eau\n\nÉTAPES\n1. Bouillir 10 minutes.');
+  await page.locator('#add-text').fill('FICHE SUPERCHEF\nNom : Soupe test\nType : Soupe\n\nINGRÉDIENTS\n- 1 l d\'eau\n\nÉTAPES\n1. Bouillir 10 minutes.');
   await page.locator('#add-go').click();
   await expect(page.locator('#add-name')).toHaveValue('Soupe test');
   expect(await page.evaluate(() => window.__gemini)).toBeNull();

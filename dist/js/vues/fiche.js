@@ -1,10 +1,10 @@
 // Aperçu d'une recette et « déjà à la maison ». Repris de Gordon Rams.ai.
-import { S, $, DAYS, norm, toast, errText, render } from '../etat.js?v=1.6.2';
-import { el, ico, vider } from '../el.js?v=1.6.2';
-import { getRecipe, saveHave } from '../donnees.js?v=1.6.2';
-import { ingKey, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.6.2';
-import { lienClasseur } from '../store.js?v=1.6.2';
-import { starRow, recipeMeta, chips, tagEditor, noticeWarn } from './commun.js?v=1.6.2';
+import { S, $, DAYS, norm, toast, errText, render } from '../etat.js?v=1.7.0';
+import { el, ico, vider } from '../el.js?v=1.7.0';
+import { getRecipe, saveHave } from '../donnees.js?v=1.7.0';
+import { ingKey, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.7.0';
+import { lienClasseur } from '../store.js?v=1.7.0';
+import { starRow, recipeMeta, chips, tagEditor, noticeWarn } from './commun.js?v=1.7.0';
 
 export const weekIds = () => new Set([...S.plan.filter(Boolean), ...(S.dess || []).map((x) => x.id)]);
 export const frozen = () => !!(S.saved && S.planRows.length);
@@ -97,7 +97,7 @@ export function texteRecette(id) {
   }
   if (d.steps.length) { out.push('ÉTAPES'); d.steps.forEach((s, i) => out.push(`${i + 1}. ${s}`)); out.push(''); }
   if (/^https:\/\/\S+$/.test(r.lien || '')) out.push(`Source : ${r.lien}`);
-  out.push('Partagé avec 3Bras · Besoin de Renfort Au Souper');
+  out.push('Partagé avec SuperChef.ai · Ton renfort au souper');
   return out.filter((l, i, a) => !(l === '' && a[i - 1] === '')).join('\n').trim();
 }
 export async function partagerRecette(id) {
