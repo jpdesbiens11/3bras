@@ -1,11 +1,12 @@
 // « + Recette » : même feuille que Gordon Rams.ai (lien, photo ou fichier, texte collé, type, aperçu, ajouter au livre).
 // Hors de claude.ai, l'app n'a pas Claude : le texte, Word et PDF sont lus ici ; une photo ou un lien seul passent
 // par l'app Claude, dont on colle la réponse dans la boîte de texte (D-G-004, D-G-026).
-import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render, norm } from '../etat.js?v=1.14.0';
-import { el, ico, vider } from '../el.js?v=1.14.0';
-import { ajouterRecette } from '../donnees.js?v=1.14.0';
-import { lireDocx, lirePdf, parseLoose, parseTexte, ENTETE_FICHE } from '../lecture.js?v=1.14.0';
-import { iaDisponible, convertirAvecGemini, erreurIA } from '../ia.js?v=1.14.0';
+import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render, norm } from '../etat.js?v=1.15.0';
+import { el, ico, vider } from '../el.js?v=1.15.0';
+import { ajouterRecette } from '../donnees.js?v=1.15.0';
+import { lireDocx, lirePdf, parseLoose, parseTexte, ENTETE_FICHE } from '../lecture.js?v=1.15.0';
+import { iaDisponible, convertirAvecGemini, erreurIA } from '../ia.js?v=1.15.0';
+import { consigneCreation } from '../generateur.js?v=1.15.0';
 
 const SRC_CAT = ['Famille', 'Ricardo', 'Di Stasio', 'Recettes du Québec', 'Labriski', 'Trois fois par jour', 'Web autre'];
 const A = { files: [], result: null, busy: false };
@@ -33,6 +34,16 @@ export function openAdd() {
         el('div', {}, el('label', { for: 'add-type' }, 'Type'), el('select', { id: 'add-type' }, TYPES.map((t) => el('option', {}, t)))),
         el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', type: 'submit', id: 'add-go', 'data-new': '1.4.0-convertir' }, ico('file'), iaDisponible() ? 'Convertir avec Gemini' : 'Convertir')),
         el('div', { class: 'add-status', id: 'add-status', 'aria-live': 'polite' })),
+      // D-G-045 : pas de recette sous la main ? Gemini la crée d'après une description.
+      iaDisponible() && el('section', { class: 'gen-etape add-creer', 'data-new': '1.15.0-creer' },
+        el('h3', {}, 'Pas de recette ? Crée-la avec Gemini'),
+        el('p', { class: 'hint', style: 'margin:0' }, 'Décris le plat que tu as en tête. Gemini écrit la fiche complète ; tu la vérifies avant de l\'ajouter au livre.'),
+        el('div', { class: 'addf' },
+          el('div', {}, el('label', { for: 'add-idee' }, 'Le plat que tu veux'),
+            el('textarea', { id: 'add-idee', placeholder: 'Ex. un pâté chinois végé pour 6, poulet brocoli et riz en 30 minutes, la soupe aux pois comme chez grand-maman…' })),
+          el('label', { class: 'gen-coche' }, el('input', { type: 'checkbox', id: 'add-gm' }), 'Utiliser ce que j\'ai au garde-manger'),
+          el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', type: 'button', id: 'add-creer' }, ico('chef'), 'Créer avec Gemini')),
+          el('div', { class: 'add-status', id: 'add-creer-status', 'aria-live': 'polite' }))),
       el('div', { class: 'add-prev', id: 'add-prev' })));
   document.body.append(n); document.body.style.overflow = 'hidden';
 }
@@ -196,6 +207,26 @@ async function viaGemini(type, lien, files, pasted) {
   A.busy = false; const g = $('#add-go'); if (g) g.disabled = false;
 }
 
+// D-G-045 : créer avec Gemini (modèle principal), même aperçu que la conversion.
+export async function creerRecette() {
+  if (A.busy) return;
+  const st = (m, err) => { const s = $('#add-creer-status'); if (s) { s.textContent = m || ''; s.classList.toggle('err', !!err); } };
+  const demande = ($('#add-idee')?.value || '').trim(), type = $('#add-type')?.value || 'Souper';
+  if (!demande) { st('Décris le plat que tu veux, par exemple « un chili végé pour 6 ».', true); return; }
+  const garde = $('#add-gm')?.checked ? (S.inv.items || []).filter((i) => i.qty > 0 || i.essential).map((i) => i.name) : [];
+  A.busy = true; const b = $('#add-creer'); if (b) b.disabled = true; vider($('#add-prev')); st('Gemini crée la recette…');
+  try {
+    const sortie = await convertirAvecGemini(consigneCreation(demande, type, garde), [], '');
+    const r = parseTexte(String(sortie || '').replace(/```\w*\n?/g, ''), type);
+    if (!r.ingredients.length || !r.etapes.length) throw { local: 'Gemini n\'a pas renvoyé une recette complète. Précise ta demande et réessaie.' };
+    A.result = { ...r, url: '', source_nom: 'Gemini', source_cat: 'Web autre', creee: demande,
+      a_verifier: ['Recette créée par Gemini : à essayer et à ajuster.', r.a_verifier].filter(Boolean).join(' ') };
+    st('Recette créée par Gemini. Vérifie la fiche, puis ajoute-la.');
+    renderAddPreview(); $('#add-prev')?.scrollIntoView({ block: 'start' });
+  } catch (e) { st(e && e.local ? e.local : erreurIA(e), true); }
+  A.busy = false; if (b) b.disabled = false;
+}
+
 function renderAddPreview() {
   const r = A.result, box = $('#add-prev'); if (!box || !r) return;
   const meta = [r.type, r.proteine, r.temps ? r.temps + ' min' : null, r.portions ? r.portions + ' portions' : null, r.source_nom].filter(Boolean);
@@ -232,7 +263,7 @@ export async function saveRecipe(apres) {
       'Tâches sous-chef': r.sous.length ? r.sous : ['Aider à mesurer les ingrédients'],
       'À vérifier': ('Ajoutée depuis l\'app, à essayer. ' + r.a_verifier).trim(),
       'Lien source': /^https:\/\/\S+$/.test(r.url || '') ? r.url : '',
-      Notes: [`D'après ${r.source_nom}.${r.portions ? ` ${r.portions} portions.` : ''} Ajoutée avec SuperChef.ai.`]
+      Notes: [r.creee ? `Créée avec Gemini d'après : « ${String(r.creee).slice(0, 200)} ».${r.portions ? ` ${r.portions} portions.` : ''}` : `D'après ${r.source_nom}.${r.portions ? ` ${r.portions} portions.` : ''} Ajoutée avec SuperChef.ai.`]
     });
     closeAdd(); render();
     toast(`Ajoutée au livre : ${rec.name}`, { label: 'Voir', fn: () => apres(rec.id) });

@@ -1,0 +1,13 @@
+{
+  "version": "1.15.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — créer une recette avec Gemini",
+  "requis": ["R-04"],
+  "nouveautes": [
+    "+ Recette → « Pas de recette ? Crée-la avec Gemini » : décris le plat que tu veux, Gemini écrit la fiche complète.",
+    "« Utiliser ce que j'ai au garde-manger » : Gemini se sert de ce que tu as en stock.",
+    "Tu vérifies et corriges la fiche avant de l'ajouter ; elle entre « À trier », avec une note qui rappelle de l'essayer."
+  ],
+  "decisions": ["D-G-045"],
+  "tests": { "unitaires": 63, "bout_en_bout": 38, "appareils": ["Galaxy S25 360 px", "PC 1440 px"] }
+}

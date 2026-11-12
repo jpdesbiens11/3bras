@@ -1,11 +1,11 @@
 // Aperçu d'une recette et « déjà à la maison ». Repris de Gordon Rams.ai.
-import { S, $, DAYS, norm, toast, errText, render } from '../etat.js?v=1.14.0';
-import { el, ico, vider } from '../el.js?v=1.14.0';
-import { getRecipe, saveHave } from '../donnees.js?v=1.14.0';
-import { ingKey, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.14.0';
-import { lienClasseur } from '../store.js?v=1.14.0';
-import { starRow, recipeMeta, chips, tagEditor, noticeWarn } from './commun.js?v=1.14.0';
-import { iaDisponible } from '../ia.js?v=1.14.0';
+import { S, $, DAYS, norm, toast, errText, render } from '../etat.js?v=1.15.0';
+import { el, ico, vider } from '../el.js?v=1.15.0';
+import { getRecipe, saveHave } from '../donnees.js?v=1.15.0';
+import { ingKey, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.15.0';
+import { lienClasseur } from '../store.js?v=1.15.0';
+import { starRow, recipeMeta, chips, tagEditor, noticeWarn } from './commun.js?v=1.15.0';
+import { iaDisponible } from '../ia.js?v=1.15.0';
 
 export const weekIds = () => new Set([...S.plan.filter(Boolean), ...(S.dess || []).map((x) => x.id)]);
 export const frozen = () => !!(S.saved && S.planRows.length);

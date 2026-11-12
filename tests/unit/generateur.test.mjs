@@ -70,3 +70,16 @@ test('D-G-035 : recoller la même réponse n\'ajoute rien de plus au classeur', 
   assert.equal(r2.deja.recettes, 2);
   assert.deepEqual((await lireOnglet(drive, classeur.id, 'Recettes')).map((l) => l.Nom), ['Sauce bolognaise mijotée', 'Pâté chinois test']);
 });
+
+test('D-G-045 : la consigne de création reprend la demande, le type et le garde-manger', async () => {
+  const { consigneCreation } = await import('../../dist/js/generateur.js');
+  const c = consigneCreation('  un pâté chinois végé   pour 6 ', 'Souper', ['Lentilles', 'Maïs en crème', 'Lentilles']);
+  assert.match(c, /Demande : « un pâté chinois végé pour 6 »/);
+  assert.match(c, /Type : Souper/);
+  assert.match(c, /Au garde-manger \(utilise-en le plus possible, sans obligation\) : Lentilles, Maïs en crème\n/);
+  assert.match(c, /FICHE SUPERCHEF\nNom : …/);
+  assert.match(c, /Source : Gemini/);
+  assert.match(c, /quantité utilisée/);
+  assert.doesNotMatch(consigneCreation('chili', 'Inventé'), /Au garde-manger/);
+  assert.match(consigneCreation('chili', 'Inventé'), /Type : Souper/);
+});

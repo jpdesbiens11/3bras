@@ -2,11 +2,11 @@
 // les cuisines et les mots-clés choisis ; la personne colle la réponse (plusieurs Fiches SuperChef),
 // coche ce qu'elle garde, et les recettes entrent « À trier » par l'import validé (D-G-016).
 // Sans DOM : testé à part.
-import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.14.0';
-import { parseTexte, parseLoose, ENTETE_FICHE } from './lecture.js?v=1.14.0';
-import { FORMAT, FORMATS, valider, estKitRepas } from './import.js?v=1.14.0';
-import { VERSION_SCHEMA } from './schema.js?v=1.14.0';
-import { slug } from './donnees.js?v=1.14.0';
+import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.15.0';
+import { parseTexte, parseLoose, ENTETE_FICHE } from './lecture.js?v=1.15.0';
+import { FORMAT, FORMATS, valider, estKitRepas } from './import.js?v=1.15.0';
+import { VERSION_SCHEMA } from './schema.js?v=1.15.0';
+import { slug } from './donnees.js?v=1.15.0';
 
 export const NOMBRES = Object.freeze([5, 10, 15, 20]);
 export const TYPES_LOT = Object.freeze(['Souper', 'Dessert', 'Soupe', 'Déjeuner', 'Accompagnement', 'Collation', 'Mélange']);
@@ -115,3 +115,50 @@ export function preparerChoix(fiches, nomsLivre, ctx) {
 
 // Fichier d'import pour les recettes cochées, validé comme tout import (D-G-016).
 export const fichierImport = (rows, jour) => valider({ format: FORMAT, version: 1, schema: VERSION_SCHEMA, genere_le: jour, source: 'claude', recettes: rows });
+
+// D-G-045 : créer une recette avec Gemini à partir d'une simple description (pas de site source).
+// garde : noms des articles du garde-manger à utiliser si possible.
+export function consigneCreation(demande, type, garde = []) {
+  const g = [...new Set(garde.map((x) => propre(x, 60)).filter(Boolean))].slice(0, 60);
+  return `Tu es le sous-chef de SuperChef.ai, l'app de recettes d'une famille québécoise. Crée UNE recette d'après la demande de la famille. Français québécois.
+
+Demande : « ${propre(demande, 600)} »
+Type : ${TYPES.includes(type) ? type : 'Souper'} (ou celui qui convient mieux à la demande)
+${g.length ? `Au garde-manger (utilise-en le plus possible, sans obligation) : ${g.join(', ')}\n` : ''}
+Règles :
+- Une recette réaliste et éprouvée, inspirée des classiques ; 4 portions sauf si la demande dit autrement.
+- Ingrédients : un par ligne, commençant par « - », métrique d'abord, impérial entre parenthèses. « Groupe : » seulement s'il y a plusieurs composantes.
+- Étapes : numérotées, phrases courtes, °C puis °F, durées en minutes (« Cuire 25 minutes »). Si un ingrédient sert à plusieurs étapes, écris dans chaque étape la quantité utilisée.
+- SOUS-CHEF : 2 ou 3 tâches simples et sécuritaires pour un enfant.
+- C'est une recette créée, pas une source vérifiée : sous À VÉRIFIER, note ce qui mérite un essai (cuisson, temps, quantités).
+- Jamais de recettes de kits repas.
+- Valeurs permises, écrites exactement ainsi :
+  Type : ${TYPES.join(', ')}
+  Protéine : ${PROTS.join(', ')} (ou Aucune pour un dessert)
+  Cuisine : ${CUIS.join(', ')} (la plus proche)
+  Outils : ${OUTILS.join(', ')} (seulement ceux utilisés)
+
+Réponds avec seulement la fiche, dans ce format :
+
+FICHE SUPERCHEF
+Nom : …
+Type : …
+Protéine : …
+Cuisine : …
+Portions : …
+Temps total : … min
+Outils : …
+Source : Gemini
+
+INGRÉDIENTS
+- …
+
+ÉTAPES
+1. …
+
+SOUS-CHEF
+- …
+
+À VÉRIFIER
+- …`;
+}

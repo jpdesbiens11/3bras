@@ -684,3 +684,31 @@ test('D-G-044 : livre en mode Modifier (infos, supprimer, fusionner) et texte de
   await expect(page.locator('#sheet')).not.toContainText('500 g de bœuf haché maigre');
   expect(erreurs).toEqual([]);
 });
+
+test('D-G-045 : créer une recette avec Gemini à partir d\'une description et du garde-manger', async ({ page }, info) => {
+  const IA = { apiKey: 'AIza-test', projectId: 'projet-test', appId: '1:2:web:3', recaptcha: 'cle-site-test', modele: 'gemini-3.5-flash', modeleRapide: 'gemini-3.5-flash-lite' };
+  await page.addInitScript(() => { window.__reponseGemini = 'FICHE SUPERCHEF\nNom : Pâté chinois végé aux lentilles\nType : Souper\nProtéine : Végé\nCuisine : Québécoise\nPortions : 6\nTemps total : 60 min\nOutils : Four\nSource : Gemini\n\nINGRÉDIENTS\n- 540 ml (19 oz) de lentilles, rincées\n- 1 boîte de 398 ml (14 oz) de maïs en crème\n- 1 kg de pommes de terre\n\nÉTAPES\n1. Cuire les pommes de terre 20 minutes.\n2. Étager les lentilles, le maïs et la purée.\n3. Cuire au four à 190 °C (375 °F) 30 minutes.\n\nSOUS-CHEF\n- Écraser les pommes de terre\n\nÀ VÉRIFIER\n- Temps de cuisson à confirmer'; });
+  const { sim, erreurs } = await demarrer(page, { ia: IA });
+  await page.locator('#addbtn').click();
+  await expect(page.locator('#add-creer')).toHaveText(/Créer avec Gemini/);
+  await page.locator('#add-idee').fill('un pâté chinois végé pour 6');
+  await page.locator('#add-gm').check();
+  await page.locator('#add-creer').click();
+  await expect(page.locator('#add-creer-status')).toContainText('Recette créée par Gemini');
+  await expect(page.locator('#add-name')).toHaveValue('Pâté chinois végé aux lentilles');
+  const g = await page.evaluate(() => ({ modele: window.__gemini.modele, consigne: window.__gemini.parts.at(-1) }));
+  expect(g.modele).toBe('gemini-3.5-flash');                                 // modèle principal pour créer de zéro
+  expect(g.consigne).toContain('Demande : « un pâté chinois végé pour 6 »');
+  expect(g.consigne).toMatch(/Au garde-manger .*Ail/);                       // l'inventaire du livre de test
+  await page.locator('#add-prev').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `tests/captures/${info.project.name}-creer-gemini.png` });
+  await page.locator('#add-save').click();
+  await expect(page.locator('#toast')).toContainText('Ajoutée au livre : Pâté chinois végé aux lentilles');
+  const o = [...sim.classeurs.values()][0].onglets.Recettes, e = o[0], l = o.find((x) => x[1] === 'Pâté chinois végé aux lentilles');
+  const v = Object.fromEntries(e.map((k, i) => [k, l[i] ?? '']));
+  expect(v.Statut).toBe('À trier');
+  expect(v.Source).toBe('Web autre');
+  expect(v.Notes).toContain('Créée avec Gemini d\'après : « un pâté chinois végé pour 6 »');
+  expect(v['À vérifier']).toContain('Recette créée par Gemini : à essayer et à ajuster.');
+  expect(erreurs).toEqual([]);
+});

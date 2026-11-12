@@ -1,11 +1,11 @@
 // 04 · Provigo : liste d'épicerie par rayon (R-10, R-11). Repris de Gordon Rams.ai.
-import { S, DEPTS, iso, norm, weekLabel, render, toast, errText } from '../etat.js?v=1.14.0';
-import { el, ico } from '../el.js?v=1.14.0';
-import { getRecipe, majArticle, supprimerArticle } from '../donnees.js?v=1.14.0';
-import { ingKey, niceName, deptOf, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.14.0';
-import { frozen } from './fiche.js?v=1.14.0';
-import { setQty, addInv } from './garde-manger.js?v=1.14.0';
-import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.14.0';
+import { S, DEPTS, iso, norm, weekLabel, render, toast, errText } from '../etat.js?v=1.15.0';
+import { el, ico } from '../el.js?v=1.15.0';
+import { getRecipe, majArticle, supprimerArticle } from '../donnees.js?v=1.15.0';
+import { ingKey, niceName, deptOf, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.15.0';
+import { frozen } from './fiche.js?v=1.15.0';
+import { setQty, addInv } from './garde-manger.js?v=1.15.0';
+import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.15.0';
 
 // R-11 : les cases cochées restent sur le téléphone, par semaine (aucune recette ni jeton).
 const provKey = () => 'superchef-provigo-' + iso(S.weekStart);
