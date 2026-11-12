@@ -1,0 +1,528 @@
+{
+  "format": "superchef-import",
+  "version": 1,
+  "schema": 2,
+  "genere_le": "2026-11-12",
+  "source": "Kit SuperChef.ai — Français",
+  "kit": {
+    "id": "francaise",
+    "nom": "Français",
+    "description": "Les grands classiques du bistro et de la table familiale française, du bœuf bourguignon au clafoutis, avec l'épicerie d'ici."
+  },
+  "recettes": [
+    {
+      "id": "k-francaise-boeuf-bourguignon",
+      "Nom": "Bœuf bourguignon",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Française",
+      "Soir de semaine": false,
+      "Temps total (min)": 175,
+      "Portions": 6,
+      "Outils": "Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Bœuf",
+        "Farine tout usage, pour enrober",
+        "1 kg (2,2 lb) de cubes de bœuf à ragoût (dans l'épaule)",
+        "60 ml (¼ tasse) d'huile d'olive",
+        "1 oignon, haché finement",
+        "2 carottes, hachées",
+        "2 branches de céleri, hachées",
+        "500 ml (2 tasses) de vin rouge",
+        "750 ml (3 tasses) de bouillon de bœuf",
+        "45 ml (3 c. à soupe) de pâte de tomates",
+        "2 gousses d'ail, hachées finement",
+        "2 feuilles de laurier",
+        "5 ml (1 c. à thé) de thym séché",
+        "Sel et poivre",
+        "## Garniture",
+        "280 g (10 oz) de petits oignons perlés",
+        "6 tranches de bacon, hachées",
+        "340 g (¾ lb) de champignons blancs, en quartiers",
+        "60 ml (¼ tasse) de persil plat, ciselé"
+      ],
+      "Étapes": [
+        "Préchauffer le four à 180 °C (350 °F).",
+        "Enrober les cubes de bœuf de farine et secouer l'excédent.",
+        "Dans une grande casserole allant au four, à feu moyen-vif, dorer le bœuf dans l'huile, la moitié des cubes à la fois.",
+        "Remettre toute la viande dans la casserole. Ajouter l'oignon, les carottes et le céleri. Cuire de 3 à 4 minutes.",
+        "Ajouter le vin, le bouillon, la pâte de tomates, l'ail, le laurier et le thym. Saler, poivrer et porter à ébullition.",
+        "Couvrir et cuire au four 100 minutes (1 h 40).",
+        "Pendant ce temps, blanchir les oignons perlés 2 minutes dans l'eau bouillante. Les rincer à l'eau froide, puis les peler.",
+        "Dans une poêle antiadhésive à feu moyen, dorer le bacon. Le retirer avec une cuillère trouée en gardant le gras dans la poêle.",
+        "Faire sauter les champignons dans le gras de bacon jusqu'à ce qu'ils soient dorés.",
+        "Ajouter les oignons perlés, le bacon et les champignons dans la casserole. Couvrir et poursuivre la cuisson au four 20 minutes.",
+        "Retirer les feuilles de laurier. Parsemer de persil et servir avec du riz ou une purée de pommes de terre."
+      ],
+      "Tâches sous-chef": [
+        "Essuyer les champignons avec un linge humide",
+        "Mesurer le bouillon avec la tasse à mesurer",
+        "Effeuiller le persil"
+      ],
+      "À vérifier": "La version française de la recette ne précise pas le temps de cuisson après l'ajout des oignons perlés, du bacon et des champignons : 20 minutes, selon la version anglaise de la même recette.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/en/recipes/3993-beef-bourguignon",
+      "Notes": [
+        "Inspirée du bœuf bourguignon aux oignons perlés de Ricardo."
+      ]
+    },
+    {
+      "id": "k-francaise-poulet-chasseur",
+      "Nom": "Poulet chasseur",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poulet",
+      "Cuisine": "Française",
+      "Soir de semaine": false,
+      "Temps total (min)": 110,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Champignons séchés",
+        "375 ml (1 ½ tasse) de bouillon de bœuf",
+        "14 g (½ oz) de cèpes (bolets) séchés",
+        "## Poulet",
+        "4 cuisses de poulet entières",
+        "15 ml (1 c. à soupe) d'huile d'olive",
+        "## Sauce",
+        "225 g (½ lb) de champignons blancs, en quartiers",
+        "225 g (½ lb) de pleurotes, émincés",
+        "30 ml (2 c. à soupe) de beurre",
+        "1 oignon, haché",
+        "2 gousses d'ail, hachées",
+        "30 ml (2 c. à soupe) de farine tout usage non blanchie",
+        "125 ml (½ tasse) de vin blanc sec",
+        "1 petite tomate, épépinée et coupée en dés",
+        "5 ml (1 c. à thé) d'estragon frais, haché finement",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "Dans une petite casserole, porter le bouillon à ébullition. Retirer du feu, ajouter les cèpes séchés et laisser gonfler 15 minutes.",
+        "Égoutter en gardant le bouillon et les cèpes séparément.",
+        "Retirer la peau du poulet et séparer les hauts de cuisse des pilons.",
+        "Dans une grande cocotte à feu moyen-vif, dorer le poulet des deux côtés dans l'huile. Saler, poivrer et réserver dans une assiette.",
+        "Déglacer la cocotte avec 60 ml (¼ tasse) du bouillon réservé en grattant bien le fond. Verser sur le poulet.",
+        "Dans la même cocotte à feu moyen-vif, dorer les champignons frais dans le beurre. Ajouter les cèpes réhydratés, l'oignon et l'ail. Cuire 2 minutes.",
+        "Saupoudrer de farine et bien mélanger. Déglacer avec le vin et laisser réduire de moitié en fouettant.",
+        "Ajouter le reste du bouillon (315 ml ou 1 ¼ tasse), la tomate et le poulet avec son jus. Porter à ébullition.",
+        "Couvrir et laisser mijoter à feu doux 60 minutes.",
+        "Retirer le couvercle et laisser réduire la sauce 5 minutes, jusqu'à ce qu'elle nappe le dos d'une cuillère.",
+        "Rectifier l'assaisonnement, ajouter l'estragon et servir, avec des nouilles au beurre si désiré."
+      ],
+      "Tâches sous-chef": [
+        "Essuyer les champignons avec un linge humide",
+        "Effeuiller l'estragon",
+        "Mesurer le bouillon avec la tasse à mesurer"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/en/recipes/8230-hunter-s-chicken-stew-the-best",
+      "Notes": [
+        "Inspirée du poulet chasseur (le meilleur) de Ricardo."
+      ]
+    },
+    {
+      "id": "k-francaise-croque-monsieur",
+      "Nom": "Croque-monsieur",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Porc",
+      "Cuisine": "Française",
+      "Soir de semaine": true,
+      "Temps total (min)": 40,
+      "Portions": 4,
+      "Outils": "Four",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Béchamel",
+        "30 ml (2 c. à soupe) de beurre",
+        "30 ml (2 c. à soupe) de farine tout usage",
+        "250 ml (1 tasse) de lait",
+        "1 pincée de muscade (facultatif)",
+        "Sel et poivre",
+        "## Sandwichs",
+        "8 tranches de pain carré",
+        "4 à 6 tranches de jambon",
+        "4 à 6 tranches de fromage au choix (suisse ou gruyère)",
+        "180 ml (¾ tasse) de cheddar râpé",
+        "30 ml (2 c. à soupe) de beurre, pour la cuisson"
+      ],
+      "Étapes": [
+        "Dans une casserole à feu moyen, faire fondre 30 ml (2 c. à soupe) de beurre.",
+        "Ajouter la farine et fouetter 30 secondes.",
+        "Verser le lait petit à petit en fouettant vivement. Laisser bouillonner 1 minute en fouettant toujours.",
+        "Retirer du feu. Ajouter la muscade, saler, poivrer et goûter. Réserver.",
+        "Tartiner 4 tranches de pain d'environ 15 ml (1 c. à soupe) de béchamel chacune et les déposer sur une plaque. Brasser la béchamel si une peau s'est formée.",
+        "Garnir de jambon et de fromage en tranches, puis couvrir avec les 4 autres tranches de pain.",
+        "Dans une grande poêle à feu moyen, faire dorer 2 sandwichs dans 15 ml (1 c. à soupe) de beurre, de 3 à 5 minutes de chaque côté. Les remettre sur la plaque.",
+        "Répéter avec les 2 autres sandwichs et le reste du beurre (15 ml ou 1 c. à soupe).",
+        "Placer la grille dans le haut du four et allumer le gril (broil).",
+        "Étendre le reste de la béchamel sur le dessus des sandwichs et parsemer de cheddar râpé.",
+        "Faire gratiner sous le gril de 3 à 4 minutes, en surveillant."
+      ],
+      "Tâches sous-chef": [
+        "Tartiner la béchamel sur le pain",
+        "Monter les sandwichs avec le jambon et le fromage",
+        "Parsemer le cheddar râpé avant le four"
+      ],
+      "À vérifier": "La source donne 30 minutes de préparation sans temps de cuisson : le total de 40 minutes est estimé d'après les étapes. L'unité de la muscade n'est pas écrite dans la source (« 1 de muscade ») : une pincée a été retenue.",
+      "Fiche complète": true,
+      "Lien source": "https://www.noovomoi.ca/cuisiner/recettes/recette.croque-monsieur-francais.1.1528769.html",
+      "Notes": [
+        "Inspirée du croque-monsieur français de Marie-Michelle Garon sur Noovo Moi."
+      ]
+    },
+    {
+      "id": "k-francaise-quiche-lorraine",
+      "Nom": "Quiche lorraine",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Œufs",
+      "Cuisine": "Française",
+      "Soir de semaine": false,
+      "Temps total (min)": 130,
+      "Portions": 6,
+      "Outils": "Robot culinaire, Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Pâte",
+        "430 ml (1 ¾ tasse) de farine tout usage non blanchie",
+        "2,5 ml (½ c. à thé) de poudre à pâte",
+        "125 ml (½ tasse) de beurre non salé froid, en cubes",
+        "90 ml (6 c. à soupe) d'eau glacée",
+        "1 œuf",
+        "## Garniture",
+        "225 g (½ lb) de bacon tranché épais (environ 0,5 cm ou ¼ po), en morceaux",
+        "1 gros oignon, émincé",
+        "500 ml (2 tasses) de crème 35 %",
+        "6 œufs",
+        "375 ml (1 ½ tasse) de gruyère râpé",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "Au robot culinaire, mélanger la farine et la poudre à pâte quelques secondes.",
+        "Ajouter le beurre et mélanger par petits coups jusqu'à ce qu'il ait la grosseur de petits pois.",
+        "Ajouter l'eau glacée et 1 œuf. Mélanger par petits coups jusqu'à ce que la pâte commence à se former, en ajoutant un peu d'eau glacée au besoin. Façonner un disque.",
+        "Sur un plan de travail fariné, abaisser la pâte et en foncer une assiette à quiche de 25 cm (10 po). Replier l'excédent vers l'intérieur pour doubler la bordure. Piquer le fond à la fourchette.",
+        "Réfrigérer la croûte 30 minutes (ou la congeler 15 minutes).",
+        "Placer la grille au bas du four et préchauffer à 190 °C (375 °F).",
+        "Dans une poêle, dorer le bacon. Ajouter l'oignon et cuire jusqu'à ce qu'il soit tendre. Égoutter le gras et laisser tiédir.",
+        "Dans un bol, fouetter la crème et les 6 œufs jusqu'à ce que le mélange soit lisse. Ajouter le mélange de bacon et le gruyère. Saler et poivrer.",
+        "Verser la garniture dans la croûte. Cuire au four environ 45 minutes, jusqu'à ce que la quiche soit légèrement dorée.",
+        "Laisser reposer 10 minutes avant de servir."
+      ],
+      "Tâches sous-chef": [
+        "Piquer le fond de la pâte avec une fourchette",
+        "Fouetter les œufs et la crème",
+        "Mesurer le gruyère râpé"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/en/recipes/5058-quiche-lorraine-the-best",
+      "Notes": [
+        "Inspirée de la meilleure quiche lorraine de Ricardo."
+      ]
+    },
+    {
+      "id": "k-francaise-ratatouille-aux-pois-chiches",
+      "Nom": "Ratatouille aux pois chiches",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Végé",
+      "Cuisine": "Française",
+      "Soir de semaine": true,
+      "Temps total (min)": 45,
+      "Portions": 4,
+      "Outils": "Four",
+      "Source": "Trois fois par jour",
+      "Ingrédients": [
+        "45 ml (3 c. à soupe) d'huile d'olive",
+        "1 oignon, tranché",
+        "2 gousses d'ail, hachées finement",
+        "1 aubergine, en dés",
+        "2 courgettes, en dés",
+        "1 poivron rouge, en dés",
+        "1 poivron jaune, en dés",
+        "1 boîte de 796 ml (28 oz) de tomates en dés",
+        "1 boîte de 540 ml (19 oz) de pois chiches, rincés et égouttés",
+        "15 ml (1 c. à soupe) de pâte de tomates",
+        "15 ml (1 c. à soupe) de basilic séché",
+        "Sel et poivre",
+        "60 ml (¼ tasse) de basilic frais haché, pour garnir",
+        "60 ml (¼ tasse) de féta émiettée, pour garnir"
+      ],
+      "Étapes": [
+        "Placer la grille au centre du four et préchauffer à 180 °C (350 °F).",
+        "Dans une grande poêle allant au four, chauffer l'huile à feu moyen-vif. Cuire l'oignon 5 minutes.",
+        "Ajouter l'ail et cuire 1 minute.",
+        "Ajouter l'aubergine et cuire 3 minutes en remuant souvent.",
+        "Ajouter les courgettes et les poivrons. Cuire 10 minutes.",
+        "Incorporer les tomates, les pois chiches, la pâte de tomates et le basilic séché. Saler, poivrer et laisser mijoter 5 minutes.",
+        "Mettre la poêle au four et cuire 10 minutes.",
+        "Garnir de basilic frais et de féta au moment de servir. Attention : le manche de la poêle sort du four très chaud."
+      ],
+      "Tâches sous-chef": [
+        "Rincer et égoutter les pois chiches dans la passoire",
+        "Émietter la féta",
+        "Déchirer les feuilles de basilic frais"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.troisfoisparjour.com/fr/recettes/plats-principaux/legumes/ratatouille-aux-pois-chiches/",
+      "Notes": [
+        "Inspirée de la ratatouille aux pois chiches de Trois fois par jour."
+      ]
+    },
+    {
+      "id": "k-francaise-blanquette-de-veau",
+      "Nom": "Blanquette de veau",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Veau",
+      "Cuisine": "Française",
+      "Soir de semaine": false,
+      "Temps total (min)": 220,
+      "Portions": 6,
+      "Outils": "",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Veau",
+        "1,4 kg (3 lb) de rôti de palette ou d'épaule de veau désossé, en cubes",
+        "2,5 L (10 tasses) d'eau",
+        "1 oignon, coupé en deux",
+        "4 clous de girofle",
+        "2 carottes, coupées en 3 tronçons",
+        "2 branches de céleri, coupées en 3 tronçons",
+        "4 gousses d'ail, coupées en deux",
+        "4 branches de thym",
+        "2 feuilles de laurier",
+        "Sel et poivre",
+        "## Garniture",
+        "225 g (½ lb) de champignons blancs, en quartiers",
+        "2 paquets de 175 g (6 oz) de petits oignons perlés blancs, pelés",
+        "30 ml (2 c. à soupe) de ciboulette ciselée",
+        "## Sauce",
+        "115 g (½ tasse) de beurre, divisé",
+        "60 g (6 c. à soupe) de farine tout usage non blanchie",
+        "180 ml (¾ tasse) de crème 15 % à cuisson ou de crème 35 %",
+        "2 jaunes d'œufs"
+      ],
+      "Étapes": [
+        "Mettre la viande dans une grande casserole et la couvrir d'eau froide. Porter à ébullition et faire bouillir 3 minutes.",
+        "Égoutter, rincer la viande à l'eau froide et bien l'égoutter. La remettre dans la casserole propre.",
+        "Piquer les clous de girofle dans les demi-oignons.",
+        "Ajouter l'oignon, les carottes, le céleri, l'ail, le thym, le laurier et 2,5 L (10 tasses) d'eau. Saler, poivrer et porter à ébullition.",
+        "Couvrir et laisser mijoter 120 minutes (2 heures), jusqu'à ce que la viande soit très tendre.",
+        "Dans une poêle à feu moyen, dorer les champignons dans 30 ml (2 c. à soupe) de beurre, environ 5 minutes. Saler, poivrer et réserver.",
+        "Dans la même poêle, faire fondre 30 ml (2 c. à soupe) de beurre. Ajouter les oignons perlés, couvrir et cuire 5 minutes, jusqu'à ce qu'ils soient tendres. Saler et réserver.",
+        "Retirer la viande de la casserole avec une écumoire. Jeter les légumes et les aromates, puis filtrer le bouillon.",
+        "Dans une grande poêle à feu moyen, faire fondre le reste du beurre (60 ml ou ¼ tasse). Ajouter la farine en fouettant et cuire 1 minute.",
+        "Ajouter 1 L (4 tasses) du bouillon filtré. Porter à ébullition en brassant et cuire 2 minutes, jusqu'à ce que la sauce épaississe. Assaisonner.",
+        "Dans un bol, fouetter la crème et les jaunes d'œufs.",
+        "À feu doux, verser ce mélange dans la sauce et chauffer sans faire bouillir jusqu'à ce que la sauce nappe le dos d'une cuillère. Rectifier l'assaisonnement.",
+        "Remettre la viande dans la sauce et bien l'enrober. Garnir des champignons et des oignons perlés, puis parsemer de ciboulette. Servir avec du riz ou des nouilles aux œufs."
+      ],
+      "Tâches sous-chef": [
+        "Piquer les clous de girofle dans l'oignon",
+        "Essuyer les champignons avec un linge humide",
+        "Couper la ciboulette avec des ciseaux"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/en/recipes/10169-classic-veal-blanquette",
+      "Notes": [
+        "Inspirée de la blanquette de veau classique de Ricardo."
+      ]
+    },
+    {
+      "id": "k-francaise-sole-meuniere",
+      "Nom": "Sole meunière",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poisson & fruits de mer",
+      "Cuisine": "Française",
+      "Soir de semaine": true,
+      "Temps total (min)": 25,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Web autre",
+      "Ingrédients": [
+        "## Poisson",
+        "675 g (1 ½ lb) de filets de sole",
+        "60 ml (¼ tasse) de farine tout usage",
+        "30 ml (2 c. à soupe) de beurre non salé",
+        "15 ml (1 c. à soupe) d'huile végétale",
+        "Sel",
+        "## Beurre citronné",
+        "60 ml (¼ tasse) de beurre non salé, froid",
+        "30 ml (2 c. à soupe) de jus de citron",
+        "15 ml (1 c. à soupe) de persil haché",
+        "1 citron, en quartiers"
+      ],
+      "Étapes": [
+        "Saler les filets de sole. Les enrober de farine et secouer l'excédent.",
+        "Dans une poêle antiadhésive à feu vif, chauffer 30 ml (2 c. à soupe) de beurre avec l'huile.",
+        "Saisir les filets environ 3 minutes, jusqu'à ce qu'ils soient bien dorés.",
+        "Retourner les filets et cuire 2 minutes de plus. Les garder au chaud dans le plat de service.",
+        "Dans la même poêle, faire fondre 60 ml (¼ tasse) de beurre froid jusqu'à ce qu'il mousse et prenne une couleur légèrement noisette.",
+        "Ajouter aussitôt le jus de citron pour arrêter la cuisson, puis le persil.",
+        "Napper les filets de beurre citronné et servir avec les quartiers de citron."
+      ],
+      "Tâches sous-chef": [
+        "Verser la farine dans une assiette creuse",
+        "Presser le jus de citron",
+        "Couper le persil avec des ciseaux"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://ici.radio-canada.ca/mordu/recettes/3645/sole-meuniere",
+      "Notes": [
+        "Inspirée de la sole meunière de l'ITHQ sur Mordu (Radio-Canada)."
+      ]
+    },
+    {
+      "id": "k-francaise-soupe-a-l-oignon-gratinee",
+      "Nom": "Soupe à l'oignon gratinée",
+      "Type": "Soupe",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Française",
+      "Soir de semaine": false,
+      "Temps total (min)": 85,
+      "Portions": 4,
+      "Outils": "Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Soupe",
+        "6 oignons jaunes, pelés",
+        "55 g (¼ tasse) de beurre",
+        "125 ml (½ tasse) de vin rouge",
+        "30 ml (2 c. à soupe) de cognac ou de brandy",
+        "1 L (4 tasses) de bouillon de poulet",
+        "1 L (4 tasses) de bouillon de bœuf",
+        "15 ml (1 c. à soupe) de farine légèrement grillée",
+        "1 pincée de muscade",
+        "Sel et poivre",
+        "## Gratinée",
+        "12 tranches de baguette d'environ 1 cm (½ po) d'épaisseur, grillées",
+        "1 petite gousse d'ail, coupée en deux",
+        "200 g (2 tasses) de gruyère râpé"
+      ],
+      "Étapes": [
+        "Couper les oignons en quartiers, puis les émincer finement sur la largeur.",
+        "Dans une grande casserole à feu moyen, attendrir les oignons dans le beurre 15 minutes en remuant de temps en temps.",
+        "Monter à feu vif et cuire 15 minutes en remuant sans arrêt et en grattant le fond, jusqu'à ce que les oignons soient caramélisés.",
+        "Déglacer avec le vin et le cognac. Laisser réduire presque à sec.",
+        "Ajouter les deux bouillons, la farine grillée et la muscade. Bien mélanger.",
+        "Porter à ébullition, puis laisser mijoter à feu moyen-vif 30 minutes, jusqu'à ce que la soupe ait réduit de moitié (environ 1,25 L ou 5 tasses). Saler et poivrer.",
+        "Placer la grille au centre du four et allumer le gril (broil). Déposer 4 bols allant au four sur une plaque.",
+        "Frotter légèrement les tranches de pain grillées avec l'ail.",
+        "Répartir la soupe dans les bols. Parsemer chaque bol de 30 ml (2 c. à soupe) de gruyère.",
+        "Couvrir chaque bol de 3 tranches de pain et parsemer du reste du gruyère.",
+        "Faire gratiner sous le gril 5 minutes, jusqu'à ce que le fromage soit fondu et doré. Attention : les bols sont brûlants."
+      ],
+      "Tâches sous-chef": [
+        "Compter les tranches de baguette",
+        "Frotter le pain grillé avec la gousse d'ail",
+        "Mesurer le gruyère râpé"
+      ],
+      "À vérifier": "La source demande de la farine « légèrement grillée » sans expliquer comment la griller.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/en/recipes/7047-french-onion-soup-the-best",
+      "Notes": [
+        "Inspirée de la meilleure soupe à l'oignon gratinée de Ricardo."
+      ]
+    },
+    {
+      "id": "k-francaise-gratin-dauphinois",
+      "Nom": "Gratin dauphinois",
+      "Type": "Accompagnement",
+      "Statut": "À trier",
+      "Protéine": "Végé",
+      "Cuisine": "Française",
+      "Soir de semaine": false,
+      "Temps total (min)": 105,
+      "Portions": 6,
+      "Outils": "Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "1,2 kg (2 ½ lb) de pommes de terre, pelées (environ 6 grosses)",
+        "200 g (2 tasses) d'emmental râpé",
+        "250 ml (1 tasse) de crème 35 % à cuisson",
+        "Beurre, pour le plat",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "Placer la grille au centre du four et préchauffer à 180 °C (350 °F).",
+        "Laver et égoutter les pommes de terre. Les trancher finement à la mandoline, sans les rincer.",
+        "Beurrer le fond et les côtés d'un plat de 28 x 20 cm (11 x 8 po). Couvrir le fond d'un rang de tranches de pommes de terre.",
+        "Ajouter une couche de fromage et un peu de crème. Saler et poivrer.",
+        "Continuer en alternant pommes de terre, fromage et crème jusqu'à épuisement des ingrédients. Couvrir de papier d'aluminium.",
+        "Cuire au four 60 minutes (1 heure).",
+        "Retirer le papier d'aluminium et poursuivre la cuisson 15 minutes, jusqu'à ce que le dessus soit doré.",
+        "Laisser reposer 10 minutes, puis couper en carrés."
+      ],
+      "Tâches sous-chef": [
+        "Laver les pommes de terre pelées",
+        "Beurrer le plat",
+        "Parsemer l'emmental entre les couches"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://ricardocuisine.com/en/recipes/4480-scalloped-potatoes-gratin-dauphinois",
+      "Notes": [
+        "Inspirée du gratin dauphinois de Ricardo."
+      ]
+    },
+    {
+      "id": "k-francaise-clafoutis-aux-cerises",
+      "Nom": "Clafoutis aux cerises",
+      "Type": "Dessert",
+      "Statut": "À trier",
+      "Protéine": "Aucune",
+      "Cuisine": "Française",
+      "Soir de semaine": false,
+      "Temps total (min)": 50,
+      "Portions": 8,
+      "Outils": "Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "Beurre et sucre, pour le moule",
+        "3 œufs, à la température ambiante",
+        "160 g (¾ tasse) de sucre",
+        "5 ml (1 c. à thé) de vanille",
+        "1 ml (¼ c. à thé) de sel",
+        "115 g (¾ tasse) de farine tout usage non blanchie",
+        "250 ml (1 tasse) de crème 35 %",
+        "250 ml (1 tasse) de lait",
+        "36 cerises noires fraîches, dénoyautées (ou surgelées et décongelées)"
+      ],
+      "Étapes": [
+        "Placer la grille au centre du four et préchauffer à 180 °C (350 °F).",
+        "Beurrer une assiette à quiche de 25 cm (10 po) et la saupoudrer généreusement de sucre.",
+        "Dans un bol, fouetter les œufs, 160 g (¾ tasse) de sucre, la vanille et le sel.",
+        "Ajouter la farine, puis la crème et le lait, en fouettant jusqu'à ce que la pâte soit lisse.",
+        "Verser la pâte dans l'assiette et répartir les cerises sur le dessus.",
+        "Cuire au four 35 minutes, jusqu'à ce que le clafoutis soit doré.",
+        "Laisser tiédir sur une grille. Servir tiède ou à la température ambiante, avec de la crème glacée à la vanille ou de la crème fraîche si désiré."
+      ],
+      "Tâches sous-chef": [
+        "Beurrer et sucrer l'assiette à quiche",
+        "Fouetter les œufs avec le sucre et la vanille",
+        "Disposer les cerises sur la pâte"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/en/recipes/9230-cherry-clafoutis",
+      "Notes": [
+        "Inspirée du clafoutis aux cerises de Ricardo."
+      ]
+    }
+  ],
+  "plans": [],
+  "inventaire": [],
+  "bilans": []
+}
