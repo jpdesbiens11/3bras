@@ -1,6 +1,6 @@
 // Minuteurs : plusieurs à la fois, sons maison, écran verrouillé, écran allumé. Repris de Gordon Rams.ai.
-import { S, $, toast, render } from './etat.js?v=1.9.0';
-import { el, ico, vider } from './el.js?v=1.9.0';
+import { S, $, toast, render } from './etat.js?v=1.10.0';
+import { el, ico, vider } from './el.js?v=1.10.0';
 
 let audioCtx = null, master = null;
 export function ac() { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (_) {} return audioCtx; }

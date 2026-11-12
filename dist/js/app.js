@@ -1,25 +1,25 @@
 // SuperChef.ai : coquille de Gordon Rams.ai (en-tête, 6 étapes, feuilles), branchée sur Google Drive.
-import { CONFIG } from './config.js?v=1.9.0';
-import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.9.0';
-import { el, ico, vider } from './el.js?v=1.9.0';
-import { creerAuth } from './auth.js?v=1.9.0';
-import { creerDrive } from './drive.js?v=1.9.0';
-import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.9.0';
-import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.9.0';
-import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.9.0';
-import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.9.0';
-import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.9.0';
-import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.9.0';
-import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.9.0';
-import { viewTri, loadTri, decide } from './vues/livre.js?v=1.9.0';
-import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.9.0';
-import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.9.0';
-import { viewCook, openCook, go, served, applyInvOff } from './vues/poele.js?v=1.9.0';
-import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.9.0';
-import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.9.0';
-import { openCompte, closeCompte, lireImport, chargerKits } from './vues/compte.js?v=1.9.0';
-import { openGen, closeGen, genOuvert, majDemande, basculerCuisine, choisirNombre, copierConsigne, partagerConsigne, collerReponse, lireRecettes, cocher, ajouterChoisis } from './vues/generateur.js?v=1.9.0';
-import { openAdapt, closeAdapt, adaptOuvert, ajouterRaccourci, adapter, saveAdapt, revenirOriginale } from './vues/adapter.js?v=1.9.0';
+import { CONFIG } from './config.js?v=1.10.0';
+import { S, $, STEPS, READY, DAYS, hooks, computeWeek, render, toast, errText } from './etat.js?v=1.10.0';
+import { el, ico, vider } from './el.js?v=1.10.0';
+import { creerAuth } from './auth.js?v=1.10.0';
+import { creerDrive } from './drive.js?v=1.10.0';
+import { ouvrirOuCreer, noterProprietaire } from './store.js?v=1.10.0';
+import { chargerTout, loadPlan, loadRecent } from './donnees.js?v=1.10.0';
+import { draftWeek, swap, toggleDay, setFixed } from './planif.js?v=1.10.0';
+import { ac, addTimer, toggleTimer, dismissTimer, setSound, soundKey, SOUNDS, wakeOn, wakeOff, paintLock } from './minuteurs.js?v=1.10.0';
+import { noticeWarn, setStars, setTag, setStatut } from './vues/commun.js?v=1.10.0';
+import { viewWeek, savePlan, openPicker, closePicker, pickList, choosePick, openDessert, closeDessert, renderDessert, dessertList, addDessert, removeDessert } from './vues/semaine.js?v=1.10.0';
+import { openPreview, closePreview, renderSheet, toggleHave, partagerRecette } from './vues/fiche.js?v=1.10.0';
+import { viewTri, loadTri, decide } from './vues/livre.js?v=1.10.0';
+import { viewInv, setQty, addInv } from './vues/garde-manger.js?v=1.10.0';
+import { viewProvigo, buildProvigo, toggleGrocery } from './vues/provigo.js?v=1.10.0';
+import { viewCook, openCook, go, served, applyInvOff, cuisinerVersion, chargerLivre } from './vues/poele.js?v=1.10.0';
+import { viewBilan, loadBilan, saveBilan } from './vues/bilan.js?v=1.10.0';
+import { openAdd, closeAdd, addFiles, removeFile, convertRecipe, saveRecipe } from './vues/ajout.js?v=1.10.0';
+import { openCompte, closeCompte, lireImport, chargerKits } from './vues/compte.js?v=1.10.0';
+import { openGen, closeGen, genOuvert, majDemande, basculerCuisine, choisirNombre, copierConsigne, partagerConsigne, collerReponse, lireRecettes, cocher, ajouterChoisis } from './vues/generateur.js?v=1.10.0';
+import { openAdapt, closeAdapt, adaptOuvert, ajouterRaccourci, adapter, saveAdapt, revenirOriginale, cuisinerCeSoir } from './vues/adapter.js?v=1.10.0';
 
 let auth = null;
 const rouvrirFiche = (id) => { const jour = S.preview ? S.preview.day : null; openPreview(id, jour); render(); };
@@ -112,10 +112,12 @@ document.addEventListener('click', (e) => {
   if (d.pickid) { choosePick(d.pickid); return; }
   if (d.unfix) { const i = +d.unfix; closePicker(); setFixed(i, null); return; }
   // D-G-033 : adapter une recette avec Gemini, puis rouvrir sa fiche à jour.
-  if (d.adapt) { openAdapt(d.adapt); return; }
+  if (d.adapt) { openAdapt(d.adapt, d.adaptcook !== undefined ? { cuisson: true, etape: S.cook.idx + 1 } : {}); return; }
   if (d.adaptclose !== undefined) { closeAdapt(); return; }
   if (d.adaptchip !== undefined) { ajouterRaccourci(d.adaptchip); return; }
-  if (b.id === 'adapt-save') { saveAdapt(rouvrirFiche); return; }
+  if (b.id === 'adapt-save') { saveAdapt((id, cuisson) => (cuisson ? chargerLivre() : rouvrirFiche(id))); return; }
+  if (b.id === 'adapt-soir') { cuisinerCeSoir((id, res, demande) => { if (S.preview) closePreview(); if (S.view !== 'poele') setView('poele'); cuisinerVersion(id, res, demande); }); return; }
+  if (b.id === 'remettre') { chargerLivre(); toast('Recette du livre remise.'); return; }
   if (d.adaptrevert) { revenirOriginale(d.adaptrevert, rouvrirFiche); return; }
   if (d.cook) { if (S.preview) closePreview(); if (S.view !== 'poele') setView('poele'); openCook(d.cook); return; }
   if (d.partager) { partagerRecette(d.partager); return; }

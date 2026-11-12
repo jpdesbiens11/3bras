@@ -1,6 +1,6 @@
 // Lecture de recettes sans bibliothèque externe (P-1, N-10) : texte, Word (.docx), PDF simple,
 // et réponse JSON de Claude (même format que la conversion de Gordon Rams.ai).
-import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.9.0';
+import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.10.0';
 
 /* ---------- .docx : zip natif (DecompressionStream) + XML ---------- */
 async function inflerBrut(octets) {

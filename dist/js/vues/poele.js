@@ -1,11 +1,12 @@
 // 05 · Au poêle : mode cuisine (R-12). Repris de Gordon Rams.ai.
-import { S, $, DAYS, iso, toast, errText, render } from '../etat.js?v=1.9.0';
-import { el, ico, svgGrand } from '../el.js?v=1.9.0';
-import { getRecipe, majRecette } from '../donnees.js?v=1.9.0';
-import { stepPlan, stepDurations, isBlocking, sousFor, ingKey, invMatch, portionDansEtape } from '../cuisine.js?v=1.9.0';
-import { SOUNDS, soundKey, wakeOn, fmt } from '../minuteurs.js?v=1.9.0';
-import { setQty } from './garde-manger.js?v=1.9.0';
-import { panelHead, noticeWarn } from './commun.js?v=1.9.0';
+import { S, $, DAYS, iso, toast, errText, render } from '../etat.js?v=1.10.0';
+import { el, ico, svgGrand } from '../el.js?v=1.10.0';
+import { getRecipe, majRecette } from '../donnees.js?v=1.10.0';
+import { stepPlan, stepDurations, isBlocking, sousFor, ingKey, invMatch, portionDansEtape, ficheDeLigne } from '../cuisine.js?v=1.10.0';
+import { iaDisponible } from '../ia.js?v=1.10.0';
+import { SOUNDS, soundKey, wakeOn, fmt } from '../minuteurs.js?v=1.10.0';
+import { setQty } from './garde-manger.js?v=1.10.0';
+import { panelHead, noticeWarn } from './commun.js?v=1.10.0';
 
 export function openCook(id) {
   S.cook = { id, data: null, idx: 0, loading: false, err: null };
@@ -13,6 +14,25 @@ export function openCook(id) {
   if (!data.steps.length) S.cook.err = 'Cette fiche n\'a pas encore d\'étapes dans ton classeur. On la complète d\'abord dans le livre.';
   else S.cook.data = data;
   render(); wakeOn();
+}
+// D-G-036 : « Cuisiner cette version ce soir » — la recette adaptée sert au poêle sans rien écrire dans le livre.
+const garderEtape = (data) => Math.min(S.cook.id ? S.cook.idx : 0, Math.max(0, data.steps.length - 1));
+export function cuisinerVersion(id, res, demande) {
+  const livre = getRecipe(id);
+  const data = ficheDeLigne({
+    ingText: res.ingredients.flatMap((g) => [g.groupe ? `## ${g.groupe}` : null, ...g.items]).filter(Boolean).join('\n'),
+    stepsText: res.etapes.join('\n'), sous: (res.sous.length ? res.sous : livre.sous).join('\n')
+  });
+  const idx = S.cook.id === id ? garderEtape(data) : 0;
+  S.cook = { id, data, idx, loading: false, err: null, soir: { demande, changements: res.changements || [] } };
+  render(); wakeOn();
+}
+// Recharge la recette du livre (après « Remettre » ou après « Remplacer la recette »), à la même étape.
+export function chargerLivre() {
+  if (!S.cook.id) return;
+  const data = getRecipe(S.cook.id);
+  Object.assign(S.cook, { data, idx: garderEtape(data), soir: null, got: null });
+  render();
 }
 const cookSlides = () => (S.cook.data ? S.cook.data.steps.length + 1 : 0); // étapes + fourchette
 export function go(delta) {
@@ -92,7 +112,11 @@ export function viewCook() {
     el('div', { class: 'cook-top' }, el('span', { class: 'title' }, r.name), el('span', { class: 'lock', id: 'lock' }),
       el('span', { class: 'count' }, `${String(idx + 1).padStart(2, '0')}/${String(n).padStart(2, '0')}`)),
     el('div', { class: 'progress' }, Array.from({ length: n }, (_, k) => el('i', { class: k <= idx ? 'on' : '' }))),
+    S.cook.soir && el('div', { class: 'soir' }, ico('chef'),
+      el('div', {}, el('div', { class: 'label' }, 'Version de ce soir · pas dans le livre'), el('p', {}, [S.cook.soir.demande, ...S.cook.soir.changements].join(' · '))),
+      el('button', { class: 'btn', id: 'remettre', type: 'button' }, 'Remettre la recette du livre')),
     el('div', { class: 'stage' }, stage), band,
+    iaDisponible() && el('div', { class: 'cook-adapt' }, el('button', { class: 'btn', 'data-adapt': S.cook.id, 'data-adaptcook': '', type: 'button' }, ico('chef'), 'Adapter avec Gemini')),
     el('details', { class: 'tfree' }, el('summary', {}, ico('clock'), 'Autre minuteur et son'),
       el('div', { class: 'tfree-in' },
         el('div', { class: 'seg' }, [1, 3, 5, 10, 15, 20, 30].map((m) => el('button', { class: 'btn', 'data-tadd': m * 60, 'data-tlabel': `Minuteur ${m} min` }, `${m} min`))),
