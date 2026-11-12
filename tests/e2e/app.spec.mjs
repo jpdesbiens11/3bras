@@ -95,7 +95,7 @@ test('texte hostile dans le classeur affiché comme texte', async ({ page }) => 
   await expect(page.getByRole('heading', { name: 'Import terminé.' })).toBeVisible();
   await page.locator('[data-compteclose]').click();
   await page.locator('[data-go="tri"]').click();
-  await page.getByRole('button', { name: /<img src=x/ }).click();
+  await page.getByRole('button', { name: /^<img src=x/ }).click();
   await expect(page.locator('#sheet h2')).toHaveText('<img src=x onerror=alert(1)>');
   await expect(page.locator('#sheet')).toContainText('<script>alert(2)</script>');
   expect(dialogs).toEqual([]);

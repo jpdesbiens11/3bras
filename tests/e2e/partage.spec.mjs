@@ -17,7 +17,7 @@ async function demarrer(page, avant) {
   await expect(page.getByRole('heading', { name: 'Import terminé.' })).toBeVisible();
   await page.locator('[data-compteclose]').click();
   await page.locator('[data-go="tri"]').click();
-  await page.getByRole('button', { name: /Poulet au citron test/ }).click();
+  await page.getByRole('button', { name: /^Poulet au citron test/ }).click();
   return { ...b, erreurs };
 }
 const NOM = 'poulet-au-citron-test-superchef.pdf';
@@ -116,5 +116,31 @@ test('D-G-048 : au téléphone, la feuille de partage du système reçoit le PDF
   await expect(page.getByRole('dialog', { name: 'Poulet au citron test' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Autres applications…' })).toBeVisible();
   await page.screenshot({ path: 'tests/captures/s25-partage.png' });
+  expect(erreurs).toEqual([]);
+});
+
+test('D-G-048 : « Partager en PDF » se voit dans la Semaine, le Livre, Au poêle et la fiche', async ({ page }, info) => {
+  test.skip(info.project.name !== 'pc-1440', 'feuille de l\'ordinateur');
+  const { erreurs } = await demarrer(page);
+  const ouvre = async (bouton, nom) => {
+    await bouton.click();
+    await expect(page.getByRole('dialog', { name: nom })).toBeVisible();
+    await page.getByRole('button', { name: 'Fermer le partage' }).click();
+    await expect(page.locator('#partage')).toHaveCount(0);
+  };
+  // La fiche : un vrai bouton, en plus de l'icône du coin.
+  await ouvre(page.locator('#sheet').getByRole('button', { name: 'Partager en PDF', exact: true }), 'Poulet au citron test');
+  await page.locator('#sheet [data-close]').first().click();
+  // Le Livre : une icône sur chaque ligne.
+  await ouvre(page.getByRole('button', { name: 'Partager Poulet au citron test en PDF' }), 'Poulet au citron test');
+  // La Semaine : un bouton PDF sur chaque souper.
+  await page.locator('[data-go="semaine"]').click();
+  const nom = (await page.locator('.week .day[data-jour="0"] h3').textContent()).trim();
+  await ouvre(page.locator('.week .day[data-jour="0"]').getByRole('button', { name: `Partager ${nom} en PDF` }), nom);
+  // Au poêle : à côté d'« Adapter ».
+  await page.locator('[data-cook="r-poulet"]').first().click().catch(() => {});
+  if (!(await page.locator('#cook').count())) { await page.locator('[data-go="poele"]').click(); await page.locator('[data-cook]').first().click(); }
+  const titre = (await page.locator('#cook .cook-top .title').textContent()).trim();
+  await ouvre(page.locator('#cook').getByRole('button', { name: 'Partager en PDF' }), titre);
   expect(erreurs).toEqual([]);
 });

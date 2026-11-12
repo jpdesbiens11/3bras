@@ -1,12 +1,12 @@
 // 05 · Au poêle : mode cuisine (R-12). Repris de Gordon Rams.ai.
-import { S, $, DAYS, iso, toast, errText, render } from '../etat.js?v=1.20.0';
-import { el, ico, svgGrand } from '../el.js?v=1.20.0';
-import { getRecipe, majRecette } from '../donnees.js?v=1.20.0';
-import { stepPlan, stepDurations, isBlocking, sousFor, ingKey, invMatch, portionDansEtape, ficheDeLigne } from '../cuisine.js?v=1.20.0';
-import { iaDisponible } from '../ia.js?v=1.20.0';
-import { SOUNDS, soundKey, wakeOn, fmt } from '../minuteurs.js?v=1.20.0';
-import { setQty } from './garde-manger.js?v=1.20.0';
-import { panelHead, noticeWarn } from './commun.js?v=1.20.0';
+import { S, $, DAYS, iso, toast, errText, render } from '../etat.js?v=1.20.1';
+import { el, ico, svgGrand } from '../el.js?v=1.20.1';
+import { getRecipe, majRecette } from '../donnees.js?v=1.20.1';
+import { stepPlan, stepDurations, isBlocking, sousFor, ingKey, invMatch, portionDansEtape, ficheDeLigne } from '../cuisine.js?v=1.20.1';
+import { iaDisponible } from '../ia.js?v=1.20.1';
+import { SOUNDS, soundKey, wakeOn, fmt } from '../minuteurs.js?v=1.20.1';
+import { setQty } from './garde-manger.js?v=1.20.1';
+import { panelHead, noticeWarn } from './commun.js?v=1.20.1';
 
 export function openCook(id) {
   S.cook = { id, data: null, idx: 0, loading: false, err: null };
@@ -116,7 +116,8 @@ export function viewCook() {
       el('div', {}, el('div', { class: 'label' }, 'Version de ce soir · pas dans le livre'), el('p', {}, [S.cook.soir.demande, ...S.cook.soir.changements].join(' · '))),
       el('button', { class: 'btn', id: 'remettre', type: 'button' }, 'Remettre la recette du livre')),
     el('div', { class: 'stage' }, stage), band,
-    iaDisponible() && el('div', { class: 'cook-adapt' }, el('button', { class: 'btn', 'data-adapt': S.cook.id, 'data-adaptcook': '', type: 'button' }, ico('chef'), 'Adapter avec Gemini')),
+    el('div', { class: 'cook-adapt' }, iaDisponible() && el('button', { class: 'btn', 'data-adapt': S.cook.id, 'data-adaptcook': '', type: 'button' }, ico('chef'), 'Adapter avec Gemini'),
+      el('button', { class: 'btn', 'data-partager': S.cook.id, type: 'button', 'data-new': '1.20.1-pdf' }, ico('share'), 'Partager en PDF')),
     el('details', { class: 'tfree' }, el('summary', {}, ico('clock'), 'Autre minuteur et son'),
       el('div', { class: 'tfree-in' },
         el('div', { class: 'seg' }, [1, 3, 5, 10, 15, 20, 30].map((m) => el('button', { class: 'btn', 'data-tadd': m * 60, 'data-tlabel': `Minuteur ${m} min` }, `${m} min`))),

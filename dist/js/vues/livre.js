@@ -1,9 +1,9 @@
 // 01 · Livre : parcourir et trier par glissement (R-03). Repris de Gordon Rams.ai.
-import { S, $, TYPES, PROTS, CUIS, norm, starsOf, toast, errText, render } from '../etat.js?v=1.20.0';
-import { el, ico } from '../el.js?v=1.20.0';
-import { majRecette, rebuildPools, dansLaSemaine, supprimerRecette, remettreRecette, fusionnerRecettes } from '../donnees.js?v=1.20.0';
-import { doublonRecette } from '../doublons.js?v=1.20.0';
-import { panelHead, skeleton, noticeWarn } from './commun.js?v=1.20.0';
+import { S, $, TYPES, PROTS, CUIS, norm, starsOf, toast, errText, render } from '../etat.js?v=1.20.1';
+import { el, ico } from '../el.js?v=1.20.1';
+import { majRecette, rebuildPools, dansLaSemaine, supprimerRecette, remettreRecette, fusionnerRecettes } from '../donnees.js?v=1.20.1';
+import { doublonRecette } from '../doublons.js?v=1.20.1';
+import { panelHead, skeleton, noticeWarn } from './commun.js?v=1.20.1';
 
 function viewBook() {
   const L = S.lib, q = norm(L.q || ''), book = S.book || [];
@@ -19,8 +19,9 @@ function viewBook() {
       el('button', { class: 'btn', id: 'lib-edit', type: 'button', 'aria-pressed': String(!!L.edit), 'data-new': '1.14.0-modifier' }, L.edit ? 'Terminer' : 'Modifier')),
     L.edit ? el('div', { id: 'liblist' }, list.slice(0, 250).map(ligneEdition)) : el('div', { class: 'picklist', id: 'liblist' }, list.slice(0, 250).map((r) => {
       const n = starsOf(r);
-      return el('button', { class: 'pickrow', 'data-preview': r.id }, el('b', {}, r.name),
-        el('small', {}, [n ? '★'.repeat(n) + '☆'.repeat(5 - n) : '', r.type || 'Sans type', r.statut, r.prot, r.time ? Math.round(r.time) + ' min' : '', r.isNew ? 'New' : ''].filter(Boolean).join(' · ')));
+      return el('div', { class: 'drow' }, el('button', { class: 'pickrow', 'data-preview': r.id }, el('b', {}, r.name),
+        el('small', {}, [n ? '★'.repeat(n) + '☆'.repeat(5 - n) : '', r.type || 'Sans type', r.statut, r.prot, r.time ? Math.round(r.time) + ' min' : '', r.isNew ? 'New' : ''].filter(Boolean).join(' · '))),
+        el('button', { class: 'btn icon', type: 'button', 'data-partager': r.id, 'aria-label': `Partager ${r.name} en PDF`, title: 'Partager en PDF' }, ico('share')));
     }))
   ];
 }
@@ -84,7 +85,8 @@ export function viewTri() {
       el('div', { class: 'label' }, c.complete ? 'Fiche complète' : 'Fiche à compléter'),
       el('h3', {}, c.name), el('div', { class: 'meta' }, meta.map((m) => el('span', {}, m))),
       el('div', { class: 'chips' }, c.weeknight && el('span', { class: 'chip' }, 'Soir de semaine'), !c.complete && el('span', { class: 'chip warn' }, 'Fiche à compléter')),
-      el('p', { style: 'margin-top:auto;display:flex;gap:10px;flex-wrap:wrap;align-items:center' }, el('button', { class: 'btn', 'data-preview': c.id }, ico('right'), 'Ouvrir et changer les étiquettes'))),
+      el('p', { style: 'margin-top:auto;display:flex;gap:10px;flex-wrap:wrap;align-items:center' }, el('button', { class: 'btn', 'data-preview': c.id }, ico('right'), 'Ouvrir et changer les étiquettes'),
+        el('button', { class: 'btn', 'data-partager': c.id, 'aria-label': `Partager ${c.name} en PDF` }, ico('share'), 'PDF'))),
     el('div', { class: 'tri-legend' },
       el('button', { class: 'btn', 'data-decide': 'Déclassée' }, ico('left'), 'Déclassée', el('small', {}, 'à gauche')),
       el('button', { class: 'btn', 'data-decide': 'À retravailler' }, ico('reset'), 'À retravailler', el('small', {}, 'vers le bas')),

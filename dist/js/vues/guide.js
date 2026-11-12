@@ -3,8 +3,8 @@
 // personne fasse l'action ; il passe seul à la suite. Kits et stock de base → Livre → Garde-manger → Semaine → Provigo :
 // à la fin, la première semaine est en place et la liste d'épicerie est prête. Il démarre seul quand le livre est vide,
 // se reprend après un rechargement, et Compte → « Mise en place guidée » le relance.
-import { S, $ } from '../etat.js?v=1.20.0';
-import { el, ico, vider } from '../el.js?v=1.20.0';
+import { S, $ } from '../etat.js?v=1.20.1';
+import { el, ico, vider } from '../el.js?v=1.20.1';
 
 const CLE = 'superchef-guide', FIN = 'superchef-guide-fin';
 const auLivre = () => (S.book || []).filter((r) => r.statut === 'Au livre').length;

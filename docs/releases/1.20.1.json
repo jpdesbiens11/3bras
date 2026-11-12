@@ -1,0 +1,25 @@
+{
+  "version": "1.20.1",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — Partager en PDF, visible partout",
+  "requis": [
+    "R-04"
+  ],
+  "nouveautes": [
+    "Semaine : un bouton « PDF » sur chaque souper (au téléphone, les actions passent sur deux rangées).",
+    "Livre : une icône de partage sur chaque recette de la liste et sur la fiche à trier.",
+    "Au poêle : « Partager en PDF » à côté d'« Adapter avec Gemini ».",
+    "Fiche de la recette : un vrai bouton « Partager en PDF », en plus de l'icône du coin."
+  ],
+  "decisions": [
+    "D-G-052"
+  ],
+  "tests": {
+    "unitaires": 77,
+    "bout_en_bout": 51,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}
