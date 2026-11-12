@@ -1,9 +1,9 @@
 // Feuille Compte : connexion, classeur, import (R-02). Même gabarit que les feuilles de Gordon Rams.ai.
-import { S, $, toast } from '../etat.js?v=1.15.0';
-import { el, ico, vider } from '../el.js?v=1.15.0';
-import { lienClasseur, lienDossier, reinitialiser, texteReparation } from '../store.js?v=1.15.0';
-import { valider, importer } from '../import.js?v=1.15.0';
-import { CONFIG } from '../config.js?v=1.15.0';
+import { S, $, toast } from '../etat.js?v=1.16.0';
+import { el, ico, vider } from '../el.js?v=1.16.0';
+import { lienClasseur, lienDossier, reinitialiser, texteReparation } from '../store.js?v=1.16.0';
+import { valider, importer } from '../import.js?v=1.16.0';
+import { CONFIG } from '../config.js?v=1.16.0';
 
 export function openCompte(surImporter) {
   if ($('#comptesheet')) return;
@@ -20,7 +20,9 @@ export function openCompte(surImporter) {
         el('div', { class: 'mrow' }, el('span', {}, 'Bibliothèque', el('small', { id: 'compte-biblio' }, texteBiblio())),
           el('a', { class: 'btn', href: lienClasseur(c.classeurId), target: '_blank', rel: 'noopener' }, 'Classeur'),
           c.dossier && el('a', { class: 'btn', href: lienDossier(c.dossier.id), target: '_blank', rel: 'noopener' }, 'Dossier')),
-        c.messageMigration && el('p', { class: 'hint' }, c.messageMigration)),
+        c.messageMigration && el('p', { class: 'hint' }, c.messageMigration),
+        el('div', { class: 'mrow' }, el('span', {}, 'Visite guidée', el('small', {}, 'Les fonctions de l\'app, dans l\'ordre où on s\'en sert.')),
+          el('button', { class: 'btn', id: 'revoirvisite', type: 'button', 'data-new': '1.16.0-visite' }, ico('play'), 'Revoir la visite'))),
       el('h4', { id: 'kits', 'data-new': '1.3.0-kits' }, 'Kits de départ'),
       el('p', { style: 'color:var(--muted);max-width:60ch;margin:0 0 10px' }, S.book.length
         ? 'Touche un ou plusieurs kits de 10 recettes (un crochet apparaît), puis ajoute-les. Ce qui est déjà là n\'est pas dédoublé.'

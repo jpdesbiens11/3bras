@@ -8,12 +8,14 @@
   <meta name="color-scheme" content="light dark">
   <title>SuperChef.ai</title>
   <link rel="icon" href="icone.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/polices.css?v=1.15.0">
-  <link rel="stylesheet" href="css/app.css?v=1.15.0">
-  <link rel="stylesheet" href="css/superchef.css?v=1.15.0">
-  <script src="js/theme.js?v=1.15.0"></script>
+  <link rel="stylesheet" href="css/polices.css?v=1.16.0">
+  <link rel="stylesheet" href="css/app.css?v=1.16.0">
+  <link rel="stylesheet" href="css/superchef.css?v=1.16.0">
+  <link rel="stylesheet" href="css/carnet.css?v=1.16.0">
+  <link rel="stylesheet" href="css/visite.css?v=1.16.0">
+  <script src="js/theme.js?v=1.16.0"></script>
   <script src="https://accounts.google.com/gsi/client" async></script>
-  <script type="module" src="js/app.js?v=1.15.0"></script>
+  <script type="module" src="js/app.js?v=1.16.0"></script>
 </head>
 <body>
 <svg width="0" height="0" class="sprite" aria-hidden="true">
@@ -41,10 +43,10 @@
 
 <header>
   <div class="wrap">
-    <div class="brand"><h1>SuperChef.ai</h1><span class="slogan">· Ton renfort au souper</span>
+    <div class="brand"><h1><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="4" fill="#ffd23f" stroke="#26323f" stroke-width="2"/><path d="M10.5 18 C7 18 6.2 13.1 9.6 12.1 C9.2 8.7 12.8 7.3 14.6 9.1 C15.6 6.1 19.8 6.3 20.6 9.3 C22.6 7.5 26 9.1 25.2 12.3 C28 13.5 27 18 23.5 18 Z" fill="#fff" stroke="#26323f" stroke-width="2" stroke-linejoin="round"/><path d="M11 18 V25 H23 V18" fill="#fff" stroke="#26323f" stroke-width="2" stroke-linejoin="round"/><path d="M18 19 L14.6 22.4 H17.2 L15.6 25.6" fill="none" stroke="#e2622f" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg><span class="mot"><span class="m-super">Super</span><span class="m-chef">Chef</span><span class="m-ai">.ai</span></span></h1><span class="slogan">· Ton renfort au souper</span>
       <div class="tools"><small class="sync" id="sync">Connexion à Google…</small>
         <label class="sr" for="skin">Thème</label>
-        <select id="skin" class="skin-select" aria-label="Thème"><option value="plan">Plan technique</option><option value="magazine">Magazine</option><option value="ardoise">Ardoise</option></select>
+        <select id="skin" class="skin-select" aria-label="Thème"><option value="carnet">Carnet</option><option value="plan">Plan technique</option><option value="magazine">Magazine</option><option value="ardoise">Ardoise</option></select>
         <button class="btn icon" id="comptebtn" type="button" aria-label="Compte et import" hidden><svg class="ico" aria-hidden="true"><use href="#i-users"/></svg></button>
         <button class="btn primary" id="addbtn" type="button" aria-label="Ajouter une recette" hidden><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg><span class="addlbl">Recette</span></button>
       </div></div>
