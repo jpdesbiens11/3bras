@@ -623,3 +623,64 @@ test('D-G-043 : garde-manger filtré, mode Modifier, fusion des doublons, Au gar
   await expect.poll(() => sens(inv())).toBe(sens(JSON.parse(photo)));
   expect(erreurs).toEqual([]);
 });
+
+test('D-G-044 : livre en mode Modifier (infos, supprimer, fusionner) et texte de la fiche', async ({ page }, info) => {
+  const double = { ...LIVRE.recettes[0], id: 'r-pate-2', Statut: 'À trier' };                      // « Pâté chinois test » en double
+  const livre = { ...LIVRE, recettes: [...LIVRE.recettes, double], plans: [{ id: 'p-vieux', 'Semaine du': '2026-10-04', Jour: 'Dimanche', 'Recette id': 'r-pate-2' }] };
+  const { sim, erreurs } = await demarrer(page, { livre });
+  const c = [...sim.classeurs.values()][0];
+  const ligne = (t, id) => { const o = c.onglets[t], e = o[0], l = o.find((x) => x[0] === id); return l && Object.fromEntries(e.map((k, i) => [k, l[i] ?? ''])); };
+  await page.locator('[data-go="tri"]').click();
+  await page.locator('#lib-edit').click();
+  await expect(page.locator('#lib-edit')).toHaveText('Terminer');
+
+  // Infos dans la liste
+  const porc = page.locator('.inv-edit', { has: page.getByLabel('Nom de Porc souvlaki test', { exact: true }) });
+  await page.getByLabel('Nom de Porc souvlaki test', { exact: true }).fill('Souvlaki au porc');
+  await page.getByLabel('Nom de Porc souvlaki test', { exact: true }).press('Tab');
+  await expect(page.locator('#toast')).toContainText('« Souvlaki au porc » mis à jour');
+  expect(ligne('Recettes', 'r-porc').Nom).toBe('Souvlaki au porc');
+  const souv = page.locator('.inv-edit', { has: page.getByLabel('Nom de Souvlaki au porc', { exact: true }) });
+  await souv.getByLabel('Temps (min) de Souvlaki au porc').fill('50');
+  await souv.getByLabel('Temps (min) de Souvlaki au porc').press('Tab');
+  await expect.poll(() => ligne('Recettes', 'r-porc')['Temps total (min)']).toBe('50');
+  expect(ligne('Recettes', 'r-porc')['Soir de semaine']).toBe('non');
+  await souv.getByLabel('Statut de Souvlaki au porc').selectOption('À retravailler');
+  await expect.poll(() => ligne('Recettes', 'r-porc').Statut).toBe('À retravailler');
+  expect(porc).toBeTruthy();
+
+  // Supprimer : refusé si dans la semaine ; sinon supprimée puis remise
+  const semaine = await page.evaluate(() => [...document.querySelectorAll('[data-recdel]')].map((b) => b.dataset.recdel));
+  const plan = c.onglets['Plans de semaine'];
+  const vide = page.locator('[data-recdel="r-vide"]');
+  await vide.click();
+  await expect(page.locator('#toast')).toContainText('« Photo de recette test » supprimée');
+  expect(ligne('Recettes', 'r-vide')).toBeUndefined();
+  await page.locator('#toast button').click();
+  await expect.poll(() => !!ligne('Recettes', 'r-vide')).toBe(true);
+  expect(semaine.length).toBeGreaterThan(5); expect(plan).toBeTruthy();
+
+  // Doublon : fusionné, la vieille semaine suit la recette gardée
+  const hint = page.locator('.inv-double', { hasText: 'Doublon possible de « Pâté chinois test »' });
+  await expect(hint).toHaveCount(1);
+  await page.screenshot({ path: `tests/captures/${info.project.name}-livre-modifier.png`, fullPage: true });
+  await hint.locator('[data-recfus]').click();
+  await expect(page.locator('#toast')).toContainText('fusionnée dans « Pâté chinois test » (1 semaine ou bilan suivent)');
+  expect(ligne('Recettes', 'r-pate-2')).toBeUndefined();
+  expect(ligne('Plans de semaine', 'p-vieux')['Recette id']).toBe('r-pate');
+
+  // Texte de la fiche, puis retour à l'originale
+  await page.locator('#lib-edit').click();
+  await page.locator('[data-preview="r-pate"]').click();
+  await page.locator('#sheet [data-textedit="r-pate"]').click();
+  await expect(page.locator('#tx-ing')).toHaveValue(/500 g de bœuf haché/);
+  await page.locator('#tx-ing').fill('## Viande\n500 g de bœuf haché maigre\n1 oignon haché\n## Étages\n1 boîte de maïs en crème\n6 pommes de terre');
+  await page.locator('#tx-save').click();
+  await expect(page.locator('#toast')).toContainText('Fiche enregistrée');
+  await expect(page.locator('#sheet')).toContainText('500 g de bœuf haché maigre');
+  await expect(page.locator('#sheet .chip', { hasText: 'Version de famille' })).toBeVisible();
+  expect(ligne('Recettes', 'r-pate').Adaptations).toMatch(/modifiée à la main$/);
+  await page.locator('#sheet [data-adaptrevert="r-pate"]').click();
+  await expect(page.locator('#sheet')).not.toContainText('500 g de bœuf haché maigre');
+  expect(erreurs).toEqual([]);
+});

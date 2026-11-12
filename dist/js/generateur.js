@@ -2,11 +2,11 @@
 // les cuisines et les mots-clés choisis ; la personne colle la réponse (plusieurs Fiches SuperChef),
 // coche ce qu'elle garde, et les recettes entrent « À trier » par l'import validé (D-G-016).
 // Sans DOM : testé à part.
-import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.13.0';
-import { parseTexte, parseLoose, ENTETE_FICHE } from './lecture.js?v=1.13.0';
-import { FORMAT, FORMATS, valider, estKitRepas } from './import.js?v=1.13.0';
-import { VERSION_SCHEMA } from './schema.js?v=1.13.0';
-import { slug } from './donnees.js?v=1.13.0';
+import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.14.0';
+import { parseTexte, parseLoose, ENTETE_FICHE } from './lecture.js?v=1.14.0';
+import { FORMAT, FORMATS, valider, estKitRepas } from './import.js?v=1.14.0';
+import { VERSION_SCHEMA } from './schema.js?v=1.14.0';
+import { slug } from './donnees.js?v=1.14.0';
 
 export const NOMBRES = Object.freeze([5, 10, 15, 20]);
 export const TYPES_LOT = Object.freeze(['Souper', 'Dessert', 'Soupe', 'Déjeuner', 'Accompagnement', 'Collation', 'Mélange']);

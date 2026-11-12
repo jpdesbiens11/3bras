@@ -77,3 +77,15 @@ export function valeursOriginales(row, jour) {
 
 // Ce qu'il faut réécrire pour annuler un retour à l'originale.
 export const valeursActuelles = (row) => Object.fromEntries([...CHAMPS_ORIGINALE, 'Adaptations'].map((c) => [c, String(row[c] ?? '')]));
+
+// D-G-044 : la fiche modifiée à la main (ingrédients, étapes, sous-chef) ; l'originale est gardée comme avec Adapter.
+// t : { ing: [lignes, « ## Groupe »], etapes: [lignes], sous: [lignes] }.
+export function valeursTexte(row, t, jour) {
+  const v = { 'Ingrédients': t.ing, 'Étapes': t.etapes, 'Tâches sous-chef': t.sous,
+    'Fiche complète': !!(t.ing.length && t.etapes.length),
+    Adaptations: ajouterLigne(row.Adaptations, `${jour} · modifiée à la main`) };
+  if (!String(row.Originale || '').trim()) {
+    v.Originale = JSON.stringify({ le: jour, ...Object.fromEntries(CHAMPS_ORIGINALE.map((c) => [c, String(row[c] ?? '')])) });
+  }
+  return v;
+}
