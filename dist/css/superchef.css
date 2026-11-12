@@ -68,3 +68,5 @@ a.btn{color:inherit;text-decoration:none}
 .tx-zone{min-height:180px}
 /* D-G-045 : créer une recette avec Gemini. */
 .add-creer{margin-top:22px}
+/* D-G-054 : Gemini sous Claude, dans Compte */
+.gen-choix{flex-direction:column;align-items:flex-start}

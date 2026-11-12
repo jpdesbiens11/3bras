@@ -83,3 +83,21 @@ test('D-G-045 : la consigne de création reprend la demande, le type et le garde
   assert.doesNotMatch(consigneCreation('chili', 'Inventé'), /Au garde-manger/);
   assert.match(consigneCreation('chili', 'Inventé'), /Type : Souper/);
 });
+
+test('D-G-054 : la consigne Gemini demande 5 fiches seules, sans lien inventé, signées Gemini', async () => {
+  const { consigneGemini, PAR_LOT_GEMINI, lireReponse, preparerChoix } = await import('../../dist/js/generateur.js');
+  const c = consigneGemini({ cuisines: ['Italienne'], motsCles: 'mijoteuse', type: 'Souper', nombre: 20, portions: 6, soirs: true, eviter: 'noix' }, ['Lasagne de la maison']);
+  assert.equal(PAR_LOT_GEMINI, 5);
+  assert.match(c, /Prépare 5 recettes/);
+  assert.match(c, /Cuisines : Italienne/);
+  assert.match(c, /mijoteuse/);
+  assert.match(c, /noix/);
+  assert.match(c, /Lasagne de la maison/);                                     // pas de recette déjà au livre
+  assert.match(c, /Lien : \(laisse vide : n'invente aucun lien\)/);
+  assert.match(c, /Source : Gemini/);
+  assert.doesNotMatch(c, /Lien : https/);
+  assert.doesNotMatch(c, /consulter le web/);
+  const { fiches } = lireReponse('FICHE SUPERCHEF\nNom : Risotto test\nType : Souper\nPortions : 4\nTemps total : 40 min\nSource : Gemini\n\nINGRÉDIENTS\n- 300 g de riz arborio\n\nÉTAPES\n1. Cuire 18 minutes.\n\nSOUS-CHEF\n- Mesurer le riz');
+  const [x] = preparerChoix(fiches, [], { lot: 'Italienne', jour: '2026-11-12', par: 'Gemini' });
+  assert.match(x.row.Notes[0], /Créée avec Gemini \(Italienne, 2026-11-12\)/);
+});

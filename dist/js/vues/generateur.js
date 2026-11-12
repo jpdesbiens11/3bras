@@ -1,19 +1,23 @@
 // « Créer des recettes avec Claude » (D-G-035) : 1. ce que tu veux, 2. la consigne à donner à Claude,
 // 3. sa réponse collée, cochée, puis ajoutée « À trier ». La personne garde la main à chaque étape.
-import { S, $, CUIS, iso, toast } from '../etat.js?v=1.21.0';
-import { el, ico, vider } from '../el.js?v=1.21.0';
-import { importer } from '../import.js?v=1.21.0';
-import { NOMBRES, TYPES_LOT, DEMANDE_VIDE, consigneGenerateur, lireReponse, preparerChoix, fichierImport } from '../generateur.js?v=1.21.0';
+// « Créer des recettes avec Gemini » (D-G-054) : même demande, mais Gemini écrit les fiches lui-même (lots de 5),
+// sans copier-coller ; on coche ensuite ce qui entre dans le livre.
+import { S, $, CUIS, iso, toast, norm } from '../etat.js?v=1.22.0';
+import { el, ico, vider } from '../el.js?v=1.22.0';
+import { importer } from '../import.js?v=1.22.0';
+import { NOMBRES, TYPES_LOT, DEMANDE_VIDE, PAR_LOT_GEMINI, consigneGenerateur, consigneGemini, lireReponse, preparerChoix, fichierImport } from '../generateur.js?v=1.22.0';
+import { convertirAvecGemini, erreurIA } from '../ia.js?v=1.22.0';
 
 const CLE = 'superchef-generateur'; // la demande reste sur l'appareil le temps d'aller dans Claude
-let G = null; // { d: demande, items: [], res }
+let G = null; // { d: demande, items: [], res, par: 'Claude' | 'Gemini', occupe, avance }
 const lireDemande = () => { try { return { ...DEMANDE_VIDE, ...JSON.parse(localStorage.getItem(CLE) || '{}') }; } catch (_) { return { ...DEMANDE_VIDE }; } };
 const garder = () => { try { localStorage.setItem(CLE, JSON.stringify(G.d)); } catch (_) {} };
 const consigne = () => consigneGenerateur(G.d, (S.book || []).map((r) => r.name));
 const lot = () => [G.d.cuisines.join(', '), G.d.motsCles].filter(Boolean).join(' · ') || 'recettes variées';
 
 export const genOuvert = () => !!G;
-export function openGen() { G = { d: lireDemande(), items: [], res: null }; paint(); }
+export function openGen(par = 'Claude') { G = { d: lireDemande(), items: [], res: null, par, occupe: false, avance: '' }; paint(); }
+const parGemini = () => G?.par === 'Gemini';
 export function closeGen() { G = null; $('#gensheet')?.remove(); document.body.style.overflow = ($('#comptesheet') || $('#sheet')) ? 'hidden' : ''; }
 
 const etape = (n, titre, ...k) => el('section', { class: 'gen-etape' }, el('h3', {}, el('b', {}, n), titre), ...k);
@@ -25,8 +29,10 @@ function paint() {
   vider(n).append(
     el('div', { class: 'sheet-bar' }, el('div', { class: 'wrap' }, el('span', { class: 'label' }, 'Recettes de départ'),
       el('button', { class: 'btn icon', 'data-genclose': '', 'aria-label': 'Fermer' }, ico('left')))),
-    el('div', { class: 'wrap gen' }, el('h2', { id: 'gen-h' }, 'Créer des recettes avec Claude'),
-      el('p', { class: 'gen-intro' }, 'Choisis ce que vous aimez, donne la consigne à Claude (Sonnet 5.5), puis colle sa réponse ici. Tu choisis ce qui entre dans ton livre.'),
+    el('div', { class: 'wrap gen' }, el('h2', { id: 'gen-h' }, `Créer des recettes avec ${G.par}`),
+      el('p', { class: 'gen-intro' }, parGemini()
+        ? 'Choisis ce que vous aimez : Gemini écrit les fiches tout seul, sans copier-coller. Tu choisis ensuite ce qui entre dans ton livre.'
+        : 'Choisis ce que vous aimez, donne la consigne à Claude (Sonnet 5.5), puis colle sa réponse ici. Tu choisis ce qui entre dans ton livre.'),
       etape('1', 'Ce que vous voulez',
         el('div', { class: 'raccourcis', role: 'group', 'aria-label': 'Cuisines' }, CUIS.map((c) => el('button', { type: 'button', class: 'btn', 'data-gencuis': c, 'aria-pressed': String(d.cuisines.includes(c)) }, c))),
         el('div', { class: 'addf' },
@@ -37,7 +43,12 @@ function paint() {
             el('div', {}, el('label', { for: 'gen-portions' }, 'Portions'), el('input', { id: 'gen-portions', type: 'number', min: 1, max: 20, inputmode: 'numeric', value: d.portions }))),
           el('div', { class: 'raccourcis', role: 'group', 'aria-label': 'Nombre de recettes' }, NOMBRES.map((x) => el('button', { type: 'button', class: 'btn', 'data-gennb': x, 'aria-pressed': String(x === d.nombre) }, `${x} recettes`))),
           el('label', { class: 'gen-coche' }, el('input', { id: 'gen-soirs', type: 'checkbox', checked: d.soirs }), 'Surtout des soirs de semaine (45 min ou moins)'))),
-      etape('2', 'Donne la consigne à Claude',
+      parGemini() ? etape('2', 'Gemini écrit les recettes',
+        el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', id: 'gen-gemini', type: 'button', disabled: G.occupe }, ico('chef'),
+          G.occupe ? 'Gemini écrit…' : `Créer ${d.nombre} recettes avec Gemini`)),
+        el('p', { class: 'hint', id: 'gen-avance', 'aria-live': 'polite' }, G.avance || `Par lots de ${PAR_LOT_GEMINI} : compte environ 20 secondes par lot. Les recettes déjà dans ton livre ne reviennent pas.`),
+        el('div', { id: 'gen-liste', 'aria-live': 'polite' }, liste())) : null,
+      !parGemini() && etape('2', 'Donne la consigne à Claude',
         el('label', { class: 'sr', for: 'gen-consigne' }, 'Consigne pour Claude'),
         el('textarea', { id: 'gen-consigne', class: 'gen-consigne', readonly: true, value: consigne() }),
         el('div', { class: 'add-acts' },
@@ -45,7 +56,7 @@ function paint() {
           typeof navigator !== 'undefined' && navigator.share && el('button', { class: 'btn', id: 'gen-partager', type: 'button' }, ico('share'), 'Envoyer à l\'app Claude'),
           el('a', { class: 'btn', href: 'https://claude.ai/new', target: '_blank', rel: 'noopener noreferrer' }, 'Ouvrir Claude')),
         el('p', { class: 'hint' }, 'Dans Claude, choisis Sonnet 5.5 et colle la consigne. Quand il a fini, touche « Copier » sur son bloc de code, puis reviens ici.')),
-      etape('3', 'Colle la réponse de Claude',
+      !parGemini() && etape('3', 'Colle la réponse de Claude',
         el('label', { class: 'sr', for: 'gen-reponse' }, 'Réponse de Claude'),
         el('textarea', { id: 'gen-reponse', placeholder: 'FICHE SUPERCHEF\nNom : …' }),
         el('div', { class: 'add-acts' },
@@ -62,7 +73,10 @@ export function majDemande() {
   garder(); const c = $('#gen-consigne'); if (c) c.value = consigne();
 }
 export function basculerCuisine(c) { if (!G) return; const s = new Set(G.d.cuisines); s.has(c) ? s.delete(c) : s.add(c); G.d.cuisines = CUIS.filter((x) => s.has(x)); majDemande(); paintBoutons('[data-gencuis]', (b) => G.d.cuisines.includes(b.dataset.gencuis)); }
-export function choisirNombre(x) { if (!G) return; G.d.nombre = +x; majDemande(); paintBoutons('[data-gennb]', (b) => +b.dataset.gennb === G.d.nombre); }
+export function choisirNombre(x) {
+  if (!G) return; G.d.nombre = +x; majDemande(); paintBoutons('[data-gennb]', (b) => +b.dataset.gennb === G.d.nombre);
+  const g = $('#gen-gemini'); if (g && !G.occupe) vider(g).append(ico('chef'), `Créer ${G.d.nombre} recettes avec Gemini`);
+}
 const paintBoutons = (sel, on) => document.querySelectorAll(`#gensheet ${sel}`).forEach((b) => b.setAttribute('aria-pressed', String(on(b))));
 
 export async function copierConsigne() {
@@ -83,12 +97,40 @@ export function lireRecettes() {
   else { G.items = preparerChoix(fiches, (S.book || []).map((r) => r.name), { lot: lot(), jour: iso(new Date()) }); G.res = tronque ? 'Seules les 40 premières fiches sont lues.' : null; }
   vider($('#gen-liste')).append(liste());
 }
+// D-G-054 : lots de 5 jusqu'au nombre voulu ; les fiches déjà écrites (ou au livre) sont données à Gemini pour ne pas revenir.
+export async function creerAvecGemini() {
+  if (!G || G.occupe) return;
+  majDemande();
+  const voulu = G.d.nombre, livre = (S.book || []).map((r) => r.name), vus = new Set(livre.map((x) => norm(x).trim()));
+  const fiches = []; G.occupe = true; G.items = []; G.res = null; G.avance = `Gemini écrit les recettes… 0 sur ${voulu}`; paint();
+  try {
+    for (let essai = 0; fiches.length < voulu && essai < Math.ceil(voulu / PAR_LOT_GEMINI) + 1; essai++) {
+      const texte = await convertirAvecGemini(consigneGemini(G.d, [...livre, ...fiches.map((f) => f.r.nom)]), [], '', { max: 12000 });
+      if (!G) return;   // feuille fermée pendant l'appel
+      for (const f of lireReponse(texte, G.d.type === 'Mélange' ? 'Souper' : G.d.type).fiches) {
+        const k = norm(f.r.nom).trim();
+        if (!f.valide || !f.r.nom || vus.has(k) || fiches.length >= voulu) continue;   // seulement des fiches complètes, nouvelles
+        vus.add(k);
+        f.r.source_nom = 'Gemini'; f.r.source_cat = 'Web autre'; f.r.lien = '';   // pas de web ici : aucun lien n'est sûr
+        f.r.a_verifier = ['Recette créée par Gemini : à essayer et à ajuster.', f.r.a_verifier].filter(Boolean).join(' ');
+        fiches.push(f);
+      }
+      G.avance = `Gemini écrit les recettes… ${fiches.length} sur ${voulu}`;
+      const a = $('#gen-avance'); if (a) a.textContent = G.avance;
+    }
+    G.avance = fiches.length ? `${fiches.length} recette${fiches.length > 1 ? 's' : ''} écrite${fiches.length > 1 ? 's' : ''} par Gemini. Vérifie-les avant de les ajouter.` : 'Gemini n\'a renvoyé aucune fiche complète. Précise ta demande et réessaie.';
+  } catch (e) { G.res = erreurIA(e); G.avance = fiches.length ? `${fiches.length} recette${fiches.length > 1 ? 's' : ''} écrite${fiches.length > 1 ? 's' : ''} avant l'arrêt.` : ''; }
+  if (!G) return;
+  G.items = preparerChoix(fiches, livre, { lot: lot(), jour: iso(new Date()), par: 'Gemini' });
+  G.occupe = false; paint();
+}
+
 export function cocher(i, on) { const x = G?.items[+i]; if (x) { x.choisi = on; const b = $('#gen-ajouter'); if (b) b.textContent = texteAjout(); } }
 const nbChoisis = () => G.items.filter((x) => x.choisi).length;
 const texteAjout = () => { const k = nbChoisis(); return k ? `Ajouter ${k} recette${k > 1 ? 's' : ''} au livre` : 'Coche au moins une recette'; };
 
 function liste() {
-  if (!G.items.length) return G.res ? el('p', { class: 'hint err' }, G.res) : null;
+  if (!G.items.length) return G.res ? el('p', { class: 'hint err', role: 'alert' }, G.res) : null;
   const meta = (r) => [r.type, r.cuisine, r.temps && `${r.temps} min`, r.portions && `${r.portions} portions`, r.source_nom && r.source_nom !== 'Inconnue' && r.source_nom].filter(Boolean).join(' · ');
   return el('div', { class: 'gen-res' },
     el('p', {}, `${G.items.length} recette${G.items.length > 1 ? 's' : ''} lue${G.items.length > 1 ? 's' : ''}. Décoche celles que tu ne veux pas.`),
@@ -108,7 +150,7 @@ function liste() {
 export async function ajouterChoisis(apres) {
   const rows = G.items.filter((x) => x.choisi && x.row).map((x) => x.row), fin = $('#gen-fin'), b = $('#gen-ajouter');
   if (!rows.length) { toast('Coche au moins une recette.'); return; }
-  const v = fichierImport(rows, iso(new Date()));
+  const v = fichierImport(rows, iso(new Date()), parGemini() ? 'gemini' : 'claude');
   if (!v.ok) { vider(fin).append(el('p', { class: 'hint err' }, `Ces fiches ne passent pas la vérification : ${v.erreurs[0]}`)); return; }
   if (b) b.disabled = true; vider(fin).append(el('p', { class: 'label' }, 'Écriture dans ton classeur…'));
   try {

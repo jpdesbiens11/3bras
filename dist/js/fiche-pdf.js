@@ -1,7 +1,7 @@
 // Fiche de recette en PDF (D-G-048), à l'image du thème Carnet : logo, nom, trait jaune, infos, ingrédients par groupe,
 // étapes numérotées dans des cercles, tâches sous-chef, adaptations de la famille, recette d'origine, pied SuperChef.ai.
 // Code pur : reçoit la recette déjà lue (pas de DOM, pas d'état), rend { octets: Uint8Array, pages }.
-import { creerPdf, couper } from './pdf.js?v=1.21.0';
+import { creerPdf, couper } from './pdf.js?v=1.22.0';
 
 const ENCRE = '#26323f', GRIS = '#56636f', FILET = '#dfe6ee', JAUNE = '#ffd23f', ORANGE = '#e2622f', VERT = '#178a7c', BLEU = '#1b5fd6';
 const G = 56, D = 556, HAUT = 736, BAS = 64;   // marges (points) ; la page fait 612 × 792

@@ -2,11 +2,11 @@
 // les cuisines et les mots-clés choisis ; la personne colle la réponse (plusieurs Fiches SuperChef),
 // coche ce qu'elle garde, et les recettes entrent « À trier » par l'import validé (D-G-016).
 // Sans DOM : testé à part.
-import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.21.0';
-import { parseTexte, parseLoose, ENTETE_FICHE } from './lecture.js?v=1.21.0';
-import { FORMAT, FORMATS, valider, estKitRepas } from './import.js?v=1.21.0';
-import { VERSION_SCHEMA } from './schema.js?v=1.21.0';
-import { slug } from './donnees.js?v=1.21.0';
+import { norm, TYPES, PROTS, CUIS, OUTILS } from './etat.js?v=1.22.0';
+import { parseTexte, parseLoose, ENTETE_FICHE } from './lecture.js?v=1.22.0';
+import { FORMAT, FORMATS, valider, estKitRepas } from './import.js?v=1.22.0';
+import { VERSION_SCHEMA } from './schema.js?v=1.22.0';
+import { slug } from './donnees.js?v=1.22.0';
 
 export const NOMBRES = Object.freeze([5, 10, 15, 20]);
 export const TYPES_LOT = Object.freeze(['Souper', 'Dessert', 'Soupe', 'Déjeuner', 'Accompagnement', 'Collation', 'Mélange']);
@@ -72,6 +72,16 @@ SOUS-CHEF
 - (rien, ou ce qui manque à la source)`;
 }
 
+// D-G-054 : la même demande, écrite seule par Gemini, 5 fiches par appel (sortie plus sûre) et sans lien inventé.
+export const PAR_LOT_GEMINI = 5;
+export function consigneGemini(d, noms = []) {
+  return consigneGenerateur({ ...d, nombre: PAR_LOT_GEMINI }, noms)
+    .replace(/^- Des classiques reconnus.*$/m, '- Des classiques reconnus et variés (protéines, méthodes de cuisson), écrits dans tes propres mots.')
+    .replace('Lien : https://…', 'Lien : (laisse vide : n\'invente aucun lien)')
+    .replace('Source : …', 'Source : Gemini')
+    .replace(/^Livraison : .*$/m, 'Livraison : seulement les fiches, l\'une après l\'autre, sans texte avant ni après, chacune exactement dans ce format :');
+}
+
 // Réponse collée → [{ r (fiche lue), valide }]. Accepte aussi un fichier d'import JSON collé tel quel.
 export function lireReponse(texte, typeDefaut = 'Souper') {
   const brut = String(texte || '').trim();
@@ -87,7 +97,7 @@ export function lireReponse(texte, typeDefaut = 'Souper') {
 }
 
 // Fiche lue → ligne de « Recettes ». Id stable (g-<nom>) : recoller la même réponse n'ajoute rien.
-export function ligneRecette(r, { lot, jour }, idsPris = new Set()) {
+export function ligneRecette(r, { lot, jour, par = 'Claude' }, idsPris = new Set()) {
   const base = `g-${slug(r.nom) || 'recette'}`; let id = base, k = 2;
   while (idsPris.has(id)) id = `${base}-${k++}`;
   idsPris.add(id);
@@ -98,7 +108,7 @@ export function ligneRecette(r, { lot, jour }, idsPris = new Set()) {
     'Ingrédients': r.ingredients.flatMap((g) => [g.groupe ? `## ${g.groupe}` : null, ...g.items]).filter(Boolean),
     'Étapes': r.etapes, 'Tâches sous-chef': r.sous.length ? r.sous : ['Aider à mesurer les ingrédients'],
     'À vérifier': r.a_verifier || '', 'Lien source': r.lien || '',
-    Notes: [`D'après ${r.source_nom}.${r.portions ? ` ${r.portions} portions.` : ''} Créée avec Claude (${lot || 'lot'}, ${jour}).`]
+    Notes: [`D'après ${r.source_nom}.${r.portions ? ` ${r.portions} portions.` : ''} Créée avec ${par} (${lot || 'lot'}, ${jour}).`]
   };
 }
 
@@ -114,7 +124,7 @@ export function preparerChoix(fiches, nomsLivre, ctx) {
 }
 
 // Fichier d'import pour les recettes cochées, validé comme tout import (D-G-016).
-export const fichierImport = (rows, jour) => valider({ format: FORMAT, version: 1, schema: VERSION_SCHEMA, genere_le: jour, source: 'claude', recettes: rows });
+export const fichierImport = (rows, jour, source = 'claude') => valider({ format: FORMAT, version: 1, schema: VERSION_SCHEMA, genere_le: jour, source, recettes: rows });
 
 // D-G-045 : créer une recette avec Gemini à partir d'une simple description (pas de site source).
 // garde : noms des articles du garde-manger à utiliser si possible.
