@@ -1,8 +1,8 @@
 // Couche de données : le classeur Google remplace les bases Notion de Gordon Rams.ai.
 // Toutes les écritures passent par ecrireParId (N-07) ou ajouterUn.
-import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.12.0';
-import { lireOnglets, ecrireParId, ajouterUn } from './store.js?v=1.12.0';
-import { ficheDeLigne } from './cuisine.js?v=1.12.0';
+import { S, DAYS, BASE_DAYS, GAP_DAYS, iso, weekLabel } from './etat.js?v=1.13.0';
+import { lireOnglets, ecrireParId, ajouterUn, supprimerParId } from './store.js?v=1.13.0';
+import { ficheDeLigne } from './cuisine.js?v=1.13.0';
 
 const T_REC = 'Recettes', T_PLAN = 'Plans de semaine', T_INV = 'Inventaire', T_BIL = 'Bilans';
 const oui = (v) => /^(oui|true|vrai|1|__yes__)$/i.test(String(v || '').trim());
@@ -109,10 +109,30 @@ export async function majRecette(r, valeurs) {
 /* ---------- inventaire ---------- */
 export const toItem = (r) => ({ row: r, id: r.id, name: r.Nom || 'Sans nom', zone: r.Zone || 'Garde-manger', qty: nb(r['Quantité']) || 0, unit: r['Unité'] || '', dept: r['Département'] || null, essential: oui(r.Essentiel) });
 export const majQuantite = (it, q) => ecrire(T_INV, it.row, { 'Quantité': q });
-export async function ajouterArticle(nom, zone, dept, qty) {
-  const row = await ajout(T_INV, { id: `i-${slug(nom)}-${Date.now().toString(36)}`, Nom: nom, Zone: zone, 'Quantité': qty, 'Département': dept });
-  const it = toItem(row); S.inv.items.push(it); S.inv.items.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+const trierInv = () => S.inv.items.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+export async function ajouterArticle(nom, zone, dept, qty, essentiel = false) {
+  const row = await ajout(T_INV, { id: `i-${slug(nom)}-${Date.now().toString(36)}`, Nom: nom, Zone: zone, 'Quantité': qty, 'Département': dept, ...(essentiel ? { Essentiel: true } : {}) });
+  const it = toItem(row); S.inv.items.push(it); trierInv();
   return it;
+}
+// D-G-043 : modifier, supprimer (et remettre), fusionner deux articles de l'inventaire.
+export async function majArticle(it, valeurs) {
+  await ecrire(T_INV, it.row, valeurs);
+  Object.assign(it, toItem(it.row)); trierInv();
+}
+export async function supprimerArticle(it) {
+  const ligne = await supprimerParId(ctx().drive, ctx().classeurId, T_INV, it.row);
+  S.inv.items = S.inv.items.filter((x) => x !== it);
+  for (const x of S.inv.items) if (x.row._ligne > ligne) x.row._ligne -= 1;
+}
+export async function remettreArticle(row) {
+  const r = await ajout(T_INV, { ...row });
+  const it = toItem(r); S.inv.items.push(it); trierInv();
+  return it;
+}
+export async function fusionnerArticles(garde, double) {
+  await majArticle(garde, { 'Quantité': Math.round((garde.qty + double.qty) * 10) / 10, ...(double.essential && !garde.essential ? { Essentiel: true } : {}) });
+  await supprimerArticle(double);
 }
 
 /* ---------- bilans ---------- */

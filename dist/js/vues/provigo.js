@@ -1,11 +1,11 @@
 // 04 · Provigo : liste d'épicerie par rayon (R-10, R-11). Repris de Gordon Rams.ai.
-import { S, DEPTS, iso, norm, weekLabel, render } from '../etat.js?v=1.12.0';
-import { el, ico } from '../el.js?v=1.12.0';
-import { getRecipe } from '../donnees.js?v=1.12.0';
-import { ingKey, niceName, deptOf, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.12.0';
-import { frozen } from './fiche.js?v=1.12.0';
-import { setQty, addInv } from './garde-manger.js?v=1.12.0';
-import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.12.0';
+import { S, DEPTS, iso, norm, weekLabel, render, toast, errText } from '../etat.js?v=1.13.0';
+import { el, ico } from '../el.js?v=1.13.0';
+import { getRecipe, majArticle, supprimerArticle } from '../donnees.js?v=1.13.0';
+import { ingKey, niceName, deptOf, invMatch, isStaple, neverBuy } from '../cuisine.js?v=1.13.0';
+import { frozen } from './fiche.js?v=1.13.0';
+import { setQty, addInv } from './garde-manger.js?v=1.13.0';
+import { panelHead, skeleton, noticeWarn, frameEmpty } from './commun.js?v=1.13.0';
 
 // R-11 : les cases cochées restent sur le téléphone, par semaine (aucune recette ni jeton).
 const provKey = () => 'superchef-provigo-' + iso(S.weekStart);
@@ -38,6 +38,19 @@ export async function toggleGrocery(key) {
   if (on) { if (m) await setQty(m, m.qty + 1); else await addInv(l.name); } else if (m && m.qty > 0) await setQty(m, m.qty - 1);
 }
 
+// D-G-043 : « Au garde-manger » — l'article devient Essentiel (toujours à la maison) et sort des listes.
+export async function auGardeManger(key) {
+  const l = (S.prov.lines || []).find((x) => x.key === key); if (!l) return;
+  const m = invMatch(key);
+  try {
+    let annuler;
+    if (m) { const avant = { Essentiel: m.essential, 'Quantité': m.qty }; await majArticle(m, { Essentiel: true, 'Quantité': Math.max(1, m.qty) }); annuler = () => majArticle(m, avant); }
+    else { const it = await addInv(l.name, null, 1, true); if (!it) return; annuler = () => supprimerArticle(it); }
+    buildProvigo();
+    toast(`« ${l.name} » est au garde-manger : il ne reviendra plus sur la liste.`, { label: 'Annuler', fn: () => annuler().then(buildProvigo).catch((e) => toast(errText(e))) });
+  } catch (e) { toast(errText(e)); }
+}
+
 export function viewProvigo() {
   const out = [panelHead('04 · Épicerie', 'Provigo', `Les soupers et desserts de la ${weekLabel().toLowerCase()}, moins ce qui est déjà à la maison.`,
     el('button', { class: 'btn', id: 'rebuild' }, ico('reset'), 'Recalculer'))];
@@ -47,7 +60,7 @@ export function viewProvigo() {
   if (S.prov.missing && S.prov.missing.length) out.push(noticeWarn(`Sans liste d'ingrédients : ${S.prov.missing.join(', ')}. Ces soupers ne sont pas dans la liste.`));
   const had = (l) => !l.home && S.have.has(l.key);
   const buy = S.prov.lines.filter((l) => !l.home && !had(l)), home = S.prov.lines.filter((l) => l.home), mine = S.prov.lines.filter(had);
-  if (frozen()) out.push(el('p', { class: 'hint', style: 'margin:0 0 10px' }, 'Ouvre une recette de la semaine pour cocher ce que tu as déjà, ou touche « J\'en ai » ici : les deux listes se suivent.'));
+  if (frozen()) out.push(el('p', { class: 'hint', style: 'margin:0 0 10px' }, 'Ouvre une recette de la semaine pour cocher ce que tu as déjà, ou touche « J\'en ai » ici : les deux listes se suivent. « Au garde-manger » : tu en as toujours, il ne reviendra plus sur la liste.'));
   const left = buy.filter((l) => !S.prov.checked[l.key]).length;
   out.push(el('p', { class: 'label' }, `${left} article${left > 1 ? 's' : ''} à prendre`));
   DEPTS.forEach((d) => {
@@ -55,7 +68,8 @@ export function viewProvigo() {
     out.push(el('div', { class: 'dept' }, el('h3', {}, d, el('small', {}, String(ls.length))), ls.map((l) => el('div', { class: 'glrow' },
       el('label', { class: `gl ${S.prov.checked[l.key] ? 'on' : ''}` }, el('input', { type: 'checkbox', 'data-gro': l.key, checked: !!S.prov.checked[l.key] }),
         el('div', { class: 't' }, el('span', {}, l.name), el('small', {}, `${l.lines.join(' · ')} · ${l.recipes.join(', ')}`))),
-      frozen() && el('button', { class: 'btn havebtn', 'data-havebtn': l.key, 'aria-label': `J'ai déjà ${l.name}` }, 'J\'en ai')))));
+      frozen() && el('button', { class: 'btn havebtn', 'data-havebtn': l.key, 'aria-label': `J'ai déjà ${l.name}` }, 'J\'en ai'),
+      el('button', { class: 'btn havebtn', 'data-augm': l.key, 'aria-label': `Garder ${l.name} au garde-manger`, title: 'Toujours à la maison : ne revient plus sur la liste', 'data-new': '1.13.0-au-garde-manger' }, 'Au garde-manger')))));
   });
   if (mine.length) out.push(el('div', { class: 'frame home-list mine' }, el('b', {}, `Coché comme déjà au frigo (${mine.length})`),
     mine.map((l) => el('div', { class: 'mrow' }, el('span', {}, l.name, el('small', {}, l.recipes.join(', '))),

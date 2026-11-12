@@ -157,3 +157,26 @@ test('D-G-042 : à l\'ouverture, un onglet supprimé est recréé avant la migra
   assert.deepEqual(b.reparation.recrees, ['Plans de semaine']);
   assert.deepEqual(c.onglets['Plans de semaine'], [ONGLETS[1].colonnes]);
 });
+
+// D-G-043 : supprimer une ligne par son id, et repérer les doublons du garde-manger.
+test('D-G-043 : supprimerParId relit l\'id et supprime la bonne ligne même si elle a bougé', async () => {
+  const { supprimerParId, lireOnglet } = await import('../../dist/js/store.js');
+  const { sim, drive } = preparer();
+  const r = await ouvrirOuCreer(drive, OPTS);
+  const c = sim.classeurs.get(r.classeur.id);
+  c.onglets.Inventaire.push(['i-a', 'Ail'], ['i-b', 'Beurre'], ['i-c', 'Citron']);
+  const objs = await lireOnglet(drive, r.classeur.id, 'Inventaire');
+  const citron = objs.find((o) => o.id === 'i-c');
+  c.onglets.Inventaire.splice(1, 1);                                     // « Ail » supprimé ailleurs : Citron remonte
+  await supprimerParId(drive, r.classeur.id, 'Inventaire', citron);
+  assert.deepEqual(c.onglets.Inventaire.slice(1).map((l) => l[1]), ['Beurre']);
+});
+
+test('D-G-043 : doublons probables du garde-manger', async () => {
+  const { doublonDe } = await import('../../dist/js/vues/garde-manger.js');
+  const items = [{ name: 'Huile d\'olive' }, { name: 'Sel' }, { name: 'huile olive' }, { name: 'Huile de sésame' }, { name: 'sel' }];
+  assert.equal(doublonDe(items[2], items), items[0]);
+  assert.equal(doublonDe(items[4], items), items[1]);
+  assert.equal(doublonDe(items[3], items), null);
+  assert.equal(doublonDe(items[0], items), null, 'le premier n\'est pas le doublon');
+});

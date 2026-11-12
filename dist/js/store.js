@@ -1,8 +1,8 @@
 // Bibliothèque SuperChef.ai dans le Drive de la personne (R-01).
 // Trouve le dossier et le classeur créés par l'app, ou les crée.
 
-import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.12.0';
-import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.12.0';
+import { TYPE_DOSSIER, TYPE_CLASSEUR } from './drive.js?v=1.13.0';
+import { ONGLETS, SOUS_DOSSIERS, VERSION_SCHEMA, plageEntete, colonnesManquantes, onglet, lettre } from './schema.js?v=1.13.0';
 
 export async function ouvrirOuCreer(drive, { nomDossier, nomClasseur, version }, etape = () => {}) {
   etape('recherche');
@@ -164,8 +164,7 @@ export async function lireOnglets(drive, id, titres) {
 
 // N-07 : écrit des colonnes d'une ligne repérée par son id, après avoir relu la cellule id.
 // Si la ligne a bougé (autre appareil), on retrouve l'id dans la colonne A ; s'il a disparu, on refuse.
-export async function ecrireParId(drive, id, titre, obj, valeurs) {
-  const o = onglet(titre);
+async function trouverLigne(drive, id, titre, obj) {
   let ligne = obj._ligne;
   const lu = ligne ? await drive.lireValeurs(id, `'${titre}'!A${ligne}:A${ligne}`) : null;
   if (!ligne || lu?.values?.[0]?.[0] !== obj.id) {
@@ -174,6 +173,11 @@ export async function ecrireParId(drive, id, titre, obj, valeurs) {
     if (k < 1) { const e = new Error(`ligne ${obj.id} introuvable`); e.conflit = true; throw e; }
     ligne = k + 1; obj._ligne = ligne;
   }
+  return ligne;
+}
+export async function ecrireParId(drive, id, titre, obj, valeurs) {
+  const o = onglet(titre);
+  const ligne = await trouverLigne(drive, id, titre, obj);
   const donnees = Object.entries(valeurs).map(([c, v]) => {
     const j = o.colonnes.indexOf(c);
     if (j < 0) throw new Error(`colonne inconnue ${c}`);
@@ -182,6 +186,17 @@ export async function ecrireParId(drive, id, titre, obj, valeurs) {
   });
   await drive.ecrireValeurs(id, donnees);
   Object.assign(obj, Object.fromEntries(Object.entries(valeurs).map(([c, v]) => [c, valeurCellule(v)])));
+}
+
+// D-G-043 : supprime la ligne repérée par son id (relue juste avant, N-07). Renvoie son ancien n° de ligne.
+export async function supprimerParId(drive, id, titre, obj) {
+  const ligne = await trouverLigne(drive, id, titre, obj);
+  const info = await drive.lireClasseur(id);
+  const feuille = info.sheets.find((s) => s.properties.title === titre);
+  if (!feuille) throw new Error(`onglet ${titre} introuvable`);
+  await drive.majClasseur(id, [{ deleteDimension: { range: { sheetId: feuille.properties.sheetId, dimension: 'ROWS', startIndex: ligne - 1, endIndex: ligne } } }]);
+  obj._ligne = null;
+  return ligne;
 }
 
 // Ajoute une ligne et renvoie l'objet avec son numéro de ligne.
