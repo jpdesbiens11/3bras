@@ -1,9 +1,10 @@
 // Feuille Compte : connexion, classeur, import (R-02). Même gabarit que les feuilles de Gordon Rams.ai.
-import { S, $, toast } from '../etat.js?v=1.21.0';
-import { el, ico, vider } from '../el.js?v=1.21.0';
-import { lienClasseur, lienDossier, reinitialiser, texteReparation } from '../store.js?v=1.21.0';
-import { valider, importer } from '../import.js?v=1.21.0';
-import { CONFIG } from '../config.js?v=1.21.0';
+import { S, $, toast } from '../etat.js?v=1.22.0';
+import { el, ico, vider } from '../el.js?v=1.22.0';
+import { lienClasseur, lienDossier, reinitialiser, texteReparation } from '../store.js?v=1.22.0';
+import { valider, importer } from '../import.js?v=1.22.0';
+import { CONFIG } from '../config.js?v=1.22.0';
+import { iaDisponible } from '../ia.js?v=1.22.0';
 
 export function openCompte(surImporter) {
   if ($('#comptesheet')) return;
@@ -32,9 +33,12 @@ export function openCompte(surImporter) {
       el('div', { class: 'kits', id: 'kitchoix', role: 'group', 'aria-label': 'Kits de départ' }, KITS.map((k) => el('button', { class: 'btn kit', type: 'button', 'data-kit': k.id, 'aria-pressed': 'false' }, el('b', {}, k.nom), el('small', {}, k.description)))),
       el('div', { class: 'add-acts' }, el('button', { class: 'btn primary', id: 'chargerkits', type: 'button', disabled: true }, ico('plus'), 'Choisis un ou plusieurs kits')),
       el('div', { class: 'import-res', id: 'kit-res', 'aria-live': 'polite' }),
-      el('h4', { id: 'generer', 'data-new': '1.9.0-generateur' }, 'Créer des recettes avec Claude'),
-      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0 0 10px' }, 'Par cuisine ou par mots-clés : l\'app écrit la consigne, Claude (Sonnet 5.5) écrit les fiches, tu colles sa réponse et tu choisis ce qui entre dans ton livre.'),
-      el('div', { class: 'add-acts' }, el('button', { class: 'btn', id: 'ouvrirgen', type: 'button' }, ico('chef'), 'Créer des recettes avec Claude')),
+      el('h4', { id: 'generer', 'data-new': '1.9.0-generateur' }, 'Créer des recettes'),
+      el('p', { style: 'color:var(--muted);max-width:60ch;margin:0 0 10px' }, iaDisponible()
+        ? 'Par cuisine ou par mots-clés. Avec Claude, l\'app écrit la consigne et tu colles sa réponse ; avec Gemini, tout se fait ici, automatiquement. Tu choisis ensuite ce qui entre dans ton livre.'
+        : 'Par cuisine ou par mots-clés : l\'app écrit la consigne, Claude (Sonnet 5.5) écrit les fiches, tu colles sa réponse et tu choisis ce qui entre dans ton livre.'),
+      el('div', { class: 'add-acts gen-choix' }, el('button', { class: 'btn', id: 'ouvrirgen', type: 'button' }, ico('chef'), 'Créer des recettes avec Claude'),
+        iaDisponible() && el('button', { class: 'btn primary', id: 'ouvrirgengemini', type: 'button', 'data-new': '1.22.0-gemini-lot' }, ico('chef'), 'Créer des recettes avec Gemini')),
       el('h4', { id: 'stock', 'data-new': '1.11.0-stock' }, 'Stock de base'),
       el('p', { style: 'color:var(--muted);max-width:60ch;margin:0 0 10px' }, 'Coche ce que tu as à la maison, parmi les essentiels courants et les ingrédients de garde-manger de tes recettes. Ça s\'écrit dans l\'onglet Inventaire de ton classeur.'),
       el('div', { class: 'add-acts' }, el('button', { class: 'btn', id: 'ouvrirstock', type: 'button' }, ico('check'), 'Choisir mon stock de base')),

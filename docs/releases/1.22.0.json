@@ -1,0 +1,25 @@
+{
+  "version": "1.22.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — créer des recettes avec Gemini dans Compte",
+  "requis": [
+    "R-04"
+  ],
+  "nouveautes": [
+    "Compte → « Créer des recettes avec Gemini », juste sous « Créer des recettes avec Claude ».",
+    "Même demande que pour Claude (cuisines, mots-clés, à éviter, type, portions, 5 à 20 recettes), mais Gemini écrit les fiches tout seul : rien à copier ni à coller.",
+    "Gemini écrit par lots de 5 et ne reprend pas les recettes déjà dans ton livre ; tu coches ensuite celles qui entrent « À trier ».",
+    "Chaque recette créée porte « Recette créée par Gemini : à essayer et à ajuster »."
+  ],
+  "decisions": [
+    "D-G-054"
+  ],
+  "tests": {
+    "unitaires": 78,
+    "bout_en_bout": 53,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}

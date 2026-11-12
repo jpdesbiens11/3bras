@@ -698,3 +698,39 @@ test('D-G-045 : créer une recette avec Gemini à partir d\'une description et d
   expect(v['À vérifier']).toContain('Recette créée par Gemini : à essayer et à ajuster.');
   expect(erreurs).toEqual([]);
 });
+
+test('D-G-054 : créer des recettes avec Gemini dans Compte, sous le bouton Claude', async ({ page }, info) => {
+  const IA = { apiKey: 'AIza-test', projectId: 'projet-test', appId: '1:2:web:3', recaptcha: 'cle-site-test', modele: 'gemini-3.5-flash', modeleRapide: 'gemini-3.5-flash-lite' };
+  await page.addInitScript((t) => { window.__reponseGemini = t; }, REPONSE_CLAUDE);
+  const { sim, erreurs } = await demarrer(page, { ia: IA });
+  await page.locator('#comptebtn').click();
+  const claude = await page.locator('#ouvrirgen').boundingBox(), gemini = await page.locator('#ouvrirgengemini').boundingBox();
+  expect(gemini.y).toBeGreaterThan(claude.y + claude.height - 1);                // sous le bouton Claude
+  await page.locator('#generer').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `tests/captures/${info.project.name}-compte-creer.png` });
+  await page.locator('#ouvrirgengemini').click();
+  await expect(page.locator('#gen-h')).toHaveText('Créer des recettes avec Gemini');
+  await expect(page.locator('#gen-consigne')).toHaveCount(0);                     // rien à copier ni à coller
+  await expect(page.locator('#gen-reponse')).toHaveCount(0);
+  await page.locator('[data-gencuis="Italienne"]').click();
+  await page.locator('[data-gennb="5"]').click();
+  await expect(page.locator('#gen-gemini')).toHaveText('Créer 5 recettes avec Gemini');
+  await page.locator('#gen-gemini').click();
+  // Fiche incomplète écartée, recette déjà au livre écartée : il reste la bolognaise et la lasagne de kit repas (refusée).
+  await expect(page.locator('#gen-avance')).toContainText('2 recettes écrites par Gemini');
+  const g = await page.evaluate(() => ({ modele: window.__gemini.modele, consigne: window.__gemini.parts.at(-1) }));
+  expect(g.modele).toBe('gemini-3.5-flash');
+  expect(g.consigne).toContain('Cuisines : Italienne');
+  expect(g.consigne).toContain('Source : Gemini');
+  await expect(page.locator('#gen-liste [data-genpick]')).toHaveCount(2);
+  await page.screenshot({ path: `tests/captures/${info.project.name}-gemini-lot.png` });
+  await expect(page.locator('#gen-liste')).toContainText('Kit repas : refusée');
+  await page.locator('#gen-ajouter').click();
+  await expect(page.locator('#gen-fin')).toContainText('1 recette ajoutée « À trier »');
+  const o = [...sim.classeurs.values()][0].onglets.Recettes, e = o[0];
+  const l = o.find((x) => x[1] === 'Sauce bolognaise mijotée'), v = Object.fromEntries(e.map((k, i) => [k, l[i] ?? '']));
+  expect([v.Statut, v.Source, v['Lien source']]).toEqual(['À trier', 'Web autre', '']);
+  expect(v.Notes).toContain('Créée avec Gemini');
+  expect(v['À vérifier']).toContain('Recette créée par Gemini');
+  expect(erreurs).toEqual([]);
+});
