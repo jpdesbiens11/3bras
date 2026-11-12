@@ -1,0 +1,481 @@
+{
+  "format": "superchef-import",
+  "version": 1,
+  "schema": 2,
+  "genere_le": "2026-11-12",
+  "source": "Kit SuperChef.ai — Enfants : surgelés et mets faciles",
+  "kit": {
+    "id": "enfants",
+    "nom": "Enfants : surgelés et mets faciles",
+    "description": "Des mets que les enfants adorent, cuisinés d'avance et rangés au congélateur pour sauver les soirs de course."
+  },
+  "recettes": [
+    {
+      "id": "k-enfants-pepites-de-poulet-au-four",
+      "Nom": "Pépites de poulet au four",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poulet",
+      "Cuisine": "Classique",
+      "Soir de semaine": true,
+      "Temps total (min)": 35,
+      "Portions": 4,
+      "Outils": "Four, Air fryer",
+      "Source": "Trois fois par jour",
+      "Ingrédients": [
+        "## Pépites",
+        "2 poitrines de poulet désossées et sans peau",
+        "75 ml (1/4 tasse + 1 c. à soupe) de farine tout usage",
+        "2 œufs",
+        "10 ml (2 c. à thé) de poudre d'oignon",
+        "1 ml (1/4 c. à thé) de sel",
+        "310 ml (1 1/4 tasse) de chapelure nature",
+        "## Sauce aigre-douce",
+        "30 ml (2 c. à soupe) de sauce soya",
+        "30 ml (2 c. à soupe) de ketchup",
+        "10 ml (2 c. à thé) de miel"
+      ],
+      "Étapes": [
+        "Placer la grille au centre du four et préchauffer à 200 °C (400 °F). Tapisser une plaque de papier parchemin.",
+        "Couper le poulet en tranches épaisses, puis en bouchées d'environ 3 cm (1 1/4 po).",
+        "Dans un grand bol, saupoudrer le poulet de 15 ml (1 c. à soupe) de farine et bien l'enrober.",
+        "Dans un autre bol, fouetter les œufs avec le reste de la farine (60 ml / 1/4 tasse), la poudre d'oignon et le sel jusqu'à l'obtention d'une pâte lisse.",
+        "Verser cette pâte sur le poulet et mélanger. Ajouter la chapelure et remuer jusqu'à ce que chaque bouchée soit bien couverte.",
+        "Déposer les pépites sur la plaque sans qu'elles se touchent. Cuire de 20 à 25 minutes, selon leur grosseur, jusqu'à ce qu'elles soient dorées et que le centre ne soit plus rosé.",
+        "Pendant la cuisson, mélanger la sauce soya, le ketchup et le miel dans un petit bol. Servir les pépites avec cette sauce à tremper.",
+        "Pour congeler : laisser refroidir les pépites cuites, les congeler à plat sur une plaque, puis les transférer dans un sac à congélation, jusqu'à 3 mois. Réchauffer sans décongeler au four à 200 °C (400 °F) 15 minutes, ou à l'air fryer à 200 °C (400 °F) de 8 à 10 minutes, jusqu'à ce qu'elles soient bien chaudes au centre."
+      ],
+      "Tâches sous-chef": [
+        "Fouetter les œufs et la farine jusqu'à ce que la pâte n'ait plus aucun grumeau",
+        "Verser la chapelure en pluie sur le poulet",
+        "Inventer un nom rigolo pour la sauce aigre-douce en la mélangeant"
+      ],
+      "À vérifier": "Réchauffage des pépites congelées (four et air fryer) estimé : la source dit seulement qu'elles se congèlent crues ou cuites.",
+      "Fiche complète": true,
+      "Lien source": "https://www.troisfoisparjour.com/fr/recettes/plats-principaux/poulet-volaille/croquettes-de-poulet-au-four-de-marilou-3-sauces-a-tremper/",
+      "Notes": [
+        "Inspirée des croquettes de poulet au four de Marilou de Trois fois par jour."
+      ]
+    },
+    {
+      "id": "k-enfants-macaroni-au-fromage-a-la-pomme-camouflee",
+      "Nom": "Macaroni au fromage à la pomme camouflée",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Végé",
+      "Cuisine": "Classique",
+      "Soir de semaine": true,
+      "Temps total (min)": 35,
+      "Portions": 6,
+      "Outils": "Four",
+      "Source": "Trois fois par jour",
+      "Ingrédients": [
+        "## Macaroni",
+        "1,5 L (6 tasses) de macaronis cuits",
+        "30 ml (2 c. à soupe) de beurre",
+        "1 oignon, émincé",
+        "250 ml (1 tasse) de lait",
+        "250 ml (1 tasse) de crème 15 % ou 35 %",
+        "2 pommes, pelées et râpées",
+        "250 ml (1 tasse) de fromage cottage",
+        "250 ml (1 tasse) de fromage mozzarella râpé",
+        "Sel et poivre",
+        "## Garniture croustillante",
+        "250 ml (1 tasse) de chapelure panko",
+        "30 ml (2 c. à soupe) de beurre, fondu"
+      ],
+      "Étapes": [
+        "Cuire les macaronis dans une grande casserole d'eau bouillante salée selon l'emballage, pour obtenir 1,5 L (6 tasses) de pâtes cuites. Égoutter et réserver.",
+        "Dans une autre casserole à feu moyen, faire fondre 30 ml (2 c. à soupe) de beurre. Cuire l'oignon de 7 à 8 minutes, jusqu'à ce qu'il soit bien tendre.",
+        "Verser le lait et la crème, puis porter à ébullition. Ajouter les pommes, le cottage et la mozzarella. Cuire 2 minutes à feu moyen. Saler et poivrer.",
+        "Réduire la sauce en purée lisse au pied-mélangeur : la pomme devient invisible! Ajouter les macaronis et bien mélanger.",
+        "Verser dans un plat allant au four. Préchauffer le gril du four (broil).",
+        "Dans un petit bol, mélanger le panko avec les 30 ml (2 c. à soupe) de beurre fondu. Saler, poivrer et répartir sur les pâtes.",
+        "Gratiner sous le gril en surveillant sans arrêt, jusqu'à ce que le dessus soit bien doré.",
+        "Pour congeler : laisser refroidir, répartir en portions dans des contenants allant au four et congeler jusqu'à 3 mois. Décongeler au réfrigérateur une nuit, puis réchauffer au four à 180 °C (350 °F) de 20 à 25 minutes, jusqu'à ce que ce soit bien chaud au centre."
+      ],
+      "Tâches sous-chef": [
+        "Jouer à l'espion : mesurer le cottage et la mozzarella sans révéler qu'il y a des pommes dans la sauce",
+        "Mélanger le panko et le beurre fondu à la fourchette",
+        "Saupoudrer la garniture croustillante sur les pâtes comme de la neige"
+      ],
+      "À vérifier": "La source ne donne ni la durée du gratinage ni le réchauffage après congélation (20 à 25 min à 180 °C estimé) ; la garniture peut ramollir au congélateur.",
+      "Fiche complète": true,
+      "Lien source": "https://www.troisfoisparjour.com/fr/recettes/plats-principaux/pates/macaroni-au-fromage-a-la-pomme-camouflee/",
+      "Notes": [
+        "Inspirée du macaroni au fromage & à la pomme camouflée de Trois fois par jour."
+      ]
+    },
+    {
+      "id": "k-enfants-boulettes-au-riz-en-sauce-tomate",
+      "Nom": "Boulettes au riz en sauce tomate",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Classique",
+      "Soir de semaine": false,
+      "Temps total (min)": 80,
+      "Portions": 8,
+      "Outils": "Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "900 g (2 lb) de bœuf haché maigre",
+        "150 g (1 tasse) de riz à grains longs cuit (environ 100 g / 1/2 tasse de riz cru)",
+        "75 g (1/2 tasse) d'oignon haché finement (1 petit oignon)",
+        "1 boîte de 284 ml (10 oz) de soupe aux tomates condensée, non diluée",
+        "1 boîte de 540 ml (19 oz) de jus de tomate",
+        "Persil plat ciselé, au goût",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "Placer la grille au centre du four et préchauffer à 180 °C (350 °F). Sortir un plat de cuisson de 33 x 23 cm (13 x 9 po).",
+        "Si le riz n'est pas déjà cuit, cuire 100 g (1/2 tasse) de riz dans 250 ml (1 tasse) d'eau, puis laisser tiédir.",
+        "Dans un grand bol, mélanger avec les mains le bœuf, le riz, l'oignon et 15 ml (1 c. à soupe) de soupe aux tomates. Saler et poivrer.",
+        "Façonner de 16 à 18 boulettes d'environ 45 ml (3 c. à soupe) chacune et les placer dans le plat.",
+        "Dans un bol, mélanger le reste de la soupe aux tomates avec le jus de tomate, puis verser sur les boulettes.",
+        "Cuire au four 60 minutes, en arrosant les boulettes de sauce à mi-cuisson.",
+        "Parsemer de persil et servir avec une purée de pommes de terre.",
+        "Pour congeler : laisser refroidir, répartir les boulettes et la sauce en portions dans des contenants hermétiques et congeler jusqu'à 3 mois. Décongeler au réfrigérateur une nuit, puis réchauffer dans une casserole couverte à feu moyen-doux de 15 à 20 minutes, jusqu'à ce que les boulettes soient bien chaudes au centre."
+      ],
+      "Tâches sous-chef": [
+        "Rouler les boulettes entre ses mains comme de la pâte à modeler (et bien se laver les mains après)",
+        "Mélanger la soupe et le jus de tomate dans le bol",
+        "Parsemer le persil comme des confettis"
+      ],
+      "À vérifier": "Réchauffage après congélation estimé : la source dit seulement que la recette se congèle.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/4962-boulettes-d-enfance",
+      "Notes": [
+        "Inspirée des boulettes d'enfance de Ricardo."
+      ]
+    },
+    {
+      "id": "k-enfants-pains-de-viande-en-muffins",
+      "Nom": "Pains de viande en muffins",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Veau",
+      "Cuisine": "Classique",
+      "Soir de semaine": false,
+      "Temps total (min)": 65,
+      "Portions": 12,
+      "Outils": "Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "1 oignon, haché finement",
+        "30 ml (2 c. à soupe) de beurre",
+        "1/2 boîte de 540 ml (19 oz) de haricots rouges, rincés et égouttés",
+        "750 g (1 1/2 lb) de veau haché mi-maigre",
+        "30 ml (2 c. à soupe) de pâte de tomates",
+        "15 ml (1 c. à soupe) de sauce Worcestershire",
+        "250 ml (1 tasse) de chapelure de pain frais",
+        "10 à 15 ml (2 à 3 c. à thé) de basilic séché",
+        "2 œufs",
+        "125 ml (1/2 tasse) de ketchup",
+        "Huile végétale, pour les moules",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "Placer la grille dans le bas du four et préchauffer à 180 °C (350 °F). Huiler 12 moules à muffins moyens.",
+        "Dans une poêle à feu moyen, dorer l'oignon dans le beurre. Laisser tiédir.",
+        "Dans un grand bol, écraser les haricots rouges au pilon jusqu'à ce qu'ils soient en purée.",
+        "Ajouter l'oignon, le veau, la pâte de tomates, la sauce Worcestershire, la chapelure, le basilic et les œufs. Saler, poivrer et mélanger avec les mains.",
+        "Répartir le mélange dans les moules. Couvrir chaque pain d'environ 10 ml (2 c. à thé) de ketchup.",
+        "Cuire environ 40 minutes, jusqu'à ce qu'un thermomètre indique 71 °C (160 °F) au centre. Le temps varie selon la grosseur des moules.",
+        "Laisser tiédir quelques instants avant de démouler.",
+        "Pour congeler : laisser refroidir, emballer les pains un à un et les mettre dans un sac à congélation, jusqu'à 3 mois. Décongeler au réfrigérateur une nuit, puis réchauffer au four à 180 °C (350 °F) 15 minutes, jusqu'à ce qu'ils soient bien chauds au centre."
+      ],
+      "Tâches sous-chef": [
+        "Écraser les haricots rouges au pilon jusqu'à ce qu'ils disparaissent : mission camouflage!",
+        "Huiler les moules à muffins avec un pinceau",
+        "Coiffer chaque petit pain d'un chapeau de ketchup"
+      ],
+      "À vérifier": "Réchauffage après congélation estimé : la source dit seulement que la recette se congèle.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/239-mini-pains-de-viande-au-ketchup",
+      "Notes": [
+        "Inspirée des mini-pains de viande au ketchup de Ricardo."
+      ]
+    },
+    {
+      "id": "k-enfants-burritos-au-boeuf-a-congeler",
+      "Nom": "Burritos au bœuf à congeler",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Mexicaine",
+      "Soir de semaine": true,
+      "Temps total (min)": 32,
+      "Portions": 4,
+      "Outils": "Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "## Riz",
+        "180 ml (3/4 tasse) d'eau froide",
+        "100 g (1/2 tasse) de riz basmati",
+        "1 ml (1/4 c. à thé) de sel",
+        "## Garniture",
+        "450 g (1 lb) de bœuf haché maigre",
+        "15 ml (1 c. à soupe) d'huile végétale",
+        "1 poivron rouge, épépiné et émincé",
+        "1 boîte de 398 ml (14 oz) de haricots noirs, rincés et égouttés",
+        "15 ml (1 c. à soupe) d'assaisonnement au chili",
+        "5 ml (1 c. à thé) de cumin moulu",
+        "## Montage",
+        "4 tortillas de blé de 30 cm (12 po)",
+        "125 ml (1/2 tasse) de salsa douce, et plus pour servir",
+        "150 g (1 tasse) de maïs en grains surgelé, décongelé",
+        "150 g (1 1/2 tasse) de fromage tex-mex râpé",
+        "180 g (3 tasses) de laitue iceberg émincée"
+      ],
+      "Étapes": [
+        "Placer la grille au centre du four et préchauffer à 220 °C (425 °F). Tapisser une plaque de papier parchemin.",
+        "Dans une petite casserole, porter à ébullition l'eau, le riz et le sel. Couvrir et cuire à feu très doux 8 minutes. Retirer du feu et laisser reposer 4 minutes, à couvert.",
+        "Pendant ce temps, dans une grande poêle antiadhésive à feu moyen-vif, dorer le bœuf dans l'huile 5 minutes en le défaisant à la cuillère de bois. Saler et poivrer.",
+        "Ajouter le poivron et cuire 3 minutes. Incorporer les haricots noirs, l'assaisonnement au chili et le cumin. Rectifier l'assaisonnement.",
+        "Au centre de chaque tortilla, répartir le riz, la garniture au bœuf, la salsa, le maïs et le fromage. Ajouter la laitue seulement pour les burritos mangés tout de suite.",
+        "Replier les côtés de la tortilla, puis rouler bien serré. Déposer les burritos sur la plaque, jointure en dessous.",
+        "Cuire 6 minutes, retourner et cuire encore 6 minutes pour qu'ils soient croustillants. Couper en deux et servir avec de la salsa.",
+        "Pour congeler : monter les burritos sans laitue avec une garniture refroidie, sans les passer au four. Envelopper chacun dans du papier d'aluminium, mettre dans un sac à congélation et congeler jusqu'à 3 mois. Décongeler au réfrigérateur une nuit, retirer le papier et cuire au four à 220 °C (425 °F) 6 minutes de chaque côté, jusqu'à ce que le centre soit bien chaud."
+      ],
+      "Tâches sous-chef": [
+        "Rincer les haricots noirs dans la passoire jusqu'à ce que l'eau ne mousse plus",
+        "Saupoudrer le maïs et le fromage sur les tortillas",
+        "Rouler les burritos bien serrés comme des sacs de couchage"
+      ],
+      "À vérifier": "La source ne parle pas de congélation : réchauffage estimé, prolonger la cuisson si le centre est encore froid.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/9380-burritos-au-b-uf",
+      "Notes": [
+        "Inspirée des burritos au bœuf de Ricardo."
+      ]
+    },
+    {
+      "id": "k-enfants-pizzas-pochettes-a-la-saucisse",
+      "Nom": "Pizzas pochettes à la saucisse",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Porc",
+      "Cuisine": "Italienne",
+      "Soir de semaine": true,
+      "Temps total (min)": 30,
+      "Portions": 4,
+      "Outils": "Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "170 g (6 oz) de chair de saucisse de porc douce, sans boyau",
+        "15 ml (1 c. à soupe) de beurre",
+        "450 g (1 lb) de pâte à pizza du commerce",
+        "125 ml (1/2 tasse) de sauce à pizza du commerce",
+        "50 g (1/2 tasse) de fromage mozzarella râpé",
+        "1 œuf",
+        "60 ml (1/4 tasse) de lait",
+        "Farine, pour le plan de travail"
+      ],
+      "Étapes": [
+        "Placer la grille au centre du four et préchauffer à 230 °C (450 °F). Tapisser une plaque de papier parchemin.",
+        "Dans une poêle à feu moyen-vif, cuire la chair de saucisse dans le beurre en l'émiettant à la cuillère de bois, jusqu'à ce qu'elle ne soit plus rosée. Laisser tiédir.",
+        "Diviser la pâte en 4 boules. Sur un plan de travail fariné, abaisser chaque boule en un cercle de 18 cm (7 po), sans fariner le dessus de la pâte.",
+        "Étaler la sauce à pizza sur chaque cercle en laissant une bordure de 1,5 cm (1/2 po). Garnir de fromage et de saucisse.",
+        "Replier la pâte pour former une demi-lune et pincer le bord pour bien sceller. Retourner les pochettes et les placer sur la plaque.",
+        "Dans un petit bol, fouetter l'œuf avec le lait. Badigeonner le dessus des pochettes.",
+        "Cuire 15 minutes, jusqu'à ce qu'elles soient bien dorées.",
+        "Pour congeler : laisser refroidir, envelopper chaque pochette dans une pellicule plastique, puis les mettre dans un sac à congélation, jusqu'à 3 mois. Réchauffer sans décongeler sur une plaque au four à 180 °C (350 °F) de 20 à 25 minutes, jusqu'à ce que le centre soit bien chaud."
+      ],
+      "Tâches sous-chef": [
+        "Étaler la sauce à pizza avec le dos d'une cuillère sans toucher la bordure",
+        "Sceller les pochettes en pressant le bord avec une fourchette",
+        "Badigeonner les pochettes de dorure avec un pinceau"
+      ],
+      "À vérifier": "La source ne parle pas de congélation : temps de réchauffage estimé.",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/215-pizzas-pochettes",
+      "Notes": [
+        "Inspirée des pizzas pochettes de Ricardo."
+      ]
+    },
+    {
+      "id": "k-enfants-croquettes-de-saumon-et-pommes-de-terre",
+      "Nom": "Croquettes de saumon et pommes de terre",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Poisson & fruits de mer",
+      "Cuisine": "Québécoise",
+      "Soir de semaine": true,
+      "Temps total (min)": 40,
+      "Portions": 6,
+      "Outils": "Four",
+      "Source": "Trois fois par jour",
+      "Ingrédients": [
+        "4 grosses pommes de terre, pelées et coupées en quatre",
+        "2 boîtes de 150 g de saumon rose sans peau ni arêtes, égoutté",
+        "60 ml (1/4 tasse) de crème 35 %",
+        "45 ml (3 c. à soupe) de beurre",
+        "80 ml (1/3 tasse) de ciboulette fraîche, émincée",
+        "750 ml (3 tasses) de céréales de flocons de maïs sans sucre ajouté",
+        "Huile végétale, pour la cuisson",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "Mettre les pommes de terre dans une casserole et les couvrir d'eau froide salée. Porter à ébullition et laisser mijoter 15 minutes, jusqu'à ce qu'elles soient tendres.",
+        "Égoutter. Ajouter le saumon, la crème, le beurre et la ciboulette. Saler, poivrer et piler jusqu'à l'obtention d'une purée épaisse.",
+        "Écraser grossièrement les céréales dans une assiette creuse.",
+        "Façonner la purée en boulettes de la grosseur d'une balle de ping-pong, puis les rouler dans les céréales.",
+        "Dans une grande poêle à feu moyen, chauffer un filet d'huile. Dorer les croquettes de 5 à 6 minutes en les tournant, jusqu'à ce qu'elles soient dorées de tous les côtés. Procéder en plusieurs fois au besoin.",
+        "Servir avec un légume vert, comme du brocoli.",
+        "Pour congeler : laisser refroidir les croquettes, les congeler à plat sur une plaque, puis les transférer dans un sac à congélation, jusqu'à 3 mois. Réchauffer sans décongeler au four à 200 °C (400 °F) de 15 à 20 minutes, jusqu'à ce qu'elles soient bien chaudes au centre."
+      ],
+      "Tâches sous-chef": [
+        "Écraser les céréales dans un sac refermable avec un rouleau à pâte",
+        "Piler la purée au saumon une fois qu'elle a tiédi",
+        "Rouler les boulettes dans les céréales comme des boules de neige"
+      ],
+      "À vérifier": "Réchauffage après congélation estimé : la source dit seulement que la recette se congèle.",
+      "Fiche complète": true,
+      "Lien source": "https://www.troisfoisparjour.com/fr/themes/trois-fois-par-jour-moi/croquettes-de-patates-au-saumon-brocoli-gratine-de-ma-maman/",
+      "Notes": [
+        "Inspirée des croquettes de patates au saumon de ma maman de Trois fois par jour."
+      ]
+    },
+    {
+      "id": "k-enfants-sauce-a-spaghetti-a-congeler",
+      "Nom": "Sauce à spaghetti à congeler",
+      "Type": "Souper",
+      "Statut": "À trier",
+      "Protéine": "Bœuf",
+      "Cuisine": "Italienne",
+      "Soir de semaine": false,
+      "Temps total (min)": 55,
+      "Portions": 8,
+      "Outils": "",
+      "Source": "Trois fois par jour",
+      "Ingrédients": [
+        "30 ml (2 c. à soupe) d'huile d'olive",
+        "1 sac de 750 g de légumes surgelés pour sauce à spaghetti",
+        "400 g (14 oz) de bœuf haché mi-maigre",
+        "30 ml (2 c. à soupe) de farine tout usage",
+        "1 boîte de 156 ml (5,5 oz) de pâte de tomates",
+        "2 boîtes de 796 ml (28 oz) de tomates broyées",
+        "60 ml (1/4 tasse) de crème à cuisson 15 % ou 35 %",
+        "15 ml (1 c. à soupe) de fines herbes italiennes séchées",
+        "15 ml (1 c. à soupe) de sirop d'érable",
+        "0,5 ml (1/8 c. à thé) de cannelle moulue",
+        "1 feuille de laurier",
+        "Sel et poivre du moulin",
+        "Spaghettis ou autres pâtes, pour servir"
+      ],
+      "Étapes": [
+        "Dans une grande casserole à feu vif, chauffer l'huile. Faire revenir les légumes surgelés 5 minutes.",
+        "Ajouter le bœuf et cuire 5 minutes en le défaisant à la cuillère de bois.",
+        "Ajouter la farine et la pâte de tomates. Cuire 2 minutes en remuant.",
+        "Ajouter les tomates broyées, la crème, les fines herbes, le sirop d'érable, la cannelle et le laurier. Porter à frémissement.",
+        "Laisser mijoter à feu doux 30 minutes, en remuant de temps en temps. Retirer le laurier, saler et poivrer.",
+        "Servir sur des spaghettis ou sur les pâtes préférées des enfants.",
+        "Pour congeler : laisser refroidir, répartir en portions dans des contenants ou des sacs à congélation (à plat pour gagner de la place) et congeler jusqu'à 3 mois. Décongeler au réfrigérateur une nuit, puis réchauffer dans une casserole à feu moyen 10 minutes, en remuant, jusqu'à ce que la sauce soit bien chaude."
+      ],
+      "Tâches sous-chef": [
+        "Mesurer le sirop d'érable et la pincée de cannelle : les ingrédients secrets!",
+        "Retrouver la feuille de laurier cachée dans la sauce à la fin",
+        "Coller une étiquette avec la date sur chaque contenant de sauce"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.troisfoisparjour.com/fr/recettes/plats-principaux/pates/sauce-a-spaghetti-express-de-marilou/",
+      "Notes": [
+        "Inspirée de la sauce à spaghetti express de Marilou de Trois fois par jour."
+      ]
+    },
+    {
+      "id": "k-enfants-soupe-poulet-et-nouilles",
+      "Nom": "Soupe poulet et nouilles",
+      "Type": "Soupe",
+      "Statut": "À trier",
+      "Protéine": "Poulet",
+      "Cuisine": "Classique",
+      "Soir de semaine": true,
+      "Temps total (min)": 35,
+      "Portions": 4,
+      "Outils": "",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "1 carotte, pelée et coupée en petits dés",
+        "1 branche de céleri, coupée en petits dés",
+        "1 gousse d'ail, hachée",
+        "2,5 ml (1/2 c. à thé) de curcuma moulu",
+        "15 ml (1 c. à soupe) d'huile d'olive",
+        "1,25 L (5 tasses) de bouillon de poulet",
+        "500 ml (2 tasses) de jus de carotte",
+        "90 g (2/3 tasse) de spaghettis de blé entier, cassés en petits morceaux",
+        "255 g (1 1/2 tasse) de poulet cuit, en dés",
+        "15 ml (1 c. à soupe) de persil plat ciselé",
+        "Sel et poivre"
+      ],
+      "Étapes": [
+        "Dans une grande casserole à feu moyen, attendrir la carotte, le céleri et l'ail dans l'huile avec le curcuma. Saler et poivrer.",
+        "Verser le bouillon et le jus de carotte. Porter à ébullition.",
+        "Ajouter les spaghettis cassés et laisser mijoter à découvert 10 minutes, jusqu'à ce qu'ils soient al dente.",
+        "Ajouter le poulet et le persil. Réchauffer et rectifier l'assaisonnement.",
+        "Pour congeler : laisser refroidir, répartir en portions dans des contenants hermétiques et congeler jusqu'à 3 mois. Décongeler au réfrigérateur une nuit, puis réchauffer à feu moyen 10 minutes en ajoutant un peu de bouillon, puisque les pâtes boivent le liquide."
+      ],
+      "Tâches sous-chef": [
+        "Casser les spaghettis en petits bouts dans un sac refermable (ça craque!)",
+        "Mesurer et verser le jus de carotte",
+        "Parsemer le persil sur la soupe"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/5213-soupe-poulet-et-nouilles-au-jus-de-carottes",
+      "Notes": [
+        "Inspirée de la soupe poulet et nouilles au jus de carottes de Ricardo."
+      ]
+    },
+    {
+      "id": "k-enfants-muffins-aux-bananes",
+      "Nom": "Muffins aux bananes",
+      "Type": "Collation",
+      "Statut": "À trier",
+      "Protéine": "Végé",
+      "Cuisine": "Classique",
+      "Soir de semaine": true,
+      "Temps total (min)": 42,
+      "Portions": 12,
+      "Outils": "Four",
+      "Source": "Ricardo",
+      "Ingrédients": [
+        "225 g (1 1/2 tasse) de farine de blé entier",
+        "5 ml (1 c. à thé) de poudre à pâte",
+        "2,5 ml (1/2 c. à thé) de bicarbonate de soude",
+        "1 ml (1/4 c. à thé) de sel",
+        "5 ml (1 c. à thé) de cannelle moulue",
+        "3 bananes très mûres",
+        "105 g (1/2 tasse) de cassonade",
+        "2 œufs",
+        "60 ml (1/4 tasse) de yogourt nature 2 %",
+        "75 ml (1/3 tasse) d'huile végétale"
+      ],
+      "Étapes": [
+        "Placer la grille au centre du four et préchauffer à 180 °C (350 °F). Garnir un moule à 12 muffins de caissettes en papier ou en silicone.",
+        "Dans un bol, mélanger la farine, la poudre à pâte, le bicarbonate, le sel et la cannelle.",
+        "Dans un autre bol, écraser grossièrement les bananes à la fourchette. Ajouter la cassonade, les œufs, le yogourt et l'huile, puis fouetter.",
+        "Incorporer les ingrédients secs à la spatule, juste assez pour les humecter. Répartir la pâte dans les caissettes.",
+        "Cuire de 22 à 25 minutes, jusqu'à ce qu'un cure-dent piqué au centre d'un muffin en ressorte propre.",
+        "Laisser tiédir, démouler et laisser refroidir sur une grille.",
+        "Pour congeler : emballer les muffins refroidis un à un, les mettre dans un sac à congélation et congeler jusqu'à 3 mois. Glisser un muffin encore gelé dans la boîte à lunch le matin : il sera décongelé à l'heure de la collation."
+      ],
+      "Tâches sous-chef": [
+        "Écraser les bananes à la fourchette (plus elles sont tachetées, meilleures elles sont!)",
+        "Placer les caissettes dans le moule",
+        "Répartir la pâte avec une cuillère à crème glacée"
+      ],
+      "À vérifier": "",
+      "Fiche complète": true,
+      "Lien source": "https://www.ricardocuisine.com/recettes/9747-muffins-aux-bananes",
+      "Notes": [
+        "Inspirée des muffins aux bananes de Ricardo."
+      ]
+    }
+  ],
+  "plans": [],
+  "inventaire": [],
+  "bilans": []
+}
