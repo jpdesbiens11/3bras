@@ -1,6 +1,6 @@
 // Doublons probables (D-G-043, D-G-044). Sans DOM : testé à part.
-import { norm } from './etat.js?v=1.22.0';
-import { couvre } from './stock.js?v=1.22.0';
+import { norm } from './etat.js?v=1.22.1';
+import { couvre } from './stock.js?v=1.22.1';
 
 const proches = (a, b) => norm(a).trim() === norm(b).trim() || couvre(a, b) || couvre(b, a);
 

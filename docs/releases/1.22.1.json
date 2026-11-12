@@ -1,0 +1,25 @@
+{
+  "version": "1.22.1",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — Créer avec Gemini : progrès et choix visibles",
+  "requis": [
+    "R-04"
+  ],
+  "nouveautes": [
+    "Les cuisines et le nombre de recettes choisis se voient dans tous les thèmes (fond, bordure et ✓), pas seulement Carnet.",
+    "Pendant que Gemini écrit : « Gemini réfléchit… », puis « 2 sur 5 · 34 s », mis à jour chaque seconde ; les fiches apparaissent au fil des lots.",
+    "Bouton « Arrêter » : on garde les recettes déjà finies.",
+    "Au plus 2 minutes et demie par lot, avec un message clair si Gemini met trop de temps."
+  ],
+  "decisions": [
+    "D-G-055"
+  ],
+  "tests": {
+    "unitaires": 78,
+    "bout_en_bout": 55,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}

@@ -718,8 +718,9 @@ test('D-G-054 : créer des recettes avec Gemini dans Compte, sous le bouton Clau
   await page.locator('#gen-gemini').click();
   // Fiche incomplète écartée, recette déjà au livre écartée : il reste la bolognaise et la lasagne de kit repas (refusée).
   await expect(page.locator('#gen-avance')).toContainText('2 recettes écrites par Gemini');
-  const g = await page.evaluate(() => ({ modele: window.__gemini.modele, consigne: window.__gemini.parts.at(-1) }));
+  const g = await page.evaluate(() => ({ modele: window.__gemini.modele, consigne: window.__gemini.parts.at(-1), flux: window.__gemini.flux, delai: window.__gemini.delai }));
   expect(g.modele).toBe('gemini-3.5-flash');
+  expect([g.flux, g.delai]).toEqual([true, 150000]);                               // D-G-055 : en flux, 150 s au plus
   expect(g.consigne).toContain('Cuisines : Italienne');
   expect(g.consigne).toContain('Source : Gemini');
   await expect(page.locator('#gen-liste [data-genpick]')).toHaveCount(2);
@@ -732,5 +733,36 @@ test('D-G-054 : créer des recettes avec Gemini dans Compte, sous le bouton Clau
   expect([v.Statut, v.Source, v['Lien source']]).toEqual(['À trier', 'Web autre', '']);
   expect(v.Notes).toContain('Créée avec Gemini');
   expect(v['À vérifier']).toContain('Recette créée par Gemini');
+  expect(erreurs).toEqual([]);
+});
+
+test('D-G-055 : Gemini montre son progrès, on peut l\'arrêter, et les choix se voient dans tous les thèmes', async ({ page }) => {
+  const IA = { apiKey: 'AIza-test', projectId: 'projet-test', appId: '1:2:web:3', recaptcha: 'cle-site-test', modele: 'gemini-3.5-flash', modeleRapide: 'gemini-3.5-flash-lite' };
+  const fiche = (n) => `FICHE SUPERCHEF\nNom : ${n}\nType : Souper\nPortions : 4\nTemps total : 30 min\n\nINGRÉDIENTS\n- 300 g de riz\n\nÉTAPES\n1. Cuire 18 minutes.\n\nSOUS-CHEF\n- Mesurer le riz\n\n`;
+  await page.addInitScript((t) => { window.__reponseGemini = t; window.__geminiLent = 700; }, ['Biryani test', 'Korma test', 'Dal test', 'Tikka test', 'Saag test'].map(fiche).join(''));
+  const { erreurs } = await demarrer(page, { ia: IA });
+  await page.locator('#skin').selectOption('magazine');
+  await page.locator('#comptebtn').click();
+  await page.locator('#ouvrirgengemini').click();
+  // Les choix se voient (Magazine) : coché, avec un crochet, avant même d'écrire des mots-clés
+  const ind = page.locator('[data-gencuis="Indienne"]'), ita = page.locator('[data-gencuis="Italienne"]');
+  await ind.click();
+  await expect(ind).toHaveAttribute('aria-pressed', 'true');
+  const fond = (l) => l.evaluate((n) => getComputedStyle(n).backgroundColor);
+  expect(await fond(ind)).not.toBe(await fond(ita));
+  expect(await ind.evaluate((n) => getComputedStyle(n, '::before').content)).toBe('"✓"');
+  await page.locator('[data-gennb="5"]').click();
+  await expect(page.locator('[data-gennb="5"]')).toHaveAttribute('aria-pressed', 'true');
+  // Progrès en direct, puis Arrêter : on garde les fiches finies
+  await page.locator('#gen-gemini').click();
+  await expect(page.locator('#gen-gemini')).toBeDisabled();
+  await expect(page.locator('#gen-avance')).toContainText(/Gemini (réfléchit|écrit les recettes)… .*\d+ s/);
+  await expect(page.locator('#gen-avance')).toContainText(/écrit les recettes… [1-4] sur 5/);
+  await page.locator('#gen-h').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `tests/captures/${test.info().project.name}-gemini-progres.png`, fullPage: false });
+  await page.locator('#gen-stop').click();
+  await expect(page.locator('#gen-avance')).toContainText(/^Arrêté : [1-4] recettes? gardées?\./);
+  await expect(page.locator('#gen-gemini')).toBeEnabled();
+  expect(await page.locator('#gen-liste [data-genpick]').count()).toBeGreaterThan(0);
   expect(erreurs).toEqual([]);
 });
