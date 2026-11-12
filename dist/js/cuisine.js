@@ -1,9 +1,23 @@
 // Lecture des fiches : ingrédients, étapes, minuteurs, rayons Provigo. Repris de Gordon Rams.ai.
-import { norm, S } from './etat.js?v=1.18.0';
+import { norm, S } from './etat.js?v=1.19.0';
 
 const STOP = new Set('avec dans pour plus sans tasse tasses cuillere cuilleres soupe environ facultatif hache hachee hachees haches finement coupe coupee coupees coupes cubes tranche tranches gousse gousses grosse gros petit petite moyen moyenne boite pelees pelee goutt bien chaud froid frais fraiche litre litres paquet morceaux reserve rincee rinces egoutte'.split(' '));
+// D-G-050 : seul le nom compte (avant la virgule : « 4 gousses d'ail, coupées en deux » -> ail, pas « deux ») ;
+// les mots courts d'aliments (ail, sel, eau, riz) sont gardés.
+const COURTS = new Set(['ail', 'sel', 'eau', 'riz', 'vin']);
+const motsDe = (s) => s.replace(/[^a-z\s]/g, ' ').split(/\s+/).filter((w) => (w.length >= 4 && !STOP.has(w)) || COURTS.has(w));
 export function keywords(line) {
-  return norm(line).replace(/\(.*?\)/g, ' ').replace(/[^a-z\s]/g, ' ').split(/\s+/).filter((w) => w.length >= 4 && !STOP.has(w)).slice(0, 4);
+  const sans = norm(line).replace(/\(.*?\)/g, ' ');
+  const nom = motsDe(sans.split(/,(?!\d)/)[0]);
+  return (nom.length ? nom : motsDe(sans)).slice(0, 4);
+}
+// Un mot de 4 lettres ou moins se cherche entier (« pois » n'est pas « poisson », « lait » n'est pas « laitue ») ;
+// « sel » se trouve aussi dans « saler ». Les autres, par leur début (« oignon » dans « oignons »).
+const rePlein = new Map();
+export function motDans(s, k) {
+  if (k.length > 4) return s.includes(k.slice(0, Math.max(4, k.length - 2)));
+  if (!rePlein.has(k)) rePlein.set(k, new RegExp(`(^|[^a-z])${k}[sx]?([^a-z]|$)${k === 'sel' ? '|(^|[^a-z])sal(e|er|ee|ees|es|ez)([^a-z]|$)' : ''}`));
+  return rePlein.get(k).test(s);
 }
 const lignes = (t) => String(t || '').split('\n').map((l) => l.trim()).filter(Boolean);
 
@@ -17,14 +31,22 @@ export function ficheDeLigne(r) {
   return { ing, steps: lignes(r.stepsText).filter((l) => !l.startsWith('## ')), sous: lignes(r.sous) };
 }
 
+// « sauce » seul ne suffit pas quand la ligne a un nom plus précis (« Verser la sauce » n'est pas la sauce soya).
+// « les ingrédients de la sauce », « les épices de l'assaisonnement » : toutes les lignes de ce groupe.
+const FAIBLES = new Set(['sauce']);
 export function stepIngredients(step, ing) {
   const s = norm(step);
-  return ing.filter((i) => i.kw.some((k) => s.includes(k.slice(0, Math.max(4, k.length - 2)))));
+  const groupes = new Set([...s.matchAll(/(?:ingredients|epices) (?:de la |de l'|du |des |de )([a-z]+)/g)].map((m) => m[1]));
+  return ing.filter((i) => {
+    if (i.group && groupes.size && [...groupes].some((g) => norm(i.group).split(/[^a-z]+/).some((w) => w.length >= 4 && motDans(g, w)))) return true;
+    const kw = i.kw || keywords(i.text), forts = kw.filter((k) => !FAIBLES.has(k));
+    return (forts.length ? forts : kw).some((k) => motDans(s, k));
+  });
 }
 export function sousFor(step, idx, sous) {
   if (!sous.length) return null;
   const s = norm(step);
-  const hit = sous.find((t) => keywords(t).some((k) => s.includes(k.slice(0, Math.max(4, k.length - 2)))));
+  const hit = sous.find((t) => keywords(t).some((k) => motDans(s, k)));
   return hit || sous[idx % sous.length];
 }
 /* durées dans une étape : « 25 minutes », « 10 à 12 min », « 1 heure », « 1 h 30 » */
@@ -43,9 +65,95 @@ const BLOCK_RE = /(laisser|faire)\s+(reposer|refroidir|tiedir|lever|mariner|mace
 export const isBlocking = (step) => BLOCK_RE.test(norm(step));
 /* ingrédients de chaque étape ; ceux qu'aucune étape ne nomme (sel, poivre…) vont à la 1re étape.
    usage[k] : les étapes où sert l'ingrédient k (D-G-032 : un ingrédient partagé n'est pas tout mis d'un coup). */
+/* D-G-050 : deux lignes du même ingrédient (sauce et marinade, par exemple) ne tombent pas ensemble dans une étape.
+   On garde celle dont la quantité est écrite juste avant son nom dans l'étape (« 15 ml de jus de citron »), puis,
+   s'il en reste plusieurs, celle du groupe de l'étape (le groupe des ingrédients sans double qu'elle nomme, ou celui
+   de l'étape d'avant), sinon la première pas encore servie. */
+const QTE_RE = /(\d+(?:[.,]\d+)?(?: \d\/\d)?|\d\/\d|[½¼¾⅓⅔])\s?(ml|cl|litres?|l|g|kg|lb|oz|tasses?|c\. a (?:soupe|the))(?![a-z])/;
+const quantite = (t) => { const m = QTE_RE.exec(norm(t).replace(/[()]/g, ' ')); return m ? m[0] : null; };
+const echapper = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s/g, '\\s?');
+function quantiteAvantNom(s, ing) {   // la quantité de la ligne figure dans les 45 caractères avant son nom
+  const q = quantite(ing.text); if (!q) return false;
+  const re = new RegExp(`(^|[^\\d.,/])${echapper(q)}(?![\\d])`);
+  for (const k of ing.kw || keywords(ing.text)) {
+    const p = k.length > 4 ? k.slice(0, Math.max(4, k.length - 2)) : k, mot = new RegExp(`(^|[^a-z])${p}`, 'g');
+    let m; while ((m = mot.exec(s))) if (re.test(s.slice(Math.max(0, m.index - 45), m.index + 1))) return true;
+  }
+  return false;
+}
+const ASSAISON_RE = /^(sel|poivre|eau)\b/;   // le sel et le poivre de chaque groupe ne disent pas de quel groupe est l'étape
+// « Lait, pour badigeonner », « eau chaude, pour le riz » : l'usage écrit après la virgule se retrouve dans l'étape.
+function usageDans(s, texte) {
+  const apres = norm(texte).replace(/\(.*?\)/g, ' ').split(/,(?!\d)/).slice(1).join(' ');
+  return motsDe(apres).filter((w) => w.length >= 5 || COURTS.has(w)).some((w) => motDans(s, w));
+}
+function departager(d, per) {
+  const cle = d.ing.map((x) => ingKey(x.text)), nb = new Map();
+  cle.forEach((c) => nb.set(c, (nb.get(c) || 0) + 1));
+  const servis = new Set();
+  let contexte = null;
+  // un groupe dont le nom n'est le nom d'aucune ligne (« Pâte », « Croûtons ») se reconnaît quand l'étape le nomme
+  const motsLignes = new Set(d.ing.flatMap((x) => x.kw || keywords(x.text)));
+  const nomsGroupes = [...new Set(d.ing.map((x) => x.group).filter(Boolean))].map((g) => [g, norm(g).split(/[^a-z]+/).filter((w) => w.length >= 4 && !motsLignes.has(w))]);
+  return per.map((l, si) => {
+    const s = norm(d.steps[si]);
+    const votes = new Map();
+    for (const k of l) if (nb.get(cle[k]) === 1 && d.ing[k].group && !ASSAISON_RE.test(cle[k])) votes.set(d.ing[k].group, (votes.get(d.ing[k].group) || 0) + 1);
+    // groupe de l'étape : celui qui a le plus de lignes nommées ; à égalité, celui de l'étape d'avant s'il en est, sinon aucun
+    let ici = contexte;
+    for (const [g, mots] of nomsGroupes) if (mots.some((w) => motDans(s, w))) votes.set(g, (votes.get(g) || 0) + 2);
+    if (votes.size) {
+      const tri = [...votes].sort((a, b) => b[1] - a[1]), tete = tri.filter((v) => v[1] === tri[0][1]).map((v) => v[0]);
+      ici = tete.length === 1 ? tete[0] : tete.includes(contexte) ? contexte : null;
+      if (tete.length === 1) contexte = ici;
+    }
+    // « Pâte : au robot, … » : l'étape dit elle-même son groupe.
+    const etiquette = /^\s*([^:]{3,40}?)\s*:/.exec(s)?.[1];
+    const nomme = etiquette && d.ing.map((x) => x.group).find((g) => g && norm(g).startsWith(etiquette));
+    if (nomme) contexte = ici = nomme;
+    const choix = new Map();   // clé -> ligne gardée
+    for (const k of l) {
+      if (choix.has(cle[k])) continue;
+      let c = l.filter((j) => cle[j] === cle[k]);
+      if (c.length > 1) { const q = c.filter((j) => quantiteAvantNom(s, d.ing[j])); if (q.length) c = q; }
+      if (c.length > 1) { const u = c.filter((j) => usageDans(s, d.ing[j].text)); if (u.length) c = u; }
+      if (c.length > 1) { const g = c.filter((j) => ici && d.ing[j].group === ici); if (g.length) c = g; }
+      if (c.length > 1) { const n = c.filter((j) => !servis.has(j)); if (n.length) c = n; }
+      choix.set(cle[k], c[0]);
+    }
+    const garde = l.filter((k) => choix.get(cle[k]) === k);
+    garde.forEach((k) => servis.add(k));
+    return garde;
+  });
+}
+/* D-G-050 : une ligne qu'aucune étape ne nomme va à l'étape qui en parle en général : « les épices », « la viande »,
+   « les fromages », « les fines herbes », « les légumes », « le pain », « les noix », le nom de son groupe
+   (« Préparer les crudités ») ou « tous les autres ingrédients ». */
+const CATEGORIES = [
+  [/\bepices?\b|assaisonnement/, /moulue?s?\b|sechee?s?\b|paprika|cumin|curcuma|cannelle|muscade|origan|thym|piment|cayenne|garam|cari|curry|cardamome|girofle|fenugrec|poivre|sel\b|chili|zaatar|sumac|laurier/],
+  [/\bviandes?\b/, /boeuf|porc|veau|agneau|poulet|dinde|saucisse|bifteck|roti|palette|epaule|haut de cuisse|cuisses?\b|poitrine/],
+  [/\bfromages?\b/, /fromage|cheddar|mozzarella|emmental|gruyere|parmesan|asiago|feta|provolone|ricotta|cottage|suisse|chevre/],
+  [/fines herbes|\bherbes\b/, /coriandre|persil|basilic|aneth|ciboulette|menthe|estragon|cerfeuil/],
+  [/\blegumes\b|\bcrudites\b/, /carottes?|celeri|oignons?|poivrons?|concombres?|laitue|romaine|tomates?|courgettes?|brocoli|chou|epinards|navet|radis|champignons|pleurotes|haricots verts|pois/],
+  [/\bpains?\b|\bcroutons?\b/, /pain|pitas?|baguette|naans?|tortillas?|ciabatta/],
+  [/\bnoix\b/, /amandes|cajou|pignons|noix|pacanes|pistaches|arachides/]
+];
+function rattacher(d, per) {
+  const used = new Set(per.flat()), etapes = d.steps.map((st) => norm(st));
+  for (const [k, x] of d.ing.entries()) {
+    if (used.has(k)) continue;
+    const nom = norm(x.text).replace(/\(.*?\)/g, ' ').split(/,(?!\d)/)[0];
+    const mots = x.group ? norm(x.group).split(/[^a-z]+/).filter((w) => w.length >= 5) : [];
+    let si = mots.length ? etapes.findIndex((s) => mots.some((w) => motDans(s, w))) : -1;
+    if (si < 0) for (const [re, ing] of CATEGORIES) if (ing.test(nom)) { si = etapes.findIndex((s) => re.test(s)); if (si >= 0) break; }
+    if (si < 0) si = etapes.findIndex((s) => /(tous|toutes) les autres ingredients|le reste des ingredients/.test(s));
+    if (si >= 0) { per[si] = [...per[si], k].sort((a, b) => a - b); used.add(k); }
+  }
+  return per;
+}
 export function stepPlan(d) {
   if (d._plan) return d._plan;
-  const per = d.steps.map((st) => stepIngredients(st, d.ing).map((x) => d.ing.indexOf(x)));
+  const per = rattacher(d, departager(d, d.steps.map((st) => stepIngredients(st, d.ing).map((x) => d.ing.indexOf(x)))));
   const used = new Set(per.flat()); const extra = d.ing.map((x, k) => k).filter((k) => !used.has(k));
   const usage = d.ing.map((x, k) => per.map((l, si) => (l.includes(k) ? si : -1)).filter((si) => si >= 0));
   return (d._plan = { per, extra, usage });
@@ -66,7 +174,9 @@ function avecPositions(s) { // texte normalisé et, pour chaque caractère, sa p
 export function portionDansEtape(step, ing) {
   const { n, pos } = avecPositions(String(step));
   for (const k of ing.kw || keywords(ing.text)) {
-    const p = k.slice(0, Math.max(4, k.length - 2)), i = n.indexOf(p); if (i < 0) continue;
+    const p = k.length > 4 ? k.slice(0, Math.max(4, k.length - 2)) : k;     // mots en a-z seulement : rien à échapper
+    const t = new RegExp(`(^|[^a-z])${p}`).exec(n); if (!t) continue;
+    const i = t.index + t[1].length;
     const m = PORTION_RE.exec(n.slice(Math.max(0, i - 50), i)); if (!m) continue;
     const debut = i - m[0].length, fin = i + (/^[a-z-]*/.exec(n.slice(i))[0].length);
     return String(step).slice(pos[debut], pos[fin]).trim();

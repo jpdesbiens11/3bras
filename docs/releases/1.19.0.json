@@ -1,0 +1,25 @@
+{
+  "version": "1.19.0",
+  "date": "2026-11-12",
+  "mvp": "SuperChef.ai — ingrédients et étapes bien découpés",
+  "requis": [
+    "R-04"
+  ],
+  "nouveautes": [
+    "Au poêle : un ingrédient présent dans deux groupes (sauce et marinade, par exemple) n'apparaît plus en double ; la bonne ligne est choisie selon la quantité écrite dans l'étape, son usage ou le groupe de l'étape.",
+    "L'ail, le sel, l'eau, le riz et le vin sont reconnus dans les étapes ; « Aussi à prévoir » ne garde que ce qu'aucune étape ne mentionne vraiment.",
+    "« Les épices », « la viande », « les fromages », « les fines herbes », « les crudités » ou « tous les autres ingrédients » rattachent les bonnes lignes à l'étape.",
+    "Les 100 recettes des 10 kits de départ ont été vérifiées : aucune ligne orpheline, aucun double dans une étape ; 12 étapes reformulées pour nommer les ingrédients."
+  ],
+  "decisions": [
+    "D-G-050"
+  ],
+  "tests": {
+    "unitaires": 77,
+    "bout_en_bout": 46,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}
