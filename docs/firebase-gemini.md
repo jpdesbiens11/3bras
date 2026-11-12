@@ -11,7 +11,9 @@ Tout se fait dans le projet Google Cloud « 3eBras » déjà utilisé pour la co
 
 Valeurs en place (2026-11-06, créées sous le nom 3Bras) : projet Firebase `bras-933fe`, app web `3Bras`. Ces noms internes ne se voient pas dans l'app et n'ont pas à changer (D-G-030).
 
-Modèle par défaut : `gemini-3.5-flash` (changer `modele` dans la config au besoin).
+Modèle par défaut : `gemini-3.5-flash` (changer `modele` dans la config au besoin). « Adapter » (D-G-033) utilise le modèle léger `modeleRapide` : `gemini-3.5-flash-lite`.
+
+Note du 2026-11-12 (page des modèles Firebase AI Logic) : Google achemine maintenant les appels à `gemini-3.5-flash` vers `gemini-3.6-flash`, et annonce `gemini-3.8-flash` comme remplaçant. Rien ne casse ; passer `modele` à `gemini-3.8-flash` est une décision à part, à tester sur quelques recettes.
 
 ## Nouveau domaine (Hostinger, D-G-031)
 

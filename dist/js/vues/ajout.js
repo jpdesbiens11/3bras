@@ -1,11 +1,11 @@
 // « + Recette » : même feuille que Gordon Rams.ai (lien, photo ou fichier, texte collé, type, aperçu, ajouter au livre).
 // Hors de claude.ai, l'app n'a pas Claude : le texte, Word et PDF sont lus ici ; une photo ou un lien seul passent
 // par l'app Claude, dont on colle la réponse dans la boîte de texte (D-G-004, D-G-026).
-import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render, norm } from '../etat.js?v=1.7.0';
-import { el, ico, vider } from '../el.js?v=1.7.0';
-import { ajouterRecette } from '../donnees.js?v=1.7.0';
-import { lireDocx, lirePdf, parseLoose, parseTexte, ENTETE_FICHE } from '../lecture.js?v=1.7.0';
-import { iaDisponible, convertirAvecGemini, erreurIA } from '../ia.js?v=1.7.0';
+import { S, $, TYPES, PROTS, CUIS, OUTILS, toast, errText, render, norm } from '../etat.js?v=1.8.0';
+import { el, ico, vider } from '../el.js?v=1.8.0';
+import { ajouterRecette } from '../donnees.js?v=1.8.0';
+import { lireDocx, lirePdf, parseLoose, parseTexte, ENTETE_FICHE } from '../lecture.js?v=1.8.0';
+import { iaDisponible, convertirAvecGemini, erreurIA } from '../ia.js?v=1.8.0';
 
 const SRC_CAT = ['Famille', 'Ricardo', 'Di Stasio', 'Recettes du Québec', 'Labriski', 'Trois fois par jour', 'Web autre'];
 const A = { files: [], result: null, busy: false };
@@ -52,7 +52,7 @@ export function removeFile(i) { A.files.splice(i, 1); paintChips(); }
 function consigne(type, url, nbImages) {
   return `Convertis cette recette en « Fiche SuperChef » pour mon livre de recettes familial. Français québécois.
 
-Règles : ingrédients fidèles (métrique d'abord, impérial entre parenthèses si la source le donne) ; étapes réécrites dans tes mots, phrases courtes, mêmes temps et températures (°C puis °F), durées en minutes ; n'invente rien qui manque, liste-le sous À VÉRIFIER ; 2 ou 3 tâches simples pour un enfant sous SOUS-CHEF ; laisse tomber la pub, l'histoire et les valeurs nutritives.
+Règles : ingrédients fidèles (métrique d'abord, impérial entre parenthèses si la source le donne) ; étapes réécrites dans tes mots, phrases courtes, mêmes temps et températures (°C puis °F), durées en minutes ; si un ingrédient sert à plusieurs étapes, écris dans chaque étape la quantité utilisée (« Ajouter 15 ml (1 c. à soupe) de beurre », « le reste du beurre ») ; n'invente rien qui manque, liste-le sous À VÉRIFIER ; 2 ou 3 tâches simples pour un enfant sous SOUS-CHEF ; laisse tomber la pub, l'histoire et les valeurs nutritives.
 
 Réponds avec seulement ce bloc de texte, prêt à coller :
 

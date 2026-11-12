@@ -3,16 +3,16 @@ import { test, expect } from '@playwright/test';
 import { brancher } from './outils.mjs';
 import { LIVRE } from './fixture.mjs';
 
-async function demarrer(page) {
+async function demarrer(page, { ia, livre = LIVRE } = {}) {
   const erreurs = [];
   page.on('pageerror', (e) => erreurs.push(e.message));
   page.on('console', (m) => { if (m.type() === 'error') erreurs.push(m.text()); });
   page.on('dialog', () => erreurs.push('dialog'));
-  const b = await brancher(page);
+  const b = await brancher(page, ia ? { ia } : undefined);
   await page.goto('./');
   await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
   await expect(page.locator('#comptesheet')).toBeVisible();     // livre vide : la feuille Compte s'ouvre sur l'import
-  await page.locator('#fichier-import').setInputFiles({ name: 'livre.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(LIVRE)) });
+  await page.locator('#fichier-import').setInputFiles({ name: 'livre.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(livre)) });
   await page.locator('#lancer-import').click();
   await expect(page.getByRole('heading', { name: 'Import terminé.' })).toBeVisible();
   await page.locator('[data-compteclose]').click();
@@ -285,5 +285,84 @@ test('+ Recette avec Gemini (Firebase simulé) : photo et lien deviennent une fi
   await page.locator('#add-go').click();
   await expect(page.locator('#add-name')).toHaveValue('Soupe test');
   expect(await page.evaluate(() => window.__gemini)).toBeNull();
+  expect(erreurs).toEqual([]);
+});
+
+// D-G-032 / D-G-033 : une recette dont le beurre et le fromage se partagent entre les étapes.
+const GRATIN = {
+  id: 'r-gratin', Nom: 'Gratin partagé test', Type: 'Souper', Statut: 'Au livre', 'Protéine': 'Végé', 'Temps total (min)': 40, Portions: 4, 'Fiche complète': true,
+  Ingrédients: ['30 ml (2 c. à soupe) de beurre', '250 ml (1 tasse) de fromage râpé', '4 pommes de terre'],
+  Étapes: ['Fondre 15 ml (1 c. à soupe) de beurre et dorer les pommes de terre 10 minutes.', 'Ajouter la moitié du fromage.', 'Ajouter le reste du beurre et le reste du fromage, puis gratiner 15 minutes.'],
+  'Tâches sous-chef': ['Râper le fromage']
+};
+const AVEC_GRATIN = { ...LIVRE, recettes: [...LIVRE.recettes, GRATIN] };
+const ouvrirGratin = async (page) => {
+  await page.locator('[data-go="tri"]').click();
+  await page.locator('[data-preview="r-gratin"]').click();
+  await expect(page.locator('#sheet h2')).toHaveText('Gratin partagé test');
+};
+
+test('D-G-032 : Au poêle montre la portion de chaque étape pour un ingrédient partagé', async ({ page }, info) => {
+  const { erreurs } = await demarrer(page, { livre: AVEC_GRATIN });
+  await ouvrirGratin(page);
+  await page.locator('#sheet [data-cook="r-gratin"]').click();
+  const ings = page.locator('.stepings');
+  await expect(page.locator('.step-no')).toHaveText('Étape 1 sur 3');
+  await expect(ings).toContainText('15 ml (1 c. à soupe) de beurre');
+  await expect(ings).toContainText('Sur 30 ml (2 c. à soupe) de beurre · Aussi à l\'étape 3');
+  await expect(ings).toContainText('4 pommes de terre');
+  await page.locator('#next').click();
+  await expect(ings).toContainText('la moitié du fromage');
+  await expect(ings).toContainText('Sur 250 ml (1 tasse) de fromage râpé · Aussi à l\'étape 3');
+  await page.locator('#next').click();
+  await expect(ings).toContainText('le reste du beurre');
+  await expect(ings).toContainText('le reste du fromage');
+  await expect(ings).toContainText('Sur 30 ml (2 c. à soupe) de beurre · Aussi à l\'étape 1');
+  await expect(ings).toContainText('Sur 250 ml (1 tasse) de fromage râpé · Aussi à l\'étape 2');
+  await page.screenshot({ path: `tests/captures/${info.project.name}-poele-partage.png`, fullPage: true });
+  expect(erreurs).toEqual([]);
+});
+
+test('D-G-033 : adapter une recette avec Gemini, garder l\'originale, y revenir', async ({ page }, info) => {
+  const IA = { apiKey: 'AIza-test', projectId: 'projet-test', appId: '1:2:web:3', recaptcha: 'cle-site-test', modele: 'gemini-3.5-flash', modeleRapide: 'gemini-3.5-flash-lite' };
+  await page.addInitScript(() => { window.__reponseGemini = 'FICHE SUPERCHEF\nNom : Gratin partagé test\nType : Souper\nPortions : 6\nTemps total : 45 min\n\nINGRÉDIENTS\n- 45 ml (3 c. à soupe) de beurre\n- 375 ml (1 ½ tasse) de fromage râpé\n- 6 pommes de terre\n\nÉTAPES\n1. Fondre 20 ml de beurre et dorer les pommes de terre 10 minutes.\n2. Ajouter la moitié du fromage.\n3. Ajouter le reste du beurre et le reste du fromage, puis gratiner 20 minutes.\n\nCHANGEMENTS\n- Quantités pour 6 portions\n- Gratiner 20 minutes au lieu de 15'; });
+  const { sim, erreurs } = await demarrer(page, { ia: IA, livre: AVEC_GRATIN });
+  const ligne = () => { const o = [...sim.classeurs.values()][0].onglets.Recettes, e = o[0], l = o.find((x) => x[0] === 'r-gratin'); return Object.fromEntries(e.map((c, i) => [c, l[i] ?? ''])); };
+  await ouvrirGratin(page);
+  await page.locator('#sheet [data-adapt="r-gratin"]').click();
+  await expect(page.locator('#adaptsheet h2')).toHaveText('Gratin partagé test');
+  await page.locator('[data-adaptchip="6"]').click();
+  await expect(page.locator('#adapt-q')).toHaveValue('Pour 6 portions.');
+  await page.locator('#adapt-go').click();
+  await expect(page.locator('#adapt-status')).toContainText('Voici la version adaptée');
+  const g = await page.evaluate(() => ({ modele: window.__gemini.modele, consigne: window.__gemini.parts.at(-1) }));
+  expect(g.modele).toBe('gemini-3.5-flash-lite');                         // modèle léger pour les retouches
+  expect(g.consigne).toContain('« Pour 6 portions. »');
+  expect(g.consigne).toContain('- 30 ml (2 c. à soupe) de beurre');
+  await expect(page.locator('.adapt-res .chg')).toContainText('Quantités pour 6 portions');
+  await expect(page.locator('.adapt-res li.neuf')).toHaveCount(5);       // 3 ingrédients et 2 étapes changés
+  await page.locator('.adapt-res').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `tests/captures/${info.project.name}-adapter.png` });
+  expect(ligne().Originale).toBe('');                                     // rien d'écrit avant « Remplacer »
+
+  await page.locator('#adapt-save').click();
+  await expect(page.locator('#toast')).toContainText('Recette adaptée');
+  await expect(page.locator('#adaptsheet')).toHaveCount(0);
+  await expect(page.locator('#sheet')).toContainText('45 ml (3 c. à soupe) de beurre');
+  await expect(page.locator('#sheet .chip', { hasText: 'Version de famille' })).toBeVisible();
+  await expect(page.locator('#sheet .histo summary')).toHaveText('Adaptations de la famille (1)');
+  let row = ligne();
+  expect(row['Ingrédients']).toBe('45 ml (3 c. à soupe) de beurre\n375 ml (1 ½ tasse) de fromage râpé\n6 pommes de terre');
+  expect(row.Portions).toBe('6');
+  expect(JSON.parse(row.Originale)['Ingrédients']).toBe('30 ml (2 c. à soupe) de beurre\n250 ml (1 tasse) de fromage râpé\n4 pommes de terre');
+  expect(row.Adaptations).toMatch(/ · Pour 6 portions\. → Quantités pour 6 portions ; Gratiner 20 minutes au lieu de 15$/);
+
+  await page.locator('#sheet [data-adaptrevert="r-gratin"]').click();
+  await expect(page.locator('#toast')).toContainText('Recette originale remise');
+  await expect(page.locator('#sheet')).toContainText('30 ml (2 c. à soupe) de beurre');
+  row = ligne();
+  expect(row['Ingrédients']).toBe('30 ml (2 c. à soupe) de beurre\n250 ml (1 tasse) de fromage râpé\n4 pommes de terre');
+  expect(row.Portions).toBe('4');
+  expect(row.Adaptations.split('\n')).toHaveLength(2);
   expect(erreurs).toEqual([]);
 });

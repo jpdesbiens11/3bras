@@ -22,14 +22,14 @@ test('P-4 : un classeur v1 passe en v2 en ajoutant des colonnes à la fin seulem
   const drive = creerDrive({ jetonValide: async () => 'jeton-test', fetch: sim.fetch });
 
   const r = await ouvrirOuCreer(drive, OPTS);
-  assert.deepEqual(r.migration, { avant: 1, apres: VERSION_SCHEMA, ajouts: 10 + 2 + 2 + 6 });
+  assert.deepEqual(r.migration, { avant: 1, apres: VERSION_SCHEMA, ajouts: 10 + 2 + 2 + 6 + 2 });
   const c = sim.classeurs.get(id);
   for (const o of ONGLETS) {
     assert.deepEqual(c.onglets[o.titre][0], o.colonnes, o.titre);
     assert.deepEqual(c.onglets[o.titre][0].slice(0, V1[o.titre].length), V1[o.titre], `${o.titre} : préfixe v1 intact`);
   }
   assert.deepEqual(c.onglets.Recettes[1].slice(0, 3), ['r-1', 'Pâté chinois', 'Souper']);
-  assert.deepEqual(c.onglets['Schéma'][1], ['version_schema', '2']);
+  assert.deepEqual(c.onglets['Schéma'][1], ['version_schema', String(VERSION_SCHEMA)]);
   assert.equal(c.onglets['Schéma'].length, 4, 'pas de ligne de version en double');
 
   const rec = await lireOnglet(drive, id, 'Recettes');

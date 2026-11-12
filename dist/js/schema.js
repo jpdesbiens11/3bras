@@ -2,8 +2,9 @@
 // P-4 : on ajoute des colonnes à la fin, on n'en renomme ni n'en retire jamais.
 // Chaque ligne a un id stable ; les plans et bilans pointent vers cet id.
 // Version 2 (1.1.0) : colonnes reprises de Notion ajoutées à la fin de chaque onglet.
+// Version 3 (1.8.0) : « Originale » et « Adaptations » à la fin de Recettes (D-G-033).
 
-export const VERSION_SCHEMA = 2;
+export const VERSION_SCHEMA = 3;
 
 export const ONGLETS = Object.freeze([
   {
@@ -13,7 +14,9 @@ export const ONGLETS = Object.freeze([
       'Note globale /10', 'Outils', 'Étiquettes', 'Source', 'Ingrédients', 'Étapes',
       // v2
       'Facilité /10', 'Étoiles', 'Restes', 'Tâches sous-chef', 'À vérifier',
-      'Fiche complète', 'Lien source', 'Notes', 'ID Notion', 'ID Evernote']
+      'Fiche complète', 'Lien source', 'Notes', 'ID Notion', 'ID Evernote',
+      // v3
+      'Originale', 'Adaptations']
   },
   {
     titre: 'Plans de semaine',

@@ -2,14 +2,14 @@
 
 Le livre de recettes familial qui vit dans **ton** Google Drive. Tu planifies la semaine, tu fais l'épicerie, tu cuisines et tu notes les soupers. (Anciennement 3Bras, 3eBras et Gordon Rams.ai.)
 
-- App : sur le site Hostinger de SuperChef.ai (D-G-031) ; copie de secours : https://jpdesbiens11.github.io/3bras/
+- App : sur un sous-domaine Hostinger (D-G-031, `docs/hostinger-deploiement.md`) ; copie de secours : https://jpdesbiens11.github.io/SuperChef.ai/ (D-G-034)
 - Aucune recette ne passe par un serveur. L'app parle directement à Google depuis ton navigateur, au téléphone comme à l'ordinateur.
 - Ta semaine planifiée est gardée dans l'onglet « Plans de semaine » de ton classeur Google et revient à chaque connexion.
 - Portée Google `drive.file` : SuperChef.ai ne voit que les fichiers qu'il a créés.
 
 ## État
 
-Version 1.7.0 : nouveau nom SuperChef.ai et paquet pour Hostinger. Voir `docs/releases/` et `docs/DECISIONS.md`.
+Version 1.8.0 : « Adapter avec Gemini » (la recette devient la version de famille, l'originale est gardée) et la bonne portion d'ingrédient à chaque étape d'Au poêle. Voir `docs/releases/` et `docs/DECISIONS.md`.
 
 ## Développer
 
@@ -30,7 +30,7 @@ Règles du dépôt (vérifiées par les tests) : fichiers JS et CSS sous 500 lig
 1. `node scripts/version.mjs 1.x.y` et une note `docs/releases/1.x.y.json`, dans une branche `version/1.x.y`.
 2. PR vers `main` ; les tests tournent sur la PR.
 3. Fusionner : GitHub Actions crée le tag et la release `v1.x.y` (avec l'archive `superchef-1.x.y.zip`), puis publie `dist/` sur Pages (D-G-014).
-4. Hostinger : `npm run paquet` produit `paquet/superchef-<version>.zip`, déployé dans `public_html` par le connecteur Hostinger (D-G-031).
+4. Hostinger : `npm run paquet` produit `paquet/superchef-<version>.zip`, déployé par le connecteur Hostinger (D-G-031) ; marche à suivre dans `docs/hostinger-deploiement.md`.
 5. Retour arrière : Actions → « Publier SuperChef.ai » → *Run workflow* avec le tag précédent ; sur Hostinger, redéployer l'archive de la release précédente.
 
 ## Héberger ta propre copie
