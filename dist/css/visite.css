@@ -12,8 +12,6 @@
 .vis-points button[aria-current="step"]::before{background:var(--jaune,var(--accent));width:24px;border-radius:999px}
 .vis-nav{display:flex;justify-content:space-between;gap:10px}
 .vis-nav .btn{flex:1;max-width:240px}
-.vis-plus{display:flex;align-items:center;gap:10px;margin-top:14px;min-height:var(--tap);color:var(--muted)}
-.vis-plus input{width:22px;height:22px;accent-color:var(--accent);margin:0}
 .vis-passer{justify-self:center;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;min-height:var(--tap);font:inherit}
 /* traits et formes */
 .v-papier{fill:var(--card,#fff);stroke:var(--fg);stroke-width:2.5;stroke-linejoin:round}

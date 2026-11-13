@@ -1,89 +1,119 @@
-// Mise en place guidée (D-G-051, D-G-053) : après la connexion Google, différente de la visite marketing (D-G-047).
-// 10 étapes. À chaque étape, le guide ouvre lui-même le bon écran (Compte, Stock, Livre, Garde-manger, Semaine, Provigo,
-// Au poêle), encadre
-// la partie à utiliser (projecteur + bulle) et dit quoi faire et comment. La personne fait les actions qui écrivent dans
-// son classeur (kits, stock, tri, approbation) ; le guide passe seul à la suite quand c'est fait. ◀ ▶ en haut à droite
-// de la bulle pour reculer ou avancer à volonté. Il finit à l'étape 1 du souper de lundi, au poêle. Il démarre seul quand le livre est vide, se reprend après un
-// rechargement, et Compte → « Lancer le guide » le relance.
-import { S, $ } from '../etat.js?v=1.22.1';
-import { el, ico, vider } from '../el.js?v=1.22.1';
+// Mise en place guidée (D-G-051, D-G-053, D-G-056), différente de la visite dessinée (D-G-047) : de l'accueil (connexion
+// Google) jusqu'à l'étape 2 du souper de lundi. À chaque étape, un doigt fait le chemin à l'écran, environ 1 seconde par
+// toucher (guide-doigt.js) : il touche les vrais boutons (👥 Compte, 01 Livre, Trier…) pour qu'on voie comment s'y rendre,
+// puis il mime le geste à faire, sans rien écrire. La personne fait les actions qui écrivent dans son classeur (kits,
+// stock, tri, approbation) ; le guide passe seul à la suite quand c'est fait. La bulle montre le fil d'Ariane depuis
+// l'accueil, ◀ ▶ ×, « Revoir le chemin », « Écouter » (voix du téléphone) et « Plus lent », en gros caractères.
+// Une personne nouvelle le voit dès l'accueil ; il se reprend après un rechargement ; Compte → « Lancer le guide » le relance.
+import { S, $ } from '../etat.js?v=1.23.0';
+import { el, ico, vider } from '../el.js?v=1.23.0';
+import { ETAPES, ANCIENNES, base, filDe, prochainToucher, val } from './guide-etapes.js?v=1.23.0';
+import * as D from './guide-doigt.js?v=1.23.0';
 
-const CLE = 'superchef-guide', FIN = 'superchef-guide-fin';
-// ce qui se voit vraiment (au téléphone, une page plus large que l'écran agrandit innerWidth)
+export { souperDuGuide } from './guide-etapes.js?v=1.23.0';
+const CLE = 'superchef-guide', FIN = 'superchef-guide-fin', VITESSE = 'superchef-guide-vitesse', VOIX = 'superchef-guide-voix';
 const ecranL = () => Math.min(window.innerWidth, document.documentElement.clientWidth || Infinity, window.visualViewport?.width || Infinity);
 const ecranH = () => Math.min(window.innerHeight, window.visualViewport?.height || Infinity);
-const auLivre = () => (S.book || []).filter((r) => r.statut === 'Au livre').length;
-const planTexte = () => (S.plan || []).map((id, i) => (S.on?.[i] ? id || '' : '')).join('|');
-const val = (v) => (typeof v === 'function' ? v() : v);
-const SEM = { vue: 'semaine' };
-/** Le souper de lundi (sinon le premier souper complet de la semaine) : la mise en place finit à son étape 1. */
-export function souperDuGuide() {
-  const ok = (i) => S.on?.[i] && S.plan?.[i] && S.byId?.[S.plan[i]]?.complete;
-  const i = ok(1) ? 1 : (S.plan || []).findIndex((x, k) => ok(k));
-  return i >= 0 ? { id: S.plan[i], jour: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'][i], nom: S.byId[S.plan[i]].name } : null;
-}
-const souper = () => souperDuGuide() || { id: '', jour: 'lundi', nom: 'ton souper' };
+const lireCle = (k) => { try { return localStorage.getItem(k); } catch (_) { return null; } };
+const ecrireCle = (k, v) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (_) { /* stockage absent */ } };
+/** Les étapes de cet appareil (« Adapter avec Gemini » seulement quand Gemini est là). */
+const liste = () => ETAPES.filter((e) => !e.si || e.si());
+export const nbEtapesGuide = () => liste().length;
 
-// 10 étapes, de l'ouverture du livre à l'étape 1 du souper de lundi (demande de JP).
-const ETAPES = [
-  { groupe: 'Kits', ecran: { compte: true }, bulle: 'bas', titre: 'Choisis tes kits, puis ajoute-les', fait: (b) => S.book.length > b.livre,
-    cible: () => ($('#kitchoix [aria-pressed="true"]') ? '#chargerkits' : '#kitchoix'),
-    texte: 'Touche un ou plusieurs kits de 10 recettes (un crochet apparaît), puis « Ajouter » : les recettes s\'écrivent dans ton classeur Google.' },
-  { groupe: 'Kits', ecran: { stock: true }, titre: 'Ton stock de base', cible: '#stock-ajouter', fait: () => !!$('#stock-voir'),
-    texte: 'Sel, huile, farine, riz… Décoche ce que tu n\'as pas, puis touche « Ajouter » : ces articles ne seront jamais sur ta liste d\'épicerie.' },
-  { groupe: '01 · Livre', ecran: { vue: 'tri', mode: 'tri' }, bulle: 'haut', titre: 'Trie tes nouvelles recettes', cible: '.tri-wrap',
-    fait: (b) => auLivre() >= b.aulivre + 3 || (S.tri.list && S.tri.idx >= S.tri.list.length),
-    texte: 'Glisse la fiche à droite (ou « Au livre ») pour la garder, à gauche pour la déclasser, vers le bas pour la retravailler. Garde-en au moins 3.' },
-  { groupe: '02 · Garde-manger', ecran: { vue: 'livre' }, info: true, titre: 'Ajoute ce qu\'il y a au frigo', cible: '#addinv',
-    texte: 'Ton stock de base est déjà là, par zone. Écris un article (« lait 2 % ») et « Ajouter » : ce que tu as ne sera pas sur ta liste d\'épicerie.' },
-  { groupe: '03 · Semaine', ecran: SEM, info: true, titre: 'Ta semaine est pigée', cible: '.daytog',
-    texte: 'Touche un jour pour l\'ajouter ou l\'enlever. Sur chaque souper : « Choisir » le prend dans ton livre, « Piger » en propose un autre, « PDF » le partage.' },
-  { groupe: '03 · Semaine', ecran: SEM, titre: 'Déplace un souper', cible: () => ($('#deplacer') ? '[data-dpenregistrer]' : '.week .day[data-jour] .dname'),
-    fait: (b) => !$('#deplacer') && planTexte() !== b.plan,
-    texte: 'Tiens un souper 2 secondes (une barre jaune se remplit), glisse-le sur un autre soir et relâche. Puis « Enregistrer ».' },
-  { groupe: '03 · Semaine', ecran: SEM, titre: 'Approuve ta semaine', cible: '#save', fait: () => S.saved && (S.planRows || []).some((r) => r['Recette id']),
-    texte: 'Touche « Approuver la semaine » : elle s\'enregistre dans ton classeur Google et ta liste d\'épicerie se prépare.' },
-  { groupe: '04 · Provigo', ecran: { vue: 'provigo' }, info: true, titre: 'Ta liste d\'épicerie est prête', cible: '.dept',
-    texte: 'Par rayon, moins ce que tu as déjà. En magasin, coche ce que tu prends. « J\'en ai » retire un article ; « Au garde-manger » le garde pour toujours.' },
-  { groupe: '05 · Au poêle', ecran: { vue: 'poele' }, titre: () => `Lundi soir : ${souper().nom}`, cible: () => `.pick [data-cook="${souper().id}"]`,
-    fait: () => S.view === 'poele' && !!S.cook?.id,
-    texte: () => `C'est le souper de ${souper().jour}. Touche-le pour allumer le rond : la recette s'ouvre étape par étape.` },
-  { groupe: '05 · Au poêle', ecran: { vue: 'poele', cuisiner: () => souper().id }, info: true, fin: true, bulle: 'bas', titre: 'Étape 1 : on cuisine !', cible: '#cook .stage',
-    texte: 'Lis l\'étape, coche ce qu\'il te faut « Pour cette étape », lance le minuteur s\'il y en a un, puis glisse vers la gauche pour la suite. Bon souper, chef !' }
-];
-export const NB_ETAPES_GUIDE = ETAPES.length;
-
-let NAV = { ecran() {} };
+let NAV = { ecran() {}, fermer() {} };
 /** app.js donne au guide de quoi ouvrir les écrans (pas d'import circulaire). */
 export function initGuide(nav) { NAV = nav; }
 
-let G = null;   // { i, base, deja, vu }
-let reduite = false;   // la bulle ne garde que sa barre (◀ ▶), pour voir ce qu'elle cachait
-let minuterie = null;
-const lire = () => { try { return JSON.parse(localStorage.getItem(CLE) || 'null'); } catch (_) { return null; } };
-const garder = () => { try { G ? localStorage.setItem(CLE, JSON.stringify({ i: G.i })) : localStorage.removeItem(CLE); } catch (_) { /* stockage absent */ } };
-const fini = () => { try { return localStorage.getItem(FIN) === '1'; } catch (_) { return false; } };
-const marquerFini = (v) => { try { v ? localStorage.setItem(FIN, '1') : localStorage.removeItem(FIN); } catch (_) { /* stockage absent */ } };
-const base = () => ({ livre: (S.book || []).length, aulivre: auLivre(), plan: planTexte() });
+let G = null;   // { i, base, deja, vu, sel, route, toucher, mime, evite }
+let reduite = false, minuterie = null, jeton = 0;
+let lent = lireCle(VITESSE) === 'lent', voix = lireCle(VOIX) === '1';
+D.setLent(lent);
+const lire = () => { try { return JSON.parse(lireCle(CLE) || 'null'); } catch (_) { return null; } };
+const garder = () => ecrireCle(CLE, G ? JSON.stringify({ id: liste()[G.i].id }) : null);
+const fini = () => lireCle(FIN) === '1';
+const marquerFini = (v) => ecrireCle(FIN, v ? '1' : null);
+const indexDe = (g) => { const id = g && (g.id || ANCIENNES[g.i]); return id ? liste().findIndex((e) => e.id === id) : -1; };
+const sansCompte = (e) => !S.ctx && e.id !== 'connexion';
+const titreDe = (e) => (sansCompte(e) ? 'Reconnecte-toi' : val(e.titre));
+const texteDe = (e) => (sansCompte(e) ? 'Touche le bouton de connexion : ta mise en place reprend là où tu étais.'
+  : S.ctx && e.id === 'connexion' ? 'C\'est fait : ton compte Google est branché.' : val(e.texte));
 
 export const guideActif = () => !!G;
-/** À la connexion : reprendre un guide en cours, ou démarrer quand le livre est vide (une fois). */
-export function guideConnexion() {
-  const g = lire();
-  if (g && ETAPES[g.i]) { aller(g.i); return; }
-  if (!S.book.length && !fini()) demarrerGuide();
+/** Au chargement de la page : reprendre un guide en cours ; une personne nouvelle (aucun compte gardé) le voit dès l'accueil. */
+export function guideDemarrage({ nouveau }) {
+  const k = indexDe(lire());
+  if (k >= 0) aller(k);
+  else if (nouveau && !fini()) aller(0);
 }
-export function demarrerGuide() { marquerFini(false); aller(0); }
-export function quitterGuide() { G = null; garder(); marquerFini(true); clearInterval(minuterie); minuterie = null; $('#guide')?.remove(); }
-/** Aller à une étape : le guide ouvre lui-même son écran. Une action déjà faite n'avance pas toute seule. */
-function aller(i) {
-  if (i >= ETAPES.length) { quitterGuide(); return; }
-  const e = ETAPES[Math.max(0, i)];
-  if (S.ctx) { try { NAV.ecran(e.ecran || {}); } catch (err) { console.warn(err); } }
+/** À la connexion : continuer le guide, ou le démarrer quand le livre est vide. Vrai si le guide prend la main. */
+export function guideConnexion() {
+  const k = G ? G.i : indexDe(lire()), id = liste()[k]?.id;
+  if (id === 'connexion' && S.book.length) { quitterGuide(); return false; }      // un livre déjà rempli : rien à mettre en place
+  if (id) { aller(id === 'connexion' ? k + 1 : k); return true; }
+  if (!S.book.length && !fini()) { aller(1); return true; }
+  return false;
+}
+/** Compte → « Lancer le guide » : déjà connecté, on part des kits. */
+export function demarrerGuide() { marquerFini(false); aller(S.ctx ? 1 : 0); }
+export function quitterGuide() {
+  jeton++; D.annuler(); taire();
+  G = null; garder(); marquerFini(true); clearInterval(minuterie); minuterie = null; $('#guide')?.remove();
+}
+
+/** Aller à une étape : le doigt fait le chemin jusqu'à son écran, puis mime le geste. Une action déjà faite n'avance pas seule. */
+function aller(i, { chemin = true } = {}) {
+  const L = liste();
+  if (i >= L.length) { quitterGuide(); return; }
+  const k = Math.max(0, i), e = L[k], j = jeton = D.nouveau();
+  taire();
   const b = base();
-  G = { i: Math.max(0, i), base: b, deja: !e.info && !!e.fait?.(b), vu: false };
+  G = { i: k, base: b, deja: !e.info && !!e.fait?.(b), vu: false, route: false };
   garder(); dessiner();
   if (!minuterie) minuterie = setInterval(tic, 250);
+  parcourir(e, j, chemin);
+}
+async function parcourir(e, j, chemin) {
+  try {
+    if (S.ctx && e.ecran) {
+      NAV.fermer(e.ecran);                                            // fiche, choix, partage… : fermés sans détour
+      if (chemin) {
+        for (let n = 0, t; n < 8 && (t = prochainToucher(e.ecran)); n++) {
+          const b = document.querySelector(t.sel);
+          if (!b || !b.getClientRects().length) break;
+          Object.assign(G, { route: true, toucher: t }); D.bouclier(true); dessiner();
+          await D.toucher(b, { j, cliquer: true, avant: (r) => { G.evite = r; tic(); } });
+        }
+      }
+      if (j !== jeton) return;
+      NAV.ecran(e.ecran);                                             // filet : l'écran voulu, même si un toucher n'a pas pris
+    }
+  } catch (err) {
+    if (err !== D.ANNULE) console.warn(err);
+    if (j !== jeton) return;
+  }
+  if (j !== jeton || !G) return;
+  D.bouclier(false);
+  G.base = base(); G.deja = !e.info && !!e.fait?.(G.base);
+  Object.assign(G, { route: false, toucher: null, evite: null, vu: false });
+  dessiner(); tic(); parler();
+  try {
+    await D.attendre(500, j);
+    const gestes = sansCompte(e) ? [] : (val(e.geste) || []).filter(Boolean);
+    G.mime = gestes.length > 0;
+    for (const g of gestes) await D.geste(g, j);
+    await D.cacher(j);                                                // sans geste aussi : le doigt ne reste pas en plan
+  } catch (err) { if (err !== D.ANNULE) console.warn(err); }
+  if (G && j === jeton) G.mime = false;
+}
+/** ↻ Revoir le chemin : l'écran de l'étape d'avant (un autre écran), puis le doigt refait le trajet et le geste. */
+function revoir() {
+  const L = liste(), e = L[G.i];
+  if (S.ctx && e.ecran) {
+    const ici = filDe(e).join('›'), avant = L.slice(0, G.i).reverse().find((x) => x.ecran && filDe(x).join('›') !== ici);
+    jeton = D.nouveau();
+    try { NAV.ecran(avant ? avant.ecran : { vue: e.ecran.vue || S.view }); } catch (err) { console.warn(err); }
+  }
+  aller(G.i);
 }
 
 /** Clics de la bulle (et du bouton de Compte) ; vrai si le bouton lui appartient. */
@@ -94,19 +124,43 @@ export function clicGuide(b) {
   if (d.gdquitter !== undefined) quitterGuide();
   else if (d.gdsuivant !== undefined || d.gdpasser !== undefined) aller(G.i + 1);
   else if (d.gdprec !== undefined) aller(G.i - 1);
+  else if (d.gdsauter !== undefined) aller(G.i, { chemin: false });
+  else if (d.gdrevoir !== undefined) revoir();
   else if (d.gdreduire !== undefined) { reduite = !reduite; dessiner(); }
+  else if (d.gdlent !== undefined) { lent = !lent; ecrireCle(VITESSE, lent ? 'lent' : null); D.setLent(lent); dessiner(); }
+  else if (d.gdvoix !== undefined) { voix = !voix; ecrireCle(VOIX, voix ? '1' : null); voix ? parler(true) : taire(); dessiner(); }
   else return false;
   return true;
 }
+// Un vrai toucher pendant que le doigt mime : le doigt s'efface et laisse faire.
+document.addEventListener('pointerdown', (ev) => {
+  if (G?.mime && !ev.target.closest?.('#guide')) { jeton = D.nouveau(); G.mime = false; }
+}, true);
+
+/* ---------- 🔊 la voix du téléphone (synthèse vocale du navigateur, rien d'externe) ---------- */
+const peutParler = () => 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+function parler(force) {
+  if (!G || !(voix || force) || !peutParler()) return;
+  const e = liste()[G.i];
+  const t = `${titreDe(e)}. ${texteDe(e)}`.replace(/[«»⋮≡✓👥]/gu, ' ').replace(/\s+/g, ' ').replace(/ ([.,])/g, '$1').trim();
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(t), fr = speechSynthesis.getVoices().filter((v) => /^fr/i.test(v.lang));
+    const v = fr.find((x) => /CA/i.test(x.lang)) || fr[0];
+    if (v) u.voice = v;
+    u.lang = v?.lang || 'fr-CA'; u.rate = lent ? 0.8 : 0.92;
+    speechSynthesis.speak(u);
+  } catch (_) { /* voix absente */ }
+}
+function taire() { try { if (peutParler()) speechSynthesis.cancel(); } catch (_) { /* voix absente */ } }
 
 /** La zone visée, si elle est à l'écran et pas cachée sous une feuille. */
 function cibleDe(e) {
-  const sel = val(e.cible);
+  const sel = sansCompte(e) ? '#connexion' : val(e.cible);
   const n = sel && document.querySelector(sel);
   if (!n) return null;
   const r = n.getBoundingClientRect();
   if (!r.width && !r.height) return null;
-  // au milieu de la partie visible (une grande zone peut dépasser l'écran)
   const H = ecranH(), W = ecranL();
   const x = (Math.max(r.left, 0) + Math.min(r.right, W)) / 2, y = (Math.max(r.top, 0) + Math.min(r.bottom, H)) / 2;
   const dessus = r.bottom > 0 && r.top < H && r.right > 0 && r.left < W ? document.elementFromPoint(x, y) : null;
@@ -116,13 +170,17 @@ function cibleDe(e) {
 function tic() {
   if (!G) return;
   const n = $('#guide'); if (!n) return;
-  const e = ETAPES[G.i];
-  n.hidden = !!$('#visite') || (!!$('#deplacer') && !/^Déplace/.test(val(e.titre)));
-  if (!S.ctx) { placer(n, null); return; }
-  if (!e.info && e.fait && !G.deja && e.fait(G.base)) { aller(G.i + 1); return; }
-  if (G.deja && e.fait && !e.fait(G.base)) G.deja = false;
-  const c = cibleDe(e);
-  const sel = val(e.cible);
+  const L = liste(), e = L[G.i];
+  n.hidden = !!$('#visite') || (!!$('#deplacer') && e.id !== 'deplacer');
+  if (n.hidden && G.mime) { jeton = D.nouveau(); G.mime = false; }
+  if (G.route) { placer(n, null); return; }
+  if (S.ctx && S.loading) return;
+  if (!sansCompte(e) && !e.info && e.fait && !G.deja && e.fait(G.base)) {
+    if (G.i < L.length - 1) { aller(G.i + 1); return; }
+    G.deja = true; dessiner();                                         // la dernière étape : « Terminer »
+  }
+  if (G.deja && e.fait && !e.fait(G.base)) { G.deja = false; dessiner(); }
+  const c = cibleDe(e), sel = sansCompte(e) ? '#connexion' : val(e.cible);
   if (G.sel !== sel) { G.sel = sel; G.vu = false; }
   if (c && !G.vu) {
     G.vu = true;
@@ -130,11 +188,10 @@ function tic() {
     const H = ecranH(), grand = c.r.height > H * 0.6;
     const aVoir = grand ? c.r.top < 60 || c.r.top > H * 0.45 : c.horsEcran || c.r.top < 70 || c.r.bottom > H - 40;
     if (aVoir) {
-      // marge de défilement : sous la barre de la feuille, ou sous l'en-tête de la page (plus haut au téléphone)
       const haut = c.n.closest('.sheet') ? 72 : Math.max(72, ($('header')?.getBoundingClientRect().height || 0) + 16);
       c.n.style.scrollMarginTop = `${Math.round(haut)}px`;
       const loin = Math.abs(c.r.top - H / 2) > H * 1.5;          // loin : on y saute ; près : on y glisse
-      c.n.scrollIntoView({ block: grand ? 'start' : 'center', behavior: loin ? 'auto' : 'smooth' });
+      c.n.scrollIntoView({ block: grand ? 'start' : 'center', behavior: loin || D.reduit() ? 'auto' : 'smooth' });
     }
   }
   placer(n, c && !c.cache ? c : null, e.bulle);
@@ -144,9 +201,13 @@ function placer(n, c, cote) {
   const anneau = n.querySelector('.gd-anneau'), bulle = n.querySelector('.gd-bulle');
   if (!anneau || !bulle) return;
   anneau.hidden = !c;
-  const H = ecranH(), W = ecranL(), bh = bulle.offsetHeight, bw = Math.min(360, W - 24);
+  n.classList.toggle('en-route', !!G?.route);
+  const H = ecranH(), W = ecranL(), bh = bulle.offsetHeight, bw = Math.min(400, W - 24);
   let top, left = Math.max(12, Math.min(W - bw - 12, c ? c.r.left + c.r.width / 2 - bw / 2 : (W - bw) / 2));
-  if (c) {
+  if (G?.route) {
+    const r = G.evite;                                                   // en chemin : la bulle laisse la place au doigt
+    top = r && r.top + r.height / 2 < H / 2 ? H - bh - 12 : 12;
+  } else if (c) {
     const m = 6;
     Object.assign(anneau.style, { top: `${c.r.top - m}px`, left: `${c.r.left - m}px`, width: `${c.r.width + 2 * m}px`, height: `${c.r.height + 2 * m}px` });
     // sous la zone, sinon au-dessus ; une zone trop haute : la bulle se met du côté où il reste le plus de place
@@ -155,30 +216,48 @@ function placer(n, c, cote) {
   } else top = H - bh - 16;
   Object.assign(bulle.style, { top: `${Math.max(8, Math.min(H - bh - 8, top))}px`, bottom: 'auto', left: `${left}px`, width: `${bw}px` });   // toujours à l'écran
 }
+
+function actions(e, dernier) {
+  if (G.route) {
+    const t = G.toucher;
+    return [el('p', { class: 'gd-route', role: 'status' }, el('span', { 'aria-hidden': 'true' }, '👆 '),
+      t ? `Je touche « ${t.nom} »${t.pour ? ` pour ${t.pour}` : ''}…` : 'J\'y vais…'),
+    el('div', { class: 'gd-acts' }, el('button', { class: 'gd-passer', type: 'button', 'data-gdsauter': '' }, 'Passer l\'animation'))];
+  }
+  if (sansCompte(e)) return [];
+  const terminer = el('button', { class: 'btn primary', type: 'button', 'data-gdsuivant': '' }, ico('check'), 'Terminer');
+  return [el('div', { class: 'gd-acts' },
+    e.info ? (dernier ? terminer : el('button', { class: 'btn primary', type: 'button', 'data-gdsuivant': '' }, 'Suivant', ico('right')))
+      : G.deja ? (dernier ? terminer : el('span', { class: 'gd-attente' }, ico('check'), 'Déjà fait : ▶ pour continuer'))
+        : el('span', { class: 'gd-attente' }, ico('play'), 'À toi de jouer'),
+    !e.info && !G.deja && el('button', { class: 'gd-passer', type: 'button', 'data-gdpasser': '' }, dernier ? 'Terminer' : 'Passer cette étape'))];
+}
 function dessiner() {
   if (!G) return;
   let n = $('#guide');
   if (!n) { n = el('div', { id: 'guide', class: 'guide' }); document.body.append(n); }
-  const e = ETAPES[G.i], sans = !S.ctx, dernier = G.i === ETAPES.length - 1;
+  const L = liste(), e = L[G.i], dernier = G.i === L.length - 1, titre = titreDe(e);
+  const fil = ['Accueil', ...(sansCompte(e) ? [] : filDe(e))];
   vider(n).append(
     el('div', { class: 'gd-anneau', 'aria-hidden': 'true', hidden: true }),
-    el('div', { class: `gd-bulle${reduite ? ' reduite' : ''}`, role: 'dialog', 'aria-live': 'polite', 'aria-labelledby': 'gd-h', 'data-new': '1.20.0-guide' },
+    el('div', { class: `gd-bulle${reduite ? ' reduite' : ''}`, role: 'dialog', 'aria-live': 'polite', 'aria-labelledby': 'gd-h', 'data-new': '1.23.0-doigt' },
       el('div', { class: 'gd-tete' },
         el('button', { class: 'gd-reduire', type: 'button', 'data-gdreduire': '', 'aria-expanded': String(!reduite), 'aria-label': reduite ? 'Agrandir la bulle' : 'Réduire la bulle' },
-          el('span', { class: 'label' }, reduite ? `${G.i + 1}/${ETAPES.length} · ${sans ? 'Reconnecte-toi' : val(e.titre)}` : `Mise en place · ${G.i + 1} sur ${ETAPES.length} · ${e.groupe}`), el('span', { class: 'gd-chevron', 'aria-hidden': 'true' }, reduite ? '▴' : '▾')),
+          el('span', { class: 'label' }, reduite ? `${G.i + 1}/${L.length} · ${titre}` : `${G.i + 1} sur ${L.length} · ${e.groupe}`), el('span', { class: 'gd-chevron', 'aria-hidden': 'true' }, reduite ? '▴' : '▾')),
         el('div', { class: 'gd-fleches', role: 'group', 'aria-label': 'Naviguer dans la mise en place' },
           el('button', { class: 'btn icon', type: 'button', 'data-gdprec': '', disabled: G.i === 0, 'aria-label': 'Étape précédente' }, ico('left')),
           el('button', { class: 'btn icon', type: 'button', 'data-gdsuivant': '', disabled: dernier, 'aria-label': 'Étape suivante' }, ico('right')),
           el('button', { class: 'btn icon', type: 'button', 'data-gdquitter': '', 'aria-label': 'Quitter la mise en place guidée' }, '×'))),
-      el('div', { class: 'gd-barre', 'aria-hidden': 'true' }, el('i', { style: `width:${Math.round(((G.i + 1) / ETAPES.length) * 100)}%` })),
-      el('h3', { id: 'gd-h' }, sans ? 'Reconnecte-toi' : val(e.titre)),
-      el('p', {}, sans ? 'pour continuer ta mise en place là où tu étais.' : val(e.texte)),
-      !sans && el('div', { class: 'gd-acts' },
-        e.info ? el('button', { class: 'btn primary', type: 'button', 'data-gdsuivant': '' }, e.fin ? [ico('check'), 'Terminer'] : ['Suivant', ico('right')])
-          : G.deja ? el('span', { class: 'gd-attente' }, ico('check'), 'Déjà fait : ▶ pour continuer')
-            : el('span', { class: 'gd-attente' }, ico('play'), 'À toi de jouer'),
-        !e.info && !G.deja && el('button', { class: 'gd-passer', type: 'button', 'data-gdpasser': '' }, 'Passer cette étape'))));
-  placer(n, sans ? null : (() => { const c = cibleDe(e); return c && !c.cache ? c : null; })(), e.bulle);
+      el('div', { class: 'gd-barre', 'aria-hidden': 'true' }, el('i', { style: `width:${Math.round(((G.i + 1) / L.length) * 100)}%` })),
+      el('p', { class: 'gd-fil', 'aria-label': `Chemin : ${fil.join(', puis ')}` }, fil.map((x, k) => [k > 0 && el('span', { class: 'gd-sep', 'aria-hidden': 'true' }, '›'), el('span', {}, x)])),
+      el('h3', { id: 'gd-h' }, titre),
+      !G.route && el('p', { class: 'gd-texte' }, texteDe(e)),
+      ...actions(e, dernier),
+      el('div', { class: 'gd-outils', role: 'group', 'aria-label': 'Aides' },
+        !G.route && el('button', { class: 'btn', type: 'button', 'data-gdrevoir': '', 'aria-label': 'Revoir le chemin' }, '↻ Revoir'),
+        peutParler() && el('button', { class: 'btn', type: 'button', 'data-gdvoix': '', 'aria-pressed': String(voix) }, voix ? '🔊 Voix' : '🔈 Écouter'),
+        el('button', { class: 'btn', type: 'button', 'data-gdlent': '', 'aria-pressed': String(lent) }, 'Plus lent'))));
+  placer(n, G.route ? null : (() => { const c = cibleDe(e); return c && !c.cache ? c : null; })(), e.bulle);
 }
 window.addEventListener('resize', () => G && tic());
-document.addEventListener('scroll', () => G && tic(), true);
+document.addEventListener('scroll', () => G && !G.route && tic(), true);

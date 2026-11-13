@@ -9,11 +9,9 @@ window.google = { accounts: { oauth2: {
   revoke: (j, cb) => cb && cb()
 } } };`;
 
-export async function brancher(page, { clientId = 'client-test.apps.googleusercontent.com', ia, visite = false, guide = false } = {}) {
+export async function brancher(page, { clientId = 'client-test.apps.googleusercontent.com', ia, guide = false } = {}) {
   const sim = creerDriveSimule();
-  // D-G-047 : la visite guidée est déjà vue dans les tests, sauf ceux qui la testent.
-  if (!visite) await page.addInitScript(() => { try { localStorage.setItem('superchef-visite', 'cachee'); } catch (_) {} });
-  // D-G-051 : la mise en place guidée est déjà faite, sauf pour les tests qui la suivent.
+  // D-G-051, D-G-056 : la mise en place guidée (dès l'accueil) est déjà faite, sauf pour les tests qui la suivent.
   if (!guide) await page.addInitScript(() => { try { localStorage.setItem('superchef-guide-fin', '1'); } catch (_) {} });
   const sorties = [];
   await page.route('**/*', async (route) => {

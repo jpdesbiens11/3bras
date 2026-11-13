@@ -1,5 +1,5 @@
 // État et constantes partagés, repris de Gordon Rams.ai.
-import { el } from './el.js?v=1.22.1';
+import { el } from './el.js?v=1.23.0';
 
 export const DAYS = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 export const BASE_DAYS = 4; // dimanche au mercredi par défaut ; jeudi à samedi au besoin
@@ -29,7 +29,7 @@ export const S = {
   view: 'semaine',
   cook: { id: null, data: null, idx: 0, loading: false, err: null },
   timers: {}, wake: null, pages: {},
-  tri: { list: null, idx: 0, loading: false, last: null }, lib: { mode: 'browse', q: '', type: 'Tous', statut: 'Tous' },
+  tri: { list: null, idx: 0, loading: false, last: null }, lib: { mode: 'browse', q: '', type: 'Tous', statut: 'Tous', cuisine: 'Toutes' },
   inv: { items: null, loading: false },
   prov: { lines: null, loading: false, checked: {} }, have: new Set(),
   bil: { items: null, loading: false, form: {}, done: {} },
