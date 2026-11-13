@@ -1,11 +1,11 @@
-/* Mise en place guidée (D-G-051) : projecteur sur la partie de l'interface et bulle, au-dessus des feuilles. */
+/* Mise en place guidée (D-G-051, D-G-056) : projecteur sur la partie de l'interface, bulle en gros caractères et doigt qui fait le chemin. */
 .guide{position:fixed;inset:0;z-index:55;pointer-events:none}
 .guide[hidden]{display:none}
 .gd-anneau{position:fixed;border-radius:calc(var(--radius) + 4px);pointer-events:none;
   box-shadow:0 0 0 4px var(--jaune,#ffd23f),0 0 0 7px var(--fg),0 0 0 9999px rgba(15,23,32,.32);animation:gd-pouls 1.8s ease-in-out infinite}
 .gd-anneau[hidden]{display:none}
 @keyframes gd-pouls{50%{box-shadow:0 0 0 7px var(--jaune,#ffd23f),0 0 0 10px var(--fg),0 0 0 9999px rgba(15,23,32,.32)}}
-.gd-bulle{position:fixed;pointer-events:auto;width:min(360px,calc(100vw - 24px));left:12px;bottom:16px;background:var(--card,#fff);color:var(--fg);border:2px solid var(--line-strong);border-radius:var(--radius);
+.gd-bulle{position:fixed;pointer-events:auto;width:min(400px,calc(100vw - 24px));left:12px;bottom:16px;background:var(--card,#fff);color:var(--fg);border:2px solid var(--line-strong);border-radius:var(--radius);
   box-shadow:4px 4px 0 var(--line-strong);padding:10px 14px 12px;display:grid;gap:6px;box-sizing:border-box}
 .gd-bulle.reduite>:not(.gd-tete){display:none}
 .gd-reduire{min-width:0;width:100%;overflow:hidden;display:flex;align-items:center;gap:6px;background:none;border:0;padding:0;margin:0;cursor:pointer;font:inherit;color:inherit;text-align:left;min-height:34px}
@@ -15,9 +15,9 @@
 .gd-tete .label{min-width:0;font-size:.72rem}
 .gd-barre{height:5px;border-radius:3px;background:var(--doux,var(--line));overflow:hidden}
 .gd-barre i{display:block;height:100%;background:var(--jaune,var(--accent))}
-.gd-bulle h3{margin:2px 0 0;font-size:1.15rem;text-transform:none;letter-spacing:0}
-.gd-bulle p{margin:0;color:var(--muted);font-size:.95rem;line-height:1.4}
-.gd-acts{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+.gd-bulle h3{margin:2px 0 0;font-size:1.32rem;line-height:1.25;text-transform:none;letter-spacing:0}
+.gd-bulle p{margin:0;color:var(--fg);font-size:1.08rem;line-height:1.45}
+.gd-acts{display:flex;align-items:center;gap:4px 14px;flex-wrap:wrap}
 .gd-attente{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--accent)}
 .gd-attente .ico{width:16px;height:16px}
 .gd-passer{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit;min-height:var(--tap)}
@@ -27,3 +27,22 @@
 .gd-fleches .btn.icon{min-height:34px;min-width:34px;padding:0}
 .gd-fleches .btn.icon[disabled]{opacity:.35}
 .gd-fleches .ico{width:16px;height:16px}
+/* D-G-056 : fil d'Ariane depuis l'accueil, toucher en cours, aides (Revoir, Écouter, Plus lent) */
+.gd-bulle .gd-fil{display:flex;flex-wrap:wrap;align-items:center;gap:2px 6px;font-size:.84rem;line-height:1.3;color:var(--muted)}
+.gd-fil span:last-child{color:var(--fg);font-weight:700}
+.gd-fil .gd-sep{color:var(--muted);font-weight:400}
+.gd-bulle .gd-route{font-weight:700;color:var(--accent-ink,var(--accent));font-size:1.1rem}
+.gd-outils{display:flex;gap:6px;flex-wrap:nowrap;border-top:1px solid var(--line);padding-top:8px;margin-top:2px}
+.gd-outils .btn{flex:1 1 auto;min-height:44px;min-width:0;padding:0 6px;font-size:.88rem;gap:4px;white-space:nowrap}
+.gd-outils .btn[aria-pressed="true"]{background:color-mix(in srgb,var(--jaune,#ffd23f) 45%,transparent);border-color:var(--fg);font-weight:700}
+.guide.en-route .gd-bulle{transition:top .25s ease,left .25s ease}
+/* le doigt (au-dessus de tout), son onde, le bouton qu'il touche, et l'écran qui attend pendant le chemin */
+#gd-doigt{position:fixed;left:0;top:0;z-index:57;width:52px;height:58px;pointer-events:none;opacity:0;transition:opacity .15s ease;will-change:transform}
+#gd-doigt.vu{opacity:1}
+#gd-doigt svg{position:relative;display:block;width:52px;height:58px;transform-origin:17px 3px;filter:drop-shadow(2px 3px 0 rgba(15,23,32,.35));overflow:visible}
+#gd-doigt .gd-main{fill:#fff;stroke:#26323f;stroke-width:2.2;stroke-linejoin:round}
+#gd-doigt .gd-pli{fill:none;stroke:#26323f;stroke-width:1.6;stroke-linecap:round}
+#gd-doigt .gd-onde{position:absolute;left:-5px;top:-19px;width:44px;height:44px;box-sizing:border-box;border-radius:50%;border:4px solid var(--jaune,#ffd23f);box-shadow:0 0 0 2px #26323f;opacity:0;pointer-events:none}
+.gd-vise{outline:4px solid var(--jaune,#ffd23f) !important;outline-offset:2px;box-shadow:0 0 0 8px rgba(38,50,63,.85) !important}
+#gd-bouclier{position:fixed;inset:0;z-index:54;cursor:progress;background:transparent}
+@media (prefers-reduced-motion:reduce){#gd-doigt{transition:none}.guide.en-route .gd-bulle{transition:none}}

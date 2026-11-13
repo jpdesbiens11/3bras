@@ -113,8 +113,8 @@ test('D-G-030 : le compte et le thème gardés sous l\'ancien nom sont repris', 
   await expect(page.getByRole('heading', { name: 'Content de te revoir' })).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-skin', 'ardoise');
   const cles = await page.evaluate(() => Object.keys(localStorage).sort());
-  // superchef-theme-defaut : bascule unique vers Carnet (D-G-046) ; superchef-visite : posée par brancher (D-G-047).
-  expect(cles).toEqual(['superchef-compte', 'superchef-guide-fin', 'superchef-skin', 'superchef-theme-defaut', 'superchef-visite']);
+  // superchef-theme-defaut : bascule unique vers Carnet (D-G-046) ; superchef-guide-fin : posée par brancher (D-G-051).
+  expect(cles).toEqual(['superchef-compte', 'superchef-guide-fin', 'superchef-skin', 'superchef-theme-defaut']);
 });
 
 test('ID client absent : message clair', async ({ page }) => {
@@ -764,5 +764,28 @@ test('D-G-055 : Gemini montre son progrès, on peut l\'arrêter, et les choix se
   await expect(page.locator('#gen-avance')).toContainText(/^Arrêté : [1-4] recettes? gardées?\./);
   await expect(page.locator('#gen-gemini')).toBeEnabled();
   expect(await page.locator('#gen-liste [data-genpick]').count()).toBeGreaterThan(0);
+  expect(erreurs).toEqual([]);
+});
+
+test('D-G-056 : 01 Livre → Parcourir, filtre par cuisine (seulement celles du livre, avec « Sans cuisine »)', async ({ page }, info) => {
+  const cuis = ['Québécoise', 'Méditerranéenne', 'Asiatique', '', 'Méditerranéenne', 'Italienne', 'Québécoise', '', ''];
+  const livre = { ...LIVRE, recettes: LIVRE.recettes.map((r, k) => (cuis[k] ? { ...r, Cuisine: cuis[k] } : r)) };
+  const { erreurs } = await demarrer(page, { livre });
+  await page.locator('[data-go="tri"]').click();
+  const f = page.locator('#lib-cuis');
+  await expect(f.getByRole('button')).toHaveText(['Toutes 9', 'Québécoise 2', 'Italienne 1', 'Asiatique 1', 'Méditerranéenne 2', 'Sans cuisine 3']);
+  await expect(f.getByRole('button', { name: 'Toutes 9' })).toHaveAttribute('aria-pressed', 'true');
+  await f.getByRole('button', { name: /^Méditerranéenne/ }).click();
+  await expect(f.getByRole('button', { name: /^Méditerranéenne/ })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#liblist .pickrow b')).toHaveText(['Porc souvlaki test', 'Poulet au citron test']);
+  await expect(page.locator('#liblist .pickrow').first()).toContainText('Méditerranéenne');
+  await page.screenshot({ path: `tests/captures/${info.project.name}-livre-cuisine.png` });
+  await page.locator('[data-libstat="À trier"]').click();                              // se combine avec les autres filtres
+  await expect(page.locator('#liblist .pickrow')).toHaveCount(0);
+  await page.locator('[data-libstat="Tous"]').click();
+  await f.getByRole('button', { name: /^Sans cuisine/ }).click();
+  await expect(page.locator('#liblist .pickrow')).toHaveCount(3);
+  await f.getByRole('button', { name: /^Toutes/ }).click();
+  await expect(page.locator('#liblist .pickrow')).toHaveCount(9);
   expect(erreurs).toEqual([]);
 });

@@ -1,11 +1,9 @@
 // Visite guidée (D-G-047) : les fonctions de l'app dans l'ordre où on s'en sert, en petites scènes dessinées
-// au trait (SVG animé en CSS, aucune bibliothèque, P-1). Elle s'ouvre à chaque chargement de la page (rechargement
-// compris, 1.18.0) tant que « Ne plus montrer » n'est pas coché (gardé sur l'appareil) ; « Visite guidée » à l'accueil
-// et Compte → « Revoir la visite » la relancent.
-import { $ } from '../etat.js?v=1.22.1';
-import { el, ico, vider } from '../el.js?v=1.22.1';
+// au trait (SVG animé en CSS, aucune bibliothèque, P-1). Depuis 1.23.0 (D-G-056), elle ne s'ouvre plus seule : la mise
+// en place guidée part de l'accueil ; « Visite guidée » à l'accueil et Compte → « Revoir la visite » l'ouvrent.
+import { $ } from '../etat.js?v=1.23.0';
+import { el, ico, vider } from '../el.js?v=1.23.0';
 
-const CLE = 'superchef-visite';
 const NS = 'http://www.w3.org/2000/svg';
 function s(tag, a = {}, ...kids) {
   const n = document.createElementNS(NS, tag);
@@ -73,11 +71,6 @@ const SCENES = [
 ];
 export const NB_SCENES = SCENES.length;
 
-const lire = (st, k) => { try { return st.getItem(k); } catch (_) { return null; } };
-export const visiteCachee = () => lire(localStorage, CLE) === 'cachee';
-export const peutMontrerVisite = () => !visiteCachee();
-export function cacherVisite(on) { try { on ? localStorage.setItem(CLE, 'cachee') : localStorage.removeItem(CLE); } catch (_) { /* stockage absent */ } }
-
 let V = null; // { i }
 export const visiteOuverte = () => !!V;
 export function openVisite(i = 0) { V = { i: 0 }; allerScene(i); }
@@ -104,7 +97,6 @@ export function allerScene(i) {
         el('button', { class: 'btn', type: 'button', 'data-vispas': '-1', disabled: V.i === 0 }, ico('left'), 'Précédent'),
         dernier ? el('button', { class: 'btn primary', type: 'button', 'data-visclose': '' }, ico('check'), 'C\'est parti')
           : el('button', { class: 'btn primary', type: 'button', 'data-vispas': '1' }, 'Suivant', ico('right'))),
-      el('label', { class: 'vis-plus' }, el('input', { type: 'checkbox', id: 'vis-plus', checked: visiteCachee() }), 'Ne plus montrer cette visite'),
       !dernier && el('button', { class: 'vis-passer', type: 'button', 'data-visclose': '' }, 'Passer la visite')));
   n.scrollTop = 0;
 }

@@ -1,0 +1,30 @@
+{
+  "version": "1.23.0",
+  "date": "2026-11-13",
+  "mvp": "SuperChef.ai — le guide montre le chemin du doigt, dès l'accueil",
+  "requis": [
+    "R-01",
+    "R-03",
+    "R-07"
+  ],
+  "nouveautes": [
+    "Un doigt fait le chemin à l'écran, comme une personne qui navigue : il va au bouton, l'allume, appuie et le touche (environ 1 seconde par toucher). On voit enfin comment se rendre à chaque écran (👥 Compte, 01 Livre, Trier…).",
+    "Le doigt mime ensuite le geste à faire, sans rien écrire : glisser la fiche à droite, tenir un souper 2 secondes, toucher « Ajouter »…",
+    "15 étapes dès l'accueil : connexion Google, kits, stock de base, tes propres recettes, tri, garde-manger, semaine, déplacer, approuver, Provigo, garder l'app sur le téléphone, puis Au poêle jusqu'à l'étape 2 et « Adapter avec Gemini ».",
+    "Bulle en plus gros caractères, une action par étape, fil d'Ariane depuis l'accueil, « ↻ Revoir », « 🔈 Écouter » (la voix du téléphone lit l'étape) et « Plus lent » (2 secondes par toucher).",
+    "La visite dessinée ne s'ouvre plus à chaque chargement : bouton « Visite guidée » à l'accueil et dans Compte.",
+    "Livre → Parcourir : nouveau filtre par cuisine (Québécoise, Mexicaine, Indienne…), avec le nombre de recettes de chacune.",
+    "Icône SuperChef.ai sur l'écran d'accueil du téléphone."
+  ],
+  "decisions": [
+    "D-G-056"
+  ],
+  "tests": {
+    "unitaires": 78,
+    "bout_en_bout": 63,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}

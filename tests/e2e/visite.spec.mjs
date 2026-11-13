@@ -1,4 +1,4 @@
-// D-G-047 : visite guidée à l'ouverture, « Ne plus montrer », « Revoir la visite » ; D-G-046 : thème Carnet par défaut.
+// D-G-047, D-G-056 : visite dessinée sur demande (accueil, « Revoir la visite ») ; D-G-046 : thème Carnet par défaut.
 import { test, expect } from '@playwright/test';
 import { brancher } from './outils.mjs';
 import { LIVRE } from './fixture.mjs';
@@ -10,14 +10,20 @@ function surveiller(page) {
   return erreurs;
 }
 
-test('D-G-047 : la visite s\'ouvre, se parcourt et ne revient plus une fois cochée', async ({ page }, info) => {
+test('D-G-056 : la visite ne s\'ouvre plus seule ; « Visite guidée » l\'ouvre et elle se parcourt', async ({ page }, info) => {
   const P = info.project.name, erreurs = surveiller(page);
-  await brancher(page, { visite: true });
+  await brancher(page);
+  await page.addInitScript(() => { try { localStorage.setItem('superchef-visite', 'cachee'); } catch (_) {} });   // clé de 1.16 à 1.22
   await page.goto('./');
+  await expect(page.getByRole('button', { name: 'Se connecter avec Google' })).toBeVisible();
+  await expect(page.locator('#visite')).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem('superchef-visite'))).toBeNull();   // l'ancienne clé est retirée
+  await page.getByRole('button', { name: 'Visite guidée' }).click();
   const v = page.getByRole('dialog', { name: 'Bienvenue dans SuperChef.ai' });
   await expect(v).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-skin', 'carnet');      // D-G-046 : Carnet par défaut
   await expect(page.locator('#visite .vis-points button')).toHaveCount(9);
+  await expect(page.getByLabel('Ne plus montrer cette visite')).toHaveCount(0);
   await page.screenshot({ path: `tests/captures/${P}-visite-1.png` });
 
   // Suivant / Précédent / flèches du clavier / points
@@ -35,37 +41,21 @@ test('D-G-047 : la visite s\'ouvre, se parcourt et ne revient plus une fois coch
   await page.getByRole('button', { name: /Scène 9 :/ }).click();
   await expect(page.getByRole('button', { name: 'Suivant' })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Passer la visite' })).toHaveCount(0);
-
-  // Sans cocher : fermée, mais elle revient au prochain chargement, rechargement compris (Ctrl+Maj+R, 1.18.0).
   await page.getByRole('button', { name: 'C\'est parti' }).click();
   await expect(page.locator('#visite')).toHaveCount(0);
   await page.reload();
-  await expect(page.locator('#visite')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Se connecter avec Google' })).toBeVisible();
+  await expect(page.locator('#visite')).toHaveCount(0);                            // pas à chaque chargement
+  await page.getByRole('button', { name: 'Visite guidée' }).click();
   await page.getByRole('button', { name: 'Passer la visite' }).click();
-  await page.getByRole('button', { name: 'Visite guidée' }).click();               // relancée depuis l'accueil
-  await expect(page.getByRole('dialog', { name: 'Bienvenue dans SuperChef.ai' })).toBeVisible();
-  await page.keyboard.press('Escape');
-  const p2 = await page.context().newPage();
-  await brancher(p2, { visite: true });
-  await p2.goto('./');
-  await expect(p2.locator('#visite')).toBeVisible();
-  await p2.getByLabel('Ne plus montrer cette visite').check();
-  await p2.keyboard.press('Escape');
-  await expect(p2.locator('#visite')).toHaveCount(0);
-  expect(await p2.evaluate(() => localStorage.getItem('superchef-visite'))).toBe('cachee');
-  const p3 = await page.context().newPage();
-  await brancher(p3, { visite: true });
-  await p3.goto('./');
-  await expect(p3.getByRole('button', { name: 'Se connecter avec Google' })).toBeVisible();
-  await expect(p3.locator('#visite')).toHaveCount(0);
+  await expect(page.locator('#visite')).toHaveCount(0);
   expect(erreurs).toEqual([]);
 });
 
-test('D-G-047 : « Revoir la visite » dans Compte, « Passer la visite » la ferme', async ({ page }) => {
+test('D-G-047 : « Revoir la visite » dans Compte, « Fermer la visite » la ferme', async ({ page }) => {
   const erreurs = surveiller(page);
-  await brancher(page, { visite: true });
+  await brancher(page);
   await page.goto('./');
-  await page.getByRole('button', { name: 'Passer la visite' }).click();
   await expect(page.locator('#visite')).toHaveCount(0);
   await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
   await expect(page.locator('#comptesheet')).toBeVisible();

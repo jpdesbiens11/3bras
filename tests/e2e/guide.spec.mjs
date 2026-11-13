@@ -1,24 +1,32 @@
-// D-G-051, D-G-053 : la mise en place guidée, après la connexion Google : le guide ouvre lui-même chaque écran,
-// encadre ce qui est visible, ◀ ▶ pour naviguer ; des kits à la liste du Provigo.
+// D-G-051, D-G-053, D-G-056 : la mise en place guidée, de l'accueil (connexion Google) à l'étape 2 du souper de lundi.
+// Un doigt fait le chemin à l'écran (≈ 1 s par toucher) en touchant les vrais boutons, puis mime le geste à faire ;
+// ◀ ▶ pour naviguer, « Revoir le chemin », « Écouter », « Plus lent ».
 import { test, expect } from '@playwright/test';
 import { brancher } from './outils.mjs';
 
-async function connecter(page, opts = {}) {
+test.setTimeout(150000);
+const IA = { apiKey: 'AIza-test', projectId: 'projet-test', appId: '1:2:web:3', recaptcha: 'cle-site-test', modele: 'gemini-3.5-flash', modeleRapide: 'gemini-3.5-flash-lite' };
+async function ouvrir(page, opts = {}) {
   const erreurs = [];
   page.on('pageerror', (e) => erreurs.push(e.message));
   page.on('console', (m) => { if (m.type() === 'error') erreurs.push(m.text()); });
   const b = await brancher(page, { guide: true, ...opts });
   await page.goto('./');
-  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
-  await expect(page.locator('#comptesheet')).toBeVisible();
   return { ...b, erreurs };
 }
 const bulle = (page) => page.locator('.gd-bulle');
 let nCapture = 0;
 async function etape(page, titre) {
   await expect(bulle(page).getByRole('heading')).toHaveText(titre);
-  if (process.env.GUIDE_CAPTURES) { await page.waitForTimeout(700); await page.screenshot({ path: `${process.env.GUIDE_CAPTURES}/${String(++nCapture).padStart(2, '0')}.png` }); }
+  await expect(bulle(page).locator('.gd-texte')).toBeVisible({ timeout: 15000 });   // le doigt est arrivé
+  if (process.env.GUIDE_CAPTURES) { await page.waitForTimeout(900); await page.screenshot({ path: `${process.env.GUIDE_CAPTURES}/${String(++nCapture).padStart(2, '0')}.png` }); }
 }
+/** Le doigt touche ce bouton en chemin : la bulle le dit et le doigt est à l'écran. */
+async function touche(page, nom) {
+  await expect(bulle(page).locator('.gd-route')).toContainText(`Je touche « ${nom} »`, { timeout: 15000 });
+  await expect(page.locator('#gd-doigt.vu')).toHaveCount(1);
+}
+const fil = (page) => bulle(page).locator('.gd-fil');
 const suivant = (page) => bulle(page).getByRole('button', { name: 'Étape suivante' }).click();
 const precedent = (page) => bulle(page).getByRole('button', { name: 'Étape précédente' }).click();
 
@@ -36,56 +44,74 @@ async function entoure(page, sel) {
   })).toBe(true);                                                                       // le guide fait défiler jusqu'à elle
 }
 
-test('D-G-053 : 10 étapes qui ouvrent chaque écran, des kits à l\'étape 1 du souper de lundi', async ({ page }, info) => {
+test('D-G-056 : 15 étapes de l\'accueil à l\'étape 2 de lundi, le doigt fait chaque chemin', async ({ page }, info) => {
   const P = info.project.name;
-  const { sim, erreurs } = await connecter(page);
-  await etape(page, 'Choisis tes kits, puis ajoute-les');
-  await expect(bulle(page)).toContainText('Mise en place · 1 sur 10 · Kits');
+  const { sim, erreurs } = await ouvrir(page, { ia: IA });
+  // 1 : dès l'accueil, avant Google ; la visite dessinée ne s'ouvre plus seule.
+  await etape(page, 'Connecte-toi avec Google');
+  await expect(page.locator('#visite')).toHaveCount(0);
+  await expect(bulle(page)).toContainText('1 sur 15 · Accueil');
+  await expect(fil(page)).toHaveText('Accueil');
+  await entoure(page, '#connexion');
   await expect(bulle(page).getByRole('button', { name: 'Étape précédente' })).toBeDisabled();
+  await page.screenshot({ path: `tests/captures/${P}-guide-accueil.png` });
+  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
+
+  // 2 : le doigt touche lui-même 👥 Compte (Compte ne s'ouvre plus d'office).
+  await touche(page, '👥 Compte');
+  await etape(page, 'Choisis tes kits de recettes');
+  await expect(page.locator('#comptesheet')).toBeVisible();
+  await expect(fil(page)).toHaveText('Accueil›👥 Compte');
   await entoure(page, '#kitchoix');
-  await page.screenshot({ path: `tests/captures/${P}-guide-kits.png` });
-  // ▾ réduit la bulle à sa barre (◀ ▶ restent), ▴ la rouvre
-  await bulle(page).getByRole('button', { name: 'Réduire la bulle' }).click();
-  await expect(bulle(page).locator('h3')).toBeHidden();
-  await expect(bulle(page).getByRole('button', { name: 'Étape suivante' })).toBeVisible();
-  await bulle(page).getByRole('button', { name: 'Agrandir la bulle' }).click();
-  await expect(bulle(page).locator('h3')).toBeVisible();
   await page.locator('[data-kit="survie"]').click();
-  await entoure(page, '#chargerkits');                                               // un kit coché : le guide montre « Ajouter »
+  await entoure(page, '#chargerkits');
   await page.locator('#chargerkits').click();
-  // 2 : le guide ouvre lui-même la feuille du stock de base.
+
+  // 3 : « Choisir mon stock de base », touché dans Compte.
+  await touche(page, 'Choisir mon stock de base');
   await etape(page, 'Ton stock de base');
   await expect(page.locator('#stocksheet')).toBeVisible();
+  await expect(fil(page)).toHaveText('Accueil›👥 Compte›Stock de base');
   await entoure(page, '#stock-ajouter');
+  // 4 : ← ferme le stock, ← ferme Compte, + Recette : 3 touchers, environ 1 seconde chacun.
+  const t0 = Date.now();
   await page.locator('#stock-ajouter').click();
-
-  // 3 : il ferme les feuilles et ouvre le Livre en mode Trier.
-  await etape(page, 'Trie tes nouvelles recettes');
+  await touche(page, '←');
+  await touche(page, '+ Recette');
+  await etape(page, 'Tes recettes à toi');
+  const duree = Date.now() - t0;
+  expect(duree).toBeGreaterThan(2400);
+  expect(duree).toBeLessThan(7000);
+  await expect(page.locator('#addsheet')).toBeVisible();
   await expect(page.locator('#comptesheet')).toHaveCount(0);
+  await entoure(page, '#addsheet .pick');
+  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
+
+  // 5 : ← ferme l'ajout, 01 Livre, Trier ; le doigt mime le glisser (la fiche suit, puis revient : rien n'est trié).
+  await touche(page, '01 Livre');
+  await touche(page, 'Trier');
+  await etape(page, 'Trie tes recettes');
   await expect(page.locator('[data-go="tri"]')).toHaveAttribute('aria-current', 'page');
   await expect(page.locator('[data-libmode="tri"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#trihint')).toHaveText('Au livre', { timeout: 5000 });
+  await expect(page.locator('#trihint')).toHaveText('');
+  await expect(page.locator('.tri-count')).toHaveText(/^1 sur/);
   await entoure(page, '.tri-wrap');
-  await page.screenshot({ path: `tests/captures/${P}-guide-trier.png` });
-  // ◀ rouvre la feuille du stock (elle n'avance pas seule), ▶ revient au tri
-  await precedent(page);
-  await etape(page, 'Ton stock de base');
-  await expect(page.locator('#stocksheet')).toBeVisible();
-  await page.waitForTimeout(600);
-  await etape(page, 'Ton stock de base');
-  await suivant(page);
-  await expect(page.locator('#stocksheet')).toHaveCount(0);
-  await etape(page, 'Trie tes nouvelles recettes');
   for (let k = 0; k < 3; k++) await page.locator('[data-decide="Au livre"]').click();
 
-  await etape(page, 'Ajoute ce qu\'il y a au frigo');
-  await expect(page.locator('[data-go="livre"]')).toHaveAttribute('aria-current', 'page');
+  await touche(page, '02 Garde-manger');
+  await etape(page, 'Ce qu\'il y a dans ton frigo');
   await entoure(page, '#addinv');
-  await suivant(page);
-  await etape(page, 'Ta semaine est pigée');
-  await expect(page.locator('[data-go="semaine"]')).toHaveAttribute('aria-current', 'page');
+  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
+  await touche(page, '03 Semaine');
+  await etape(page, 'Tes soupers de la semaine');
   await entoure(page, '.daytog');
   await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
-  await etape(page, 'Déplace un souper');
+  // 8 : même écran, pas de chemin ; le doigt tient un souper 2 s (la barre jaune se remplit), sans rien déplacer.
+  await etape(page, 'Change un souper de soir');
+  await expect(page.locator('.week .day.tenir')).toHaveCount(1, { timeout: 5000 });
+  await expect(page.locator('#deplacer')).toHaveCount(0);
+  await expect(page.locator('.week .day.tenir')).toHaveCount(0, { timeout: 5000 });
   await page.locator('#deplacer-btn').click();
   await entoure(page, '[data-dpenregistrer]');
   await page.locator('#deplacer [data-dpjour="0"]').click();
@@ -95,40 +121,112 @@ test('D-G-053 : 10 étapes qui ouvrent chaque écran, des kits à l\'étape 1 du
   await entoure(page, '#save');
   await page.locator('#save').click();
 
+  await touche(page, '04 Provigo');
   await etape(page, 'Ta liste d\'épicerie est prête');
-  await expect(page.locator('[data-go="provigo"]')).toHaveAttribute('aria-current', 'page');
   await entoure(page, '.dept');
-  await suivant(page);
-  // 9 : Au poêle, le souper de lundi est encadré ; on le touche.
-  const lundi = (await page.evaluate(() => [...document.querySelectorAll('.pick [data-cook]')].find((b) => /^Lun/.test(b.textContent))?.dataset.cook));
-  expect(lundi).toBeTruthy();
+  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
+  // 11 : garder l'app sur le téléphone (le menu du navigateur, hors de la page).
+  await etape(page, 'Garde l\'app sur ton téléphone');
+  await expect(bulle(page)).toContainText(P === 's25' ? 'trois points ⋮ en haut à droite' : 'Ctrl + D');
+  await expect(fil(page)).toHaveText('Accueil›Menu du navigateur');
+  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
+
+  // 12 : 05 Au poêle, le souper de lundi est encadré ; on le touche.
+  await touche(page, '05 Au poêle');
   await expect(bulle(page).getByRole('heading')).toHaveText(/^Lundi soir : /);
-  await expect(page.locator('[data-go="poele"]')).toHaveAttribute('aria-current', 'page');
+  await expect(bulle(page).locator('.gd-texte')).toBeVisible();
+  const lundi = await page.evaluate(() => [...document.querySelectorAll('.pick [data-cook]')].find((b) => /^Lun/.test(b.textContent))?.dataset.cook);
+  expect(lundi).toBeTruthy();
   await entoure(page, `.pick [data-cook="${lundi}"]`);
   await page.locator(`.pick [data-cook="${lundi}"]`).click();
-  // 10 : l'étape 1 de la recette, encadrée.
-  await etape(page, 'Étape 1 : on cuisine !');
+  await etape(page, 'Étape 1 : lis et prépare');
   await expect(page.locator('#cook .step-no')).toHaveText(/^Étape 1 sur/);
-  await expect(page.locator(`.pick [data-cook="${lundi}"]`)).toHaveAttribute('aria-pressed', 'true');
   await entoure(page, '#cook .stage');
-  await expect(bulle(page)).toContainText('10 sur 10');
-  await expect(bulle(page).getByRole('button', { name: 'Étape suivante' })).toBeDisabled();
   await page.screenshot({ path: `tests/captures/${P}-guide-poele.png` });
+  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
+  // 14 : le minuteur (s'il y en a un), puis l'étape 2.
+  await etape(page, 'Le minuteur, puis l\'étape 2');
+  await entoure(page, '#cook .cook-nav');
+  await page.locator('#next').click();
+  await etape(page, 'Il te manque un ingrédient ?');
+  await expect(page.locator('#cook .step-no')).toHaveText(/^Étape 2 sur/);
+  await entoure(page, '#cook [data-adapt]');
+  await expect(bulle(page)).toContainText('15 sur 15');
+  await expect(bulle(page).getByRole('button', { name: 'Étape suivante' })).toBeDisabled();
   await bulle(page).getByRole('button', { name: 'Terminer' }).click();
   await expect(page.locator('#guide')).toHaveCount(0);
+  await expect(page.locator('#gd-doigt.vu')).toHaveCount(0);
   expect(await page.evaluate(() => [localStorage.getItem('superchef-guide'), localStorage.getItem('superchef-guide-fin')])).toEqual([null, '1']);
   expect([...sim.classeurs.values()][0].onglets['Plans de semaine'].length).toBeGreaterThan(4);
   expect(erreurs).toEqual([]);
 });
 
-test('D-G-051 : passer, reprendre après un rechargement, quitter, relancer depuis Compte', async ({ page }) => {
-  const { erreurs } = await connecter(page);
-  await etape(page, 'Choisis tes kits, puis ajoute-les');
+test('D-G-056 : ◀ refait le chemin en sens inverse, « Revoir le chemin », « Passer l\'animation »', async ({ page }) => {
+  const { erreurs } = await ouvrir(page);
+  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
+  await etape(page, 'Choisis tes kits de recettes');
+  await expect(bulle(page)).toContainText('2 sur 14');                                 // sans Gemini : pas d'étape « Adapter »
   await bulle(page).getByRole('button', { name: 'Passer cette étape' }).click();
   await etape(page, 'Ton stock de base');
-  await expect(page.locator('#stocksheet')).toBeVisible();                           // ▶ ouvre l'écran suivant tout de suite
+  // Revoir : le doigt repart de Compte et retouche « Choisir mon stock de base ».
+  await bulle(page).getByRole('button', { name: 'Revoir le chemin' }).click();
+  await expect(page.locator('#stocksheet')).toHaveCount(0);
+  await touche(page, 'Choisir mon stock de base');
+  await etape(page, 'Ton stock de base');
+  await suivant(page);
+  await touche(page, '+ Recette');
+  await etape(page, 'Tes recettes à toi');
+  // ◀ : ← ferme l'ajout, puis 👥 Compte et le stock de base.
+  await precedent(page);
+  await touche(page, '👥 Compte');
+  await etape(page, 'Ton stock de base');
+  await expect(page.locator('#stocksheet')).toBeVisible();
+  await expect(page.locator('#addsheet')).toHaveCount(0);
+  // ▶ puis « Passer l'animation » : l'écran voulu tout de suite.
+  await suivant(page);
+  await bulle(page).getByRole('button', { name: 'Passer l\'animation' }).click();
+  await etape(page, 'Tes recettes à toi');
+  await expect(page.locator('#addsheet')).toBeVisible();
+  await expect(page.locator('#gd-bouclier')).toHaveCount(0);
+  expect(erreurs).toEqual([]);
+});
+
+test('D-G-056 : « Plus lent » double le temps du doigt, « Écouter » lit la bulle ; gardés sur l\'appareil', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__dit = [];
+    window.SpeechSynthesisUtterance = class { constructor(t) { this.text = t; } };
+    Object.defineProperty(window, 'speechSynthesis', { value: { speak: (u) => window.__dit.push(u.text), cancel: () => {}, getVoices: () => [{ lang: 'fr-CA', name: 'Test' }] } });
+  });
+  const { erreurs } = await ouvrir(page);
+  await bulle(page).getByRole('button', { name: '🔈 Écouter' }).click();
+  await expect.poll(() => page.evaluate(() => window.__dit.at(-1))).toMatch(/^Connecte-toi avec Google\. Touche Se connecter avec Google\. Dans la fenêtre de Google/);
+  await bulle(page).getByRole('button', { name: 'Plus lent' }).click();
+  await expect(bulle(page).getByRole('button', { name: 'Plus lent' })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
+  await etape(page, 'Choisis tes kits de recettes');
+  await expect.poll(() => page.evaluate(() => window.__dit.at(-1))).toMatch(/^Choisis tes kits de recettes\./);   // chaque étape est lue
+  await bulle(page).getByRole('button', { name: 'Passer cette étape' }).click();
+  await etape(page, 'Ton stock de base');
+  const t0 = Date.now();
+  await bulle(page).getByRole('button', { name: 'Passer cette étape' }).click();   // 3 touchers à environ 2 s
+  await touche(page, '+ Recette');
+  await etape(page, 'Tes recettes à toi');
+  expect(Date.now() - t0).toBeGreaterThan(5000);
+  expect(await page.evaluate(() => [localStorage.getItem('superchef-guide-vitesse'), localStorage.getItem('superchef-guide-voix')])).toEqual(['lent', '1']);
+  expect(erreurs).toEqual([]);
+});
+
+test('D-G-051 : reprendre après un rechargement, quitter, relancer depuis Compte', async ({ page }) => {
+  const { erreurs } = await ouvrir(page);
+  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
+  await etape(page, 'Choisis tes kits de recettes');
+  await bulle(page).getByRole('button', { name: 'Passer cette étape' }).click();
+  await etape(page, 'Ton stock de base');
   await page.reload();
-  await page.getByRole('button', { name: 'Continuer' }).click();                    // compte mémorisé
+  await etape(page, 'Reconnecte-toi');                                                // compte mémorisé : « Continuer » est encadré
+  await entoure(page, '#connexion');
+  await page.getByRole('button', { name: 'Continuer' }).click();
+  await touche(page, '👥 Compte');
   await etape(page, 'Ton stock de base');                                            // repris là où on était
   await expect(page.locator('#stocksheet')).toBeVisible();
   await page.getByRole('button', { name: 'Quitter la mise en place guidée' }).click();
@@ -139,6 +237,16 @@ test('D-G-051 : passer, reprendre après un rechargement, quitter, relancer depu
   await page.waitForTimeout(500);
   await expect(page.locator('#guide')).toHaveCount(0);                               // quitté : il ne revient pas seul
   await page.getByRole('button', { name: 'Lancer le guide' }).click();
-  await etape(page, 'Choisis tes kits, puis ajoute-les');
+  await etape(page, 'Choisis tes kits de recettes');
+  expect(erreurs).toEqual([]);
+});
+
+test('D-G-056 : mouvement réduit, le doigt ne voyage pas mais chaque bouton s\'allume avant d\'être touché', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const { erreurs } = await ouvrir(page);
+  await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
+  await expect(page.locator('#comptebtn.gd-vise')).toHaveCount(1, { timeout: 10000 });
+  await etape(page, 'Choisis tes kits de recettes');
+  await expect(page.locator('#comptesheet')).toBeVisible();
   expect(erreurs).toEqual([]);
 });

@@ -4,12 +4,12 @@
 // puis ouvre l'appli ou le site avec un court message. « Lien Google Drive » dépose le PDF dans le dossier SuperChef.ai
 // (Exports), lisible par qui a le lien : les messages portent alors le lien, et le code QR le passe au téléphone.
 // Rien ne part de la page par lui-même : chaque choix ouvre l'appli de la personne.
-import { S, $, toast, errText } from '../etat.js?v=1.22.1';
-import { el, ico, vider } from '../el.js?v=1.22.1';
-import { getRecipe } from '../donnees.js?v=1.22.1';
-import { pdfRecette, nomFichier } from '../fiche-pdf.js?v=1.22.1';
-import { qrCanvas } from '../qr.js?v=1.22.1';
-import { TYPE_DOSSIER } from '../drive.js?v=1.22.1';
+import { S, $, toast, errText } from '../etat.js?v=1.23.0';
+import { el, ico, vider } from '../el.js?v=1.23.0';
+import { getRecipe } from '../donnees.js?v=1.23.0';
+import { pdfRecette, nomFichier } from '../fiche-pdf.js?v=1.23.0';
+import { qrCanvas } from '../qr.js?v=1.23.0';
+import { TYPE_DOSSIER } from '../drive.js?v=1.23.0';
 
 const enc = encodeURIComponent;
 const TYPE = 'application/pdf';
