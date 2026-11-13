@@ -1,8 +1,8 @@
 // Les étapes de la mise en place guidée (D-G-056, D-G-057) : de l'accueil (connexion Google) à l'étape 2 du souper de lundi.
 // Chaque étape dit son écran (ecran), ce qu'elle encadre (cible), quand elle est faite (fait) et le geste que le doigt
 // mime (geste). Textes courts, une seule action à la fois : pensé pour qu'une grand-mère avec un compte Google s'y retrouve.
-import { S, $, STEPS, DAYS } from '../etat.js?v=1.23.1';
-import { iaDisponible } from '../ia.js?v=1.23.1';
+import { S, $, STEPS, DAYS } from '../etat.js?v=1.23.2';
+import { iaDisponible } from '../ia.js?v=1.23.2';
 
 export const val = (v) => (typeof v === 'function' ? v() : v);
 export const auLivre = () => (S.book || []).filter((r) => r.statut === 'Au livre').length;
@@ -21,6 +21,14 @@ const etiquette = (id) => { const s = STEPS.find((x) => x.id === id); return s ?
 
 const SEM = { vue: 'semaine' };
 const minuteur = () => $('#cook .tstart [data-tadd]');
+const enMarche = () => !!$('#tray .tchip');
+const ESSAI = '#cook .tfree [data-tadd="60"]';
+/** Une étape sans « Lancer » : « Autre minuteur et son » s'ouvre, une fois par affichage de la recette, pour qu'on voie
+ *  partir un minuteur quand même (1.23.2, 2e demande de JP). Fermé à la main, il le reste ; la recette redessinée le rouvre. */
+function ouvrirAutreMinuteur() {
+  const d = $('#cook details.tfree');
+  if (d && !minuteur() && !enMarche() && !d.dataset.gdouvert) { d.dataset.gdouvert = '1'; d.open = true; }
+}
 export const ETAPES = [
   { id: 'connexion', groupe: 'Accueil', titre: 'Connecte-toi avec Google', cible: '#connexion', fait: () => !!S.ctx,
     texte: 'Touche « Se connecter avec Google ». Dans la fenêtre de Google, touche ton compte, puis « Continuer ».',
@@ -66,14 +74,16 @@ export const ETAPES = [
   { id: 'etape1', groupe: '05 · Au poêle', ecran: { vue: 'poele', cuisiner: () => souper().id }, info: true, bulle: 'bas', titre: 'Étape 1 : lis et prépare', cible: '#cook .stage',
     texte: 'Lis l\'étape, en grosses lettres. Coche ce qu\'il te faut dans « Pour cette étape ».',
     geste: [{ toucher: '#cook .stepings label' }] },
-  // l'anneau va d'abord sur « Lancer X min » (s'il y en a un), puis sur « Suivante » une fois le minuteur parti (1.23.1)
+  // l'anneau va d'abord sur « Lancer X min », puis sur « Suivante » une fois le minuteur parti (1.23.1) ; une étape sans
+  // « Lancer » ouvre « Autre minuteur et son » et l'anneau va sur ses boutons : un minuteur part toujours (1.23.2)
   // ancre « haut » : la bulle reste en haut et la recette défile vers le bas, pour que « Lancer », « Autre minuteur »,
   // « Suivante » et la barre des minuteurs restent tous libres (1.23.1, « libérer le bas de l'écran »)
   { id: 'suite', groupe: '05 · Au poêle', ecran: { vue: 'poele', cuisiner: () => souper().id }, ancre: 'haut', titre: 'Le minuteur, puis l\'étape 2',
-    cible: () => (minuteur() && !$('#tray .tchip') ? '#cook .tstart' : '#cook .cook-nav'),
+    preparer: ouvrirAutreMinuteur,
+    cible: () => (enMarche() ? '#cook .cook-nav' : minuteur() ? '#cook .tstart' : '#cook .tfree .seg'),
     fait: (b) => S.view === 'poele' && (S.cook?.idx || 0) > b.etape,
-    texte: () => `${$('#tray .tchip') ? 'Le minuteur roule, en bas de l\'écran : il sonne à la fin. ' : minuteur() ? `Touche « ${minuteur().textContent.trim()} » : le minuteur part, en bas de l'écran, et sonne à la fin. ` : 'Pas de minuteur à cette étape (« Autre minuteur » au besoin). '}Quand c'est fait, glisse l'étape vers la gauche, ou touche « Suivante ».`,
-    geste: () => [minuteur() && !$('#tray .tchip') && { toucher: minuteur() }, { toucher: '#next' }].filter(Boolean) },   // sur place : l'écran ne saute pas
+    texte: () => `${enMarche() ? 'Le minuteur roule, en bas de l\'écran : il sonne à la fin. ' : minuteur() ? `Touche « ${minuteur().textContent.trim()} » : le minuteur part, en bas de l'écran, et sonne à la fin. ` : 'Cette étape n\'a pas de minuteur à elle : touche « 1 min » pour en lancer un. Il part en bas de l\'écran et sonne à la fin. '}Quand c'est fait, glisse l'étape vers la gauche, ou touche « Suivante ».`,
+    geste: () => [!enMarche() && { toucher: minuteur() || ESSAI }, { toucher: '#next' }].filter(Boolean) },   // sur place : l'écran ne saute pas
   { id: 'adapter', groupe: '05 · Au poêle', si: iaDisponible, ecran: { vue: 'poele', cuisiner: () => souper().id }, info: true, titre: 'Il te manque un ingrédient ?',
     cible: '#cook [data-adapt]', texte: 'Touche « Adapter avec Gemini » et dis ce qui manque : il change la recette pour ce soir, ou pour de bon. Bon souper, chef !',
     geste: [{ toucher: '#cook [data-adapt]' }] }

@@ -1,9 +1,9 @@
 // 01 · Livre : parcourir et trier par glissement (R-03). Repris de Gordon Rams.ai.
-import { S, $, TYPES, PROTS, CUIS, norm, starsOf, toast, errText, render } from '../etat.js?v=1.23.1';
-import { el, ico } from '../el.js?v=1.23.1';
-import { majRecette, rebuildPools, dansLaSemaine, supprimerRecette, remettreRecette, fusionnerRecettes } from '../donnees.js?v=1.23.1';
-import { doublonRecette } from '../doublons.js?v=1.23.1';
-import { panelHead, skeleton, noticeWarn } from './commun.js?v=1.23.1';
+import { S, $, TYPES, PROTS, CUIS, norm, starsOf, toast, errText, render } from '../etat.js?v=1.23.2';
+import { el, ico } from '../el.js?v=1.23.2';
+import { majRecette, rebuildPools, dansLaSemaine, supprimerRecette, remettreRecette, fusionnerRecettes } from '../donnees.js?v=1.23.2';
+import { doublonRecette } from '../doublons.js?v=1.23.2';
+import { panelHead, skeleton, noticeWarn } from './commun.js?v=1.23.2';
 
 const SANS = 'Sans cuisine';
 function viewBook() {

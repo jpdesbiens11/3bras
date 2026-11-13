@@ -5,12 +5,12 @@
 // stock, tri, approbation) ; le guide passe seul à la suite quand c'est fait. La bulle montre le fil d'Ariane depuis
 // l'accueil, « Suivant » à chaque étape, ◀ ▶ ×, « Revoir le chemin » et « Plus lent », en gros caractères (1.23.1 : sans « Écouter »).
 // Une personne nouvelle le voit dès l'accueil ; il se reprend après un rechargement ; Compte → « Lancer le guide » le relance.
-import { S, $ } from '../etat.js?v=1.23.1';
-import { el, ico, vider } from '../el.js?v=1.23.1';
-import { ETAPES, ANCIENNES, RETIREES, base, filDe, prochainToucher, val } from './guide-etapes.js?v=1.23.1';
-import * as D from './guide-doigt.js?v=1.23.1';
+import { S, $ } from '../etat.js?v=1.23.2';
+import { el, ico, vider } from '../el.js?v=1.23.2';
+import { ETAPES, ANCIENNES, RETIREES, base, filDe, prochainToucher, val } from './guide-etapes.js?v=1.23.2';
+import * as D from './guide-doigt.js?v=1.23.2';
 
-export { souperDuGuide } from './guide-etapes.js?v=1.23.1';
+export { souperDuGuide } from './guide-etapes.js?v=1.23.2';
 const CLE = 'superchef-guide', FIN = 'superchef-guide-fin', VITESSE = 'superchef-guide-vitesse';
 const ecranL = () => Math.min(window.innerWidth, document.documentElement.clientWidth || Infinity, window.visualViewport?.width || Infinity);
 const ecranH = () => Math.min(window.innerHeight, window.visualViewport?.height || Infinity);
@@ -88,6 +88,7 @@ async function parcourir(e, j, chemin) {
       }
       if (j !== jeton) return;
       NAV.ecran(e.ecran);                                             // filet : l'écran voulu, même si un toucher n'a pas pris
+      e.preparer?.();                                                 // ce que l'étape ouvre elle-même (1.23.2 : « Autre minuteur »)
     }
   } catch (err) {
     if (err !== D.ANNULE) console.warn(err);
@@ -164,6 +165,7 @@ function tic() {
     G.deja = true; dessiner();                                         // la dernière étape : « Terminer »
   }
   if (G.deja && e.fait && !e.fait(G.base)) { G.deja = false; dessiner(); }
+  if (S.ctx && !sansCompte(e)) e.preparer?.();                         // la recette redessinée : ce que l'étape ouvre revient
   const c = cibleDe(e), sel = sansCompte(e) ? '#connexion' : val(e.cible);
   if (G.sel !== sel) { G.sel = sel; G.vu = false; }
   const tray = !!$('#tray');
