@@ -1,0 +1,28 @@
+{
+  "version": "1.23.1",
+  "date": "2026-11-13",
+  "mvp": "SuperChef.ai — guide plus simple : « Suivant » partout, 14 étapes, rien de caché",
+  "requis": [
+    "R-07"
+  ],
+  "nouveautes": [
+    "« Suivant » sur chaque étape, toujours au même endroit ; une action à faire le dit à côté (« À toi de jouer », « Déjà fait »), et le guide avance toujours seul quand c'est fait.",
+    "« Écouter » est retiré : il reste « ↻ Revoir » et « Plus lent ».",
+    "L'étape « Garde l'app sur ton téléphone » est retirée (le menu du navigateur ne se voyait pas) : 14 étapes, de la connexion Google à l'étape 2 du souper de lundi.",
+    "Un minuteur parti reste visible : la bulle ne descend plus sur la barre des minuteurs, en bas de l'écran ; à l'étape du minuteur, l'anneau va de « Lancer » à « Suivante ».",
+    "Kits : le doigt mime le toucher d'un kit sur place ; l'écran ne défile plus jusqu'à « Ajouter », et le premier kit reste visible.",
+    "Après chaque geste mimé, ce que l'étape encadre revient à l'écran si le geste l'avait fait défiler.",
+    "Vue « Déplacer les soupers » : la bulle s'efface pour laisser tous les soirs libres ; l'anneau reste sur « Enregistrer » et la bulle revient à la fermeture."
+  ],
+  "decisions": [
+    "D-G-057"
+  ],
+  "tests": {
+    "unitaires": 78,
+    "bout_en_bout": 63,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}

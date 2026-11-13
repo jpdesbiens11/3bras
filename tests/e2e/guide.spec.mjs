@@ -1,6 +1,6 @@
 // D-G-051, D-G-053, D-G-056 : la mise en place guidée, de l'accueil (connexion Google) à l'étape 2 du souper de lundi.
 // Un doigt fait le chemin à l'écran (≈ 1 s par toucher) en touchant les vrais boutons, puis mime le geste à faire ;
-// ◀ ▶ pour naviguer, « Revoir le chemin », « Écouter », « Plus lent ».
+// « Suivant » sur chaque étape, ◀ ▶ pour naviguer, « Revoir le chemin », « Plus lent » (1.23.1).
 import { test, expect } from '@playwright/test';
 import { brancher } from './outils.mjs';
 
@@ -19,6 +19,7 @@ let nCapture = 0;
 async function etape(page, titre) {
   await expect(bulle(page).getByRole('heading')).toHaveText(titre);
   await expect(bulle(page).locator('.gd-texte')).toBeVisible({ timeout: 15000 });   // le doigt est arrivé
+  if (titre !== 'Reconnecte-toi') await expect(bulle(page).locator('.gd-acts .btn.primary')).toHaveText(/^(Suivant|Terminer)$/);   // 1.23.1 : sur chaque étape
   if (process.env.GUIDE_CAPTURES) { await page.waitForTimeout(900); await page.screenshot({ path: `${process.env.GUIDE_CAPTURES}/${String(++nCapture).padStart(2, '0')}.png` }); }
 }
 /** Le doigt touche ce bouton en chemin : la bulle le dit et le doigt est à l'écran. */
@@ -27,6 +28,13 @@ async function touche(page, nom) {
   await expect(page.locator('#gd-doigt.vu')).toHaveCount(1);
 }
 const fil = (page) => bulle(page).locator('.gd-fil');
+/** Rien ne couvre ce bouton (ni la bulle, ni la barre d'une feuille) : on peut le toucher là où il est. */
+async function libre(page, sel) {
+  await expect.poll(() => page.locator(sel).first().evaluate((n) => {
+    const r = n.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const d = y > 0 && y < innerHeight ? document.elementFromPoint(x, y) : null; return !!d && n.contains(d);
+  }), { message: `${sel} est couvert ou hors de l'écran` }).toBe(true);
+}
 const suivant = (page) => bulle(page).getByRole('button', { name: 'Étape suivante' }).click();
 const precedent = (page) => bulle(page).getByRole('button', { name: 'Étape précédente' }).click();
 
@@ -44,13 +52,13 @@ async function entoure(page, sel) {
   })).toBe(true);                                                                       // le guide fait défiler jusqu'à elle
 }
 
-test('D-G-056 : 15 étapes de l\'accueil à l\'étape 2 de lundi, le doigt fait chaque chemin', async ({ page }, info) => {
+test('D-G-056, D-G-057 : 14 étapes de l\'accueil à l\'étape 2 de lundi, le doigt fait chaque chemin', async ({ page }, info) => {
   const P = info.project.name;
   const { sim, erreurs } = await ouvrir(page, { ia: IA });
   // 1 : dès l'accueil, avant Google ; la visite dessinée ne s'ouvre plus seule.
   await etape(page, 'Connecte-toi avec Google');
   await expect(page.locator('#visite')).toHaveCount(0);
-  await expect(bulle(page)).toContainText('1 sur 15 · Accueil');
+  await expect(bulle(page)).toContainText('1 sur 14 · Accueil');
   await expect(fil(page)).toHaveText('Accueil');
   await entoure(page, '#connexion');
   await expect(bulle(page).getByRole('button', { name: 'Étape précédente' })).toBeDisabled();
@@ -63,6 +71,8 @@ test('D-G-056 : 15 étapes de l\'accueil à l\'étape 2 de lundi, le doigt fait 
   await expect(page.locator('#comptesheet')).toBeVisible();
   await expect(fil(page)).toHaveText('Accueil›👥 Compte');
   await entoure(page, '#kitchoix');
+  await expect(page.locator('#gd-doigt.vu')).toHaveCount(0, { timeout: 8000 });     // le geste mimé est fini
+  await libre(page, '[data-kit="survie"]');                                          // 1.23.1 : le premier kit reste à l'écran, libre
   await page.locator('[data-kit="survie"]').click();
   await entoure(page, '#chargerkits');
   await page.locator('#chargerkits').click();
@@ -114,10 +124,14 @@ test('D-G-056 : 15 étapes de l\'accueil à l\'étape 2 de lundi, le doigt fait 
   await expect(page.locator('.week .day.tenir')).toHaveCount(0, { timeout: 5000 });
   await page.locator('#deplacer-btn').click();
   await entoure(page, '[data-dpenregistrer]');
+  // 1.23.1 : dans la vue « Déplacer », la bulle s'efface (l'anneau reste sur « Enregistrer ») ; tous les soirs restent libres
+  await expect(bulle(page)).toBeHidden();
+  for (let k = 0; k < 7; k++) { await page.locator(`#deplacer [data-dpjour="${k}"]`).scrollIntoViewIfNeeded(); await libre(page, `#deplacer [data-dpjour="${k}"]`); }
   await page.locator('#deplacer [data-dpjour="0"]').click();
   await page.locator('#deplacer [data-dpjour="2"]').click();
   await page.locator('[data-dpenregistrer]').click();
   await etape(page, 'Approuve ta semaine');
+  await expect(bulle(page).locator('h3')).toBeVisible();                              // la vue fermée, la bulle revient
   await entoure(page, '#save');
   await page.locator('#save').click();
 
@@ -125,13 +139,7 @@ test('D-G-056 : 15 étapes de l\'accueil à l\'étape 2 de lundi, le doigt fait 
   await etape(page, 'Ta liste d\'épicerie est prête');
   await entoure(page, '.dept');
   await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
-  // 11 : garder l'app sur le téléphone (le menu du navigateur, hors de la page).
-  await etape(page, 'Garde l\'app sur ton téléphone');
-  await expect(bulle(page)).toContainText(P === 's25' ? 'trois points ⋮ en haut à droite' : 'Ctrl + D');
-  await expect(fil(page)).toHaveText('Accueil›Menu du navigateur');
-  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
-
-  // 12 : 05 Au poêle, le souper de lundi est encadré ; on le touche.
+  // 11 : 05 Au poêle, le souper de lundi est encadré ; on le touche (1.23.1 : plus d'étape « téléphone » avant).
   await touche(page, '05 Au poêle');
   await expect(bulle(page).getByRole('heading')).toHaveText(/^Lundi soir : /);
   await expect(bulle(page).locator('.gd-texte')).toBeVisible();
@@ -144,14 +152,22 @@ test('D-G-056 : 15 étapes de l\'accueil à l\'étape 2 de lundi, le doigt fait 
   await entoure(page, '#cook .stage');
   await page.screenshot({ path: `tests/captures/${P}-guide-poele.png` });
   await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
-  // 14 : le minuteur (s'il y en a un), puis l'étape 2.
+  // 13 : le minuteur (s'il y en a un), puis l'étape 2 ; le minuteur parti, la bulle laisse le bas de l'écran libre (1.23.1).
   await etape(page, 'Le minuteur, puis l\'étape 2');
+  const lancer = page.locator('#cook .tstart [data-tadd]');
+  if (await lancer.count()) { await entoure(page, '#cook .tstart'); await lancer.first().click(); }
+  else { await page.locator('#cook .tfree summary').click(); await page.locator('#cook .tfree [data-tadd="60"]').click(); }
+  await expect(page.locator('#tray .tchip')).toBeVisible();
+  await expect(bulle(page).locator('.gd-texte')).toContainText('Le minuteur roule, en bas de l\'écran');
   await entoure(page, '#cook .cook-nav');
+  await expect.poll(async () => { const b = await bulle(page).boundingBox(), t = await page.locator('#tray').boundingBox(); return b.y + b.height <= t.y + 1; }).toBe(true);
+  await libre(page, '#tray .tchip');
+  await page.screenshot({ path: `tests/captures/${P}-guide-minuteur.png` });
   await page.locator('#next').click();
   await etape(page, 'Il te manque un ingrédient ?');
   await expect(page.locator('#cook .step-no')).toHaveText(/^Étape 2 sur/);
   await entoure(page, '#cook [data-adapt]');
-  await expect(bulle(page)).toContainText('15 sur 15');
+  await expect(bulle(page)).toContainText('14 sur 14');
   await expect(bulle(page).getByRole('button', { name: 'Étape suivante' })).toBeDisabled();
   await bulle(page).getByRole('button', { name: 'Terminer' }).click();
   await expect(page.locator('#guide')).toHaveCount(0);
@@ -165,8 +181,10 @@ test('D-G-056 : ◀ refait le chemin en sens inverse, « Revoir le chemin », «
   const { erreurs } = await ouvrir(page);
   await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
   await etape(page, 'Choisis tes kits de recettes');
-  await expect(bulle(page)).toContainText('2 sur 14');                                 // sans Gemini : pas d'étape « Adapter »
-  await bulle(page).getByRole('button', { name: 'Passer cette étape' }).click();
+  await expect(bulle(page)).toContainText('2 sur 13');                                 // sans Gemini : pas d'étape « Adapter »
+  await expect(bulle(page)).toContainText('À toi de jouer');
+  await expect(bulle(page).getByRole('button', { name: 'Passer cette étape' })).toHaveCount(0);
+  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();     // 1.23.1 : « Suivant » aussi quand il y a une action
   await etape(page, 'Ton stock de base');
   // Revoir : le doigt repart de Compte et retouche « Choisir mon stock de base ».
   await bulle(page).getByRole('button', { name: 'Revoir le chemin' }).click();
@@ -191,28 +209,22 @@ test('D-G-056 : ◀ refait le chemin en sens inverse, « Revoir le chemin », «
   expect(erreurs).toEqual([]);
 });
 
-test('D-G-056 : « Plus lent » double le temps du doigt, « Écouter » lit la bulle ; gardés sur l\'appareil', async ({ page }) => {
-  await page.addInitScript(() => {
-    window.__dit = [];
-    window.SpeechSynthesisUtterance = class { constructor(t) { this.text = t; } };
-    Object.defineProperty(window, 'speechSynthesis', { value: { speak: (u) => window.__dit.push(u.text), cancel: () => {}, getVoices: () => [{ lang: 'fr-CA', name: 'Test' }] } });
-  });
+test('D-G-057 : « Plus lent » double le temps du doigt et reste choisi ; plus de bouton « Écouter »', async ({ page }) => {
+  await page.addInitScript(() => { try { localStorage.setItem('superchef-guide-voix', '1'); } catch (_) {} });   // clé de 1.23.0
   const { erreurs } = await ouvrir(page);
-  await bulle(page).getByRole('button', { name: '🔈 Écouter' }).click();
-  await expect.poll(() => page.evaluate(() => window.__dit.at(-1))).toMatch(/^Connecte-toi avec Google\. Touche Se connecter avec Google\. Dans la fenêtre de Google/);
+  await expect(bulle(page).getByRole('button', { name: /Écouter|Voix/ })).toHaveCount(0);
   await bulle(page).getByRole('button', { name: 'Plus lent' }).click();
   await expect(bulle(page).getByRole('button', { name: 'Plus lent' })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
   await etape(page, 'Choisis tes kits de recettes');
-  await expect.poll(() => page.evaluate(() => window.__dit.at(-1))).toMatch(/^Choisis tes kits de recettes\./);   // chaque étape est lue
-  await bulle(page).getByRole('button', { name: 'Passer cette étape' }).click();
+  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
   await etape(page, 'Ton stock de base');
   const t0 = Date.now();
-  await bulle(page).getByRole('button', { name: 'Passer cette étape' }).click();   // 3 touchers à environ 2 s
+  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();   // 3 touchers à environ 2 s
   await touche(page, '+ Recette');
   await etape(page, 'Tes recettes à toi');
   expect(Date.now() - t0).toBeGreaterThan(5000);
-  expect(await page.evaluate(() => [localStorage.getItem('superchef-guide-vitesse'), localStorage.getItem('superchef-guide-voix')])).toEqual(['lent', '1']);
+  expect(await page.evaluate(() => [localStorage.getItem('superchef-guide-vitesse'), localStorage.getItem('superchef-guide-voix')])).toEqual(['lent', null]);
   expect(erreurs).toEqual([]);
 });
 
@@ -220,7 +232,7 @@ test('D-G-051 : reprendre après un rechargement, quitter, relancer depuis Compt
   const { erreurs } = await ouvrir(page);
   await page.getByRole('button', { name: 'Se connecter avec Google' }).click();
   await etape(page, 'Choisis tes kits de recettes');
-  await bulle(page).getByRole('button', { name: 'Passer cette étape' }).click();
+  await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
   await etape(page, 'Ton stock de base');
   await page.reload();
   await etape(page, 'Reconnecte-toi');                                                // compte mémorisé : « Continuer » est encadré

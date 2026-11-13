@@ -3,8 +3,8 @@
 // Il mime aussi les gestes à faire (toucher, glisser une fiche, tenir 2 secondes) sans rien toucher pour vrai.
 // Web Animations (CSSOM, permis par la CSP), aucune bibliothèque (P-1). Mouvement réduit : le doigt ne voyage pas,
 // il apparaît sur le bouton, qui s'allume une seconde avant d'être touché.
-import { $ } from '../etat.js?v=1.23.0';
-import { el } from '../el.js?v=1.23.0';
+import { $ } from '../etat.js?v=1.23.1';
+import { el } from '../el.js?v=1.23.1';
 
 const NS = 'http://www.w3.org/2000/svg';
 const POINTE = { x: 17, y: 3 };                    // le bout de l'index, dans le dessin de 52 × 58
@@ -173,21 +173,10 @@ async function tenir(n, vers, j) {
   await relacher(j);
 }
 
-/** Un coin de l'écran, hors de la page : le menu du navigateur (⋮ en haut à droite, Partager en bas…). */
-async function coin(ou, j) {
-  const H = ecranH(), W = ecranL();
-  const p = { 'haut-droite': { x: W - 18, y: 14 }, bas: { x: W / 2, y: H - 14 }, 'bas-droite': { x: W - 22, y: H - 14 } }[ou] || { x: W - 18, y: 14 };
-  await voyager(p, j);
-  await appuyer(j);
-  await relacher(j);
-  await attendre(500 * f(), j);
-}
-
-/** Un geste mimé : { toucher: sel } | { glisser: sel, dx, dy, indice, texte } | { tenir: sel, vers: sel } | { coin: 'haut-droite' }. */
+/** Un geste mimé : { toucher: sel } | { glisser: sel, dx, dy, indice, texte } | { tenir: sel, vers: sel }. */
 export async function geste(g, j) {
   verif(j);
   const q = (s) => (typeof s === 'string' ? document.querySelector(s) : s);
-  if (g.coin) return coin(g.coin, j);
   const n = q(g.toucher || g.glisser || g.tenir);
   if (!n || !n.getClientRects().length) return;
   if (g.toucher) return toucher(n, { j });
