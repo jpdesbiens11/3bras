@@ -1,8 +1,8 @@
 // Visite guidée (D-G-047) : les fonctions de l'app dans l'ordre où on s'en sert, en petites scènes dessinées
 // au trait (SVG animé en CSS, aucune bibliothèque, P-1). Depuis 1.23.0 (D-G-056), elle ne s'ouvre plus seule : la mise
 // en place guidée part de l'accueil ; « Visite guidée » à l'accueil et Compte → « Revoir la visite » l'ouvrent.
-import { $ } from '../etat.js?v=1.23.0';
-import { el, ico, vider } from '../el.js?v=1.23.0';
+import { $ } from '../etat.js?v=1.23.1';
+import { el, ico, vider } from '../el.js?v=1.23.1';
 
 const NS = 'http://www.w3.org/2000/svg';
 function s(tag, a = {}, ...kids) {

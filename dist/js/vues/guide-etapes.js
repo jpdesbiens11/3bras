@@ -1,8 +1,8 @@
-// Les étapes de la mise en place guidée (D-G-056) : de l'accueil (connexion Google) à l'étape 2 du souper de lundi.
+// Les étapes de la mise en place guidée (D-G-056, D-G-057) : de l'accueil (connexion Google) à l'étape 2 du souper de lundi.
 // Chaque étape dit son écran (ecran), ce qu'elle encadre (cible), quand elle est faite (fait) et le geste que le doigt
 // mime (geste). Textes courts, une seule action à la fois : pensé pour qu'une grand-mère avec un compte Google s'y retrouve.
-import { S, $, STEPS, DAYS } from '../etat.js?v=1.23.0';
-import { iaDisponible } from '../ia.js?v=1.23.0';
+import { S, $, STEPS, DAYS } from '../etat.js?v=1.23.1';
+import { iaDisponible } from '../ia.js?v=1.23.1';
 
 export const val = (v) => (typeof v === 'function' ? v() : v);
 export const auLivre = () => (S.book || []).filter((r) => r.statut === 'Au livre').length;
@@ -19,20 +19,6 @@ export function souperDuGuide() {
 const souper = () => souperDuGuide() || { id: '', i: 1, jour: 'lundi', nom: 'ton souper' };
 const etiquette = (id) => { const s = STEPS.find((x) => x.id === id); return s ? `${s.n} ${s.label}` : id; };
 
-/** Où est le menu du navigateur pour garder la page sur l'écran d'accueil du téléphone. */
-export function appareil() {
-  const ua = navigator.userAgent || '';
-  let installe = false;
-  try { installe = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (_) { /* vieux navigateur */ }
-  if (installe) return { installe, texte: 'C\'est déjà fait : SuperChef.ai est sur ton écran d\'accueil.' };
-  if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) {
-    return { coin: 'bas', texte: 'Touche le bouton Partager (le carré avec une flèche vers le haut), puis « Sur l\'écran d\'accueil ».' };
-  }
-  if (/SamsungBrowser/.test(ua)) return { coin: 'bas-droite', texte: 'Touche le menu ≡ en bas à droite, puis « Ajouter page à » et « Écran d\'accueil ».' };
-  if (/Android/.test(ua)) return { coin: 'haut-droite', texte: 'Touche les trois points ⋮ en haut à droite, puis « Ajouter à l\'écran d\'accueil ».' };
-  return { coin: 'haut-droite', texte: 'À l\'ordinateur, mets la page dans tes favoris (Ctrl + D, ou ⌘ + D sur un Mac). Au téléphone : menu ⋮, puis « Ajouter à l\'écran d\'accueil ».' };
-}
-
 const SEM = { vue: 'semaine' };
 const minuteur = () => $('#cook .tstart [data-tadd]');
 export const ETAPES = [
@@ -42,7 +28,8 @@ export const ETAPES = [
   { id: 'kits', groupe: 'Compte', ecran: { compte: true }, bulle: 'bas', titre: 'Choisis tes kits de recettes', fait: (b) => S.book.length > b.livre,
     cible: () => ($('#kitchoix [aria-pressed="true"]') ? '#chargerkits' : '#kitchoix'),
     texte: 'Touche un ou plusieurs kits : un crochet ✓ apparaît. Puis touche le bouton « Ajouter » juste en dessous.',
-    geste: () => ($('#kitchoix [aria-pressed="true"]') ? [{ toucher: '#chargerkits' }] : [{ toucher: '#kitchoix [data-kit]' }, { toucher: '#chargerkits' }]) },
+    // un seul toucher, sur place : mimer « Ajouter » (plus bas) ferait défiler les kits hors de l'écran (1.23.1)
+    geste: () => [{ toucher: $('#kitchoix [aria-pressed="true"]') ? '#chargerkits' : '#kitchoix [data-kit]' }] },
   { id: 'stock', groupe: 'Compte', ecran: { stock: true }, titre: 'Ton stock de base', cible: '#stock-ajouter', fait: () => !!$('#stock-voir'),
     texte: 'Ce que tu as toujours à la maison : sel, huile, farine… Décoche ce que tu n\'as pas, puis touche « Ajouter ».',
     geste: [{ toucher: '#stock-ajouter' }] },
@@ -59,7 +46,9 @@ export const ETAPES = [
   { id: 'soirs', groupe: '03 · Semaine', ecran: SEM, info: true, titre: 'Tes soupers de la semaine', cible: '.daytog',
     texte: 'L\'app a choisi un souper pour chaque soir. Touche un jour pour l\'ajouter ou l\'enlever. « Piger » propose un autre souper.',
     geste: [{ toucher: '.daytog button[aria-pressed="false"]' }] },
+  // dans la vue « Déplacer », la bulle s'efface (la vue a sa consigne, l'anneau montre « Enregistrer ») : les soirs restent libres (1.23.1)
   { id: 'deplacer', groupe: '03 · Semaine', ecran: SEM, titre: 'Change un souper de soir', cible: () => ($('#deplacer') ? '[data-dpenregistrer]' : '.week .day[data-jour] .dname'),
+    bulleCachee: () => !!$('#deplacer'),
     fait: (b) => !$('#deplacer') && planTexte() !== b.plan,
     texte: 'Garde le doigt 2 secondes sur un souper (une barre jaune se remplit), puis glisse-le sur un autre soir. Touche ensuite « Enregistrer ».',
     geste: () => ($('#deplacer') ? [{ toucher: '[data-dpenregistrer]' }]
@@ -70,9 +59,6 @@ export const ETAPES = [
   { id: 'provigo', groupe: '04 · Provigo', ecran: { vue: 'provigo' }, info: true, titre: 'Ta liste d\'épicerie est prête', cible: '.dept',
     texte: 'Elle est classée par rayon, sans ce que tu as déjà. Au magasin, coche chaque article que tu mets dans ton panier.',
     geste: [{ toucher: '.dept .gl' }] },
-  { id: 'telephone', groupe: 'Ton téléphone', info: true, titre: 'Garde l\'app sur ton téléphone', fil: ['Menu du navigateur'],
-    texte: () => `Pour la retrouver au magasin. ${appareil().texte} La prochaine fois, touche « Continuer » : ton livre revient.`,
-    geste: () => (appareil().coin ? [{ coin: appareil().coin }] : []) },
   { id: 'lundi', groupe: '05 · Au poêle', ecran: { vue: 'poele' }, titre: () => `${souper().jour[0].toUpperCase()}${souper().jour.slice(1)} soir : ${souper().nom}`,
     cible: () => `.pick [data-cook="${souper().id}"]`, fait: () => S.view === 'poele' && !!S.cook?.id,
     texte: () => `C'est le souper de ${souper().jour}. Touche-le : la recette s'ouvre, une étape à la fois.`,
@@ -80,16 +66,22 @@ export const ETAPES = [
   { id: 'etape1', groupe: '05 · Au poêle', ecran: { vue: 'poele', cuisiner: () => souper().id }, info: true, bulle: 'bas', titre: 'Étape 1 : lis et prépare', cible: '#cook .stage',
     texte: 'Lis l\'étape, en grosses lettres. Coche ce qu\'il te faut dans « Pour cette étape ».',
     geste: [{ toucher: '#cook .stepings label' }] },
-  { id: 'suite', groupe: '05 · Au poêle', ecran: { vue: 'poele', cuisiner: () => souper().id }, titre: 'Le minuteur, puis l\'étape 2', cible: '#cook .cook-nav',
+  // l'anneau va d'abord sur « Lancer X min » (s'il y en a un), puis sur « Suivante » une fois le minuteur parti (1.23.1)
+  // ancre « haut » : la bulle reste en haut et la recette défile vers le bas, pour que « Lancer », « Autre minuteur »,
+  // « Suivante » et la barre des minuteurs restent tous libres (1.23.1, « libérer le bas de l'écran »)
+  { id: 'suite', groupe: '05 · Au poêle', ecran: { vue: 'poele', cuisiner: () => souper().id }, ancre: 'haut', titre: 'Le minuteur, puis l\'étape 2',
+    cible: () => (minuteur() && !$('#tray .tchip') ? '#cook .tstart' : '#cook .cook-nav'),
     fait: (b) => S.view === 'poele' && (S.cook?.idx || 0) > b.etape,
-    texte: () => `${minuteur() ? `Touche « ${minuteur().textContent.trim()} » : le minuteur part et sonne à la fin. ` : 'Pas de minuteur à cette étape. '}Quand c'est fait, glisse l'étape vers la gauche, ou touche « Suivante ».`,
-    geste: () => [minuteur() && { toucher: minuteur() }, { glisser: '#cook .stage', dx: -110, dy: 0 }].filter(Boolean) },
+    texte: () => `${$('#tray .tchip') ? 'Le minuteur roule, en bas de l\'écran : il sonne à la fin. ' : minuteur() ? `Touche « ${minuteur().textContent.trim()} » : le minuteur part, en bas de l'écran, et sonne à la fin. ` : 'Pas de minuteur à cette étape (« Autre minuteur » au besoin). '}Quand c'est fait, glisse l'étape vers la gauche, ou touche « Suivante ».`,
+    geste: () => [minuteur() && !$('#tray .tchip') && { toucher: minuteur() }, { toucher: '#next' }].filter(Boolean) },   // sur place : l'écran ne saute pas
   { id: 'adapter', groupe: '05 · Au poêle', si: iaDisponible, ecran: { vue: 'poele', cuisiner: () => souper().id }, info: true, titre: 'Il te manque un ingrédient ?',
     cible: '#cook [data-adapt]', texte: 'Touche « Adapter avec Gemini » et dis ce qui manque : il change la recette pour ce soir, ou pour de bon. Bon souper, chef !',
     geste: [{ toucher: '#cook [data-adapt]' }] }
 ];
 /** Les 10 étapes de 1.21 et 1.22 : un guide commencé avant la mise à jour reprend à la même. */
 export const ANCIENNES = ['kits', 'stock', 'tri', 'frigo', 'soirs', 'deplacer', 'approuver', 'provigo', 'lundi', 'etape1'];
+/** Étapes retirées (1.23.1 : « Garde l'app sur ton téléphone », le menu du navigateur ne se voit pas) : on reprend à la suivante. */
+export const RETIREES = { telephone: 'lundi' };
 
 /** Le chemin depuis l'accueil, pour le fil d'Ariane de la bulle. */
 export function filDe(e) {
