@@ -29,7 +29,7 @@ Règles du dépôt (vérifiées par les tests) : fichiers JS et CSS sous 500 lig
 
 1. `node scripts/version.mjs 1.x.y` et une note `docs/releases/1.x.y.json`, dans une branche `version/1.x.y`.
 2. PR vers `main` ; les tests tournent sur la PR.
-3. Fusionner : GitHub Actions crée le tag et la release `v1.x.y` (avec l'archive `superchef-1.x.y.zip`), puis publie `dist/` sur Pages (D-G-014).
+3. Fusionner dès que les tests de la PR passent (Claude le fait lui-même, sans demander : D-G-059) : GitHub Actions crée le tag et la release `v1.x.y` (avec l'archive `superchef-1.x.y.zip`), puis publie `dist/` sur Pages (D-G-014). Vérifier ensuite que Pages sert la nouvelle version.
 4. Hostinger : `npm run paquet` produit `paquet/superchef-<version>.zip`, déployé par le connecteur Hostinger (D-G-031) ; marche à suivre dans `docs/hostinger-deploiement.md`.
 5. Retour arrière : Actions → « Publier SuperChef.ai » → *Run workflow* avec le tag précédent ; sur Hostinger, redéployer l'archive de la release précédente.
 
