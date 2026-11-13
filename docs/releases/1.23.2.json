@@ -1,0 +1,22 @@
+{
+  "version": "1.23.2",
+  "date": "2026-11-13",
+  "mvp": "SuperChef.ai — guide : un minuteur part toujours, même quand l'étape n'en a pas",
+  "requis": [
+    "R-07"
+  ],
+  "nouveautes": [
+    "Étape « Le minuteur, puis l'étape 2 » : si l'étape de la recette n'a pas de « Lancer », le guide ouvre « Autre minuteur et son » et montre « 1 min » ; le minuteur part en bas de l'écran, toujours visible sous la bulle."
+  ],
+  "decisions": [
+    "D-G-058"
+  ],
+  "tests": {
+    "unitaires": 78,
+    "bout_en_bout": 63,
+    "appareils": [
+      "Galaxy S25 360 px",
+      "PC 1440 px"
+    ]
+  }
+}

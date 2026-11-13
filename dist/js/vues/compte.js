@@ -1,10 +1,10 @@
 // Feuille Compte : connexion, classeur, import (R-02). Même gabarit que les feuilles de Gordon Rams.ai.
-import { S, $, toast } from '../etat.js?v=1.23.1';
-import { el, ico, vider } from '../el.js?v=1.23.1';
-import { lienClasseur, lienDossier, reinitialiser, texteReparation } from '../store.js?v=1.23.1';
-import { valider, importer } from '../import.js?v=1.23.1';
-import { CONFIG } from '../config.js?v=1.23.1';
-import { iaDisponible } from '../ia.js?v=1.23.1';
+import { S, $, toast } from '../etat.js?v=1.23.2';
+import { el, ico, vider } from '../el.js?v=1.23.2';
+import { lienClasseur, lienDossier, reinitialiser, texteReparation } from '../store.js?v=1.23.2';
+import { valider, importer } from '../import.js?v=1.23.2';
+import { CONFIG } from '../config.js?v=1.23.2';
+import { iaDisponible } from '../ia.js?v=1.23.2';
 
 export function openCompte(surImporter) {
   if ($('#comptesheet')) return;

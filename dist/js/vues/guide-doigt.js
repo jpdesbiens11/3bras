@@ -3,8 +3,8 @@
 // Il mime aussi les gestes à faire (toucher, glisser une fiche, tenir 2 secondes) sans rien toucher pour vrai.
 // Web Animations (CSSOM, permis par la CSP), aucune bibliothèque (P-1). Mouvement réduit : le doigt ne voyage pas,
 // il apparaît sur le bouton, qui s'allume une seconde avant d'être touché.
-import { $ } from '../etat.js?v=1.23.1';
-import { el } from '../el.js?v=1.23.1';
+import { $ } from '../etat.js?v=1.23.2';
+import { el } from '../el.js?v=1.23.2';
 
 const NS = 'http://www.w3.org/2000/svg';
 const POINTE = { x: 17, y: 3 };                    // le bout de l'index, dans le dessin de 52 × 58

@@ -152,11 +152,21 @@ test('D-G-056, D-G-057 : 14 étapes de l\'accueil à l\'étape 2 de lundi, le do
   await entoure(page, '#cook .stage');
   await page.screenshot({ path: `tests/captures/${P}-guide-poele.png` });
   await bulle(page).getByRole('button', { name: 'Suivant', exact: true }).click();
-  // 13 : le minuteur (s'il y en a un), puis l'étape 2 ; le minuteur parti, la bulle laisse le bas de l'écran libre (1.23.1).
+  // 13 : le minuteur, puis l'étape 2 ; le minuteur parti, la bulle laisse le bas de l'écran libre (1.23.1).
+  // Une étape sans « Lancer » (la soupe du kit Survie) : le guide ouvre lui-même « Autre minuteur et son » et encadre
+  // ses boutons, pour qu'un minuteur parte quand même en bas de l'écran (1.23.2).
   await etape(page, 'Le minuteur, puis l\'étape 2');
   const lancer = page.locator('#cook .tstart [data-tadd]');
   if (await lancer.count()) { await entoure(page, '#cook .tstart'); await lancer.first().click(); }
-  else { await page.locator('#cook .tfree summary').click(); await page.locator('#cook .tfree [data-tadd="60"]').click(); }
+  else {
+    await expect(page.locator('#cook details.tfree')).toHaveAttribute('open', '');
+    await expect(bulle(page).locator('.gd-texte')).toContainText('touche « 1 min » pour en lancer un');
+    await entoure(page, '#cook .tfree .seg');
+    await expect(page.locator('#gd-doigt.vu')).toHaveCount(0, { timeout: 8000 });   // le doigt a mimé « 1 min », puis « Suivante »
+    await libre(page, '#cook .tfree [data-tadd="60"]');
+    await page.screenshot({ path: `tests/captures/${P}-guide-sans-minuteur.png` });
+    await page.locator('#cook .tfree [data-tadd="60"]').click();
+  }
   await expect(page.locator('#tray .tchip')).toBeVisible();
   await expect(bulle(page).locator('.gd-texte')).toContainText('Le minuteur roule, en bas de l\'écran');
   await entoure(page, '#cook .cook-nav');

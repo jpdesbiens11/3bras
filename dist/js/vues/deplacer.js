@@ -3,10 +3,10 @@
 // on le glisse : le soir visé montre l'échange en direct, et au relâchement le souper s'y dépose (les deux soirs
 // échangent). On jongle autant qu'on veut, au doigt, à la souris, ou en touchant un souper puis un soir (clavier).
 // « Enregistrer » revient à la semaine, en brouillon : il faut approuver la semaine pour l'écrire dans le classeur.
-import { S, $, DAYS, MOIS, dayDate, render, toast } from '../etat.js?v=1.23.1';
-import { el, ico, vider } from '../el.js?v=1.23.1';
-import { dname } from './commun.js?v=1.23.1';
-import { echanger, differences } from '../deplacement.js?v=1.23.1';
+import { S, $, DAYS, MOIS, dayDate, render, toast } from '../etat.js?v=1.23.2';
+import { el, ico, vider } from '../el.js?v=1.23.2';
+import { dname } from './commun.js?v=1.23.2';
+import { echanger, differences } from '../deplacement.js?v=1.23.2';
 
 export const TENIR_MS = 2000;
 let R = null;   // { plan, on, pins, depart, choisi, annonce }

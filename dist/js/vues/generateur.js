@@ -2,11 +2,11 @@
 // 3. sa réponse collée, cochée, puis ajoutée « À trier ». La personne garde la main à chaque étape.
 // « Créer des recettes avec Gemini » (D-G-054) : même demande, mais Gemini écrit les fiches lui-même (lots de 5),
 // sans copier-coller ; on coche ensuite ce qui entre dans le livre.
-import { S, $, CUIS, iso, toast, norm } from '../etat.js?v=1.23.1';
-import { el, ico, vider } from '../el.js?v=1.23.1';
-import { importer } from '../import.js?v=1.23.1';
-import { NOMBRES, TYPES_LOT, DEMANDE_VIDE, PAR_LOT_GEMINI, consigneGenerateur, consigneGemini, lireReponse, preparerChoix, fichierImport } from '../generateur.js?v=1.23.1';
-import { ecrireAvecGemini, erreurIA } from '../ia.js?v=1.23.1';
+import { S, $, CUIS, iso, toast, norm } from '../etat.js?v=1.23.2';
+import { el, ico, vider } from '../el.js?v=1.23.2';
+import { importer } from '../import.js?v=1.23.2';
+import { NOMBRES, TYPES_LOT, DEMANDE_VIDE, PAR_LOT_GEMINI, consigneGenerateur, consigneGemini, lireReponse, preparerChoix, fichierImport } from '../generateur.js?v=1.23.2';
+import { ecrireAvecGemini, erreurIA } from '../ia.js?v=1.23.2';
 
 const CLE = 'superchef-generateur'; // la demande reste sur l'appareil le temps d'aller dans Claude
 let G = null; // { d: demande, items: [], res, par: 'Claude' | 'Gemini', occupe, avance }
